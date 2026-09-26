@@ -356,9 +356,17 @@ const WEBAPP_CATEGORIES: &[(&str, &str)] = &[
     ("ai", "AI Assistants"),
     ("media", "Music & Video"),
     ("social", "Social"),
+    ("news", "News & Reading"),
     ("design", "Design"),
     ("development", "Development"),
     ("education", "Learning"),
+    ("storage", "Cloud Storage"),
+    ("security", "Passwords & Security"),
+    ("finance", "Money"),
+    ("business", "Business"),
+    ("shopping", "Shopping & Food"),
+    ("games", "Games"),
+    ("travel", "Travel & Outdoors"),
 ];
 
 pub fn webapps(ctx: &Ctx) -> Page {
