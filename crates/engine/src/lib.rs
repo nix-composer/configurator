@@ -425,11 +425,24 @@ pub fn plan(answers: &Answers, catalog: &Catalog, options: &Options) -> Result<P
     // Builds work in a directory on the new disk, not in the live
     // system's memory, and fewer at once where memory is short.
     let build_dir = format!("{target}/.configurator-build");
-    let parallel = match crate::status::memory().map(|b| b >> 30) {
-        Some(gib) if gib < 8 => "--max-jobs 1 --cores 2 ",
-        Some(gib) if gib < 16 => "--max-jobs 2 ",
-        _ => "",
+    let mut parallel = match crate::status::memory().map(|b| b >> 30) {
+        Some(gib) if gib < 8 => "--max-jobs 1 --cores 2 ".to_string(),
+        Some(gib) if gib < 16 => "--max-jobs 2 ".to_string(),
+        _ => String::new(),
     };
+    // A flake desktop's own packages come prebuilt from its binary cache.
+    if let Some(cache) = answers
+        .desktop
+        .as_ref()
+        .and_then(|d| catalog.desktop(&d.id))
+        .and_then(|d| d.module.flake.as_ref())
+        .and_then(|f| f.cache.as_ref())
+    {
+        parallel.push_str(&format!(
+            "--option extra-substituters '{}' --option extra-trusted-public-keys '{}' ",
+            cache.url, cache.public_key
+        ));
+    }
     let nix = |script: &str, args: &[&str], counts: bool| {
         let mut argv = vec![
             "sh".to_string(),

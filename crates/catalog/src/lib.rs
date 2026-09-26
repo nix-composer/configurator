@@ -344,6 +344,16 @@ pub struct FlakeModule {
     /// Needs Home Manager's NixOS module.
     #[serde(default)]
     pub home_manager: bool,
+    /// The binary cache its own packages are built into (its CI).
+    #[serde(default)]
+    pub cache: Option<BinaryCache>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct BinaryCache {
+    pub url: String,
+    pub public_key: String,
 }
 
 #[derive(Debug, thiserror::Error)]

@@ -13,7 +13,11 @@
           "url": "github:nix-desktops/omarchy/stable",
           "follows": ["nixpkgs", "home-manager"],
           "nixosModule": "nixosModules.default",
-          "homeManager": true
+          "homeManager": true,
+          "cache": {
+            "url": "https://nix-desktops.cachix.org",
+            "publicKey": "nix-desktops.cachix.org-1:3nwBByDXptI8ugWCbaSjfrXmqa8+Fo9UUvwCZX5IPeA="
+          }
         },
         "config": {
           "omarchy.enable": true,

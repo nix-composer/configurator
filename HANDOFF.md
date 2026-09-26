@@ -683,6 +683,15 @@ grow to the memory's size, builds work in /mnt/.configurator-build
 (not the live system's RAM), `nix flake lock` fetches into /mnt's store,
 and below 8 GB Nix builds one job on two cores (two jobs below 16 GB).
 
+**Binary cache (2026-09-26):** `nix-desktops.cachix.org` (public key in
+data/desktops.json, a flake desktop's `module.flake.cache`). Omarchy's
+`.github/workflows/cache.yml` builds its own packages (Herdr, Aether, …)
+against the newest nixos-26.05 per channel, after pushes and every 6 hours,
+and pushes them there (secret CACHIX_AUTH_TOKEN). The installer's Nix
+commands trust the cache and the generated host sets it as
+`nix.settings.extra-substituters`, so installs and rebuilds download them
+instead of compiling (a T500 took ages on Herdr).
+
 **Decided (2026-09-26):** the generated host flake lives in the first
 admin's `~/.config/nixos` (was `~/nixos`, which collided with personal
 repos).

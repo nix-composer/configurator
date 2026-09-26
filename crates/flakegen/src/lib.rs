@@ -357,6 +357,18 @@ impl Generator<'_> {
         {
             section.set(option.as_str(), Nix::Bool(true));
         }
+        // Its own packages come prebuilt from its binary cache.
+        if let Some(cache) = self.flake_module().and_then(|f| f.cache.as_ref()) {
+            section
+                .set(
+                    "nix.settings.extra-substituters",
+                    Nix::List(vec![Nix::str(&cache.url)]),
+                )
+                .set(
+                    "nix.settings.extra-trusted-public-keys",
+                    Nix::List(vec![Nix::str(&cache.public_key)]),
+                );
+        }
         Ok(section)
     }
 

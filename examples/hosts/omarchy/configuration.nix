@@ -16,6 +16,10 @@
   omarchy.stateDir = ./omarchy;
   omarchy.users = [ "me" ];
   omarchy.ecosystem.enable = true;
+  nix.settings.extra-substituters = [ "https://nix-desktops.cachix.org" ];
+  nix.settings.extra-trusted-public-keys = [
+    "nix-desktops.cachix.org-1:3nwBByDXptI8ugWCbaSjfrXmqa8+Fo9UUvwCZX5IPeA="
+  ];
 
   # Apps, web apps, AI agents and command-line tools.
   environment.systemPackages = [

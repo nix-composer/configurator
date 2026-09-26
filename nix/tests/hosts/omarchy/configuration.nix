@@ -15,6 +15,10 @@
   omarchy.enable = true;
   omarchy.stateDir = ./omarchy;
   omarchy.users = [ "omar" ];
+  nix.settings.extra-substituters = [ "https://nix-desktops.cachix.org" ];
+  nix.settings.extra-trusted-public-keys = [
+    "nix-desktops.cachix.org-1:3nwBByDXptI8ugWCbaSjfrXmqa8+Fo9UUvwCZX5IPeA="
+  ];
 
   # Apps, web apps, AI agents and command-line tools.
   nixpkgs.config.allowUnfree = true;
