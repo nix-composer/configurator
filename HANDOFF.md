@@ -678,7 +678,8 @@ counts, then `nixos-install --system` sets the profile and boot loader;
 offline, `nix copy --to /mnt` counts. For machines with little memory (a
 T500 with 4 GB failed an Omarchy install with exit 137): the live system
 has zram, the new disk's swap is on during the install, a temporary swap
-file tops memory + swap up to 16 GiB, builds work in /mnt/.configurator-build
+file tops memory + swap up to 24 GiB (at most 16 GiB of it), zram may
+grow to the memory's size, builds work in /mnt/.configurator-build
 (not the live system's RAM), `nix flake lock` fetches into /mnt's store,
 and below 8 GB Nix builds one job on two cores (two jobs below 16 GB).
 

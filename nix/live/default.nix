@@ -101,6 +101,8 @@ in
   # install on a small machine room to evaluate and build (the new disk's
   # swap comes on too, once it's partitioned).
   zramSwap.enable = true;
+  # Up to the size of the memory; it takes memory only when used (compressed).
+  zramSwap.memoryPercent = 100;
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"

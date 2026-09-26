@@ -294,12 +294,16 @@ pub fn plan(answers: &Answers, catalog: &Catalog, options: &Options) -> Result<P
     if let Some(swap) = &swap {
         partition.push(run(&["sh", "-c", r#"swapon "$1" || true"#, "swapon", swap]));
     }
-    // And where memory and swap come to less than 16 GiB (older laptops),
-    // a swap file for the install only, removed after it.
+    // And where memory and swap come to less than 24 GiB (older laptops),
+    // a swap file for the install only (up to 16 GiB), removed after it.
     let install_swap = format!("{target}/.configurator-swap");
     let short_gib = crate::status::memory()
         .map(|b| b >> 30)
-        .map(|ram| 16u64.saturating_sub(ram + u64::from(answers.disk.swap_gib)))
+        .map(|ram| {
+            24u64
+                .saturating_sub(ram + u64::from(answers.disk.swap_gib))
+                .min(16)
+        })
         .unwrap_or(0);
     if short_gib > 0 {
         let size = format!("{short_gib}G");
