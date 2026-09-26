@@ -44,6 +44,8 @@ let
       fsType = "ext4";
     };
     boot.initrd.luks.devices.cryptroot.device = "/dev/null";
+    # disko points a BIOS host's GRUB at its disk.
+    boot.loader.grub.devices = lib.mkDefault [ "/dev/null" ];
   };
 
   # Every generated host (examples and VM test hosts) but the ones that

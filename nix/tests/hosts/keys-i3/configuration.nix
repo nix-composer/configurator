@@ -20,7 +20,6 @@
   services.xserver.displayManager.lightdm.enable = true;
 
   # Apps, web apps, AI agents and command-line tools.
-  environment.systemPackages = [ pkgs.xterm pkgs.dmenu ];
   nixpkgs.config.allowUnfree = true;
 
   # Keybinds, on top of the desktop's defaults.

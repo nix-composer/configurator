@@ -19,7 +19,6 @@
   services.displayManager.ly.enable = true;
 
   # Apps, web apps, AI agents and command-line tools.
-  environment.systemPackages = [ pkgs.foot ];
   nixpkgs.config.allowUnfree = true;
 
   # Keybinds, on top of the desktop's defaults.
