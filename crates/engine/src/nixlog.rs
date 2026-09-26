@@ -153,7 +153,7 @@ impl Tracker {
 
 /// "About 6 minutes left", once the pace is known.
 fn remaining(elapsed: Duration, fraction: f64) -> Option<String> {
-    if elapsed < Duration::from_secs(20) || fraction < 0.03 || fraction >= 1.0 {
+    if elapsed < Duration::from_secs(20) || !(0.03..1.0).contains(&fraction) {
         return None;
     }
     let left = elapsed.as_secs_f64() * (1.0 - fraction) / fraction;
@@ -177,7 +177,7 @@ fn thousands(n: u64) -> String {
     let s = n.to_string();
     let mut out = String::new();
     for (i, c) in s.chars().enumerate() {
-        if i > 0 && (s.len() - i) % 3 == 0 {
+        if i > 0 && (s.len() - i).is_multiple_of(3) {
             out.push(',');
         }
         out.push(c);
