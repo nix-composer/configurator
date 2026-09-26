@@ -303,10 +303,14 @@ fn screenshots_dir() -> Option<std::path::PathBuf> {
         .filter(|d| d.is_dir())
 }
 
-/// Light or dark. The installer starts with the system's preference (on
-/// the live system there is none: light); the moon button switches.
+/// Light or dark. The installer starts with the system's preference; the
+/// live system has none, and starts dark (no white flash after the dark
+/// boot menu). The moon button switches.
 fn theme_toggle() -> gtk::ToggleButton {
     let style = adw::StyleManager::default();
+    if std::path::Path::new("/etc/configurator-live").exists() {
+        style.set_color_scheme(adw::ColorScheme::ForceDark);
+    }
     let button = gtk::ToggleButton::builder()
         .active(style.is_dark())
         .valign(gtk::Align::Center)

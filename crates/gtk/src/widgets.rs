@@ -16,6 +16,31 @@ pub type SelfRef = Rc<RefCell<Option<Rc<dyn Fn()>>>>;
 /// 110 px instead of 770). Touchpads keep GTK's smooth, kinetic scrolling;
 /// a scroller inside this one (a code view) still scrolls itself.
 pub fn instant_wheel(scroller: &gtk::ScrolledWindow) {
+    instant_wheel_then(scroller, None);
+}
+
+/// [`instant_wheel`], calling `moved` after each wheel step it scrolls
+/// (it takes the event, so other controllers don't see it).
+pub fn instant_wheel_then(scroller: &gtk::ScrolledWindow, moved: Option<std::rc::Rc<dyn Fn()>>) {
+    // Where the pointer is, in the scroller's coordinates: scroll events
+    // don't carry a position on every backend (Wayland, here), motion does.
+    let pointer = std::rc::Rc::new(std::cell::Cell::new(None::<(f64, f64)>));
+    let motion = gtk::EventControllerMotion::new();
+    motion.set_propagation_phase(gtk::PropagationPhase::Capture);
+    {
+        let pointer = pointer.clone();
+        motion.connect_enter(move |_, x, y| pointer.set(Some((x, y))));
+    }
+    {
+        let pointer = pointer.clone();
+        motion.connect_motion(move |_, x, y| pointer.set(Some((x, y))));
+    }
+    {
+        let pointer = pointer.clone();
+        motion.connect_leave(move |_| pointer.set(None));
+    }
+    scroller.add_controller(motion);
+
     let wheel = gtk::EventControllerScroll::new(gtk::EventControllerScrollFlags::VERTICAL);
     wheel.set_propagation_phase(gtk::PropagationPhase::Capture);
     let weak = scroller.downgrade();
@@ -23,36 +48,28 @@ pub fn instant_wheel(scroller: &gtk::ScrolledWindow) {
         let Some(sw) = weak.upgrade() else {
             return gtk::glib::Propagation::Proceed;
         };
-        if c.unit() != gtk::gdk::ScrollUnit::Wheel || innermost_elsewhere(c, &sw) {
+        if c.unit() != gtk::gdk::ScrollUnit::Wheel || innermost_elsewhere(&sw, pointer.get()) {
             return gtk::glib::Propagation::Proceed;
         }
         let adj = sw.vadjustment();
         let step = adj.page_size().powf(2.0 / 3.0);
         let top = (adj.upper() - adj.page_size()).max(adj.lower());
         adj.set_value((adj.value() + dy * step).clamp(adj.lower(), top));
+        if let Some(moved) = &moved {
+            moved();
+        }
         gtk::glib::Propagation::Stop
     });
     scroller.add_controller(wheel);
 }
 
-/// Whether the pointer is over another scroller inside `sw`, which should
-/// get the wheel instead.
-fn innermost_elsewhere(c: &gtk::EventControllerScroll, sw: &gtk::ScrolledWindow) -> bool {
-    let (Some(event), Some(native)) = (c.current_event(), sw.native()) else {
+/// Whether the pointer (at `pointer`, in `sw`'s coordinates) is over
+/// another scroller inside `sw`, which should get the wheel instead.
+fn innermost_elsewhere(sw: &gtk::ScrolledWindow, pointer: Option<(f64, f64)>) -> bool {
+    let Some((x, y)) = pointer else {
         return false;
     };
-    let Some((x, y)) = event.position() else {
-        return false;
-    };
-    // Surface coordinates, less the window's shadow, into the scroller's.
-    let (sx, sy) = native.surface_transform();
-    let Some(point) = native.upcast_ref::<gtk::Widget>().compute_point(
-        sw,
-        &gtk::graphene::Point::new((x - sx) as f32, (y - sy) as f32),
-    ) else {
-        return false;
-    };
-    sw.pick(point.x() as f64, point.y() as f64, gtk::PickFlags::DEFAULT)
+    sw.pick(x, y, gtk::PickFlags::DEFAULT)
         .and_then(|w| w.ancestor(gtk::ScrolledWindow::static_type()))
         .is_some_and(|inner| inner != *sw.upcast_ref::<gtk::Widget>())
 }

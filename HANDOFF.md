@@ -710,6 +710,21 @@ commands trust the cache and the generated host sets it as
 instead of compiling (a T500 took ages on Herdr); `fallback = true` and a
 10 s connect timeout build it when the cache is missing it, stale or down.
 
+**Live ISO look and the install log (2026-09-26):** both boot menus are
+dark (isolinux: NixOS's dark boot artwork, light text; GRUB: a plain dark
+background instead of the light theme), without nixpkgs' "Options"
+submenu (nix/live/iso-image.nix, a checked patch of nixpkgs' iso-image.nix;
+Memtest86+, Firmware Setup and Shutdown stay), and the installer starts
+dark on the live system. The progress screen's Details log follows its
+newest line; only the user's scrolling (wheel, touchpad, holding the
+scrollbar) stops that, reaching the bottom resumes it; it keeps the last
+5,000 lines, all of them go to /tmp/configurator-install.log.
+`widgets::instant_wheel` finds what's under the pointer from motion
+events (Wayland scroll events have no position), so nested scrollers get
+the wheel. CONFIGURATOR_DEMO_INSTALL plays a made-up install anywhere, to
+try the progress screen (the example's plan if the choices aren't
+complete); tested in the live VM through QMP.
+
 **Decided (2026-09-26):** the generated host flake lives in the first
 admin's `~/.config/nixos` (was `~/nixos`, which collided with personal
 repos).

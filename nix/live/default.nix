@@ -6,6 +6,7 @@
   self,
   lib,
   pkgs,
+  config,
   modulesPath,
   ...
 }:
@@ -19,10 +20,59 @@ in
 {
   # nixpkgs' own installer image (stock NixOS boot menu and branding);
   # `config.system.build.isoImage` builds it (`nix build .#iso`).
-  imports = [ (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix") ];
+  imports = [
+    (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
+    # Its ISO module, without the "Options" boot submenu.
+    (import ./iso-image.nix { inherit lib modulesPath; })
+  ];
+  disabledModules = [ (modulesPath + "/installer/cd-dvd/iso-image.nix") ];
   image.baseName = lib.mkForce "configurator-live-${pkgs.stdenv.hostPlatform.system}";
 
   isoImage.appendToMenuLabel = " Configurator";
+
+  # A dark boot menu (NixOS's own dark boot artwork), not a white flash
+  # before the installer, which starts dark too.
+  isoImage.splashImage =
+    pkgs.runCommand "bios-boot-dark.png" { nativeBuildInputs = [ pkgs.imagemagick ]; }
+      ''
+        magick ${pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader.gnomeFilePath} \
+          -resize 800x600 -background '#2e2e2e' -gravity center -extent 800x600 -depth 8 PNG24:$out
+      '';
+  # UEFI: GRUB's menu box fills the screen, so a plain dark background
+  # (a logo would end up behind the entries). A plain 8-bit PNG: GRUB's
+  # loader doesn't take every PNG.
+  isoImage.efiSplashImage =
+    pkgs.runCommand "efi-background-dark.png" { nativeBuildInputs = [ pkgs.imagemagick ]; }
+      ''
+        magick -size 1024x768 xc:'#2e2e2e' -depth 8 PNG24:$out
+      '';
+  # The splash image instead of the (light) GRUB theme.
+  isoImage.grubTheme = null;
+  # nixpkgs' menu layout with light text for the dark background.
+  isoImage.syslinuxTheme = ''
+    MENU TITLE ${config.system.nixos.distroName}
+    MENU RESOLUTION 800 600
+    MENU CLEAR
+    MENU ROWS 6
+    MENU CMDLINEROW -4
+    MENU TIMEOUTROW -3
+    MENU TABMSGROW  -2
+    MENU HELPMSGROW -1
+    MENU HELPMSGENDROW -1
+    MENU MARGIN 0
+
+    #                                FG:AARRGGBB  BG:AARRGGBB   shadow
+    MENU COLOR BORDER       30;44      #00000000    #00000000   none
+    MENU COLOR SCREEN       37;40      #FFE8ECF4    #00000000   none
+    MENU COLOR TABMSG       31;40      #A0E8ECF4    #00000000   none
+    MENU COLOR TIMEOUT      1;37;40    #FFFFFFFF    #00000000   none
+    MENU COLOR TIMEOUT_MSG  37;40      #FFE8ECF4    #00000000   none
+    MENU COLOR CMDMARK      1;36;40    #FFFFFFFF    #00000000   none
+    MENU COLOR CMDLINE      37;40      #FFFFFFFF    #00000000   none
+    MENU COLOR TITLE        1;36;44    #00000000    #00000000   none
+    MENU COLOR UNSEL        37;44      #FFE8ECF4    #00000000   none
+    MENU COLOR SEL          7;37;40    #FFFFFFFF    #FF5277C3   std
+  '';
 
   environment.systemPackages = [
     self.packages.${system}.configurator

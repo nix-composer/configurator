@@ -14,6 +14,13 @@ use crate::pages::Page;
 use crate::widgets::{escape, group, list, page_frame};
 
 fn monospace_view() -> (gtk::ScrolledWindow, gtk::TextBuffer) {
+    let (scroller, buffer) = monospace_view_bare();
+    crate::widgets::instant_wheel(&scroller);
+    (scroller, buffer)
+}
+
+/// A monospace text view in a scroller, without the wheel handling.
+fn monospace_view_bare() -> (gtk::ScrolledWindow, gtk::TextBuffer) {
     let view = gtk::TextView::builder()
         .editable(false)
         .monospace(true)
@@ -29,27 +36,107 @@ fn monospace_view() -> (gtk::ScrolledWindow, gtk::TextBuffer) {
         .min_content_height(320)
         .css_classes(["card", "code"])
         .build();
-    crate::widgets::instant_wheel(&scroller);
     (scroller, buffer)
 }
 
-/// Keeps a log scrolled to its newest line while it's at the bottom;
-/// scrolled up, it stays put, and back at the bottom it follows again.
-fn follow_end(scroller: &gtk::ScrolledWindow) {
-    let adj = scroller.vadjustment();
-    let following = std::rc::Rc::new(std::cell::Cell::new(true));
-    {
-        let following = following.clone();
-        adj.connect_value_changed(move |a| {
-            following.set(a.value() + a.page_size() >= a.upper() - 24.0);
-        });
-    }
-    // New lines make it taller.
-    adj.connect_changed(move |a| {
-        if following.get() {
-            a.set_value(a.upper() - a.page_size());
+/// Keeps a log showing its newest line. Only the user's scrolling decides
+/// whether it follows: wheel, touchpad or scrollbar; after each, it
+/// follows if the log is at its bottom and stays put if not. New text
+/// never changes that (the text view's own adjustments while laying out
+/// long text would otherwise look like scrolling).
+#[derive(Clone)]
+struct LogFollow {
+    view: gtk::TextView,
+    end: gtk::TextMark,
+    following: std::rc::Rc<std::cell::Cell<bool>>,
+    /// One scroll per frame at most, however many lines arrive.
+    pending: std::rc::Rc<std::cell::Cell<bool>>,
+}
+
+impl LogFollow {
+    /// The scroller gets its wheel handling here, to report wheel scrolls.
+    fn new(scroller: &gtk::ScrolledWindow) -> LogFollow {
+        use std::cell::Cell;
+        use std::rc::Rc;
+        let view: gtk::TextView = scroller.child().and_downcast().expect("a text view");
+        let buffer = view.buffer();
+        // Stays at the end: text is inserted before it.
+        let end = buffer.create_mark(None, &buffer.end_iter(), false);
+        let following = Rc::new(Cell::new(true));
+        let adj = scroller.vadjustment();
+        // After the user scrolled: following if they're at the bottom.
+        let check: Rc<dyn Fn()> = {
+            let (adj, following) = (adj.clone(), following.clone());
+            Rc::new(move || {
+                following.set(adj.value() + adj.page_size() >= adj.upper() - 24.0);
+            })
+        };
+        crate::widgets::instant_wheel_then(scroller, Some(check.clone()));
+        // Touchpads (GTK's own scrolling).
+        let touch = gtk::EventControllerScroll::new(gtk::EventControllerScrollFlags::VERTICAL);
+        touch.set_propagation_phase(gtk::PropagationPhase::Capture);
+        {
+            let check = check.clone();
+            touch.connect_scroll(move |_, _, _| {
+                let check = check.clone();
+                gtk::glib::idle_add_local_once(move || check());
+                gtk::glib::Propagation::Proceed
+            });
         }
-    });
+        scroller.add_controller(touch);
+        // The scrollbar: while it's held, moving off the bottom stops
+        // following. Reaching the bottom, any way, starts it again.
+        let held = Rc::new(Cell::new(false));
+        let press = gtk::GestureClick::new();
+        press.set_propagation_phase(gtk::PropagationPhase::Capture);
+        {
+            let held = held.clone();
+            press.connect_pressed(move |_, _, _, _| held.set(true));
+        }
+        {
+            let held = held.clone();
+            press.connect_released(move |_, _, _, _| held.set(false));
+        }
+        {
+            let held = held.clone();
+            press.connect_stopped(move |_| held.set(false));
+        }
+        scroller.vscrollbar().add_controller(press);
+        {
+            let following = following.clone();
+            adj.connect_value_changed(move |a| {
+                if a.value() + a.page_size() >= a.upper() - 24.0 {
+                    following.set(true);
+                } else if held.get() {
+                    following.set(false);
+                }
+            });
+        }
+        LogFollow {
+            view,
+            end,
+            following,
+            pending: Rc::new(Cell::new(false)),
+        }
+    }
+
+    /// Opening the details: show the newest line.
+    fn restart(&self) {
+        self.following.set(true);
+        self.follow();
+    }
+
+    /// After adding text: shows it, if following.
+    fn follow(&self) {
+        if self.following.get() && !self.pending.replace(true) {
+            let this = self.clone();
+            // Once the view has laid out the new text.
+            gtk::glib::idle_add_local_once(move || {
+                this.pending.set(false);
+                this.view.scroll_to_mark(&this.end, 0.0, true, 0.0, 1.0);
+            });
+        }
+    }
 }
 
 pub fn review(ctx: &Ctx) -> Page {
@@ -121,8 +208,8 @@ pub fn review(ctx: &Ctx) -> Page {
         .wrap(true)
         .build();
     let steps = list();
-    let (log_view, log_buffer) = monospace_view();
-    follow_end(&log_view);
+    let (log_view, log_buffer) = monospace_view_bare();
+    let follow_log = LogFollow::new(&log_view);
     let details = gtk::Expander::builder()
         .label("Details")
         .child(&log_view)
@@ -150,6 +237,26 @@ pub fn review(ctx: &Ctx) -> Page {
         )
         .build();
     crate::widgets::instant_wheel(&progress_page);
+    // Opening the details brings the whole log into view, once the page
+    // has grown to hold it.
+    {
+        let adj = progress_page.vadjustment();
+        let reveal = std::rc::Rc::new(std::cell::Cell::new(false));
+        {
+            let (reveal, follow_log) = (reveal.clone(), follow_log.clone());
+            details.connect_expanded_notify(move |d| {
+                reveal.set(d.is_expanded());
+                if d.is_expanded() {
+                    follow_log.restart();
+                }
+            });
+        }
+        adj.connect_changed(move |a| {
+            if reveal.replace(false) {
+                a.set_value(a.upper() - a.page_size());
+            }
+        });
+    }
     stack.add_named(&progress_page, Some("progress"));
 
     // -------------------------------------------------------------- done
@@ -235,9 +342,11 @@ pub fn review(ctx: &Ctx) -> Page {
                     *generated.borrow_mut() = files;
                 }
                 Err(e) => {
-                    problem.set_title(&escape(&format!("Can't install yet: {e}")));
+                    // A banner title is plain text (no markup to escape).
+                    problem.set_title(&format!("Can't install yet: {e}"));
                     problem.set_revealed(true);
-                    install.set_sensitive(false);
+                    // The demo install plays anyway (with the example's plan).
+                    install.set_sensitive(std::env::var_os("CONFIGURATOR_DEMO_INSTALL").is_some());
                     code_buffer.set_text("");
                 }
             }
@@ -279,6 +388,7 @@ pub fn review(ctx: &Ctx) -> Page {
             after,
             details,
             plan_back,
+            follow_log,
         };
         install.connect_clicked(move |button| {
             let disk = ctx.draft.borrow().disk.clone();
@@ -460,6 +570,9 @@ fn fill_summary(ctx: &Ctx, rows: &gtk::ListBox) {
     }
 }
 
+/// Every line of the install's log, on the live system.
+const INSTALL_LOG: &str = "/tmp/configurator-install.log";
+
 #[derive(Clone)]
 struct ProgressUi {
     stack: gtk::Stack,
@@ -469,6 +582,8 @@ struct ProgressUi {
     detail: gtk::Label,
     steps: gtk::ListBox,
     log: gtk::TextBuffer,
+    /// Shows the log's newest line, unless the user scrolled up.
+    follow_log: LogFollow,
     done: adw::StatusPage,
     after: gtk::ListBox,
     details: gtk::Expander,
@@ -478,9 +593,28 @@ struct ProgressUi {
 
 impl ProgressUi {
     fn log(&self, line: &str) {
+        // The whole log, for bug reports: the view keeps only the end.
+        if let Ok(mut file) = std::fs::OpenOptions::new()
+            .create(true)
+            .append(true)
+            .open(INSTALL_LOG)
+        {
+            use std::io::Write;
+            let _ = writeln!(file, "{line}");
+        }
         let mut end = self.log.end_iter();
         self.log.insert(&mut end, line);
         self.log.insert(&mut end, "\n");
+        // The last lines only: a long install's full log would make the
+        // view slow to lay out (all of it is in INSTALL_LOG).
+        const KEEP: i32 = 5000;
+        let extra = self.log.line_count() - KEEP;
+        if extra > 500 {
+            let mut start = self.log.start_iter();
+            let mut cut = self.log.iter_at_line(extra).unwrap_or(self.log.end_iter());
+            self.log.delete(&mut start, &mut cut);
+        }
+        self.follow_log.follow();
     }
 }
 
@@ -496,8 +630,19 @@ fn step_icon(state: &str) -> &'static str {
 fn start(ctx: &Ctx, ui: &ProgressUi) {
     let answers = ctx.draft.borrow().answers();
     let secrets = ctx.draft.borrow().secrets();
+    // CONFIGURATOR_DEMO_INSTALL: plays a made-up install (anywhere, with
+    // the GNOME example's plan if the choices aren't complete), to try the
+    // progress screen without installing.
+    let demo = std::env::var_os("CONFIGURATOR_DEMO_INSTALL").is_some();
     let plan = match configurator_engine::plan(&answers, &ctx.catalog, &Options::default()) {
         Ok(p) => p,
+        Err(_) if demo => {
+            let example = include_str!("../../../examples/answers/gnome.json");
+            let answers =
+                configurator_answers::Answers::from_json(example).expect("the example parses");
+            configurator_engine::plan(&answers, &ctx.catalog, &Options::default())
+                .expect("the example plans")
+        }
         Err(e) => return ctx.toast(&format!("Can't install: {e}")),
     };
 
@@ -522,7 +667,7 @@ fn start(ctx: &Ctx, ui: &ProgressUi) {
     });
     ui.stack.set_visible_child_name("progress");
 
-    if !ctx.live {
+    if !ctx.live && !demo {
         dry_run(ui, &plan, &step_rows);
         return;
     }
@@ -535,6 +680,10 @@ fn start(ctx: &Ctx, ui: &ProgressUi) {
         let mut progress = move |e: Event| {
             let _ = tx2.send(e);
         };
+        if demo {
+            demo_install(&thread_plan, &mut progress);
+            return;
+        }
         if let Err(e) =
             configurator_engine::install(&answers, &catalog, &thread_plan, &secrets, &mut progress)
         {
@@ -592,6 +741,38 @@ fn start(ctx: &Ctx, ui: &ProgressUi) {
 }
 
 /// Not on the live system: list what the install would run.
+/// A made-up install for CONFIGURATOR_DEMO_INSTALL: every step, with log
+/// lines and download progress in the install step.
+fn demo_install(plan: &Plan, progress: &mut dyn FnMut(Event)) {
+    let pause = |ms| std::thread::sleep(std::time::Duration::from_millis(ms));
+    let mut percent = 0u8;
+    for step in &plan.steps {
+        progress(Event::Step {
+            id: step.id,
+            title: step.title.clone(),
+            percent,
+        });
+        let lines = if step.id == StepId::Install { 3000 } else { 8 };
+        for i in 0..lines {
+            progress(Event::Log {
+                line: format!(
+                    "copying path '/nix/store/{i:032x}-demo-package-{i}' from 'https://cache.nixos.org'..."
+                ),
+            });
+            if step.id == StepId::Install && i % 10 == 0 {
+                let share = f64::from(step.weight) * f64::from(i) / f64::from(lines);
+                progress(Event::Progress {
+                    percent: percent + share as u8,
+                    detail: format!("{} MB of 6,000 MB · {i} of {lines} packages", i * 2),
+                });
+            }
+            pause(40);
+        }
+        percent = percent.saturating_add(step.weight);
+    }
+    progress(Event::Done);
+}
+
 fn dry_run(ui: &ProgressUi, plan: &Plan, rows: &[(StepId, adw::ActionRow, gtk::Image)]) {
     let mut percent = 0u32;
     for (step, (_, row, icon)) in plan.steps.iter().zip(rows) {
@@ -624,7 +805,7 @@ fn finish(ctx: &Ctx, ui: &ProgressUi, plan: &Plan, failure: Option<String>) {
             ui.done.set_icon_name(Some("checkbox-checked-symbolic"));
             ui.done.set_title("NixOS is installed");
             ui.done.set_description(Some(
-                "Your configuration is in your home folder, in nixos. Restart to start using it.",
+                "Your configuration is in your home folder, in .config/nixos. Restart to start using it.",
             ));
             for line in &plan.after_install {
                 let row = adw::ActionRow::builder()
