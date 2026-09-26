@@ -233,6 +233,8 @@ pub struct Profile {
 pub struct Container {
     pub id: String,
     pub name: String,
+    /// One of [`CONTAINER_CATEGORIES`].
+    pub category: String,
     pub description: String,
     pub image: String,
     pub ports: Vec<String>,
@@ -240,7 +242,27 @@ pub struct Container {
     pub volumes: Vec<String>,
     #[serde(default)]
     pub cmd: Vec<String>,
+    /// oci-containers' `user`, for images that can't write their volume
+    /// as their own user.
+    #[serde(default)]
+    pub user: Option<String>,
+    /// oci-containers' `extraOptions` (`--network=host` for tools that
+    /// reach the other services on localhost).
+    #[serde(default)]
+    pub extra_options: Vec<String>,
 }
+
+/// The categories of containerized services, in the order they're shown.
+pub const CONTAINER_CATEGORIES: &[(&str, &str)] = &[
+    ("databases", "Databases"),
+    ("caches", "Caches"),
+    ("search", "Search"),
+    ("ai", "AI & vector databases"),
+    ("queues", "Queues & streaming"),
+    ("storage", "Storage & cloud emulators"),
+    ("devtools", "Developer tools"),
+    ("observability", "Observability"),
+];
 
 /// One of a desktop's default keybinds (data/keybinds/<desktop>.json).
 #[derive(Debug, Clone, Deserialize)]
@@ -668,6 +690,31 @@ mod tests {
                 catalog.container(id).is_some(),
                 "data/containers/{id}.png: no such container"
             );
+        }
+        for c in &catalog.containers {
+            assert!(
+                CONTAINER_CATEGORIES.iter().any(|(id, _)| *id == c.category),
+                "{}: unknown category {}",
+                c.id,
+                c.category
+            );
+            assert!(catalog.container_icon(&c.id).is_some(), "{}: no icon", c.id);
+        }
+        // Services bind to this machine only, and no two to the same port
+        // (but MySQL and MariaDB, which are alternatives).
+        let mut ports = BTreeMap::new();
+        for c in &catalog.containers {
+            for port in &c.ports {
+                let host = port
+                    .strip_prefix("127.0.0.1:")
+                    .and_then(|p| p.split(':').next())
+                    .unwrap_or_else(|| panic!("{}: {port} isn't bound to 127.0.0.1", c.id));
+                if let Some(other) = ports.insert(host.to_string(), &c.id)
+                    && !(other == "mysql" && c.id == "mariadb")
+                {
+                    panic!("{} and {other} both use port {host}", c.id);
+                }
+            }
         }
         for (id, _) in AGENT_ICONS {
             assert!(

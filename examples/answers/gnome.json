@@ -65,7 +65,12 @@
     ],
     "containers": [
       "postgres",
-      "redis"
+      "redis",
+      "keycloak",
+      "surrealdb",
+      "pgadmin",
+      "opensearch",
+      "mailpit"
     ]
   }
 }

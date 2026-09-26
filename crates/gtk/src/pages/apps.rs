@@ -528,6 +528,9 @@ fn category_title(id: &str) -> String {
     }
 }
 
+/// The Development layer's cards: searchable text, the card, its grid.
+type SearchCards = Rc<RefCell<Vec<(String, gtk::Widget, gtk::FlowBox)>>>;
+
 pub fn development(ctx: &Ctx) -> Page {
     let (widget, content) = wide_page_frame(
         "configurator-code-symbolic",
@@ -540,7 +543,7 @@ pub fn development(ctx: &Ctx) -> Page {
         .build();
     content.append(&search);
     // Every card, with its searchable text and its section's grid.
-    let cards: Rc<RefCell<Vec<(String, gtk::Widget, gtk::FlowBox)>>> = Default::default();
+    let cards: SearchCards = Default::default();
 
     let section = |title: &str, note: &str| {
         let heading = gtk::Label::builder()
@@ -601,11 +604,85 @@ pub fn development(ctx: &Ctx) -> Page {
             .push((hay, card.upcast(), templates.clone()));
     }
 
-    let containers = section(
-        "Services in containers",
-        "Databases and other services, run with Docker and bound to this machine only.",
+    // Services, under a heading per category (in the catalog's order).
+    let services_heading = gtk::Label::builder()
+        .label("Services in containers")
+        .xalign(0.0)
+        .css_classes(["title-3", "store-heading"])
+        .build();
+    content.append(&services_heading);
+    content.append(
+        &gtk::Label::builder()
+            .label("Databases and other services a project runs against, run with Docker and bound to this machine only. Their logins are in each description.")
+            .xalign(0.0)
+            .wrap(true)
+            .css_classes(["dim-label"])
+            .build(),
     );
-    for c in &ctx.catalog.containers {
+    let mut category_grids: Vec<(gtk::Label, gtk::FlowBox)> = Vec::new();
+    for (category, title) in configurator_catalog::CONTAINER_CATEGORIES {
+        let services: Vec<_> = ctx
+            .catalog
+            .containers
+            .iter()
+            .filter(|c| c.category == *category)
+            .collect();
+        if services.is_empty() {
+            continue;
+        }
+        let heading = gtk::Label::builder()
+            .label(*title)
+            .xalign(0.0)
+            .css_classes(["heading", "dim-label"])
+            .build();
+        content.append(&heading);
+        let grid = store::grid(|_| {});
+        content.append(&grid);
+        category_grids.push((heading, grid.clone()));
+        add_container_cards(ctx, &services, title, &grid, &cards);
+    }
+
+    // Headings follow their cards: one shows while any card under it does.
+    let headings = Rc::new(category_grids);
+    search.connect_search_changed(move |s| {
+        let q = s.text().to_lowercase();
+        for (hay, card, _) in cards.borrow().iter() {
+            if let Some(cell) = card.parent() {
+                cell.set_visible(q.is_empty() || hay.contains(&q));
+            }
+        }
+        let shows = |grid: &gtk::FlowBox| {
+            let mut child = grid.first_child();
+            while let Some(c) = child {
+                if c.is_visible() {
+                    return true;
+                }
+                child = c.next_sibling();
+            }
+            false
+        };
+        let mut any = false;
+        for (heading, grid) in headings.iter() {
+            let show = shows(grid);
+            heading.set_visible(show);
+            grid.set_visible(show);
+            any |= show;
+        }
+        services_heading.set_visible(any);
+    });
+
+    Page::new(Layer::Development, widget)
+}
+
+/// Cards for containerized services, with their searchable text.
+fn add_container_cards(
+    ctx: &Ctx,
+    services: &[&configurator_catalog::Container],
+    category: &str,
+    grid: &gtk::FlowBox,
+    cards: &SearchCards,
+) {
+    for c in services {
         let icon = match ctx.catalog.container_icon(&c.id) {
             Some(png) => store::png_icon(png, 48),
             None => store::letter_tile(&c.name, 48, false),
@@ -619,31 +696,14 @@ pub fn development(ctx: &Ctx) -> Page {
                 d.containers.remove(&id);
             }
         });
-        let card = store::card(
-            &c.id,
-            icon,
-            &c.name,
-            &format!("{}\n{}", c.description, c.image),
-            &[],
-            &button,
-        );
-        containers.append(&card);
-        let hay = format!("{} {} {}", c.name, c.description, c.image).to_lowercase();
-        cards
-            .borrow_mut()
-            .push((hay, card.upcast(), containers.clone()));
+        let card = store::card(&c.id, icon, &c.name, &c.description, &[], &button);
+        // The card shows two lines; the whole description (ports, logins)
+        // and the image are a hover away.
+        card.set_tooltip_text(Some(&format!("{}\n{}", c.description, c.image)));
+        grid.append(&card);
+        let hay = format!("{} {} {} {category}", c.name, c.description, c.image).to_lowercase();
+        cards.borrow_mut().push((hay, card.upcast(), grid.clone()));
     }
-
-    search.connect_search_changed(move |s| {
-        let q = s.text().to_lowercase();
-        for (hay, card, _) in cards.borrow().iter() {
-            if let Some(cell) = card.parent() {
-                cell.set_visible(q.is_empty() || hay.contains(&q));
-            }
-        }
-    });
-
-    Page::new(Layer::Development, widget)
 }
 
 const SHELLS: [(ShellKind, &str); 4] = [

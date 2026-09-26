@@ -73,6 +73,65 @@
     ports = [ "127.0.0.1:6379:6379" ];
     volumes = [ "redis:/data" ];
   };
+  virtualisation.oci-containers.containers.keycloak = {
+    image = "quay.io/keycloak/keycloak:26.7";
+    ports = [ "127.0.0.1:8080:8080" ];
+    environment = {
+      KC_BOOTSTRAP_ADMIN_PASSWORD = "admin";
+      KC_BOOTSTRAP_ADMIN_USERNAME = "admin";
+    };
+    volumes = [ "keycloak:/opt/keycloak/data" ];
+    cmd = [ "start-dev" ];
+  };
+  virtualisation.oci-containers.containers.surrealdb = {
+    image = "surrealdb/surrealdb:v3";
+    ports = [ "127.0.0.1:8001:8000" ];
+    volumes = [ "surrealdb:/data" ];
+    cmd = [
+      "start"
+      "--bind"
+      "0.0.0.0:8000"
+      "--user"
+      "root"
+      "--pass"
+      "root"
+      "rocksdb:///data/database.db"
+    ];
+    user = "root";
+  };
+  virtualisation.oci-containers.containers.pgadmin = {
+    image = "dpage/pgadmin4:9";
+    ports = [ ];
+    environment = {
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED = "False";
+      PGADMIN_CONFIG_SERVER_MODE = "False";
+      PGADMIN_DEFAULT_EMAIL = "admin@example.com";
+      PGADMIN_DEFAULT_PASSWORD = "admin";
+      PGADMIN_LISTEN_ADDRESS = "127.0.0.1";
+      PGADMIN_LISTEN_PORT = "5050";
+    };
+    volumes = [ "pgadmin:/var/lib/pgadmin" ];
+    extraOptions = [ "--network=host" ];
+  };
+  virtualisation.oci-containers.containers.opensearch = {
+    image = "opensearchproject/opensearch:3";
+    ports = [ "127.0.0.1:9200:9200" ];
+    environment = {
+      DISABLE_INSTALL_DEMO_CONFIG = "true";
+      DISABLE_SECURITY_PLUGIN = "true";
+      OPENSEARCH_JAVA_OPTS = "-Xms512m -Xmx512m";
+      "discovery.type" = "single-node";
+    };
+    volumes = [ "opensearch:/usr/share/opensearch/data" ];
+  };
+  virtualisation.oci-containers.containers.mailpit = {
+    image = "axllent/mailpit:v1";
+    ports = [ "127.0.0.1:1025:1025" "127.0.0.1:8025:8025" ];
+    environment = {
+      MP_DATABASE = "/data/mailpit.db";
+    };
+    volumes = [ "mailpit:/data" ];
+  };
 
   # Shell.
   programs.fish.enable = true;

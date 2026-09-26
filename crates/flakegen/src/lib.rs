@@ -801,6 +801,15 @@ impl Generator<'_> {
                         Nix::List(c.cmd.iter().map(Nix::str).collect()),
                     ));
                 }
+                if let Some(user) = &c.user {
+                    unit.push((Key::from("user"), Nix::str(user)));
+                }
+                if !c.extra_options.is_empty() {
+                    unit.push((
+                        Key::from("extraOptions"),
+                        Nix::List(c.extra_options.iter().map(Nix::str).collect()),
+                    ));
+                }
                 section.set(
                     Key(vec![
                         "virtualisation".into(),
@@ -1271,6 +1280,26 @@ mod tests {
             Keybind::Action("org.gnome.nothing/here".into()),
         );
         assert!(generate(&answers, &catalog, &Inputs::default()).is_err());
+    }
+
+    #[test]
+    fn containers_carry_cmd_user_and_options() {
+        let catalog = Catalog::builtin().unwrap();
+        let mut answers =
+            Answers::from_json(include_str!("../../../examples/answers/gnome.json")).unwrap();
+        answers.development.containers =
+            vec!["keycloak".into(), "surrealdb".into(), "grafana".into()];
+        let host = generate(&answers, &catalog, &Inputs::default()).unwrap();
+        let config = &host.files["configuration.nix"];
+        assert!(config.contains("cmd = [ \"start-dev\" ];"), "{config}");
+        assert!(config.contains("user = \"root\";"), "{config}");
+        assert!(
+            config.contains("extraOptions = [ \"--network=host\" ];"),
+            "{config}"
+        );
+        // Every container is known, and generates.
+        answers.development.containers = catalog.containers.iter().map(|c| c.id.clone()).collect();
+        generate(&answers, &catalog, &Inputs::default()).unwrap();
     }
 
     #[test]

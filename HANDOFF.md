@@ -514,7 +514,8 @@ crates/gtk                 the graphical installer: a page per layer over one Dr
                            package, cards, details with screenshots)
 data/                      desktops.json (45 desktops/WMs), agents.json (ids as
                            Omarchy's), webapps.json, profiles.json, containers.json
-                           (Omarchy's DBs + more), dev-templates.json (nix-templates/dev)
+                           (40 dev services by category; Omarchy takes its DBs by id),
+                           dev-templates.json (nix-templates/dev)
 data/app-categories.json   the store's categories (apps, CLI) and how packages land in them
 data/apps-curated.json     featured apps, popular tools, apps AppStream misses
 data/ecosystems.json       each desktop's essentials and ecosystem (apps, tools)
@@ -665,8 +666,24 @@ boot into it, and a VM test that drives it.
   ships icons the theme lacks in crates/gtk/icons (the `</>` code icon of
   the Development layer and tiles), registered at startup.
 - The Development layer is a searchable icon grid: language logos for 59
-  of 67 templates and all 10 containers (data/dev-templates,
+  of 67 templates and every container (data/dev-templates,
   data/containers).
+
+**Development services (2026-09-26):** data/containers.json has 40
+services a project runs against, each with a `category`, shown under
+headings in the catalog's `CONTAINER_CATEGORIES` order (databases,
+caches, search, AI & vector databases, queues & streaming, storage &
+cloud emulators, developer tools, observability; the wizard lists them
+the same way). Official images pinned to a major tag where there is one
+(else a release, or `latest`/`community`/`emulators` where that's all),
+ports on 127.0.0.1 with no two services on one host port (a catalog
+test; MySQL and MariaDB excepted), logins in the descriptions. Entries
+may set oci-containers' `cmd`, `user` and `extraOptions`: Adminer,
+pgAdmin, Grafana and Prometheus run with `--network=host`, listening on
+127.0.0.1 themselves, so they reach the other services (and your own
+apps) at localhost. LocalStack is left out: its image needs an account's
+auth token since 2026 (Moto emulates AWS instead). The images were
+checked to exist, not run: `examples/hosts/gnome` evaluates a few.
 
 **Install progress and small machines (2026-09-26):** the Install step
 runs Nix itself with `--log-format internal-json` (crates/engine/src/nixlog.rs

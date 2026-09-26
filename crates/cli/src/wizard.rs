@@ -241,17 +241,27 @@ pub fn run(catalog: &Catalog) -> Result<(Answers, Secrets)> {
         .into_iter()
         .map(|i| catalog.dev_templates[i].id.clone())
         .collect();
-    let names: Vec<String> = catalog
-        .containers
+    // By category, in the GUI's order.
+    let services: Vec<_> = configurator_catalog::CONTAINER_CATEGORIES
         .iter()
-        .map(|c| format!("{:<12} {}", c.name, c.description))
+        .flat_map(|(id, title)| {
+            catalog
+                .containers
+                .iter()
+                .filter(move |c| c.category == *id)
+                .map(move |c| (title, c))
+        })
+        .collect();
+    let names: Vec<String> = services
+        .iter()
+        .map(|(title, c)| format!("{title}: {:<18} {}", c.name, c.description))
         .collect();
     let containers: Vec<String> = MultiSelect::with_theme(t)
         .with_prompt("Services in containers")
         .items(&names)
         .interact()?
         .into_iter()
-        .map(|i| catalog.containers[i].id.clone())
+        .map(|i| services[i].1.id.clone())
         .collect();
 
     heading(Layer::Shell);

@@ -1,66 +1,288 @@
 {
-  "$comment": "Containerized development services (the development layer), as virtualisation.oci-containers. Dev-friendly: known or empty passwords, bound to localhost. Same definitions as nix-desktops/omarchy's databases, so Omarchy takes these ids in its dbs.json.",
+  "$comment": "Containerized development services (the development layer), as virtualisation.oci-containers. Dev-friendly: known or empty passwords, bound to localhost. The first ten are the same definitions as nix-desktops/omarchy's databases, so Omarchy takes their ids in its dbs.json. `category` is one of the catalog's CONTAINER_CATEGORIES; where two services share a default port, one moves to another host port and its description says so. `user` and `extraOptions` go to oci-containers as they are (`--network=host` only for tools that have to reach the other services on localhost; they listen on 127.0.0.1 themselves).",
   "containers": [
     {
-      "id": "postgres", "name": "PostgreSQL", "description": "Relational database",
+      "id": "postgres", "name": "PostgreSQL", "category": "databases", "description": "Relational database",
       "image": "postgres:18", "ports": ["127.0.0.1:5432:5432"],
       "environment": { "POSTGRES_HOST_AUTH_METHOD": "trust" },
       "volumes": ["postgres:/var/lib/postgresql"]
     },
     {
-      "id": "mysql", "name": "MySQL", "description": "Relational database",
+      "id": "mysql", "name": "MySQL", "category": "databases", "description": "Relational database",
       "image": "mysql:8.4", "ports": ["127.0.0.1:3306:3306"],
       "environment": { "MYSQL_ROOT_PASSWORD": "", "MYSQL_ALLOW_EMPTY_PASSWORD": "true" },
       "volumes": ["mysql:/var/lib/mysql"]
     },
     {
-      "id": "mariadb", "name": "MariaDB", "description": "Relational database",
+      "id": "mariadb", "name": "MariaDB", "category": "databases", "description": "Relational database",
       "image": "mariadb:11.8", "ports": ["127.0.0.1:3306:3306"],
       "environment": { "MARIADB_ROOT_PASSWORD": "", "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "true" },
       "volumes": ["mariadb:/var/lib/mysql"]
     },
     {
-      "id": "redis", "name": "Redis", "description": "In-memory data store",
+      "id": "redis", "name": "Redis", "category": "caches", "description": "In-memory data store",
       "image": "redis:7", "ports": ["127.0.0.1:6379:6379"],
       "environment": {},
       "volumes": ["redis:/data"]
     },
     {
-      "id": "mongodb", "name": "MongoDB", "description": "Document database",
+      "id": "mongodb", "name": "MongoDB", "category": "databases", "description": "Document database",
       "image": "mongo:noble", "ports": ["127.0.0.1:27017:27017"],
       "environment": { "MONGO_INITDB_ROOT_USERNAME": "admin", "MONGO_INITDB_ROOT_PASSWORD": "admin123" },
       "volumes": ["mongodb:/data/db"]
     },
     {
-      "id": "mssql", "name": "SQL Server", "description": "Microsoft's relational database (x86_64 only)",
+      "id": "mssql", "name": "SQL Server", "category": "databases", "description": "Microsoft's relational database (x86_64 only)",
       "image": "mcr.microsoft.com/mssql/server:2022-CU12-ubuntu-22.04", "ports": ["127.0.0.1:1433:1433"],
       "environment": { "MSSQL_PID": "Developer", "ACCEPT_EULA": "Y", "MSSQL_SA_PASSWORD": "@dmin123" },
       "volumes": ["mssql:/var/opt/mssql"]
     },
     {
-      "id": "valkey", "name": "Valkey", "description": "Open source Redis fork",
+      "id": "valkey", "name": "Valkey", "category": "caches", "description": "Open source Redis fork",
       "image": "valkey/valkey:8", "ports": ["127.0.0.1:6380:6379"],
       "environment": {},
       "volumes": ["valkey:/data"]
     },
     {
-      "id": "rabbitmq", "name": "RabbitMQ", "description": "Message broker, with its management UI on :15672",
+      "id": "rabbitmq", "name": "RabbitMQ", "category": "queues", "description": "Message broker, with its management UI on :15672",
       "image": "rabbitmq:4-management", "ports": ["127.0.0.1:5672:5672", "127.0.0.1:15672:15672"],
       "environment": {},
       "volumes": ["rabbitmq:/var/lib/rabbitmq"]
     },
     {
-      "id": "meilisearch", "name": "Meilisearch", "description": "Search engine",
+      "id": "meilisearch", "name": "Meilisearch", "category": "search", "description": "Search engine",
       "image": "getmeili/meilisearch:v1.15", "ports": ["127.0.0.1:7700:7700"],
       "environment": { "MEILI_ENV": "development" },
       "volumes": ["meilisearch:/meili_data"]
     },
     {
-      "id": "minio", "name": "MinIO", "description": "S3-compatible object storage, console on :9001",
+      "id": "minio", "name": "MinIO", "category": "storage", "description": "S3-compatible object storage, console on :9001",
       "image": "minio/minio:latest", "ports": ["127.0.0.1:9000:9000", "127.0.0.1:9001:9001"],
       "environment": { "MINIO_ROOT_USER": "minioadmin", "MINIO_ROOT_PASSWORD": "minioadmin" },
       "volumes": ["minio:/data"],
       "cmd": ["server", "/data", "--console-address", ":9001"]
+    },
+    {
+      "id": "postgis", "name": "PostGIS", "category": "databases", "description": "PostgreSQL with spatial types and queries, on :5433 (PostgreSQL has :5432); user postgres, no password",
+      "image": "postgis/postgis:18-3.6", "ports": ["127.0.0.1:5433:5432"],
+      "environment": { "POSTGRES_HOST_AUTH_METHOD": "trust" },
+      "volumes": ["postgis:/var/lib/postgresql"]
+    },
+    {
+      "id": "pgvector", "name": "pgvector", "category": "databases", "description": "PostgreSQL with vector similarity search, on :5434 (PostgreSQL has :5432); user postgres, no password",
+      "image": "pgvector/pgvector:pg18", "ports": ["127.0.0.1:5434:5432"],
+      "environment": { "POSTGRES_HOST_AUTH_METHOD": "trust" },
+      "volumes": ["pgvector:/var/lib/postgresql"]
+    },
+    {
+      "id": "clickhouse", "name": "ClickHouse", "category": "databases", "description": "Column-oriented analytics database: HTTP on :8123, native protocol on :19000 (MinIO has :9000); user default, no password",
+      "image": "clickhouse/clickhouse-server:26.3", "ports": ["127.0.0.1:8123:8123", "127.0.0.1:19000:9000"],
+      "environment": { "CLICKHOUSE_SKIP_USER_SETUP": "1" },
+      "volumes": ["clickhouse:/var/lib/clickhouse"]
+    },
+    {
+      "id": "couchdb", "name": "CouchDB", "category": "databases", "description": "Document database with an HTTP API, Fauxton UI on :5984/_utils; admin/admin",
+      "image": "couchdb:3", "ports": ["127.0.0.1:5984:5984"],
+      "environment": { "COUCHDB_USER": "admin", "COUCHDB_PASSWORD": "admin" },
+      "volumes": ["couchdb:/opt/couchdb/data"]
+    },
+    {
+      "id": "cassandra", "name": "Cassandra", "category": "databases", "description": "Wide-column database, CQL on :9042, no login; 1 GB heap",
+      "image": "cassandra:5", "ports": ["127.0.0.1:9042:9042"],
+      "environment": { "MAX_HEAP_SIZE": "1G", "HEAP_NEWSIZE": "256M" },
+      "volumes": ["cassandra:/var/lib/cassandra"]
+    },
+    {
+      "id": "neo4j", "name": "Neo4j", "category": "databases", "description": "Graph database: Browser on :7474, Bolt on :7687; neo4j/password",
+      "image": "neo4j:2026", "ports": ["127.0.0.1:7474:7474", "127.0.0.1:7687:7687"],
+      "environment": { "NEO4J_AUTH": "neo4j/password" },
+      "volumes": ["neo4j:/data"]
+    },
+    {
+      "id": "surrealdb", "name": "SurrealDB", "category": "databases", "description": "Multi-model database, on :8001 (Chroma has :8000); root/root",
+      "image": "surrealdb/surrealdb:v3", "ports": ["127.0.0.1:8001:8000"],
+      "environment": {},
+      "volumes": ["surrealdb:/data"],
+      "user": "root",
+      "cmd": ["start", "--bind", "0.0.0.0:8000", "--user", "root", "--pass", "root", "rocksdb:///data/database.db"]
+    },
+    {
+      "id": "memcached", "name": "Memcached", "category": "caches", "description": "In-memory cache, on :11211; keeps nothing across restarts",
+      "image": "memcached:1", "ports": ["127.0.0.1:11211:11211"],
+      "environment": {},
+      "volumes": []
+    },
+    {
+      "id": "opensearch", "name": "OpenSearch", "category": "search", "description": "Search and analytics engine (Elasticsearch-compatible), on :9200 without security; 512 MB heap",
+      "image": "opensearchproject/opensearch:3", "ports": ["127.0.0.1:9200:9200"],
+      "environment": {
+        "discovery.type": "single-node",
+        "DISABLE_SECURITY_PLUGIN": "true",
+        "DISABLE_INSTALL_DEMO_CONFIG": "true",
+        "OPENSEARCH_JAVA_OPTS": "-Xms512m -Xmx512m"
+      },
+      "volumes": ["opensearch:/usr/share/opensearch/data"]
+    },
+    {
+      "id": "typesense", "name": "Typesense", "category": "search", "description": "Typo-tolerant search engine, on :8108; API key xyz",
+      "image": "typesense/typesense:30.2", "ports": ["127.0.0.1:8108:8108"],
+      "environment": { "TYPESENSE_DATA_DIR": "/data", "TYPESENSE_API_KEY": "xyz", "TYPESENSE_ENABLE_CORS": "true" },
+      "volumes": ["typesense:/data"]
+    },
+    {
+      "id": "ollama", "name": "Ollama", "category": "ai", "description": "Runs language models locally (on the CPU), API on :11434",
+      "image": "ollama/ollama:latest", "ports": ["127.0.0.1:11434:11434"],
+      "environment": {},
+      "volumes": ["ollama:/root/.ollama"]
+    },
+    {
+      "id": "qdrant", "name": "Qdrant", "category": "ai", "description": "Vector database: REST and dashboard on :6333, gRPC on :6334",
+      "image": "qdrant/qdrant:v1", "ports": ["127.0.0.1:6333:6333", "127.0.0.1:6334:6334"],
+      "environment": {},
+      "volumes": ["qdrant:/qdrant/storage"]
+    },
+    {
+      "id": "weaviate", "name": "Weaviate", "category": "ai", "description": "Vector database, REST on :8090 (Keycloak has :8080), gRPC on :50051; anonymous access",
+      "image": "cr.weaviate.io/semitechnologies/weaviate:1.39.7", "ports": ["127.0.0.1:8090:8080", "127.0.0.1:50051:50051"],
+      "environment": {
+        "AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED": "true",
+        "PERSISTENCE_DATA_PATH": "/var/lib/weaviate",
+        "DEFAULT_VECTORIZER_MODULE": "none",
+        "CLUSTER_HOSTNAME": "node1"
+      },
+      "volumes": ["weaviate:/var/lib/weaviate"],
+      "cmd": ["--host", "0.0.0.0", "--port", "8080", "--scheme", "http"]
+    },
+    {
+      "id": "chroma", "name": "Chroma", "category": "ai", "description": "Embedding database for AI apps, on :8000",
+      "image": "chromadb/chroma:1.5.9", "ports": ["127.0.0.1:8000:8000"],
+      "environment": {},
+      "volumes": ["chroma:/data"]
+    },
+    {
+      "id": "kafka", "name": "Apache Kafka", "category": "queues", "description": "Event streaming, one KRaft node on :9092; keeps nothing across restarts",
+      "image": "apache/kafka:4.3.1", "ports": ["127.0.0.1:9092:9092"],
+      "environment": {},
+      "volumes": []
+    },
+    {
+      "id": "redpanda", "name": "Redpanda", "category": "queues", "description": "Kafka-compatible streaming on :19092 (Kafka has :9092), schema registry :18081, HTTP proxy :18082, admin :19644",
+      "image": "redpandadata/redpanda:v26.2.3", "ports": ["127.0.0.1:19092:19092", "127.0.0.1:18081:18081", "127.0.0.1:18082:18082", "127.0.0.1:19644:9644"],
+      "environment": {},
+      "volumes": ["redpanda:/var/lib/redpanda/data"],
+      "cmd": [
+        "redpanda", "start", "--mode", "dev-container", "--smp", "1",
+        "--kafka-addr", "0.0.0.0:19092", "--advertise-kafka-addr", "localhost:19092",
+        "--pandaproxy-addr", "0.0.0.0:18082", "--advertise-pandaproxy-addr", "localhost:18082",
+        "--schema-registry-addr", "0.0.0.0:18081"
+      ]
+    },
+    {
+      "id": "nats", "name": "NATS", "category": "queues", "description": "Messaging with JetStream persistence, on :4222, monitoring on :8222",
+      "image": "nats:2", "ports": ["127.0.0.1:4222:4222", "127.0.0.1:8222:8222"],
+      "environment": {},
+      "volumes": ["nats:/data"],
+      "cmd": ["--jetstream", "--store_dir", "/data", "--http_port", "8222"]
+    },
+    {
+      "id": "moto", "name": "Moto", "category": "storage", "description": "AWS emulator (S3, SQS, DynamoDB, Lambda, …) on :5000, any access key; keeps nothing across restarts",
+      "image": "motoserver/moto:5.2.3", "ports": ["127.0.0.1:5000:5000"],
+      "environment": {},
+      "volumes": []
+    },
+    {
+      "id": "azurite", "name": "Azurite", "category": "storage", "description": "Azure Storage emulator: blobs :10000, queues :10001, tables :10002; account devstoreaccount1",
+      "image": "mcr.microsoft.com/azure-storage/azurite:3.37.0", "ports": ["127.0.0.1:10000:10000", "127.0.0.1:10001:10001", "127.0.0.1:10002:10002"],
+      "environment": {},
+      "volumes": ["azurite:/data"]
+    },
+    {
+      "id": "gcloud-pubsub", "name": "Pub/Sub emulator", "category": "storage", "description": "Google Cloud Pub/Sub emulator on :8085 (PUBSUB_EMULATOR_HOST=localhost:8085); keeps nothing across restarts",
+      "image": "gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators", "ports": ["127.0.0.1:8085:8085"],
+      "environment": {},
+      "volumes": [],
+      "cmd": ["gcloud", "beta", "emulators", "pubsub", "start", "--host-port=0.0.0.0:8085"]
+    },
+    {
+      "id": "gcloud-firestore", "name": "Firestore emulator", "category": "storage", "description": "Google Cloud Firestore emulator on :8088 (Keycloak has :8080; FIRESTORE_EMULATOR_HOST=localhost:8088); keeps nothing across restarts",
+      "image": "gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators", "ports": ["127.0.0.1:8088:8088"],
+      "environment": {},
+      "volumes": [],
+      "cmd": ["gcloud", "emulators", "firestore", "start", "--host-port=0.0.0.0:8088"]
+    },
+    {
+      "id": "mailpit", "name": "Mailpit", "category": "devtools", "description": "Catches outgoing mail: SMTP on :1025, web UI on :8025",
+      "image": "axllent/mailpit:v1", "ports": ["127.0.0.1:1025:1025", "127.0.0.1:8025:8025"],
+      "environment": { "MP_DATABASE": "/data/mailpit.db" },
+      "volumes": ["mailpit:/data"]
+    },
+    {
+      "id": "keycloak", "name": "Keycloak", "category": "devtools", "description": "Identity and access management (OpenID Connect, SAML) in dev mode, on :8080; admin/admin",
+      "image": "quay.io/keycloak/keycloak:26.7", "ports": ["127.0.0.1:8080:8080"],
+      "environment": { "KC_BOOTSTRAP_ADMIN_USERNAME": "admin", "KC_BOOTSTRAP_ADMIN_PASSWORD": "admin" },
+      "volumes": ["keycloak:/opt/keycloak/data"],
+      "cmd": ["start-dev"]
+    },
+    {
+      "id": "adminer", "name": "Adminer", "category": "devtools", "description": "Database manager in the browser, on :8081 (Keycloak has :8080); reaches the databases at localhost",
+      "image": "adminer:5", "ports": [],
+      "environment": {},
+      "volumes": [],
+      "extraOptions": ["--network=host"],
+      "cmd": ["php", "-S", "127.0.0.1:8081", "-t", "/var/www/html"]
+    },
+    {
+      "id": "pgadmin", "name": "pgAdmin", "category": "devtools", "description": "PostgreSQL administration, on :5050 without a login; reaches the databases at localhost",
+      "image": "dpage/pgadmin4:9", "ports": [],
+      "environment": {
+        "PGADMIN_DEFAULT_EMAIL": "admin@example.com",
+        "PGADMIN_DEFAULT_PASSWORD": "admin",
+        "PGADMIN_CONFIG_SERVER_MODE": "False",
+        "PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED": "False",
+        "PGADMIN_LISTEN_ADDRESS": "127.0.0.1",
+        "PGADMIN_LISTEN_PORT": "5050"
+      },
+      "volumes": ["pgadmin:/var/lib/pgadmin"],
+      "extraOptions": ["--network=host"]
+    },
+    {
+      "id": "gitea", "name": "Gitea", "category": "devtools", "description": "Git hosting, on :3001 (Grafana has :3000), SSH on :2222; the first account you register is the admin",
+      "image": "gitea/gitea:1", "ports": ["127.0.0.1:3001:3000", "127.0.0.1:2222:22"],
+      "environment": {
+        "GITEA__database__DB_TYPE": "sqlite3",
+        "GITEA__security__INSTALL_LOCK": "true",
+        "GITEA__server__ROOT_URL": "http://localhost:3001/",
+        "GITEA__server__SSH_DOMAIN": "localhost",
+        "GITEA__server__SSH_PORT": "2222"
+      },
+      "volumes": ["gitea:/data"]
+    },
+    {
+      "id": "sonarqube", "name": "SonarQube", "category": "devtools", "description": "Code quality and security analysis, on :9010 (MinIO has :9000); admin/admin, changed on first login",
+      "image": "sonarqube:community", "ports": ["127.0.0.1:9010:9000"],
+      "environment": { "SONAR_ES_BOOTSTRAP_CHECKS_DISABLE": "true" },
+      "volumes": ["sonarqube:/opt/sonarqube/data"]
+    },
+    {
+      "id": "grafana", "name": "Grafana", "category": "observability", "description": "Dashboards, on :3000; admin/admin; reaches Prometheus and the databases at localhost",
+      "image": "grafana/grafana:12.4", "ports": [],
+      "environment": { "GF_SERVER_HTTP_ADDR": "127.0.0.1", "GF_SECURITY_ADMIN_USER": "admin", "GF_SECURITY_ADMIN_PASSWORD": "admin" },
+      "volumes": ["grafana:/var/lib/grafana"],
+      "extraOptions": ["--network=host"]
+    },
+    {
+      "id": "prometheus", "name": "Prometheus", "category": "observability", "description": "Metrics and alerting, on :9090; scrapes localhost, so it reaches what you run on this machine",
+      "image": "prom/prometheus:v3", "ports": [],
+      "environment": {},
+      "volumes": ["prometheus:/prometheus"],
+      "extraOptions": ["--network=host"],
+      "cmd": ["--config.file=/etc/prometheus/prometheus.yml", "--storage.tsdb.path=/prometheus", "--web.listen-address=127.0.0.1:9090"]
+    },
+    {
+      "id": "jaeger", "name": "Jaeger", "category": "observability", "description": "Distributed tracing: UI on :16686, OpenTelemetry (OTLP) on :4317 (gRPC) and :4318 (HTTP); in memory",
+      "image": "jaegertracing/jaeger:2.21.0", "ports": ["127.0.0.1:16686:16686", "127.0.0.1:4317:4317", "127.0.0.1:4318:4318"],
+      "environment": {},
+      "volumes": []
     }
   ]
 }
