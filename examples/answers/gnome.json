@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "nl_NL.UTF-8",
+    "keyboardLayout": "us",
+    "keyboardVariant": "intl",
+    "timezone": "Europe/Amsterdam"
+  },
+  "profile": "office",
+  "desktop": {
+    "id": "gnome",
+    "ecosystem": false
+  },
+  "apps": {
+    "packages": [
+      "libreoffice",
+      "thunderbird",
+      "firefox"
+    ]
+  },
+  "shell": {
+    "shell": "fish"
+  },
+  "disk": {
+    "device": "/dev/sda",
+    "filesystem": "ext4",
+    "encryption": true,
+    "swapGib": 8
+  },
+  "users": [
+    {
+      "name": "alex",
+      "fullName": "Alex",
+      "admin": true
+    },
+    {
+      "name": "sam",
+      "fullName": "Sam"
+    }
+  ],
+  "hostname": "office-pc",
+  "webapps": [
+    "gmail",
+    "google-calendar"
+  ],
+  "keybinds": {
+    "SUPER + RETURN": {
+      "launch": "gnome-console"
+    },
+    "SUPER + E": {
+      "launch": "nautilus"
+    },
+    "SUPER + SHIFT + C": {
+      "webapp": "google-calendar"
+    },
+    "SUPER + H": {
+      "exec": "gnome-text-editor"
+    },
+    "ALT + F4": "unbind"
+  },
+  "development": {
+    "templates": [
+      "python",
+      "rust"
+    ],
+    "containers": [
+      "postgres",
+      "redis"
+    ]
+  }
+}

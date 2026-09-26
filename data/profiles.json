@@ -1,0 +1,87 @@
+{
+  "$comment": "Profiles: a purpose's opinionated setup. `apps` are preselected in the app store (the answers carry what's kept); `config` is written as the profile's own section. Special values as in desktops.json, plus {\"$context\": \"firstUser\"}.",
+  "profiles": [
+    {
+      "id": "custom",
+      "name": "Everything Custom",
+      "description": "Nothing preselected: choose everything yourself",
+      "apps": [],
+      "config": {}
+    },
+    {
+      "id": "office",
+      "name": "Office",
+      "description": "Documents, email, a browser and printing",
+      "apps": [
+        "libreoffice",
+        "thunderbird",
+        "firefox",
+        "evince",
+        "simple-scan"
+      ],
+      "config": {
+        "services.printing.enable": true,
+        "services.avahi.enable": true,
+        "services.avahi.nssmdns4": true,
+        "hardware.sane.enable": true
+      }
+    },
+    {
+      "id": "gaming",
+      "name": "Gaming",
+      "description": "Steam, launchers for other stores, and performance tools",
+      "apps": [
+        "lutris",
+        "heroic",
+        "mangohud",
+        "protonup-qt",
+        "discord"
+      ],
+      "config": {
+        "programs.steam.enable": true,
+        "programs.gamemode.enable": true,
+        "hardware.graphics.enable": true,
+        "hardware.graphics.enable32Bit": true
+      }
+    },
+    {
+      "id": "kiosk",
+      "name": "Kiosk",
+      "description": "One app, fullscreen, logged in automatically",
+      "apps": [
+        "firefox"
+      ],
+      "config": {
+        "services.cage.enable": true,
+        "services.cage.user": {
+          "$context": "firstUser"
+        },
+        "services.cage.program": {
+          "$expr": "lib.getExe pkgs.firefox + \" --kiosk https://nixos.org\""
+        }
+      }
+    },
+    {
+      "id": "server",
+      "name": "Server",
+      "description": "Remote access over SSH and server tools",
+      "apps": [
+        "htop",
+        "tmux",
+        "git"
+      ],
+      "config": {
+        "services.openssh.enable": true
+      }
+    },
+    {
+      "id": "headless",
+      "name": "Headless",
+      "description": "No desktop, reachable over SSH",
+      "apps": [],
+      "config": {
+        "services.openssh.enable": true
+      }
+    }
+  ]
+}

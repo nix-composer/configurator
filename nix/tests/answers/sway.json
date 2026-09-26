@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "en_US.UTF-8",
+    "keyboardLayout": "us",
+    "timezone": "UTC"
+  },
+  "desktop": {
+    "id": "sway"
+  },
+  "apps": {
+    "packages": [
+      "foot"
+    ]
+  },
+  "webapps": [
+    "github"
+  ],
+  "keybinds": {
+    "SUPER + RETURN": {
+      "launch": "foot"
+    },
+    "SUPER + SHIFT + G": {
+      "webapp": "github"
+    },
+    "SUPER + SHIFT + Q": "unbind",
+    "SUPER + P": {
+      "exec": "swaymsg exit"
+    }
+  },
+  "disk": {
+    "device": "/dev/vdb",
+    "filesystem": "ext4"
+  },
+  "users": [
+    {
+      "name": "erin",
+      "admin": true
+    }
+  ],
+  "hostname": "tiles"
+}

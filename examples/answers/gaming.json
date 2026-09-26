@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "en_US.UTF-8",
+    "keyboardLayout": "us",
+    "timezone": "Europe/Amsterdam"
+  },
+  "profile": "gaming",
+  "desktop": {
+    "id": "plasma"
+  },
+  "apps": {
+    "packages": [
+      "lutris",
+      "heroic",
+      "mangohud",
+      "protonup-qt",
+      "discord"
+    ]
+  },
+  "hardware": {
+    "nvidia": "open"
+  },
+  "disk": {
+    "device": "/dev/nvme0n1",
+    "filesystem": "btrfs",
+    "swapGib": 16
+  },
+  "users": [
+    {
+      "name": "player",
+      "admin": true
+    }
+  ],
+  "hostname": "battlestation"
+}

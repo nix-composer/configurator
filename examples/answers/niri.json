@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "en_US.UTF-8",
+    "keyboardLayout": "us",
+    "timezone": "UTC"
+  },
+  "desktop": {
+    "id": "niri"
+  },
+  "apps": {
+    "packages": [
+      "foot",
+      "fuzzel"
+    ]
+  },
+  "keybinds": {
+    "SUPER + RETURN": {
+      "launch": "foot"
+    },
+    "SUPER + D": {
+      "exec": "fuzzel"
+    },
+    "SUPER + SHIFT + E": {
+      "exec": "notify-send \"hi there\""
+    }
+  },
+  "disk": {
+    "device": "/dev/nvme0n1",
+    "filesystem": "btrfs"
+  },
+  "users": [
+    {
+      "name": "nia",
+      "admin": true
+    }
+  ],
+  "hostname": "scroller"
+}

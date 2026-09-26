@@ -1,0 +1,29 @@
+{
+  "$comment": "The app store's categories (apps) and the shell layer's (command-line tools). `freedesktop` lists the desktop-entry categories that put an app in it; the first matching category in this order is an app's main one. `paths` are nixpkgs source directories whose packages belong in it (command-line tools without curated categories). `keywords` match words in a package's description, as a last resort.",
+  "apps": [
+    { "id": "browsers", "name": "Web Browsers", "icon": "web-browser-symbolic", "freedesktop": ["WebBrowser"] },
+    { "id": "communication", "name": "Chat & Email", "icon": "mail-unread-symbolic", "freedesktop": ["Chat", "InstantMessaging", "Email", "IRCClient", "VideoConference", "Telephony", "Feed", "News"] },
+    { "id": "office", "name": "Office & Notes", "icon": "x-office-document-symbolic", "freedesktop": ["Office", "WordProcessor", "Spreadsheet", "Presentation", "Calendar", "ContactManagement", "Finance", "Publishing", "Dictionary", "ProjectManagement"] },
+    { "id": "graphics", "name": "Graphics & Photos", "icon": "applications-graphics-symbolic", "freedesktop": ["Graphics", "Photography", "2DGraphics", "3DGraphics", "RasterGraphics", "VectorGraphics", "ImageProcessing"] },
+    { "id": "audio-video", "name": "Audio & Video", "icon": "applications-multimedia-symbolic", "freedesktop": ["AudioVideo", "Audio", "Video", "Player", "Recorder", "Music", "AudioVideoEditing", "Midi", "Mixer", "Sequencer", "TV"] },
+    { "id": "games", "name": "Games", "icon": "input-gaming-symbolic", "freedesktop": ["Game", "ArcadeGame", "ActionGame", "AdventureGame", "BoardGame", "CardGame", "LogicGame", "StrategyGame", "RolePlaying", "Shooter", "Simulation", "SportsGame", "KidsGame", "BlocksGame", "Emulator"] },
+    { "id": "development", "name": "Development", "icon": "applications-engineering-symbolic", "freedesktop": ["Development", "IDE", "Debugger", "RevisionControl", "GUIDesigner", "Profiling", "Translation", "WebDevelopment", "Database"] },
+    { "id": "editors", "name": "Text Editors", "icon": "text-editor-symbolic", "freedesktop": ["TextEditor"] },
+    { "id": "networking", "name": "Networking", "icon": "network-workgroup-symbolic", "freedesktop": ["Network", "FileTransfer", "P2P", "RemoteAccess", "Dialup", "HamRadio"] },
+    { "id": "science", "name": "Science & Education", "icon": "applications-science-symbolic", "freedesktop": ["Science", "Education", "Math", "Engineering", "Electronics", "Astronomy", "Biology", "Chemistry", "Physics", "Geography", "Geoscience", "Geology", "Languages", "Maps", "DataVisualization", "ComputerScience", "ArtificialIntelligence", "MedicalSoftware", "NumericalAnalysis", "Robotics"] },
+    { "id": "security", "name": "Security & Privacy", "icon": "security-high-symbolic", "freedesktop": ["Security"] },
+    { "id": "system", "name": "System", "icon": "applications-system-symbolic", "freedesktop": ["System", "Settings", "FileManager", "TerminalEmulator", "Monitor", "PackageManager", "HardwareSettings", "DesktopSettings", "Filesystem", "Printing"] },
+    { "id": "utilities", "name": "Utilities", "icon": "applications-utilities-symbolic", "freedesktop": ["Utility", "Accessibility", "Archiving", "Compression", "FileTools", "TextTools", "Calculator", "Clock", "Viewer", "Scanning", "OCR"] }
+  ],
+  "cli": [
+    { "id": "files", "name": "Files & Search", "icon": "folder-symbolic", "paths": ["pkgs/tools/filesystems", "pkgs/tools/archivers", "pkgs/tools/compression"], "keywords": ["file manager", "find files", "grep", "directory", "archive", "compress", "disk usage"] },
+    { "id": "text", "name": "Text & Data", "icon": "text-x-generic-symbolic", "paths": ["pkgs/tools/text"], "keywords": ["json", "yaml", "csv", "markdown", "text processing", "pager", "diff"] },
+    { "id": "system", "name": "System & Monitoring", "icon": "utilities-system-monitor-symbolic", "paths": ["pkgs/tools/system", "pkgs/os-specific/linux"], "keywords": ["process viewer", "system monitor", "resource monitor", "benchmark", "hardware"] },
+    { "id": "development", "name": "Git & Development", "icon": "applications-engineering-symbolic", "paths": ["pkgs/development/tools", "pkgs/applications/version-management"], "keywords": ["git", "linter", "formatter", "language server", "build tool", "debugger"] },
+    { "id": "network", "name": "Network", "icon": "network-workgroup-symbolic", "paths": ["pkgs/tools/networking"], "keywords": ["http", "dns", "ssh", "network", "download", "vpn", "proxy"] },
+    { "id": "shell", "name": "Shell & Terminal", "icon": "utilities-terminal-symbolic", "paths": ["pkgs/shells", "pkgs/tools/misc"], "keywords": ["shell", "prompt", "terminal multiplexer", "completion", "history"] },
+    { "id": "security", "name": "Security", "icon": "security-high-symbolic", "paths": ["pkgs/tools/security"], "keywords": ["password", "encryption", "secret", "scanner", "vulnerability"] },
+    { "id": "media", "name": "Media", "icon": "applications-multimedia-symbolic", "paths": ["pkgs/tools/audio", "pkgs/tools/video", "pkgs/tools/graphics"], "keywords": ["video", "audio", "image", "music", "youtube"] },
+    { "id": "containers", "name": "Containers & Cloud", "icon": "network-server-symbolic", "paths": ["pkgs/applications/virtualization", "pkgs/applications/networking/cluster", "pkgs/tools/admin"], "keywords": ["docker", "kubernetes", "container", "cloud", "terraform", "aws"] }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "en_US.UTF-8",
+    "keyboardLayout": "us",
+    "timezone": "UTC"
+  },
+  "profile": "server",
+  "apps": {
+    "packages": [
+      "htop",
+      "tmux",
+      "git"
+    ]
+  },
+  "development": {
+    "containers": [
+      "postgres"
+    ]
+  },
+  "disk": {
+    "device": "/dev/nvme0n1",
+    "filesystem": "btrfs",
+    "encryption": true
+  },
+  "users": [
+    {
+      "name": "ops",
+      "admin": true,
+      "sshKeys": [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIExampleKeyExampleKeyExampleKeyExampleKey ops@laptop"
+      ]
+    }
+  ],
+  "hostname": "server"
+}

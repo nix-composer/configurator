@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "basics": { "locale": "de_DE.UTF-8", "keyboardLayout": "de", "timezone": "Europe/Berlin" },
+  "profile": "headless",
+  "shell": { "shell": "zsh", "packages": ["ripgrep"] },
+  "disk": { "device": "/dev/vdb", "filesystem": "btrfs", "encryption": true, "swapGib": 1 },
+  "users": [
+    { "name": "bob", "admin": true },
+    { "name": "carol" }
+  ],
+  "hostname": "vault"
+}

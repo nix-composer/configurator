@@ -1,0 +1,456 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Answers",
+  "type": "object",
+  "properties": {
+    "apps": {
+      "$ref": "#/$defs/Apps",
+      "default": {
+        "agents": [],
+        "defaultAgent": null,
+        "packages": []
+      }
+    },
+    "basics": {
+      "$ref": "#/$defs/Basics"
+    },
+    "desktop": {
+      "description": "`None` for a system without a graphical desktop (server, headless).",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Desktop"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "development": {
+      "$ref": "#/$defs/Development",
+      "default": {
+        "containers": [],
+        "templates": []
+      }
+    },
+    "disk": {
+      "$ref": "#/$defs/Disk"
+    },
+    "hardware": {
+      "$ref": "#/$defs/Hardware",
+      "default": {
+        "nonFreeFirmware": false,
+        "nvidia": null
+      }
+    },
+    "hostname": {
+      "type": "string"
+    },
+    "keybinds": {
+      "description": "Keybinds on top of the desktop's defaults, keyed by combo\n(`\"SUPER + SHIFT + B\"`).",
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/Keybind"
+      },
+      "default": {}
+    },
+    "loginManager": {
+      "description": "`None`: the desktop's own choice.",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/LoginManager"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "profile": {
+      "description": "Profile id (office, gaming, kiosk, server, headless, custom, …).",
+      "type": "string",
+      "default": "custom"
+    },
+    "security": {
+      "$ref": "#/$defs/Security",
+      "default": {
+        "fido2": false,
+        "fingerprint": false,
+        "secureBoot": false,
+        "tpmPin": false
+      }
+    },
+    "shell": {
+      "$ref": "#/$defs/Shell",
+      "default": {
+        "packages": [],
+        "shell": "bash"
+      }
+    },
+    "users": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/User"
+      }
+    },
+    "version": {
+      "description": "Schema version; see [`VERSION`].",
+      "type": "integer",
+      "format": "uint32",
+      "minimum": 0
+    },
+    "webapps": {
+      "description": "Web apps, as web app catalog ids.",
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "basics",
+    "disk",
+    "users",
+    "hostname"
+  ],
+  "$defs": {
+    "Apps": {
+      "type": "object",
+      "properties": {
+        "agents": {
+          "description": "AI agents, as agent catalog ids (never preselected).",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
+        "defaultAgent": {
+          "description": "Which of `agents` the desktop launches by default, where it has one.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "packages": {
+          "description": "nixpkgs attributes, e.g. `wireshark` or `kdePackages.kate`.",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "Basics": {
+      "type": "object",
+      "properties": {
+        "keyboardLayout": {
+          "description": "XKB layout, e.g. `us`.",
+          "type": "string"
+        },
+        "keyboardVariant": {
+          "type": "string",
+          "default": ""
+        },
+        "locale": {
+          "description": "Locale, e.g. `en_US.UTF-8`.",
+          "type": "string"
+        },
+        "timezone": {
+          "description": "IANA time zone, e.g. `Europe/Amsterdam`.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "locale",
+        "keyboardLayout",
+        "timezone"
+      ]
+    },
+    "Desktop": {
+      "type": "object",
+      "properties": {
+        "ecosystem": {
+          "description": "\"Install entire ecosystem\": the desktop's own ecosystem switch where\nit has one (Omarchy); the ecosystem's apps and tools themselves are\nin `apps` and `shell`, as preselected and kept.",
+          "type": "boolean",
+          "default": false
+        },
+        "id": {
+          "description": "Desktop id from the catalog's desktop registry.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id"
+      ]
+    },
+    "Development": {
+      "type": "object",
+      "properties": {
+        "containers": {
+          "description": "Containerized services (databases and others).",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
+        "templates": {
+          "description": "Dev environment templates (`nix-templates/*` ids).",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "Disk": {
+      "type": "object",
+      "properties": {
+        "device": {
+          "description": "The disk to install to, e.g. `/dev/nvme0n1` (wiped).",
+          "type": "string"
+        },
+        "encryption": {
+          "description": "LUKS full disk encryption.",
+          "type": "boolean",
+          "default": false
+        },
+        "filesystem": {
+          "$ref": "#/$defs/Filesystem"
+        },
+        "swapGib": {
+          "description": "Swap size in GiB; 0 for none.",
+          "type": "integer",
+          "format": "uint32",
+          "default": 0,
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "device",
+        "filesystem"
+      ]
+    },
+    "Filesystem": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "ext4",
+            "xfs"
+          ]
+        },
+        {
+          "description": "btrfs with subvolumes and snapshots.",
+          "type": "string",
+          "const": "btrfs"
+        }
+      ]
+    },
+    "Hardware": {
+      "type": "object",
+      "properties": {
+        "nonFreeFirmware": {
+          "description": "Redistributable and non-free firmware (Broadcom Wi-Fi, …).",
+          "type": "boolean",
+          "default": false
+        },
+        "nvidia": {
+          "description": "NVIDIA driver choice, when an NVIDIA GPU is detected.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NvidiaDriver"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "additionalProperties": false
+    },
+    "Keybind": {
+      "oneOf": [
+        {
+          "description": "Launch an app: its nixpkgs attribute (its main program runs).",
+          "type": "object",
+          "properties": {
+            "launch": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "launch"
+          ]
+        },
+        {
+          "description": "Open a web app from the web app catalog.",
+          "type": "object",
+          "properties": {
+            "webapp": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "webapp"
+          ]
+        },
+        {
+          "description": "Run a shell command.",
+          "type": "object",
+          "properties": {
+            "exec": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "exec"
+          ]
+        },
+        {
+          "description": "Remove the desktop's default bind on this combo.",
+          "type": "string",
+          "const": "unbind"
+        }
+      ]
+    },
+    "LoginManager": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "gdm",
+            "sddm",
+            "lightdm",
+            "cosmic-greeter",
+            "ly"
+          ]
+        },
+        {
+          "description": "No login manager: log in on the console.",
+          "type": "string",
+          "const": "none"
+        }
+      ]
+    },
+    "NvidiaDriver": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "nouveau"
+          ]
+        },
+        {
+          "description": "NVIDIA's driver with its open kernel module (Turing and newer).",
+          "type": "string",
+          "const": "open"
+        },
+        {
+          "description": "NVIDIA's driver with its closed kernel module.",
+          "type": "string",
+          "const": "proprietary"
+        }
+      ]
+    },
+    "Security": {
+      "type": "object",
+      "properties": {
+        "fido2": {
+          "description": "FIDO2 keys for disk unlock, login and sudo.",
+          "type": "boolean",
+          "default": false
+        },
+        "fingerprint": {
+          "type": "boolean",
+          "default": false
+        },
+        "secureBoot": {
+          "description": "Secure Boot with lanzaboote; keys are created and enrolled during\ninstall (needs the firmware in setup mode).",
+          "type": "boolean",
+          "default": false
+        },
+        "tpmPin": {
+          "description": "Unlock the disk with the TPM2 and a PIN (needs `secure_boot` and\ndisk encryption; sealed on the first boot with Secure Boot on).",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "Shell": {
+      "type": "object",
+      "properties": {
+        "packages": {
+          "description": "Command-line utilities, as nixpkgs attributes.",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
+        "shell": {
+          "$ref": "#/$defs/ShellKind"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "shell"
+      ]
+    },
+    "ShellKind": {
+      "type": "string",
+      "enum": [
+        "bash",
+        "zsh",
+        "fish",
+        "nushell"
+      ]
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "admin": {
+          "description": "In the wheel group.",
+          "type": "boolean",
+          "default": false
+        },
+        "fullName": {
+          "type": "string",
+          "default": ""
+        },
+        "name": {
+          "type": "string"
+        },
+        "sshKeys": {
+          "description": "Public SSH keys allowed to log in as this user.",
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ]
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "$comment": "Containerized development services (the development layer), as virtualisation.oci-containers. Dev-friendly: known or empty passwords, bound to localhost. Same definitions as nix-desktops/omarchy's databases, so Omarchy takes these ids in its dbs.json.",
+  "containers": [
+    {
+      "id": "postgres", "name": "PostgreSQL", "description": "Relational database",
+      "image": "postgres:18", "ports": ["127.0.0.1:5432:5432"],
+      "environment": { "POSTGRES_HOST_AUTH_METHOD": "trust" },
+      "volumes": ["postgres:/var/lib/postgresql"]
+    },
+    {
+      "id": "mysql", "name": "MySQL", "description": "Relational database",
+      "image": "mysql:8.4", "ports": ["127.0.0.1:3306:3306"],
+      "environment": { "MYSQL_ROOT_PASSWORD": "", "MYSQL_ALLOW_EMPTY_PASSWORD": "true" },
+      "volumes": ["mysql:/var/lib/mysql"]
+    },
+    {
+      "id": "mariadb", "name": "MariaDB", "description": "Relational database",
+      "image": "mariadb:11.8", "ports": ["127.0.0.1:3306:3306"],
+      "environment": { "MARIADB_ROOT_PASSWORD": "", "MARIADB_ALLOW_EMPTY_ROOT_PASSWORD": "true" },
+      "volumes": ["mariadb:/var/lib/mysql"]
+    },
+    {
+      "id": "redis", "name": "Redis", "description": "In-memory data store",
+      "image": "redis:7", "ports": ["127.0.0.1:6379:6379"],
+      "environment": {},
+      "volumes": ["redis:/data"]
+    },
+    {
+      "id": "mongodb", "name": "MongoDB", "description": "Document database",
+      "image": "mongo:noble", "ports": ["127.0.0.1:27017:27017"],
+      "environment": { "MONGO_INITDB_ROOT_USERNAME": "admin", "MONGO_INITDB_ROOT_PASSWORD": "admin123" },
+      "volumes": ["mongodb:/data/db"]
+    },
+    {
+      "id": "mssql", "name": "SQL Server", "description": "Microsoft's relational database (x86_64 only)",
+      "image": "mcr.microsoft.com/mssql/server:2022-CU12-ubuntu-22.04", "ports": ["127.0.0.1:1433:1433"],
+      "environment": { "MSSQL_PID": "Developer", "ACCEPT_EULA": "Y", "MSSQL_SA_PASSWORD": "@dmin123" },
+      "volumes": ["mssql:/var/opt/mssql"]
+    },
+    {
+      "id": "valkey", "name": "Valkey", "description": "Open source Redis fork",
+      "image": "valkey/valkey:8", "ports": ["127.0.0.1:6380:6379"],
+      "environment": {},
+      "volumes": ["valkey:/data"]
+    },
+    {
+      "id": "rabbitmq", "name": "RabbitMQ", "description": "Message broker, with its management UI on :15672",
+      "image": "rabbitmq:4-management", "ports": ["127.0.0.1:5672:5672", "127.0.0.1:15672:15672"],
+      "environment": {},
+      "volumes": ["rabbitmq:/var/lib/rabbitmq"]
+    },
+    {
+      "id": "meilisearch", "name": "Meilisearch", "description": "Search engine",
+      "image": "getmeili/meilisearch:v1.15", "ports": ["127.0.0.1:7700:7700"],
+      "environment": { "MEILI_ENV": "development" },
+      "volumes": ["meilisearch:/meili_data"]
+    },
+    {
+      "id": "minio", "name": "MinIO", "description": "S3-compatible object storage, console on :9001",
+      "image": "minio/minio:latest", "ports": ["127.0.0.1:9000:9000", "127.0.0.1:9001:9001"],
+      "environment": { "MINIO_ROOT_USER": "minioadmin", "MINIO_ROOT_PASSWORD": "minioadmin" },
+      "volumes": ["minio:/data"],
+      "cmd": ["server", "/data", "--console-address", ":9001"]
+    }
+  ]
+}

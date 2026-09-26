@@ -1,0 +1,1066 @@
+//! Turns answers into the user's host flake: `flake.nix` (the pinned
+//! inputs and the machine), `configuration.nix` (the choices, one section
+//! per layer), `hardware.nix`, `disko.nix` and the desktop's state files.
+//!
+//! The output is the product: plain, readable Nix the user owns. Desktop
+//! modules are imported from their flakes, never copied in.
+
+mod keybinds;
+pub mod nix;
+
+use std::collections::BTreeMap;
+
+use configurator_answers::{Answers, Filesystem, LoginManager, NvidiaDriver, ShellKind, User};
+use configurator_catalog::{Catalog, Desktop, Session};
+use serde_json::Value;
+
+use nix::{Key, Nix};
+
+/// The NixOS release the generated flakes follow.
+pub const NIXOS_RELEASE: &str = "26.05";
+
+/// Where disko reads the LUKS passphrase from while formatting. The engine
+/// writes it there (on the live system's tmpfs) and removes it after.
+pub const LUKS_KEY_FILE: &str = "/tmp/configurator-luks.key";
+
+#[derive(Debug, thiserror::Error)]
+pub enum Error {
+    #[error("unknown desktop {0:?}")]
+    UnknownDesktop(String),
+    #[error("the catalog entry {0:?} is invalid: {1}")]
+    BadCatalog(String, String),
+    #[error("not supported yet: {0}")]
+    Unsupported(String),
+    #[error("unknown {0} {1:?}")]
+    Unknown(&'static str, String),
+    #[error("keybinds: {0}")]
+    Keybind(String),
+}
+
+/// The generated host flake: file paths relative to its root, and contents.
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct Host {
+    pub files: BTreeMap<String, String>,
+}
+
+/// What the generator needs besides the answers.
+#[derive(Debug, Default, Clone)]
+pub struct Inputs<'a> {
+    /// The nixos-facter report (`facter.json`), when hardware was detected.
+    pub facter_report: Option<&'a str>,
+    /// The Nix system to build for; `None` for `x86_64-linux`.
+    pub platform: Option<&'a str>,
+}
+
+/// The Nix system of the machine this runs on, e.g. `x86_64-linux`.
+pub fn current_platform() -> String {
+    format!("{}-linux", std::env::consts::ARCH)
+}
+
+/// Where the host flake lives on the installed system: the first admin's
+/// `~/nixos`, so the user owns it and desktop menus can edit and rebuild it.
+pub fn config_dir(answers: &Answers) -> String {
+    let admin = answers
+        .users
+        .iter()
+        .find(|u| u.admin)
+        .unwrap_or(&answers.users[0]);
+    format!("/home/{}/nixos", admin.name)
+}
+
+pub fn generate(answers: &Answers, catalog: &Catalog, inputs: &Inputs) -> Result<Host, Error> {
+    let desktop = match &answers.desktop {
+        Some(d) => Some(
+            catalog
+                .desktop(&d.id)
+                .ok_or_else(|| Error::UnknownDesktop(d.id.clone()))?,
+        ),
+        None => None,
+    };
+    if let Some(d) = desktop
+        && let Some(why) = &d.unavailable
+    {
+        return Err(Error::Unsupported(format!(
+            "{} can't be installed with this nixpkgs: {why}",
+            d.name
+        )));
+    }
+    let generator = Generator {
+        answers,
+        catalog,
+        desktop,
+        config_dir: config_dir(answers),
+    };
+
+    let mut host = Host::default();
+    host.files.insert("flake.nix".into(), generator.flake());
+    host.files
+        .insert("configuration.nix".into(), generator.configuration()?);
+    host.files.insert(
+        "hardware.nix".into(),
+        generator.hardware(
+            inputs.facter_report.is_some(),
+            inputs.platform.unwrap_or("x86_64-linux"),
+        ),
+    );
+    host.files.insert("disko.nix".into(), generator.disko());
+    if let Some(report) = inputs.facter_report {
+        host.files.insert("facter.json".into(), report.to_owned());
+    }
+    if let Some(desktop) = desktop {
+        for (path, content) in &desktop.module.files {
+            let mut content = content.clone();
+            if let Some(state) = &desktop.module.containers
+                && state.file == *path
+            {
+                content[&state.key] = generator
+                    .desktop_containers()
+                    .into_iter()
+                    .cloned()
+                    .collect();
+            }
+            let json = serde_json::to_string_pretty(&content).expect("JSON value serializes");
+            host.files.insert(path.clone(), json + "\n");
+        }
+    }
+    Ok(host)
+}
+
+struct Generator<'a> {
+    answers: &'a Answers,
+    catalog: &'a Catalog,
+    desktop: Option<&'a Desktop>,
+    config_dir: String,
+}
+
+/// A commented group of option assignments in a module.
+struct Section {
+    comment: String,
+    entries: Vec<(Key, Nix)>,
+}
+
+impl Section {
+    fn new(comment: impl Into<String>) -> Section {
+        Section {
+            comment: comment.into(),
+            entries: Vec::new(),
+        }
+    }
+
+    fn set(&mut self, key: impl Into<Key>, value: Nix) -> &mut Section {
+        self.entries.push((key.into(), value));
+        self
+    }
+}
+
+const HEADER: &str = "# Generated by the Configurator (github:nix-composer/configurator).\n\
+                      # This is your system now: edit it freely.\n";
+
+fn module(header: &str, args: &str, sections: &[Section]) -> String {
+    let mut out = format!("{HEADER}{header}{args}:\n{{\n");
+    // Nix rejects an attribute defined twice in one set; the first section
+    // that sets an option (e.g. services.xserver.enable) keeps it.
+    let mut seen = std::collections::BTreeSet::new();
+    let mut first = true;
+    for section in sections {
+        let entries: Vec<_> = section
+            .entries
+            .iter()
+            .filter(|(key, _)| seen.insert(key.render()))
+            .collect();
+        if entries.is_empty() {
+            continue;
+        }
+        if !first {
+            out.push('\n');
+        }
+        first = false;
+        for line in section.comment.lines() {
+            out.push_str(&format!("  # {line}\n"));
+        }
+        for (key, value) in entries {
+            out.push_str(&format!("  {} = {};\n", key.render(), value.render(1)));
+        }
+    }
+    out.push_str("}\n");
+    out
+}
+
+fn follows_nixpkgs(url: &str) -> Nix {
+    Nix::attrs([
+        ("url", Nix::str(url)),
+        ("inputs.nixpkgs.follows", Nix::str("nixpkgs")),
+    ])
+}
+
+impl Generator<'_> {
+    fn flake_module(&self) -> Option<&configurator_catalog::FlakeModule> {
+        self.desktop.and_then(|d| d.module.flake.as_ref())
+    }
+
+    fn needs_home_manager(&self) -> bool {
+        self.flake_module().is_some_and(|f| f.home_manager)
+    }
+
+    fn flake(&self) -> String {
+        let a = self.answers;
+        let mut inputs = vec![
+            (
+                Key::from("nixpkgs.url"),
+                Nix::str(format!("github:NixOS/nixpkgs/nixos-{NIXOS_RELEASE}")),
+            ),
+            (
+                Key::from("disko"),
+                follows_nixpkgs("github:nix-community/disko"),
+            ),
+        ];
+        let mut modules = vec![Nix::raw("inputs.disko.nixosModules.disko")];
+
+        if self.needs_home_manager() {
+            inputs.push((
+                Key::from("home-manager"),
+                follows_nixpkgs(&format!(
+                    "github:nix-community/home-manager/release-{NIXOS_RELEASE}"
+                )),
+            ));
+            modules.push(Nix::raw("inputs.home-manager.nixosModules.home-manager"));
+        }
+        if let Some(flake) = self.flake_module() {
+            let mut input = vec![(Key::from("url"), Nix::str(&flake.url))];
+            for follow in &flake.follows {
+                input.push((
+                    Key(vec!["inputs".into(), follow.clone(), "follows".into()]),
+                    Nix::str(follow),
+                ));
+            }
+            inputs.push((Key(vec![flake.input.clone()]), Nix::Attrs(input)));
+            modules.push(Nix::raw(format!(
+                "inputs.{}.{}",
+                flake.input, flake.nixos_module
+            )));
+        }
+        if a.security.secure_boot {
+            inputs.push((
+                Key::from("lanzaboote"),
+                follows_nixpkgs("github:nix-community/lanzaboote"),
+            ));
+            modules.push(Nix::raw("inputs.lanzaboote.nixosModules.lanzaboote"));
+        }
+        if a.security.tpm_pin {
+            // First-boot tasks (TPM2 + PIN sealing) from the configurator.
+            inputs.push((
+                Key::from("configurator"),
+                follows_nixpkgs("github:nix-composer/configurator"),
+            ));
+            modules.push(Nix::raw("inputs.configurator.nixosModules.default"));
+        }
+        modules.extend(["./disko.nix", "./hardware.nix", "./configuration.nix"].map(Nix::raw));
+
+        let system = Nix::attrs([
+            ("specialArgs", Nix::raw("{ inherit inputs; }")),
+            ("modules", Nix::List(modules)),
+        ]);
+        let outputs = Nix::attrs([(
+            Key(vec!["nixosConfigurations".into(), a.hostname.clone()]),
+            Nix::raw(format!("nixpkgs.lib.nixosSystem {}", system.render(2))),
+        )]);
+        let flake = Nix::attrs([
+            (
+                Key::from("description"),
+                Nix::str(format!("NixOS configuration of {}", a.hostname)),
+            ),
+            (Key::from("inputs"), Nix::Attrs(inputs)),
+            (
+                Key::from("outputs"),
+                Nix::Lambda("{ nixpkgs, ... }@inputs".into(), Box::new(outputs)),
+            ),
+        ]);
+        format!(
+            "{HEADER}# Apply changes with: sudo nixos-rebuild switch --flake {}\n{}\n",
+            self.config_dir,
+            flake.render(0)
+        )
+    }
+
+    fn configuration(&self) -> Result<String, Error> {
+        let a = self.answers;
+        let mut sections = Vec::new();
+
+        let mut basics = Section::new("Basics: language, keyboard and time zone.");
+        basics
+            .set("i18n.defaultLocale", Nix::str(&a.basics.locale))
+            .set(
+                "services.xserver.xkb.layout",
+                Nix::str(&a.basics.keyboard_layout),
+            );
+        if !a.basics.keyboard_variant.is_empty() {
+            basics.set(
+                "services.xserver.xkb.variant",
+                Nix::str(&a.basics.keyboard_variant),
+            );
+        }
+        basics
+            .set("console.useXkbConfig", Nix::Bool(true))
+            .set("time.timeZone", Nix::str(&a.basics.timezone));
+        sections.push(basics);
+
+        sections.push(self.profile_section()?);
+        sections.push(self.desktop_section()?);
+        sections.push(self.login_manager_section());
+        sections.push(self.apps_section()?);
+        sections.push(self.development_section()?);
+        sections.push(self.shell_section());
+        sections.push(self.keybinds_section()?);
+        sections.push(self.boot_and_security_section());
+        sections.push(self.users_section());
+
+        let mut system = Section::new("System.");
+        system
+            .set("networking.hostName", Nix::str(&a.hostname))
+            .set("networking.networkmanager.enable", Nix::Bool(true))
+            // This flake is a git repository the user owns; root rebuilds it.
+            .set("programs.git.enable", Nix::Bool(true))
+            .set(
+                "programs.git.config.safe.directory",
+                Nix::List(vec![Nix::str(&self.config_dir)]),
+            )
+            .set(
+                "nix.settings.experimental-features",
+                Nix::List(vec![Nix::str("nix-command"), Nix::str("flakes")]),
+            )
+            .set("system.stateVersion", Nix::str(NIXOS_RELEASE));
+        sections.push(system);
+
+        let header = format!(
+            "# Your choices, one section per installer layer. Apply changes with:\n\
+             #   sudo nixos-rebuild switch --flake {}\n",
+            self.config_dir
+        );
+        Ok(module(&header, "{ lib, pkgs, ... }", &sections))
+    }
+
+    fn desktop_section(&self) -> Result<Section, Error> {
+        let Some(desktop) = self.desktop else {
+            return Ok(Section::new("Desktop: none."));
+        };
+        let mut section = Section::new(format!("Desktop: {}.", desktop.name));
+        for (path, value) in &desktop.module.config {
+            section.set(path.as_str(), self.resolve(&desktop.id, value)?);
+        }
+        // The ecosystem's apps are in the answers' app and shell lists (as
+        // preselected and kept); a desktop with its own switch gets it too.
+        if self.answers.desktop.as_ref().is_some_and(|d| d.ecosystem)
+            && let Some(option) = &desktop.module.ecosystem
+        {
+            section.set(option.as_str(), Nix::Bool(true));
+        }
+        Ok(section)
+    }
+
+    /// The registry's JSON, with its special objects resolved.
+    /// Catalog JSON (desktop modules, profiles) with its special values
+    /// resolved; `owner` names the entry in errors.
+    fn resolve(&self, owner: &str, value: &Value) -> Result<Nix, Error> {
+        let bad = |msg: String| Error::BadCatalog(owner.to_owned(), msg);
+        if let Value::Object(map) = value {
+            if let Some(path) = map.get("$path") {
+                let path = path
+                    .as_str()
+                    .filter(|p| p.starts_with("./"))
+                    .ok_or_else(|| bad("$path must be \"./…\"".into()))?;
+                return Ok(Nix::Path(path.to_owned()));
+            }
+            if let Some(name) = map.get("$context") {
+                return match name.as_str() {
+                    Some("users") => Ok(Nix::List(
+                        self.answers
+                            .users
+                            .iter()
+                            .map(|u| Nix::str(&u.name))
+                            .collect(),
+                    )),
+                    Some("firstUser") => Ok(Nix::str(&self.answers.users[0].name)),
+                    Some("configDir") => Ok(Nix::str(&self.config_dir)),
+                    other => Err(bad(format!("unknown $context {other:?}"))),
+                };
+            }
+            // Nix code from the catalog (reviewed data, never user input).
+            if let Some(code) = map.get("$expr") {
+                let code = code
+                    .as_str()
+                    .ok_or_else(|| bad("$expr must be a string".into()))?;
+                return Ok(Nix::raw(format!("({code})")));
+            }
+            return Ok(Nix::Attrs(
+                map.iter()
+                    .map(|(k, v)| Ok((Nix::attr(k), self.resolve(owner, v)?)))
+                    .collect::<Result<_, Error>>()?,
+            ));
+        }
+        if let Value::Array(items) = value {
+            return Ok(Nix::List(
+                items
+                    .iter()
+                    .map(|v| self.resolve(owner, v))
+                    .collect::<Result<_, _>>()?,
+            ));
+        }
+        Ok(Nix::from(value))
+    }
+
+    fn login_manager(&self) -> Option<LoginManager> {
+        if self.answers.login_manager.is_some() {
+            return self.answers.login_manager;
+        }
+        let default = &self.desktop?.login_manager;
+        // "builtin": the desktop's module sets up its own.
+        serde_json::from_value(Value::String(default.clone())).ok()
+    }
+
+    fn login_manager_section(&self) -> Section {
+        let mut section = Section::new("Login manager.");
+        let wayland_only = self
+            .desktop
+            .is_some_and(|d| !d.sessions.contains(&Session::X11));
+        match self.login_manager() {
+            Some(LoginManager::Gdm) => {
+                section.set("services.displayManager.gdm.enable", Nix::Bool(true));
+            }
+            Some(LoginManager::Sddm) => {
+                section.set("services.displayManager.sddm.enable", Nix::Bool(true));
+                if wayland_only {
+                    section.set(
+                        "services.displayManager.sddm.wayland.enable",
+                        Nix::Bool(true),
+                    );
+                }
+            }
+            Some(LoginManager::Lightdm) => {
+                section.set("services.xserver.enable", Nix::Bool(true)).set(
+                    "services.xserver.displayManager.lightdm.enable",
+                    Nix::Bool(true),
+                );
+            }
+            Some(LoginManager::CosmicGreeter) => {
+                section.set(
+                    "services.displayManager.cosmic-greeter.enable",
+                    Nix::Bool(true),
+                );
+            }
+            Some(LoginManager::Ly) => {
+                section.set("services.displayManager.ly.enable", Nix::Bool(true));
+            }
+            Some(LoginManager::None) | None => {}
+        }
+        section
+    }
+
+    fn apps_section(&self) -> Result<Section, Error> {
+        let a = self.answers;
+        let module = self.desktop.map(|d| &d.module);
+
+        // Agents the desktop takes through its own option (Omarchy's agents
+        // panel) go there; the rest are installed as packages.
+        let agents_option = module.and_then(|m| m.agents.as_ref());
+        let mut desktop_agents = Vec::new();
+        let mut agent_packages = Vec::new();
+        for id in &a.apps.agents {
+            let agent = self
+                .catalog
+                .agent(id)
+                .ok_or_else(|| Error::Unknown("agent", id.clone()))?;
+            if agents_option.is_some_and(|o| o.ids.contains(id)) {
+                desktop_agents.push(Nix::str(id));
+            } else {
+                agent_packages.push(&agent.attr);
+            }
+        }
+        if let Some(id) = &a.apps.default_agent
+            && !agents_option.is_some_and(|o| o.ids.contains(id))
+        {
+            return Err(Error::Unsupported(format!(
+                "a default agent ({id}) on a desktop without an agents option for it"
+            )));
+        }
+
+        // Likewise web apps: the desktop's own launchers where it has them,
+        // generic app-window launchers otherwise.
+        let webapps_option = module.and_then(|m| m.webapps.as_ref());
+        let mut desktop_webapps = Vec::new();
+        let mut launchers = Vec::new();
+        for id in &a.webapps {
+            let webapp = self
+                .catalog
+                .webapp(id)
+                .ok_or_else(|| Error::Unknown("web app", id.clone()))?;
+            if webapps_option.is_some_and(|o| o.ids.contains(id)) {
+                desktop_webapps.push(Nix::str(id));
+            } else {
+                launchers.push(Nix::raw(format!(
+                    "(pkgs.makeDesktopItem {})",
+                    Nix::attrs([
+                        ("name", Nix::str(format!("webapp-{}", webapp.id))),
+                        ("desktopName", Nix::str(&webapp.name)),
+                        ("comment", Nix::str(&webapp.description)),
+                        ("exec", self.webapp_command(id)?),
+                        ("categories", Nix::List(vec![Nix::str("Network")])),
+                    ])
+                    .render(2)
+                )));
+            }
+        }
+
+        let mut section = Section::new("Apps, web apps, AI agents and command-line tools.");
+        let mut seen = std::collections::BTreeSet::new();
+        let mut packages: Vec<Nix> = a
+            .all_packages()
+            .chain(agent_packages)
+            .filter(|attr| seen.insert(attr.as_str()))
+            .map(|attr| Nix::raw(format!("pkgs.{attr}")))
+            .collect();
+        packages.extend(launchers);
+        if !packages.is_empty() {
+            section.set("environment.systemPackages", Nix::List(packages));
+        }
+        // The app store marks unfree apps; accepting them is part of picking one.
+        section.set("nixpkgs.config.allowUnfree", Nix::Bool(true));
+
+        if let Some(option) = agents_option
+            && !desktop_agents.is_empty()
+        {
+            self.desktop_option(
+                &mut section,
+                &option.option,
+                option.home,
+                Nix::List(desktop_agents),
+            );
+            if let Some(id) = &a.apps.default_agent {
+                self.desktop_option(
+                    &mut section,
+                    &option.default_option,
+                    option.home,
+                    Nix::str(id),
+                );
+            }
+        }
+        let ecosystem = a.desktop.as_ref().is_some_and(|d| d.ecosystem);
+        if let Some(option) = webapps_option
+            && (ecosystem || !desktop_webapps.is_empty())
+        {
+            // With the ecosystem on, the picks narrow its web apps down to
+            // the ones kept in the web app store.
+            let value = Nix::attrs([
+                ("enable", Nix::Bool(!desktop_webapps.is_empty())),
+                ("picks", Nix::List(desktop_webapps)),
+            ]);
+            self.desktop_option(&mut section, &option.option, option.home, value);
+        }
+        Ok(section)
+    }
+
+    /// Sets a desktop module option, per user when it's a Home Manager one.
+    fn desktop_option(&self, section: &mut Section, option: &str, home: bool, value: Nix) {
+        if home {
+            for user in &self.answers.users {
+                let mut key = vec!["home-manager".into(), "users".into(), user.name.clone()];
+                key.extend(Key::from(option).0);
+                section.set(Key(key), value.clone());
+            }
+        } else {
+            section.set(option, value);
+        }
+    }
+
+    /// Opens a web app in its own window, as a Nix string expression.
+    fn webapp_command(&self, id: &str) -> Result<Nix, Error> {
+        let webapp = self
+            .catalog
+            .webapp(id)
+            .ok_or_else(|| Error::Unknown("web app", id.to_owned()))?;
+        Ok(Nix::raw(format!(
+            "(lib.getExe pkgs.chromium + {})",
+            nix::string(&format!(" --app={}", webapp.url))
+        )))
+    }
+
+    fn profile_section(&self) -> Result<Section, Error> {
+        let id = &self.answers.profile;
+        let profile = self
+            .catalog
+            .profile(id)
+            .ok_or_else(|| Error::Unknown("profile", id.clone()))?;
+        let mut section = Section::new(format!("Profile: {}.", profile.name));
+        for (path, value) in &profile.config {
+            section.set(path.as_str(), self.resolve(&profile.id, value)?);
+        }
+        Ok(section)
+    }
+
+    /// Container picks the desktop keeps in its own state (Omarchy's
+    /// dbs.json).
+    fn desktop_containers(&self) -> Vec<&String> {
+        let ids = self
+            .desktop
+            .and_then(|d| d.module.containers.as_ref())
+            .map(|c| &c.ids);
+        let containers = &self.answers.development.containers;
+        containers
+            .iter()
+            .filter(|id| ids.is_some_and(|ids| ids.contains(id)))
+            .collect()
+    }
+
+    /// Containers that become oci-containers units here.
+    fn own_containers(&self) -> Vec<&String> {
+        let desktop = self.desktop_containers();
+        self.answers
+            .development
+            .containers
+            .iter()
+            .filter(|id| !desktop.contains(id))
+            .collect()
+    }
+
+    fn development_section(&self) -> Result<Section, Error> {
+        let dev = &self.answers.development;
+        let mut comment = String::from("Development.");
+        let mut section = Section::new("");
+        if !dev.templates.is_empty() {
+            // Dev environments are per project: direnv loads them, and the
+            // `dev` registry entry names the templates.
+            comment.push_str(" Start a project from a template with:");
+            for id in &dev.templates {
+                self.catalog
+                    .dev_template(id)
+                    .ok_or_else(|| Error::Unknown("dev template", id.clone()))?;
+                comment.push_str(&format!(
+                    "\n  nix flake new -t dev#{id} ~/Projects/my-{id}-project"
+                ));
+            }
+            section.set("programs.direnv.enable", Nix::Bool(true)).set(
+                "nix.registry.dev.to",
+                Nix::attrs([
+                    ("type", Nix::str("github")),
+                    ("owner", Nix::str("nix-templates")),
+                    ("repo", Nix::str("dev")),
+                ]),
+            );
+        }
+        let own = self.own_containers();
+        if !own.is_empty() {
+            section
+                .set("virtualisation.docker.enable", Nix::Bool(true))
+                .set("virtualisation.oci-containers.backend", Nix::str("docker"));
+            for id in own {
+                let c = self
+                    .catalog
+                    .container(id)
+                    .ok_or_else(|| Error::Unknown("container", id.clone()))?;
+                let mut unit = vec![
+                    (Key::from("image"), Nix::str(&c.image)),
+                    (
+                        Key::from("ports"),
+                        Nix::List(c.ports.iter().map(Nix::str).collect()),
+                    ),
+                ];
+                if !c.environment.is_empty() {
+                    unit.push((
+                        Key::from("environment"),
+                        Nix::Attrs(
+                            c.environment
+                                .iter()
+                                .map(|(k, v)| (Nix::attr(k), Nix::str(v)))
+                                .collect(),
+                        ),
+                    ));
+                }
+                unit.push((
+                    Key::from("volumes"),
+                    Nix::List(c.volumes.iter().map(Nix::str).collect()),
+                ));
+                if !c.cmd.is_empty() {
+                    unit.push((
+                        Key::from("cmd"),
+                        Nix::List(c.cmd.iter().map(Nix::str).collect()),
+                    ));
+                }
+                section.set(
+                    Key(vec![
+                        "virtualisation".into(),
+                        "oci-containers".into(),
+                        "containers".into(),
+                        c.id.clone(),
+                    ]),
+                    Nix::Attrs(unit),
+                );
+            }
+        }
+        for id in self.desktop_containers() {
+            self.catalog
+                .container(id)
+                .ok_or_else(|| Error::Unknown("container", id.clone()))?;
+        }
+        section.comment = comment;
+        Ok(section)
+    }
+
+    fn shell_section(&self) -> Section {
+        let mut section = Section::new("Shell.");
+        match self.answers.shell.shell {
+            ShellKind::Bash => {}
+            ShellKind::Zsh => {
+                section
+                    .set("programs.zsh.enable", Nix::Bool(true))
+                    .set("users.defaultUserShell", Nix::raw("pkgs.zsh"));
+            }
+            ShellKind::Fish => {
+                section
+                    .set("programs.fish.enable", Nix::Bool(true))
+                    .set("users.defaultUserShell", Nix::raw("pkgs.fish"));
+            }
+            ShellKind::Nushell => {
+                section
+                    .set(
+                        "environment.shells",
+                        Nix::List(vec![Nix::raw("pkgs.nushell")]),
+                    )
+                    .set("users.defaultUserShell", Nix::raw("pkgs.nushell"));
+            }
+        }
+        section
+    }
+
+    fn boot_and_security_section(&self) -> Section {
+        let s = &self.answers.security;
+        let mut section = Section::new("Boot and security.");
+        if s.secure_boot {
+            // lanzaboote replaces systemd-boot and signs the boot files with
+            // the keys the installer created and enrolled. Turn Secure Boot
+            // on in the firmware after the install.
+            section
+                .set(
+                    "boot.loader.systemd-boot.enable",
+                    Nix::raw("lib.mkForce false"),
+                )
+                .set("boot.lanzaboote.enable", Nix::Bool(true))
+                .set("boot.lanzaboote.pkiBundle", Nix::str("/var/lib/sbctl"));
+        } else {
+            section.set("boot.loader.systemd-boot.enable", Nix::Bool(true));
+        }
+        section.set("boot.loader.efi.canTouchEfiVariables", Nix::Bool(true));
+        if s.tpm_pin {
+            // Sealed to the TPM2 (PCR 7) with a PIN on the first boot with
+            // Secure Boot on; see github:nix-composer/configurator.
+            section.set("configurator.tpmPin.enable", Nix::Bool(true));
+        }
+        if s.fido2 {
+            section.set("security.pam.u2f.enable", Nix::Bool(true));
+        }
+        if s.fingerprint {
+            section.set("services.fprintd.enable", Nix::Bool(true));
+        }
+        section
+    }
+
+    fn users_section(&self) -> Section {
+        let mut section = Section::new("Users. Passwords are set during install, not stored here.");
+        let docker = !self.own_containers().is_empty();
+        // With keys to log in with, SSH needs no passwords.
+        if self.answers.users.iter().any(|u| !u.ssh_keys.is_empty()) {
+            section.set("services.openssh.enable", Nix::Bool(true)).set(
+                "services.openssh.settings.PasswordAuthentication",
+                Nix::Bool(false),
+            );
+        }
+        for user in &self.answers.users {
+            section.set(
+                Key(vec!["users".into(), "users".into(), user.name.clone()]),
+                user_config(user, docker),
+            );
+        }
+        if self.needs_home_manager() {
+            section
+                .set("home-manager.useGlobalPkgs", Nix::Bool(true))
+                .set("home-manager.useUserPackages", Nix::Bool(true));
+            for user in &self.answers.users {
+                section.set(
+                    Key(vec![
+                        "home-manager".into(),
+                        "users".into(),
+                        user.name.clone(),
+                        "home".into(),
+                        "stateVersion".into(),
+                    ]),
+                    Nix::str(NIXOS_RELEASE),
+                );
+            }
+        }
+        section
+    }
+
+    fn hardware(&self, has_report: bool, platform: &str) -> String {
+        let h = &self.answers.hardware;
+        let mut detected =
+            Section::new("What nixos-facter detected: kernel modules, firmware, CPU microcode, …");
+        // The report sets it too; this keeps the flake evaluating without one.
+        detected.set(
+            "nixpkgs.hostPlatform",
+            Nix::raw(format!("lib.mkDefault {}", nix::string(platform))),
+        );
+        if has_report {
+            detected.set(
+                "hardware.facter.reportPath",
+                Nix::Path("./facter.json".into()),
+            );
+        }
+
+        let mut drivers = Section::new("Driver choices.");
+        match h.nvidia {
+            Some(NvidiaDriver::Open) | Some(NvidiaDriver::Proprietary) => {
+                drivers
+                    .set(
+                        "services.xserver.videoDrivers",
+                        Nix::List(vec![Nix::str("nvidia")]),
+                    )
+                    .set(
+                        "hardware.nvidia.open",
+                        Nix::Bool(h.nvidia == Some(NvidiaDriver::Open)),
+                    )
+                    .set("hardware.graphics.enable", Nix::Bool(true));
+            }
+            // nouveau is the default.
+            Some(NvidiaDriver::Nouveau) | None => {}
+        }
+        if h.non_free_firmware {
+            drivers.set("hardware.enableAllFirmware", Nix::Bool(true));
+        } else {
+            drivers.set("hardware.enableRedistributableFirmware", Nix::Bool(true));
+        }
+
+        let header = if has_report {
+            ""
+        } else {
+            "# No hardware report yet. On the machine, run\n\
+             #   sudo nixos-facter -o facter.json\n\
+             # here and set hardware.facter.reportPath = ./facter.json;\n"
+        };
+        module(header, "{ lib, ... }", &[detected, drivers])
+    }
+
+    fn disko(&self) -> String {
+        let d = &self.answers.disk;
+        let swap = (d.swap_gib > 0).then(|| format!("{}G", d.swap_gib));
+
+        let root_fs = match d.filesystem {
+            Filesystem::Btrfs => {
+                let opts = || Nix::List(vec![Nix::str("compress=zstd"), Nix::str("noatime")]);
+                let mut subvolumes = vec![
+                    (
+                        Nix::attr("@"),
+                        Nix::attrs([("mountpoint", Nix::str("/")), ("mountOptions", opts())]),
+                    ),
+                    (
+                        Nix::attr("@home"),
+                        Nix::attrs([("mountpoint", Nix::str("/home")), ("mountOptions", opts())]),
+                    ),
+                    (
+                        Nix::attr("@nix"),
+                        Nix::attrs([("mountpoint", Nix::str("/nix")), ("mountOptions", opts())]),
+                    ),
+                    (
+                        Nix::attr("@snapshots"),
+                        Nix::attrs([
+                            ("mountpoint", Nix::str("/.snapshots")),
+                            ("mountOptions", opts()),
+                        ]),
+                    ),
+                ];
+                if let Some(size) = &swap {
+                    subvolumes.push((
+                        Nix::attr("@swap"),
+                        Nix::attrs([
+                            ("mountpoint", Nix::str("/.swapvol")),
+                            ("swap.swapfile.size", Nix::str(size)),
+                        ]),
+                    ));
+                }
+                Nix::attrs([
+                    ("type", Nix::str("btrfs")),
+                    ("extraArgs", Nix::List(vec![Nix::str("-f")])),
+                    ("subvolumes", Nix::Attrs(subvolumes)),
+                ])
+            }
+            Filesystem::Ext4 | Filesystem::Xfs => Nix::attrs([
+                ("type", Nix::str("filesystem")),
+                (
+                    "format",
+                    Nix::str(if d.filesystem == Filesystem::Ext4 {
+                        "ext4"
+                    } else {
+                        "xfs"
+                    }),
+                ),
+                ("mountpoint", Nix::str("/")),
+            ]),
+        };
+        let root_content = if d.encryption {
+            Nix::attrs([
+                ("type", Nix::str("luks")),
+                ("name", Nix::str("cryptroot")),
+                ("passwordFile", Nix::str(LUKS_KEY_FILE)),
+                ("settings.allowDiscards", Nix::Bool(true)),
+                ("content", root_fs),
+            ])
+        } else {
+            root_fs
+        };
+
+        let mut partitions = vec![(
+            Key::from("ESP"),
+            Nix::attrs([
+                ("size", Nix::str("1G")),
+                ("type", Nix::str("EF00")),
+                (
+                    "content",
+                    Nix::attrs([
+                        ("type", Nix::str("filesystem")),
+                        ("format", Nix::str("vfat")),
+                        ("mountpoint", Nix::str("/boot")),
+                        ("mountOptions", Nix::List(vec![Nix::str("umask=0077")])),
+                    ]),
+                ),
+            ]),
+        )];
+        // btrfs keeps swap in a subvolume; the others get a partition,
+        // encrypted with a random key on every boot when the disk is.
+        if let (Some(size), false) = (&swap, d.filesystem == Filesystem::Btrfs) {
+            partitions.push((
+                Key::from("swap"),
+                Nix::attrs([
+                    ("size", Nix::str(size)),
+                    (
+                        "content",
+                        Nix::attrs([
+                            ("type", Nix::str("swap")),
+                            ("randomEncryption", Nix::Bool(d.encryption)),
+                        ]),
+                    ),
+                ]),
+            ));
+        }
+        partitions.push((
+            Key::from("root"),
+            Nix::attrs([("size", Nix::str("100%")), ("content", root_content)]),
+        ));
+
+        let disk = Nix::attrs([
+            ("type", Nix::str("disk")),
+            ("device", Nix::str(&d.device)),
+            (
+                "content",
+                Nix::attrs([
+                    ("type", Nix::str("gpt")),
+                    ("partitions", Nix::Attrs(partitions)),
+                ]),
+            ),
+        ]);
+        let mut layout = Section::new(format!(
+            "Disk layout (disko): {}{}.",
+            match d.filesystem {
+                Filesystem::Btrfs => "btrfs with subvolumes",
+                Filesystem::Ext4 => "ext4",
+                Filesystem::Xfs => "XFS",
+            },
+            if d.encryption { " on LUKS" } else { "" }
+        ));
+        layout.set("disko.devices.disk.main", disk);
+        module("", "{ ... }", &[layout])
+    }
+}
+
+fn user_config(user: &User, docker: bool) -> Nix {
+    let mut groups = vec![Nix::str("networkmanager"), Nix::str("video")];
+    if docker {
+        groups.push(Nix::str("docker"));
+    }
+    if user.admin {
+        groups.insert(0, Nix::str("wheel"));
+    }
+    let mut entries = vec![(Key::from("isNormalUser"), Nix::Bool(true))];
+    if !user.full_name.is_empty() {
+        entries.push((Key::from("description"), Nix::str(&user.full_name)));
+    }
+    entries.push((Key::from("extraGroups"), Nix::List(groups)));
+    if !user.ssh_keys.is_empty() {
+        entries.push((
+            Key::from("openssh.authorizedKeys.keys"),
+            Nix::List(user.ssh_keys.iter().map(Nix::str).collect()),
+        ));
+    }
+    Nix::Attrs(entries)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::path::Path;
+
+    /// Generated output for each answers file in `examples/answers` and
+    /// `nix/tests/answers` is checked in next to it, under `hosts/<name>/`
+    /// (the VM tests install those). Set `UPDATE_EXPECT=1` to regenerate.
+    #[test]
+    fn examples_match_checked_in_output() {
+        let catalog = Catalog::builtin().unwrap();
+        let update = std::env::var_os("UPDATE_EXPECT").is_some();
+        let mut stale = Vec::new();
+
+        for root in ["../../examples", "../../nix/tests"] {
+            let root = Path::new(env!("CARGO_MANIFEST_DIR")).join(root);
+            for entry in std::fs::read_dir(root.join("answers")).unwrap() {
+                let path = entry.unwrap().path();
+                let name = path.file_stem().unwrap().to_str().unwrap().to_owned();
+                let answers = Answers::from_json(&std::fs::read_to_string(&path).unwrap()).unwrap();
+                let host = generate(&answers, &catalog, &Inputs::default()).unwrap();
+                let dir = root.join("hosts").join(&name);
+                for (file, content) in &host.files {
+                    let target = dir.join(file);
+                    if update {
+                        std::fs::create_dir_all(target.parent().unwrap()).unwrap();
+                        std::fs::write(&target, content).unwrap();
+                    } else if std::fs::read_to_string(&target).ok().as_deref() != Some(content) {
+                        stale.push(target.display().to_string());
+                    }
+                }
+            }
+        }
+        assert!(
+            stale.is_empty(),
+            "stale generated examples (UPDATE_EXPECT=1 cargo test): {stale:?}"
+        );
+    }
+
+    #[test]
+    fn every_desktop_generates() {
+        let catalog = Catalog::builtin().unwrap();
+        let base = include_str!("../../../examples/answers/gnome.json");
+        for desktop in &catalog.desktops {
+            let mut answers = Answers::from_json(base).unwrap();
+            answers.desktop.as_mut().unwrap().id = desktop.id.clone();
+            answers.desktop.as_mut().unwrap().ecosystem = false;
+            // Keybinds are per desktop (tested through the examples).
+            answers.keybinds.clear();
+            let result = generate(&answers, &catalog, &Inputs::default());
+            match &desktop.unavailable {
+                None => {
+                    result.unwrap_or_else(|e| panic!("{}: {e}", desktop.id));
+                }
+                // Refused before anything is written.
+                Some(_) => assert!(
+                    matches!(result, Err(Error::Unsupported(_))),
+                    "{}: unavailable but generated",
+                    desktop.id
+                ),
+            }
+        }
+    }
+}

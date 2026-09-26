@@ -1,0 +1,273 @@
+{
+  "$comment": "Development environments from github:nix-templates/dev (per project: nix flake new -t dev#<id>). Generated from the flake's templates; aliases dropped.",
+  "templates": [
+    {
+      "id": "ansible",
+      "description": "Ansible development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "assembly",
+      "description": "Assembly development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "bun",
+      "description": "Bun development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "c",
+      "description": "C/C++ development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "clojure",
+      "description": "Clojure development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "crystal",
+      "description": "Crystal development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "csharp",
+      "description": "C# development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "cue",
+      "description": "CUE development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "dart",
+      "description": "Dart / Flutter development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "deno",
+      "description": "Deno development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "dhall",
+      "description": "Dhall development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "docker",
+      "description": "Docker / containers development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "docs",
+      "description": "Markdown / docs development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "elixir",
+      "description": "Elixir development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "elm",
+      "description": "Elm development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "erlang",
+      "description": "Erlang development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "fortran",
+      "description": "Fortran development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "fsharp",
+      "description": "F# development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "gha",
+      "description": "GitHub Actions development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "gleam",
+      "description": "Gleam development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "go",
+      "description": "Go development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "graphql",
+      "description": "GraphQL development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "groovy",
+      "description": "Groovy development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "hashi",
+      "description": "HashiCorp development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "haskell",
+      "description": "Haskell development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "haxe",
+      "description": "Haxe development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "hdl",
+      "description": "HDL (Verilog/VHDL) development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "java",
+      "description": "Java development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "js",
+      "description": "Node.js development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "julia",
+      "description": "Julia development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "jupyter",
+      "description": "Jupyter development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "k8s",
+      "description": "Kubernetes development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "kotlin",
+      "description": "Kotlin development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "latex",
+      "description": "LaTeX development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "lean4",
+      "description": "Lean 4 development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "lua",
+      "description": "Lua development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "nickel",
+      "description": "Nickel development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "nim",
+      "description": "Nim development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "nix",
+      "description": "Nix development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "ocaml",
+      "description": "OCaml development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "odin",
+      "description": "Odin development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "opa",
+      "description": "Open Policy Agent development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "perl",
+      "description": "Perl development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "php",
+      "description": "PHP development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "platformio",
+      "description": "PlatformIO development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "powershell",
+      "description": "PowerShell development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "presenterm",
+      "description": "Presenterm development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "protobuf",
+      "description": "Protocol Buffers development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "pulumi",
+      "description": "Pulumi development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "purescript",
+      "description": "PureScript development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "python",
+      "description": "Python development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "r",
+      "description": "R development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "racket",
+      "description": "Racket development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "ruby",
+      "description": "Ruby development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "rust",
+      "description": "Rust development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "scala",
+      "description": "Scala development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "sh",
+      "description": "Shell development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "solidity",
+      "description": "Solidity development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "sql",
+      "description": "SQL development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "swi-prolog",
+      "description": "SWI-Prolog development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "swift",
+      "description": "Swift development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "terraform",
+      "description": "Terraform / OpenTofu development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "ts",
+      "description": "TypeScript development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "typst",
+      "description": "Typst development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "vlang",
+      "description": "V development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "web",
+      "description": "Web front-end development environment with linters, formatters, LSP and security scanning"
+    },
+    {
+      "id": "zig",
+      "description": "Zig development environment with linters, formatters, LSP and security scanning"
+    }
+  ]
+}

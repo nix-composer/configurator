@@ -1,0 +1,19 @@
+{
+  "$comment": "AI coding agents for the app store's AI agents category: never preselected. Ids follow nix-desktops/omarchy's lib.catalog.agents, so a desktop with its own agent option (Omarchy) takes them as they are.",
+  "agents": [
+    { "id": "claude", "name": "Claude Code", "attr": "claude-code", "description": "Anthropic's coding agent" },
+    { "id": "codex", "name": "Codex", "attr": "codex", "description": "OpenAI's coding agent" },
+    { "id": "copilot", "name": "GitHub Copilot", "attr": "github-copilot-cli", "description": "GitHub Copilot in the terminal" },
+    { "id": "opencode", "name": "OpenCode", "attr": "opencode", "description": "Open source coding agent for any model" },
+    { "id": "crush", "name": "Crush", "attr": "crush", "description": "Charm's coding agent" },
+    { "id": "cursor-agent", "name": "Cursor CLI", "attr": "cursor-cli", "description": "Cursor's agent in the terminal" },
+    { "id": "grok", "name": "Grok", "attr": "grok-cli", "description": "xAI's coding agent" },
+    { "id": "pi", "name": "Pi", "attr": "pi-coding-agent", "description": "A minimal, extensible coding agent" },
+    { "id": "openclaw", "name": "OpenClaw", "attr": "openclaw", "description": "Personal AI assistant" },
+    { "id": "gemini", "name": "Gemini CLI", "attr": "gemini-cli", "description": "Google's coding agent" },
+    { "id": "aider", "name": "Aider", "attr": "aider-chat", "description": "AI pair programming in your terminal" },
+    { "id": "goose", "name": "Goose", "attr": "goose-cli", "description": "Block's extensible AI agent" },
+    { "id": "amp", "name": "Amp", "attr": "amp-cli", "description": "Sourcegraph's coding agent" },
+    { "id": "qwen", "name": "Qwen Code", "attr": "qwen-code", "description": "Alibaba's coding agent" }
+  ]
+}

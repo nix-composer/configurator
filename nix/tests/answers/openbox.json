@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "basics": { "locale": "en_US.UTF-8", "keyboardLayout": "us", "timezone": "UTC" },
+  "desktop": { "id": "openbox" },
+  "apps": { "packages": ["xterm"] },
+  "disk": { "device": "/dev/vdb", "filesystem": "xfs" },
+  "users": [{ "name": "dave", "admin": true }],
+  "hostname": "retro"
+}

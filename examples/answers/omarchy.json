@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "en_US.UTF-8",
+    "keyboardLayout": "us",
+    "timezone": "Europe/Amsterdam"
+  },
+  "profile": "custom",
+  "desktop": {
+    "id": "omarchy",
+    "ecosystem": true
+  },
+  "apps": {
+    "packages": [
+      "wireshark",
+      "spotify",
+      "gh"
+    ],
+    "agents": [
+      "claude",
+      "gemini"
+    ],
+    "defaultAgent": "claude"
+  },
+  "webapps": [
+    "youtube",
+    "hey",
+    "slack"
+  ],
+  "shell": {
+    "shell": "zsh",
+    "packages": [
+      "bat",
+      "eza",
+      "fd",
+      "fzf",
+      "ripgrep",
+      "zoxide",
+      "starship",
+      "tmux",
+      "lazygit"
+    ]
+  },
+  "keybinds": {
+    "SUPER + SHIFT + M": {
+      "launch": "spotify"
+    },
+    "SUPER + SHIFT + W": {
+      "exec": "wireshark"
+    },
+    "SUPER + SHIFT + N": "unbind",
+    "SUPER + SHIFT + K": {
+      "webapp": "slack"
+    }
+  },
+  "hardware": {
+    "nvidia": "open"
+  },
+  "security": {
+    "secureBoot": true,
+    "tpmPin": true
+  },
+  "disk": {
+    "device": "/dev/nvme0n1",
+    "filesystem": "btrfs",
+    "encryption": true,
+    "swapGib": 16
+  },
+  "users": [
+    {
+      "name": "me",
+      "fullName": "Me Myself",
+      "admin": true
+    }
+  ],
+  "hostname": "omarchy",
+  "development": {
+    "templates": [
+      "go"
+    ],
+    "containers": [
+      "postgres",
+      "minio"
+    ]
+  }
+}

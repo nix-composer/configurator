@@ -1,0 +1,20 @@
+[package]
+name = "configurator"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "configurator"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0.104"
+clap = { version = "4.6.7", features = ["derive"] }
+configurator-answers.workspace = true
+configurator-catalog.workspace = true
+configurator-engine.workspace = true
+configurator-flakegen.workspace = true
+dialoguer = "0.12.0"
+serde_json = "1.0.151"

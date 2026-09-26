@@ -1,0 +1,24 @@
+[workspace]
+resolver = "3"
+members = ["crates/*"]
+# `cargo build` / `cargo test` skip the GUI, so the engine builds without
+# GTK; build it with `-p configurator-gtk` (the dev shell has GTK).
+default-members = [
+    "crates/answers",
+    "crates/catalog",
+    "crates/flakegen",
+    "crates/engine",
+    "crates/cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "GPL-3.0-only"
+repository = "https://github.com/nix-composer/configurator"
+
+[workspace.dependencies]
+configurator-answers = { path = "crates/answers" }
+configurator-catalog = { path = "crates/catalog" }
+configurator-flakegen = { path = "crates/flakegen" }
+configurator-engine = { path = "crates/engine" }

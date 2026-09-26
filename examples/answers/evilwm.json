@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "en_GB.UTF-8",
+    "keyboardLayout": "gb",
+    "timezone": "Europe/London"
+  },
+  "desktop": {
+    "id": "evilwm",
+    "ecosystem": true
+  },
+  "apps": {
+    "packages": [
+      "feh",
+      "dunst",
+      "slock",
+      "pavucontrol"
+    ]
+  },
+  "disk": {
+    "device": "/dev/vda",
+    "filesystem": "xfs"
+  },
+  "users": [
+    {
+      "name": "pat",
+      "admin": true
+    }
+  ],
+  "hostname": "evil",
+  "shell": {
+    "shell": "bash",
+    "packages": [
+      "scrot",
+      "xclip"
+    ]
+  },
+  "keybinds": {}
+}

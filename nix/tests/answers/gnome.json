@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "en_US.UTF-8",
+    "keyboardLayout": "us",
+    "timezone": "UTC"
+  },
+  "profile": "office",
+  "desktop": {
+    "id": "gnome"
+  },
+  "apps": {
+    "packages": [
+      "gnome-console"
+    ]
+  },
+  "webapps": [
+    "youtube"
+  ],
+  "keybinds": {
+    "SUPER + RETURN": {
+      "launch": "gnome-console"
+    },
+    "SUPER + SHIFT + Y": {
+      "webapp": "youtube"
+    },
+    "ALT + F4": "unbind"
+  },
+  "disk": {
+    "device": "/dev/vdb",
+    "filesystem": "btrfs"
+  },
+  "users": [
+    {
+      "name": "frank",
+      "admin": true
+    }
+  ],
+  "hostname": "gnome"
+}

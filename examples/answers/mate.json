@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "en_US.UTF-8",
+    "keyboardLayout": "us",
+    "timezone": "UTC"
+  },
+  "desktop": {
+    "id": "mate"
+  },
+  "apps": {
+    "packages": [
+      "firefox"
+    ]
+  },
+  "keybinds": {
+    "SUPER + RETURN": {
+      "launch": "alacritty"
+    },
+    "CTRL + ALT + B": {
+      "exec": "firefox --private-window"
+    }
+  },
+  "disk": {
+    "device": "/dev/sda",
+    "filesystem": "ext4"
+  },
+  "users": [
+    {
+      "name": "sam",
+      "admin": true
+    }
+  ],
+  "hostname": "mate"
+}

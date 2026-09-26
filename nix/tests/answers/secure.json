@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "en_US.UTF-8",
+    "keyboardLayout": "us",
+    "timezone": "UTC"
+  },
+  "profile": "headless",
+  "security": {
+    "secureBoot": true,
+    "tpmPin": true
+  },
+  "disk": {
+    "device": "/dev/vdb",
+    "filesystem": "btrfs",
+    "encryption": true
+  },
+  "users": [
+    {
+      "name": "grace",
+      "admin": true
+    }
+  ],
+  "hostname": "fortress"
+}

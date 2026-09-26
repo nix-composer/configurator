@@ -1,0 +1,411 @@
+/* The installer's look on top of libadwaita: large, image-led pages with
+   few words, big choices, and color only where it means something. */
+
+.hero {
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+
+.hero-icon {
+  color: @accent_color;
+  -gtk-icon-shadow: 0 6px 18px alpha(@accent_bg_color, 0.35);
+}
+
+.hero-subtitle {
+  font-size: 1.1em;
+}
+
+/* The step indicator in the header. */
+.step-dot {
+  min-width: 8px;
+  min-height: 8px;
+  border-radius: 999px;
+  background: alpha(currentColor, 0.18);
+  transition: all 250ms ease;
+}
+
+.step-dot.done {
+  background: alpha(@accent_bg_color, 0.55);
+}
+
+.step-dot.current {
+  min-width: 28px;
+  background: @accent_bg_color;
+}
+
+.dry-run {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-weight: bold;
+  font-size: 0.85em;
+  color: @warning_fg_color;
+  background: @warning_bg_color;
+}
+
+/* Profile cards. */
+.choice-card {
+  border-radius: 16px;
+  padding: 6px 12px;
+  background: alpha(currentColor, 0.05);
+  transition: all 200ms ease;
+}
+
+.choice-card:hover {
+  background: alpha(currentColor, 0.09);
+}
+
+.choice-card:checked {
+  background: alpha(@accent_bg_color, 0.18);
+  box-shadow: inset 0 0 0 2px @accent_bg_color;
+  color: inherit;
+}
+
+/* Selected packages. */
+.chip {
+  padding: 2px 4px 2px 12px;
+  border-radius: 999px;
+  background: alpha(currentColor, 0.08);
+}
+
+.chip-tag {
+  font-size: 0.8em;
+  padding: 0 6px;
+  border-radius: 999px;
+  color: @accent_fg_color;
+  background: @accent_bg_color;
+}
+
+.chip-remove {
+  min-width: 22px;
+  min-height: 22px;
+  padding: 0;
+}
+
+.small-pill {
+  padding: 4px 12px;
+  font-size: 0.9em;
+}
+
+.note {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: alpha(@accent_bg_color, 0.12);
+}
+
+/* Hardware and security status. */
+.status-card {
+  padding: 18px 12px;
+}
+
+.status-card.good {
+  background: alpha(@success_bg_color, 0.16);
+}
+
+.status-card.good image {
+  color: @success_color;
+}
+
+.status-card.warn {
+  background: alpha(@warning_bg_color, 0.18);
+}
+
+.status-card.warn image {
+  color: @warning_color;
+}
+
+.status-card.bad {
+  background: alpha(@error_bg_color, 0.16);
+}
+
+.status-card.bad image {
+  color: @error_color;
+}
+
+/* The disk layout. */
+.disk-bar {
+  border-radius: 12px;
+}
+
+.part {
+  padding: 6px;
+  font-size: 0.9em;
+  font-weight: bold;
+  color: white;
+}
+
+.part:first-child {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.part:last-child {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.part-boot {
+  background: #986a44;
+}
+
+.part-swap {
+  background: #9141ac;
+}
+
+.part-root {
+  background: @accent_bg_color;
+}
+
+.code textview,
+.code text {
+  background: transparent;
+}
+
+/* The stores: category tiles, app cards, what's picked. */
+.store-search {
+  min-height: 42px;
+  font-size: 1.1em;
+  border-radius: 12px;
+}
+
+.store-heading {
+  margin-top: 6px;
+}
+
+.picked-panel {
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: alpha(@accent_bg_color, 0.08);
+}
+
+.pick-chip {
+  padding: 3px 4px 3px 6px;
+  border-radius: 999px;
+  background: @card_bg_color;
+  box-shadow: 0 1px 2px alpha(black, 0.12);
+}
+
+.store-card {
+  padding: 14px;
+  border-radius: 14px;
+  background: @card_bg_color;
+  box-shadow: 0 1px 3px alpha(black, 0.10), 0 0 0 1px alpha(currentColor, 0.04);
+  transition: all 180ms ease;
+}
+
+flowboxchild:hover .store-card {
+  box-shadow: 0 4px 14px alpha(black, 0.14), 0 0 0 1px alpha(@accent_bg_color, 0.35);
+}
+
+flowboxchild {
+  padding: 0;
+  border-radius: 14px;
+}
+
+.store-grid > flowboxchild:focus-visible {
+  outline: 2px solid @accent_color;
+  outline-offset: 2px;
+}
+
+.app-icon {
+  -gtk-icon-shadow: 0 2px 6px alpha(black, 0.18);
+}
+
+.webapp-icon {
+  padding: 6px;
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 1px 4px alpha(black, 0.18);
+}
+
+.pick-button {
+  min-width: 36px;
+  min-height: 36px;
+  background: alpha(@accent_bg_color, 0.14);
+  color: @accent_color;
+}
+
+.pick-button:checked {
+  background: @success_bg_color;
+  color: @success_fg_color;
+}
+
+.tag {
+  font-size: 0.75em;
+  font-weight: bold;
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+
+.tag-profile {
+  color: @accent_fg_color;
+  background: @accent_bg_color;
+}
+
+.tag-ecosystem {
+  color: white;
+  background: #9141ac;
+}
+
+.tag-unfree {
+  color: @warning_fg_color;
+  background: alpha(@warning_bg_color, 0.85);
+}
+
+.tag-error {
+  color: @error_fg_color;
+  background: @error_bg_color;
+}
+
+.tag-session {
+  background: alpha(currentColor, 0.10);
+}
+
+/* Packages without an icon: their initial on a colored tile. */
+.letter-tile {
+  border-radius: 22%;
+  color: white;
+  font-weight: 800;
+}
+
+.tile-0 { background: linear-gradient(135deg, #62a0ea, #1c71d8); }
+.tile-1 { background: linear-gradient(135deg, #57e389, #26a269); }
+.tile-2 { background: linear-gradient(135deg, #ffbe6f, #e66100); }
+.tile-3 { background: linear-gradient(135deg, #f66151, #c01c28); }
+.tile-4 { background: linear-gradient(135deg, #dc8add, #813d9c); }
+.tile-5 { background: linear-gradient(135deg, #5bc8af, #1a7f83); }
+.tile-6 { background: linear-gradient(135deg, #cdab8f, #865e3c); }
+.tile-7 { background: linear-gradient(135deg, #99c1f1, #613583); }
+
+.tile-cli {
+  background: linear-gradient(135deg, #3d3846, #241f31);
+  color: #8ff0a4;
+  font-family: monospace;
+}
+
+.category-tile {
+  border-radius: 16px;
+  color: white;
+  transition: all 180ms ease;
+}
+
+.category-tile:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 6px 18px alpha(black, 0.20);
+}
+
+.category-tile label {
+  font-weight: bold;
+}
+
+.cat-browsers, .cat-network { background: linear-gradient(135deg, #3584e4, #1a5fb4); }
+.cat-communication { background: linear-gradient(135deg, #2ec27e, #1f8a5b); }
+.cat-office, .cat-text { background: linear-gradient(135deg, #e5a50a, #c64600); }
+.cat-graphics { background: linear-gradient(135deg, #e66100, #a51d2d); }
+.cat-audio-video, .cat-media { background: linear-gradient(135deg, #c061cb, #613583); }
+.cat-games { background: linear-gradient(135deg, #e01b24, #7a0d14); }
+.cat-development { background: linear-gradient(135deg, #5e5c64, #241f31); }
+.cat-editors, .cat-shell { background: linear-gradient(135deg, #26a269, #0d4f37); }
+.cat-networking, .cat-containers { background: linear-gradient(135deg, #1c71d8, #0b3d7a); }
+.cat-science { background: linear-gradient(135deg, #33b2a4, #146b63); }
+.cat-security { background: linear-gradient(135deg, #865e3c, #3d2b1c); }
+.cat-system { background: linear-gradient(135deg, #77767b, #3d3846); }
+.cat-utilities, .cat-files { background: linear-gradient(135deg, #62a0ea, #3584e4); }
+.cat-ai-agents { background: linear-gradient(135deg, #d56199, #613583); }
+
+.screenshot {
+  border-radius: 12px;
+  background: alpha(currentColor, 0.05);
+}
+
+.screenshot picture {
+  border-radius: 12px;
+}
+
+/* The desktop layer: a grid of screenshots and the chosen one large. */
+.desktop-card {
+  padding: 0;
+  border-radius: 18px;
+  background: @card_bg_color;
+  box-shadow: 0 1px 3px alpha(black, 0.12), 0 0 0 1px alpha(currentColor, 0.05);
+  transition: all 200ms ease;
+}
+
+.desktop-card:hover {
+  box-shadow: 0 6px 20px alpha(black, 0.16), 0 0 0 1px alpha(@accent_bg_color, 0.4);
+}
+
+.desktop-card:checked {
+  background: @card_bg_color;
+  color: inherit;
+  box-shadow: 0 6px 20px alpha(@accent_bg_color, 0.30), 0 0 0 3px @accent_bg_color;
+}
+
+.desktop-shot {
+  border-radius: 18px 18px 0 0;
+}
+
+.desktop-check {
+  margin: 10px;
+  padding: 4px;
+  border-radius: 999px;
+  color: @accent_fg_color;
+  background: @accent_bg_color;
+  box-shadow: 0 2px 6px alpha(black, 0.3);
+}
+
+.desktop-preview {
+  padding: 18px;
+  border-radius: 22px;
+  background: @card_bg_color;
+  box-shadow: 0 2px 10px alpha(black, 0.10);
+}
+
+.desktop-preview .desktop-shot {
+  border-radius: 14px;
+}
+
+/* A desktop without a screenshot yet: its initial on a gradient. */
+.desktop-art {
+  color: white;
+}
+
+.desktop-art label {
+  font-weight: 800;
+}
+
+.art-0 { background: linear-gradient(135deg, #1c71d8, #613583); }
+.art-1 { background: linear-gradient(135deg, #26a269, #1a5fb4); }
+.art-2 { background: linear-gradient(135deg, #e66100, #a51d2d); }
+.art-3 { background: linear-gradient(135deg, #813d9c, #241f31); }
+.art-4 { background: linear-gradient(135deg, #1a7f83, #0b3d7a); }
+.art-5 { background: linear-gradient(135deg, #5e5c64, #241f31); }
+.art-none { background: linear-gradient(135deg, #3d3846, #000000); }
+
+.desktop-card.unavailable {
+  opacity: 0.55;
+}
+
+.desktop-card.unavailable .desktop-shot {
+  filter: grayscale(1);
+}
+
+/* Will it fit: the install's size against the disk. */
+.size-status {
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.95em;
+}
+
+.size-status.good {
+  background: alpha(@success_bg_color, 0.14);
+}
+
+.size-status.warn {
+  background: alpha(@warning_bg_color, 0.22);
+}
+
+.size-status.bad {
+  color: @error_fg_color;
+  background: @error_bg_color;
+  font-weight: bold;
+}

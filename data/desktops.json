@@ -1,0 +1,651 @@
+{
+  "$comment": "Every desktop and window manager the configurator offers. The generator writes `module.config` into the host's configuration.nix, so adding one is a data change. Special values: {\"$path\": \"./x\"} is a path in the host flake, {\"$context\": \"users\"} the users' names, {\"$context\": \"configDir\"} where the host flake lives. `checks.desktops` verifies every nixpkgs option path here exists. `unavailable` marks one that can't be installed with this nixpkgs (it doesn't evaluate or build; nix/screenshots finds out) and says why: it's shown but can't be picked.",
+  "desktops": [
+    {
+      "id": "omarchy",
+      "name": "Omarchy",
+      "kind": "desktop",
+      "sessions": ["wayland"],
+      "description": "Basecamp's Hyprland setup: its shell, bar, menu, themes, commands and keybinds",
+      "module": {
+        "flake": {
+          "input": "omarchy",
+          "url": "github:nix-desktops/omarchy/stable",
+          "follows": ["nixpkgs", "home-manager"],
+          "nixosModule": "nixosModules.default",
+          "homeManager": true
+        },
+        "config": {
+          "omarchy.enable": true,
+          "omarchy.users": { "$context": "users" },
+          "omarchy.stateDir": { "$path": "./omarchy" },
+          "omarchy.configDir": { "$context": "configDir" }
+        },
+        "files": {
+          "omarchy/apps.json": { "packages": [] },
+          "omarchy/dbs.json": { "enabled": [] },
+          "omarchy/theme.json": { "theme": "tokyo-night" }
+        },
+        "ecosystem": "omarchy.ecosystem.enable",
+        "agents": {
+          "option": "omarchy.agents",
+          "defaultOption": "omarchy.defaultAgent",
+          "home": true,
+          "ids": ["claude", "codex", "copilot", "crush", "cursor-agent", "grok", "openclaw", "opencode", "pi"]
+        },
+        "webapps": {
+          "option": "omarchy.webapps",
+          "home": true,
+          "ids": ["hey", "basecamp", "chatgpt", "grok", "youtube", "whatsapp", "google-messages", "google-photos", "google-maps", "google-contacts", "x", "zoom", "discord"]
+        },
+        "containers": {
+          "file": "omarchy/dbs.json",
+          "key": "enabled",
+          "ids": ["postgres", "mysql", "mariadb", "redis", "mongodb", "mssql"]
+        }
+      },
+      "loginManager": "builtin",
+      "keybinds": { "format": "hyprland-lua", "option": "omarchy.keybinds", "home": true }
+    },
+    {
+      "id": "gnome",
+      "name": "GNOME",
+      "kind": "desktop",
+      "sessions": ["wayland"],
+      "description": "A focused, modern desktop with a curated set of core apps",
+      "module": { "config": { "services.desktopManager.gnome.enable": true } },
+      "loginManager": "gdm",
+      "keybinds": { "format": "gnome-dconf" }
+    },
+    {
+      "id": "plasma",
+      "name": "KDE Plasma",
+      "kind": "desktop",
+      "sessions": ["wayland", "x11"],
+      "description": "A flexible, highly configurable desktop with the KDE apps",
+      "module": { "config": { "services.desktopManager.plasma6.enable": true } },
+      "loginManager": "sddm",
+      "keybinds": { "format": "kde-kglobalshortcuts" }
+    },
+    {
+      "id": "cosmic",
+      "name": "COSMIC",
+      "kind": "desktop",
+      "sessions": ["wayland"],
+      "description": "System76's Rust desktop with built-in tiling",
+      "module": { "config": { "services.desktopManager.cosmic.enable": true } },
+      "loginManager": "cosmic-greeter",
+      "keybinds": { "format": "cosmic" }
+    },
+    {
+      "id": "hyprland",
+      "name": "Hyprland",
+      "kind": "window-manager",
+      "sessions": ["wayland"],
+      "description": "A dynamic tiling Wayland compositor with smooth animations",
+      "module": { "config": { "programs.hyprland.enable": true } },
+      "loginManager": "sddm",
+      "keybinds": { "format": "hyprland-lua" }
+    },
+    {
+      "id": "niri",
+      "name": "niri",
+      "kind": "window-manager",
+      "sessions": ["wayland"],
+      "description": "A scrollable-tiling Wayland compositor",
+      "module": { "config": { "programs.niri.enable": true } },
+      "loginManager": "ly",
+      "keybinds": { "format": "niri" }
+    },
+    {
+      "id": "xfce",
+      "name": "Xfce",
+      "kind": "desktop",
+      "sessions": ["x11"],
+      "description": "A lightweight, traditional desktop",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.desktopManager.xfce.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": { "format": "xfce-xfconf" }
+    },
+    {
+      "id": "cinnamon",
+      "name": "Cinnamon",
+      "kind": "desktop",
+      "sessions": ["x11"],
+      "description": "Linux Mint's familiar, traditional desktop",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.desktopManager.cinnamon.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": { "format": "cinnamon-dconf" }
+    },
+    {
+      "id": "lxqt",
+      "name": "LXQt",
+      "kind": "desktop",
+      "sessions": ["x11"],
+      "description": "A lightweight Qt desktop",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.desktopManager.lxqt.enable": true
+        }
+      },
+      "loginManager": "sddm",
+      "keybinds": null
+    },
+    {
+      "id": "mate",
+      "name": "MATE",
+      "kind": "desktop",
+      "sessions": ["x11"],
+      "description": "The continuation of GNOME 2",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.desktopManager.mate.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": { "format": "mate-dconf" }
+    },
+    {
+      "id": "budgie",
+      "name": "Budgie",
+      "kind": "desktop",
+      "sessions": ["x11"],
+      "description": "A simple, elegant desktop from the Buddies of Budgie",
+      "module": { "config": { "services.desktopManager.budgie.enable": true } },
+      "loginManager": "lightdm",
+      "keybinds": { "format": "budgie-dconf" }
+    },
+    {
+      "id": "pantheon",
+      "name": "Pantheon",
+      "kind": "desktop",
+      "sessions": ["x11"],
+      "description": "elementary OS's polished desktop",
+      "module": { "config": { "services.desktopManager.pantheon.enable": true } },
+      "loginManager": "lightdm",
+      "keybinds": { "format": "gnome-dconf" }
+    },
+    {
+      "id": "enlightenment",
+      "name": "Enlightenment",
+      "kind": "desktop",
+      "sessions": ["x11"],
+      "description": "A lean, eye-candy desktop built on the EFL",
+      "unavailable": "python-efl doesn't support Python 3.13 in nixpkgs 26.05, so it doesn't evaluate",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.desktopManager.enlightenment.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    },
+    {
+      "id": "lomiri",
+      "name": "Lomiri",
+      "kind": "desktop",
+      "sessions": ["wayland"],
+      "description": "The convergent desktop from Ubuntu Touch",
+      "module": { "config": { "services.desktopManager.lomiri.enable": true } },
+      "loginManager": "lightdm",
+      "keybinds": null
+    },
+    {
+      "id": "lumina",
+      "name": "Lumina",
+      "kind": "desktop",
+      "sessions": ["x11"],
+      "description": "A lightweight desktop from TrueOS",
+      "unavailable": "it needs kwindowsystem, gone from nixpkgs 26.05's Qt 5 packages, so it doesn't evaluate",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.desktopManager.lumina.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    },
+    {
+      "id": "sway",
+      "name": "Sway",
+      "kind": "window-manager",
+      "sessions": ["wayland"],
+      "description": "An i3-compatible tiling Wayland compositor",
+      "module": { "config": { "programs.sway.enable": true } },
+      "loginManager": "ly",
+      "keybinds": { "format": "sway" }
+    },
+    {
+      "id": "labwc",
+      "name": "labwc",
+      "kind": "window-manager",
+      "sessions": ["wayland"],
+      "description": "An Openbox-inspired stacking Wayland compositor",
+      "module": { "config": { "programs.labwc.enable": true } },
+      "loginManager": "ly",
+      "keybinds": null
+    },
+    {
+      "id": "river",
+      "name": "river",
+      "kind": "window-manager",
+      "sessions": ["wayland"],
+      "description": "A dynamic tiling Wayland compositor",
+      "module": { "config": { "programs.river-classic.enable": true } },
+      "loginManager": "ly",
+      "keybinds": null
+    },
+    {
+      "id": "wayfire",
+      "name": "Wayfire",
+      "kind": "window-manager",
+      "sessions": ["wayland"],
+      "description": "A 3D Wayland compositor with Compiz-style effects",
+      "module": { "config": { "programs.wayfire.enable": true } },
+      "loginManager": "ly",
+      "keybinds": null
+    },
+    {
+      "id": "mangowc",
+      "name": "MangoWC",
+      "kind": "window-manager",
+      "sessions": ["wayland"],
+      "description": "A dwl-based Wayland compositor with animations",
+      "module": { "config": { "programs.mangowc.enable": true } },
+      "loginManager": "ly",
+      "keybinds": null
+    }
+    ,{
+      "id": "i3",
+      "name": "i3",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A manual tiling window manager",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.i3.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": { "format": "i3" }
+    }
+    ,{
+      "id": "openbox",
+      "name": "Openbox",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A minimal, highly configurable stacking window manager",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.openbox.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "icewm",
+      "name": "IceWM",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A fast, Windows-like window manager with a taskbar",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.icewm.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "fluxbox",
+      "name": "Fluxbox",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A lightweight stacking window manager from the Blackbox family",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.fluxbox.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "awesome",
+      "name": "awesome",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A tiling window manager configured in Lua",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.awesome.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "bspwm",
+      "name": "bspwm",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A binary space partitioning tiling window manager",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.bspwm.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "xmonad",
+      "name": "xmonad",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A tiling window manager configured in Haskell",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.xmonad.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "herbstluftwm",
+      "name": "herbstluftwm",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A manual tiling window manager driven by a CLI",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.herbstluftwm.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "fvwm3",
+      "name": "FVWM3",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A classic, endlessly configurable window manager",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.fvwm3.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "jwm",
+      "name": "JWM",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "Joe's Window Manager: small, with a panel",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.jwm.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "windowmaker",
+      "name": "Window Maker",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A NeXTSTEP-like window manager",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.windowmaker.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "spectrwm",
+      "name": "spectrwm",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A small dynamic tiling window manager",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.spectrwm.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "leftwm",
+      "name": "LeftWM",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A tiling window manager written in Rust",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.leftwm.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "pekwm",
+      "name": "PekWM",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A small window manager with window grouping",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.pekwm.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "ratpoison",
+      "name": "ratpoison",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A keyboard-only window manager with no decorations",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.ratpoison.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "stumpwm",
+      "name": "StumpWM",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A tiling window manager written in Common Lisp",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.stumpwm.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "cwm",
+      "name": "cwm",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "OpenBSD's minimal stacking window manager",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.cwm.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "evilwm",
+      "name": "evilwm",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A minimalist window manager",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.evilwm.enable": true,
+          "fonts.packages": { "$expr": "[ (pkgs.runCommand \"x11-font-aliases\" { } \"mkdir -p $out/share/fonts/X11/misc && cp ${pkgs.font-alias}/share/fonts/X11/misc/fonts.alias $out/share/fonts/X11/misc && echo 0 > $out/share/fonts/X11/misc/fonts.dir\") ]" }
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "afterstep",
+      "name": "AfterStep",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A NeXTSTEP-inspired window manager",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.afterstep.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "e16",
+      "name": "E16",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "Enlightenment's classic DR16 window manager",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.e16.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "sawfish",
+      "name": "Sawfish",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "An extensible window manager scripted in Lisp",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.sawfish.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "notion",
+      "name": "Notion",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A tabbed, tiling window manager",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.notion.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "exwm",
+      "name": "EXWM",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "Emacs as your window manager",
+      "unavailable": "its source tarball can no longer be downloaded (nixpkgs 26.05)",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.exwm.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "qtile",
+      "name": "Qtile",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "A tiling window manager configured in Python",
+      "unavailable": "it doesn't build against nixpkgs 26.05's wlroots",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.qtile.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+    ,{
+      "id": "dwm",
+      "name": "dwm",
+      "kind": "window-manager",
+      "sessions": ["x11"],
+      "description": "suckless' dynamic window manager, configured in C",
+      "module": {
+        "config": {
+          "services.xserver.enable": true,
+          "services.xserver.windowManager.dwm.enable": true
+        }
+      },
+      "loginManager": "lightdm",
+      "keybinds": null
+    }
+  ]
+}

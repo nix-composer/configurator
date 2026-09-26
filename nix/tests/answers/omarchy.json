@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "en_US.UTF-8",
+    "keyboardLayout": "us",
+    "timezone": "Europe/Amsterdam"
+  },
+  "desktop": {
+    "id": "omarchy",
+    "ecosystem": false
+  },
+  "apps": {
+    "agents": [
+      "claude"
+    ],
+    "defaultAgent": "claude"
+  },
+  "webapps": [
+    "youtube"
+  ],
+  "shell": {
+    "shell": "zsh"
+  },
+  "keybinds": {
+    "SUPER + SHIFT + Y": {
+      "webapp": "youtube"
+    }
+  },
+  "disk": {
+    "device": "/dev/vdb",
+    "filesystem": "btrfs"
+  },
+  "users": [
+    {
+      "name": "omar",
+      "fullName": "Omar Chy",
+      "admin": true
+    }
+  ],
+  "hostname": "omarchy"
+}
