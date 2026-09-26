@@ -21,6 +21,7 @@ fn describe(bind: &Keybind) -> String {
         Keybind::Launch(attr) => format!("Launch {attr}"),
         Keybind::Webapp(id) => format!("Open web app {id}"),
         Keybind::Exec(cmd) => format!("Run {cmd}"),
+        Keybind::Action(action) => format!("The desktop's {action}"),
         Keybind::Unbind => "Removes the desktop's default".into(),
     }
 }

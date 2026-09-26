@@ -36,7 +36,7 @@ impl Generator<'_> {
             )?,
             "cinnamon-dconf" => self.dconf_cinnamon(&mut section, desktop)?,
             "mate-dconf" => self.dconf_mate(&mut section, desktop)?,
-            "sway" => self.sway(&mut section)?,
+            "sway" => self.sway(&mut section, desktop)?,
             "niri" => self.niri(&mut section, desktop)?,
             _ => return Err(unsupported()),
         }
@@ -49,6 +49,11 @@ impl Generator<'_> {
             Keybind::Launch(attr) => Some(Nix::raw(format!("lib.getExe pkgs.{attr}"))),
             Keybind::Exec(cmd) => Some(Nix::str(cmd)),
             Keybind::Webapp(id) => Some(self.webapp_command(id)?),
+            Keybind::Action(action) => {
+                return Err(Error::Unsupported(format!(
+                    "the desktop's own action {action:?} on this desktop"
+                )));
+            }
             Keybind::Unbind => None,
         })
     }
@@ -58,6 +63,7 @@ impl Generator<'_> {
             Keybind::Launch(attr) => format!("Launch {attr}"),
             Keybind::Webapp(id) => format!("Open {id}"),
             Keybind::Exec(cmd) => format!("Run {cmd}"),
+            Keybind::Action(action) => action.clone(),
             Keybind::Unbind => "Unbound".into(),
         }
     }
@@ -100,6 +106,11 @@ impl Generator<'_> {
                 }
                 Keybind::Webapp(id) => Nix::attrs([("exec", self.webapp_command(id)?)]),
                 Keybind::Exec(cmd) => Nix::attrs([("exec", Nix::str(cmd))]),
+                Keybind::Action(action) => {
+                    return Err(Error::Unsupported(format!(
+                        "the desktop's own action {action:?} on this desktop"
+                    )));
+                }
                 Keybind::Unbind => Nix::attrs([("enable", Nix::Bool(false))]),
             };
             binds.push((Nix::attr(combo), value));
@@ -119,19 +130,31 @@ impl Generator<'_> {
         desktop: &Desktop,
         base: &str,
     ) -> Result<(), Error> {
-        let format = desktop
-            .keybinds
-            .as_ref()
-            .map(|k| k.format.as_str())
-            .unwrap_or_default();
-        let defaults = self.catalog.default_keybinds.get(format);
+        let defaults = self.catalog.default_keybinds.get(&desktop.id);
         // dconf path → its keys.
         let mut settings: std::collections::BTreeMap<String, Vec<(Key, Nix)>> = Default::default();
         let mut paths = Vec::new();
+        // Every combo the answers bind, with whether it's an unbind.
         let mut taken = Vec::new();
+        // The desktop's own actions bound anew: action → its new accels.
+        let mut moved: std::collections::BTreeMap<&str, Vec<String>> = Default::default();
         let mut i = 0;
         for (combo_text, bind) in &self.answers.keybinds {
             let combo = Combo::parse(combo_text).map_err(Error::Unsupported)?;
+            if let Keybind::Action(action) = bind {
+                if !defaults.is_some_and(|d| d.iter().any(|b| b.action == *action)) {
+                    return Err(Error::Keybind(format!(
+                        "{combo_text}: {action:?} is not one of {}'s actions",
+                        desktop.name
+                    )));
+                }
+                moved
+                    .entry(action)
+                    .or_default()
+                    .push(gtk_accel(&combo, "<Super>"));
+                taken.push((combo_text, combo, false));
+                continue;
+            }
             let Some(command) = self.command(bind)? else {
                 if defaults.is_none() {
                     return Err(Error::Unsupported(format!(
@@ -160,37 +183,54 @@ impl Generator<'_> {
         }
 
         if let Some(defaults) = defaults {
-            for (combo_text, combo, unbind) in taken {
-                let holders: Vec<_> = defaults
-                    .iter()
-                    .filter(|d| d.accels.iter().any(|a| accel_matches(a, &combo)))
-                    .collect();
-                if unbind && holders.is_empty() {
+            // Each default's keys after the changes: moved actions get
+            // exactly their new keys; a combo bound or unbound elsewhere
+            // leaves whichever other default held it.
+            let mut keys: Vec<Vec<String>> = defaults
+                .iter()
+                .map(|d| {
+                    moved
+                        .get(d.action.as_str())
+                        .cloned()
+                        .unwrap_or_else(|| d.accels.clone())
+                })
+                .collect();
+            for (combo_text, combo, unbind) in &taken {
+                let mut held = false;
+                for (d, accels) in defaults.iter().zip(keys.iter_mut()) {
+                    let own = moved
+                        .get(d.action.as_str())
+                        .is_some_and(|m| m.iter().any(|a| accel_matches(a, combo)));
+                    if own || !accels.iter().any(|a| accel_matches(a, combo)) {
+                        continue;
+                    }
+                    held = true;
+                    accels.retain(|a| !accel_matches(a, combo));
+                }
+                if *unbind && !held {
                     return Err(Error::Keybind(format!(
                         "{combo_text} is not one of {}'s default binds",
                         desktop.name
                     )));
                 }
-                for default in holders {
-                    let rest: Vec<Nix> = default
-                        .accels
-                        .iter()
-                        .filter(|a| !accel_matches(a, &combo))
-                        .map(Nix::str)
-                        .collect();
-                    let value = match (default.kind.as_str(), rest.is_empty()) {
-                        ("as", true) => {
-                            Nix::raw("lib.gvariant.mkEmptyArray lib.gvariant.type.string")
-                        }
-                        ("as", false) => Nix::List(rest),
-                        (_, true) => Nix::str(""),
-                        (_, false) => rest.into_iter().next().unwrap(),
-                    };
-                    settings
-                        .entry(default.schema.replace('.', "/"))
-                        .or_default()
-                        .push((Key(vec![default.key.clone()]), value));
+            }
+            for (default, accels) in defaults.iter().zip(keys) {
+                if accels == default.accels {
+                    continue;
                 }
+                let Some((schema, key)) = default.gsettings() else {
+                    continue;
+                };
+                let value = match (default.kind.as_str(), accels.is_empty()) {
+                    ("as", true) => Nix::raw("lib.gvariant.mkEmptyArray lib.gvariant.type.string"),
+                    ("as", false) => Nix::List(accels.into_iter().map(Nix::str).collect()),
+                    (_, true) => Nix::str(""),
+                    (_, false) => Nix::str(&accels[0]),
+                };
+                settings
+                    .entry(schema.replace('.', "/"))
+                    .or_default()
+                    .push((Key(vec![key.to_owned()]), value));
             }
         }
         dconf(
@@ -270,10 +310,11 @@ impl Generator<'_> {
 
     /// Sway's default config includes /etc/sway/config.d/*; later binds
     /// override earlier ones, and unbindsym removes a default.
-    fn sway(&self, section: &mut Section) -> Result<(), Error> {
+    fn sway(&self, section: &mut Section, desktop: &Desktop) -> Result<(), Error> {
+        let defaults = self.catalog.default_keybinds.get(&desktop.id);
         let mut lines = Vec::new();
-        for (combo, bind) in &self.answers.keybinds {
-            let combo = Combo::parse(combo).map_err(Error::Unsupported)?;
+        for (combo_text, bind) in &self.answers.keybinds {
+            let combo = Combo::parse(combo_text).map_err(Error::Unsupported)?;
             let mut keys: Vec<String> = combo
                 .modifiers
                 .iter()
@@ -289,6 +330,27 @@ impl Generator<'_> {
                 .collect();
             keys.push(combo.keysym());
             let keys = keys.join("+");
+            // A default on these keys goes first, so the new bind replaces it.
+            let held = defaults.is_some_and(|d| {
+                d.iter()
+                    .any(|b| b.accels.iter().any(|a| accel_matches(a, &combo)))
+            });
+            if let Keybind::Action(action) = bind {
+                if !defaults.is_some_and(|d| d.iter().any(|b| b.action == *action)) {
+                    return Err(Error::Keybind(format!(
+                        "{combo_text}: {action:?} is not one of {}'s actions",
+                        desktop.name
+                    )));
+                }
+                if held {
+                    lines.push(Nix::str(format!("unbindsym {keys}")));
+                }
+                lines.push(Nix::str(format!("bindsym {keys} {action}")));
+                continue;
+            }
+            if held && !matches!(bind, Keybind::Unbind) {
+                lines.push(Nix::str(format!("unbindsym {keys}")));
+            }
             lines.push(match self.command(bind)? {
                 Some(Nix::Str(cmd)) => Nix::str(format!("bindsym {keys} exec {cmd}")),
                 Some(Nix::Raw(expr)) => Nix::raw(format!(

@@ -19,11 +19,6 @@ const CONTAINERS_JSON: &str = include_str!("../../../data/containers.json");
 const DEV_TEMPLATES_JSON: &str = include_str!("../../../data/dev-templates.json");
 const ECOSYSTEMS_JSON: &str = include_str!("../../../data/ecosystems.json");
 include!(concat!(env!("OUT_DIR"), "/icons.rs"));
-/// Desktops' default keybinds, by keybind format.
-const DEFAULT_KEYBINDS: &[(&str, &str)] = &[(
-    "gnome-dconf",
-    include_str!("../../../data/keybinds/gnome.json"),
-)];
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -161,17 +156,32 @@ pub struct Container {
     pub cmd: Vec<String>,
 }
 
-/// One of a desktop's default keybinds: a GSettings key and the
-/// accelerators it holds.
+/// One of a desktop's default keybinds (data/keybinds/<desktop>.json).
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DefaultBind {
-    pub schema: String,
-    pub key: String,
-    /// The GVariant type: `as` (all of GNOME's) or `s`.
-    #[serde(rename = "type")]
+    /// What `Keybind::Action` names: GNOME's `schema/key`, a Sway command.
+    pub action: String,
+    /// What it does, for people.
+    pub label: String,
+    #[serde(default)]
+    pub group: String,
+    /// GNOME's GVariant type: `as` (most) or `s`.
+    #[serde(rename = "type", default = "string_array")]
     pub kind: String,
+    /// Its keys as GTK accelerators (`<Super><Shift>q`).
     pub accels: Vec<String>,
+}
+
+fn string_array() -> String {
+    "as".into()
+}
+
+impl DefaultBind {
+    /// GNOME's GSettings schema and key, from `action`.
+    pub fn gsettings(&self) -> Option<(&str, &str)> {
+        self.action.split_once('/')
+    }
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -261,7 +271,7 @@ pub struct Catalog {
     pub containers: Vec<Container>,
     pub dev_templates: Vec<DevTemplate>,
     pub ecosystems: Vec<Ecosystem>,
-    /// Default keybinds by keybind format (`gnome-dconf`).
+    /// Default keybinds by desktop id.
     pub default_keybinds: BTreeMap<String, Vec<DefaultBind>>,
 }
 

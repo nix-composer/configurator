@@ -27,12 +27,36 @@ fn table(out: &mut String, name: &str, dir: &str) {
     out.push_str("];\n");
 }
 
+/// `data/keybinds/<desktop>.json`, the desktops' default keybinds.
+fn keybinds(out: &mut String) {
+    let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../data/keybinds");
+    println!("cargo::rerun-if-changed={}", dir.display());
+    let mut files: Vec<_> = std::fs::read_dir(&dir)
+        .unwrap_or_else(|e| panic!("{}: {e}", dir.display()))
+        .filter_map(|e| e.ok()?.path().canonicalize().ok())
+        .filter(|p| p.extension().is_some_and(|e| e == "json"))
+        .collect();
+    files.sort();
+    out.push_str("/// Default keybinds by desktop id (JSON).\nconst DEFAULT_KEYBINDS: &[(&str, &str)] = &[\n");
+    for path in files {
+        let id = path.file_stem().unwrap().to_str().unwrap();
+        writeln!(
+            out,
+            "    ({id:?}, include_str!({:?})),",
+            path.to_str().unwrap()
+        )
+        .unwrap();
+    }
+    out.push_str("];\n");
+}
+
 fn main() {
     let mut out = String::from("/// Icons by id (PNG).\n");
     table(&mut out, "WEBAPP_ICONS", "webapps");
     table(&mut out, "AGENT_ICONS", "agents");
     table(&mut out, "DEV_TEMPLATE_ICONS", "dev-templates");
     table(&mut out, "CONTAINER_ICONS", "containers");
+    keybinds(&mut out);
     let dest = std::path::Path::new(&std::env::var("OUT_DIR").unwrap()).join("icons.rs");
     std::fs::write(dest, out).unwrap();
 }

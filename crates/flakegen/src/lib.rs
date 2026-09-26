@@ -1004,6 +1004,7 @@ fn user_config(user: &User, docker: bool) -> Nix {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use configurator_answers::{Combo, Keybind};
     use std::path::Path;
 
     /// Generated output for each answers file in `examples/answers` and
@@ -1038,6 +1039,68 @@ mod tests {
             stale.is_empty(),
             "stale generated examples (UPDATE_EXPECT=1 cargo test): {stale:?}"
         );
+    }
+
+    #[test]
+    fn default_keybinds_are_desktops_and_parse() {
+        let catalog = Catalog::builtin().unwrap();
+        for (id, binds) in &catalog.default_keybinds {
+            let desktop = catalog
+                .desktop(id)
+                .unwrap_or_else(|| panic!("data/keybinds/{id}.json: no such desktop"));
+            assert!(
+                desktop.keybinds.is_some(),
+                "{id}: has defaults but no keybind format"
+            );
+            for bind in binds {
+                for accel in &bind.accels {
+                    assert!(
+                        Combo::from_gtk_accel(accel).is_some(),
+                        "{id}: {}: {accel:?} doesn't parse",
+                        bind.action
+                    );
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn gnome_actions_move_to_new_keys() {
+        let catalog = Catalog::builtin().unwrap();
+        let mut answers =
+            Answers::from_json(include_str!("../../../examples/answers/gnome.json")).unwrap();
+        answers.keybinds.clear();
+        // The overview on the right Super key; closing on SUPER + Q, which
+        // nothing else holds; and SUPER + S, which the quick settings hold.
+        for (combo, action) in [
+            ("Super_R", "org.gnome.mutter/overlay-key"),
+            ("SUPER + Q", "org.gnome.desktop.wm.keybindings/close"),
+        ] {
+            answers
+                .keybinds
+                .insert(combo.into(), Keybind::Action(action.into()));
+        }
+        answers.keybinds.insert(
+            "SUPER + S".into(),
+            Keybind::Action("org.gnome.desktop.wm.keybindings/close".into()),
+        );
+        let host = generate(&answers, &catalog, &Inputs::default()).unwrap();
+        let config = &host.files["configuration.nix"];
+        assert!(config.contains("overlay-key = \"Super_R\""), "{config}");
+        assert!(
+            config.contains("close = [ \"<Super>q\" \"<Super>s\" ];"),
+            "{config}"
+        );
+        // SUPER + S left the quick settings (its only key): now empty.
+        assert!(
+            config.contains("toggle-quick-settings = lib.gvariant.mkEmptyArray"),
+            "{config}"
+        );
+        answers.keybinds.insert(
+            "SUPER + Z".into(),
+            Keybind::Action("org.gnome.nothing/here".into()),
+        );
+        assert!(generate(&answers, &catalog, &Inputs::default()).is_err());
     }
 
     #[test]

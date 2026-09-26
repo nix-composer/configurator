@@ -324,6 +324,19 @@
           ]
         },
         {
+          "description": "One of the desktop's own actions, from its default binds\n(data/keybinds/<desktop>.json): GNOME's `schema/key`\n(`org.gnome.shell.keybindings/toggle-overview`), a Sway command\n(`focus left`). Binding it moves or adds the action's keys.",
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "action"
+          ]
+        },
+        {
           "description": "Remove the desktop's default bind on this combo.",
           "type": "string",
           "const": "unbind"

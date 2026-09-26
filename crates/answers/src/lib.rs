@@ -199,6 +199,11 @@ pub enum Keybind {
     Webapp(String),
     /// Run a shell command.
     Exec(String),
+    /// One of the desktop's own actions, from its default binds
+    /// (data/keybinds/<desktop>.json): GNOME's `schema/key`
+    /// (`org.gnome.shell.keybindings/toggle-overview`), a Sway command
+    /// (`focus left`). Binding it moves or adds the action's keys.
+    Action(String),
     /// Remove the desktop's default bind on this combo.
     Unbind,
 }
@@ -247,6 +252,91 @@ impl Combo {
         })
     }
 
+    /// The canonical form: `SUPER + SHIFT + B`, modifiers in a fixed order.
+    pub fn canonical(&self) -> String {
+        let mut parts: Vec<String> = self
+            .modifiers
+            .iter()
+            .map(|m| format!("{m:?}").to_uppercase())
+            .collect();
+        parts.push(self.key.clone());
+        parts.join(" + ")
+    }
+
+    /// A combo from a GTK accelerator (`<Super><Shift>h`, `<Primary>q`,
+    /// `Super_L`); `None` for one it can't express.
+    pub fn from_gtk_accel(accel: &str) -> Option<Combo> {
+        let mut modifiers = Vec::new();
+        let mut rest = accel;
+        while let Some(tail) = rest.strip_prefix('<') {
+            let (name, after) = tail.split_once('>')?;
+            let m = match name.to_ascii_lowercase().as_str() {
+                "super" | "mod4" => Modifier::Super,
+                "control" | "ctrl" | "primary" => Modifier::Ctrl,
+                "alt" | "mod1" => Modifier::Alt,
+                "shift" => Modifier::Shift,
+                _ => return None,
+            };
+            if !modifiers.contains(&m) {
+                modifiers.push(m);
+            }
+            rest = after;
+        }
+        modifiers.sort();
+        Some(Combo {
+            modifiers,
+            key: Combo::key_name(rest)?,
+        })
+    }
+
+    /// A keysym (`b`, `Return`, `Page_Up`, `XF86AudioMute`) as the answers
+    /// write keys: letters upper case, the common ones by their short name,
+    /// the rest as XKB spells them.
+    pub fn key_name(keysym: &str) -> Option<String> {
+        if keysym.is_empty()
+            || !keysym
+                .chars()
+                .all(|c| c.is_ascii_alphanumeric() || c == '_')
+        {
+            return None;
+        }
+        let named = match keysym {
+            "Return" | "KP_Enter" => "RETURN",
+            "space" => "SPACE",
+            "Tab" | "ISO_Left_Tab" => "TAB",
+            "Escape" => "ESCAPE",
+            "BackSpace" => "BACKSPACE",
+            "Delete" => "DELETE",
+            "Insert" => "INSERT",
+            "Home" => "HOME",
+            "End" => "END",
+            "Page_Up" | "Prior" => "PAGEUP",
+            "Page_Down" | "Next" => "PAGEDOWN",
+            "Print" => "PRINT",
+            "Left" => "LEFT",
+            "Right" => "RIGHT",
+            "Up" => "UP",
+            "Down" => "DOWN",
+            "comma" => "COMMA",
+            "period" => "PERIOD",
+            "minus" => "MINUS",
+            "equal" => "EQUAL",
+            "slash" => "SLASH",
+            "semicolon" => "SEMICOLON",
+            "grave" => "GRAVE",
+            _ => "",
+        };
+        Some(if !named.is_empty() {
+            named.to_string()
+        } else if keysym.len() == 1
+            || (keysym.starts_with('F') && keysym[1..].parse::<u8>().is_ok())
+        {
+            keysym.to_ascii_uppercase()
+        } else {
+            keysym.to_string()
+        })
+    }
+
     /// The key as an XKB keysym name (`b`, `Return`, `F5`, `space`, …),
     /// the name X11 and most Wayland desktops use.
     pub fn keysym(&self) -> String {
@@ -275,6 +365,15 @@ impl Combo {
             "SLASH" => "slash",
             "SEMICOLON" => "semicolon",
             "GRAVE" => "grave",
+            // A modifier on its own (GNOME's overview is the Super key).
+            "SUPER_L" => "Super_L",
+            "SUPER_R" => "Super_R",
+            "ALT_L" => "Alt_L",
+            "ALT_R" => "Alt_R",
+            "CONTROL_L" => "Control_L",
+            "CONTROL_R" => "Control_R",
+            "SHIFT_L" => "Shift_L",
+            "SHIFT_R" => "Shift_R",
             _ => "",
         };
         if !named.is_empty() {
@@ -451,6 +550,11 @@ impl Answers {
                 Keybind::Exec(cmd) if cmd.contains(['\n', '\r']) || cmd.trim().is_empty() => {
                     return invalid(format!("{combo}: a command is one non-empty line"));
                 }
+                Keybind::Action(action)
+                    if action.contains(['\n', '\r']) || action.trim().is_empty() =>
+                {
+                    return invalid(format!("{combo}: an action is one non-empty line"));
+                }
                 Keybind::Webapp(id) if !self.webapps.contains(id) => {
                     return invalid(format!(
                         "{combo}: web app {id:?} is not one of the picked web apps"
@@ -573,6 +677,33 @@ mod tests {
         );
         assert!(Combo::parse("HYPER + B").is_err());
         assert!(Combo::parse("SUPER + ").is_err());
+    }
+
+    #[test]
+    fn gtk_accels_and_keys() {
+        let c = |a: &str| Combo::from_gtk_accel(a).map(|c| c.canonical());
+        assert_eq!(
+            c("<Super><Shift>Page_Up").as_deref(),
+            Some("SUPER + SHIFT + PAGEUP")
+        );
+        assert_eq!(c("<Primary><Alt>t").as_deref(), Some("CTRL + ALT + T"));
+        assert_eq!(c("XF86AudioMute").as_deref(), Some("XF86AudioMute"));
+        // GNOME's overview: the Super key on its own.
+        let overlay = Combo::from_gtk_accel("Super_L").unwrap();
+        assert_eq!(overlay.canonical(), "Super_L");
+        assert_eq!(overlay.keysym(), "Super_L");
+        assert_eq!(Combo::parse(&overlay.canonical()).unwrap(), overlay);
+        assert_eq!(c("<Hyper>x"), None);
+        // Round trip through the canonical form.
+        for accel in [
+            "<Super>Above_Tab",
+            "<Control><Alt>Delete",
+            "<Super>F10",
+            "<Alt>space",
+        ] {
+            let combo = Combo::from_gtk_accel(accel).unwrap();
+            assert_eq!(Combo::parse(&combo.canonical()).unwrap(), combo, "{accel}");
+        }
     }
 
     #[test]

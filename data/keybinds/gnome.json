@@ -1,161 +1,488 @@
 {
-  "$comment": "GNOME default keybinds from the GSettings schemas in nixpkgs nixos-26.05 (scripts/extract-gnome-keybinds.sh).",
+  "$comment": "GNOME's default keybinds from the GSettings schemas in nixpkgs nixos-26.05 (scripts/extract-gnome-keybinds.sh): the action is `schema/key`, the label its summary, accels GTK accelerators.",
   "binds": [
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "activate-window-menu",
+      "action": "org.gnome.shell.keybindings/focus-active-notification",
+      "label": "Keybinding to focus the active notification",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super>n"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/open-new-window-application-1",
+      "label": "Open a new instance of application 1",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super><Control>1"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/open-new-window-application-2",
+      "label": "Open a new instance of application 2",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super><Control>2"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/open-new-window-application-3",
+      "label": "Open a new instance of application 3",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super><Control>3"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/open-new-window-application-4",
+      "label": "Open a new instance of application 4",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super><Control>4"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/open-new-window-application-5",
+      "label": "Open a new instance of application 5",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super><Control>5"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/open-new-window-application-6",
+      "label": "Open a new instance of application 6",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super><Control>6"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/open-new-window-application-7",
+      "label": "Open a new instance of application 7",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super><Control>7"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/open-new-window-application-8",
+      "label": "Open a new instance of application 8",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super><Control>8"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/open-new-window-application-9",
+      "label": "Open a new instance of application 9",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super><Control>9"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/screen-brightness-cycle",
+      "label": "Screen brightness cycle",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "XF86MonBrightnessCycle"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/screen-brightness-cycle-monitor",
+      "label": "Screen brightness cycle on current monitor",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Shift>XF86MonBrightnessCycle"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/screen-brightness-down",
+      "label": "Screen brightness down",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "XF86MonBrightnessDown"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/screen-brightness-down-monitor",
+      "label": "Screen brightness down on current monitor",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Shift>XF86MonBrightnessDown"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/screen-brightness-up",
+      "label": "Screen brightness up",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "XF86MonBrightnessUp"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/screen-brightness-up-monitor",
+      "label": "Screen brightness up on current monitor",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Shift>XF86MonBrightnessUp"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/screenshot",
+      "label": "Take a screenshot",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Shift>Print"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/screenshot-window",
+      "label": "Take a screenshot of a window",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Alt>Print"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/shift-overview-down",
+      "label": "Keybinding to shift between overview states",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super><Alt>Down"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/shift-overview-up",
+      "label": "Keybinding to shift between overview states",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super><Alt>Up"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/show-screen-recording-ui",
+      "label": "Record a screencast interactively",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Ctrl><Shift><Alt>R"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/show-screenshot-ui",
+      "label": "Take a screenshot interactively",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "Print"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/switch-to-application-1",
+      "label": "Switch to application 1",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super>1"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/switch-to-application-2",
+      "label": "Switch to application 2",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super>2"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/switch-to-application-3",
+      "label": "Switch to application 3",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super>3"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/switch-to-application-4",
+      "label": "Switch to application 4",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super>4"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/switch-to-application-5",
+      "label": "Switch to application 5",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super>5"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/switch-to-application-6",
+      "label": "Switch to application 6",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super>6"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/switch-to-application-7",
+      "label": "Switch to application 7",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super>7"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/switch-to-application-8",
+      "label": "Switch to application 8",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super>8"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/switch-to-application-9",
+      "label": "Switch to application 9",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super>9"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/toggle-application-view",
+      "label": "Keybinding to open the “Show Applications” view",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super>a"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/toggle-message-tray",
+      "label": "Keybinding to toggle the visibility of the notification list",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super>v",
+        "<Super>m"
+      ]
+    },
+    {
+      "action": "org.gnome.shell.keybindings/toggle-quick-settings",
+      "label": "Keybinding to toggle the quick settings menu",
+      "group": "Shell",
+      "type": "as",
+      "accels": [
+        "<Super>s"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/activate-window-menu",
+      "label": "Activate the window menu",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Alt>space"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "begin-move",
+      "action": "org.gnome.desktop.wm.keybindings/begin-move",
+      "label": "Move window",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Alt>F7"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "begin-resize",
+      "action": "org.gnome.desktop.wm.keybindings/begin-resize",
+      "label": "Resize window",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Alt>F8"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "close",
+      "action": "org.gnome.desktop.wm.keybindings/close",
+      "label": "Close window",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Alt>F4"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "cycle-group",
+      "action": "org.gnome.desktop.wm.keybindings/cycle-group",
+      "label": "Switch windows of an app directly",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Alt>F6"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "cycle-group-backward",
+      "action": "org.gnome.desktop.wm.keybindings/cycle-group-backward",
+      "label": "Reverse switch windows of an app directly",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Shift><Alt>F6"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "cycle-panels",
+      "action": "org.gnome.desktop.wm.keybindings/cycle-panels",
+      "label": "Switch system controls directly",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Control><Alt>Escape"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "cycle-panels-backward",
+      "action": "org.gnome.desktop.wm.keybindings/cycle-panels-backward",
+      "label": "Reverse switch system controls directly",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Shift><Control><Alt>Escape"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "cycle-windows",
+      "action": "org.gnome.desktop.wm.keybindings/cycle-windows",
+      "label": "Switch windows directly",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Alt>Escape"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "cycle-windows-backward",
+      "action": "org.gnome.desktop.wm.keybindings/cycle-windows-backward",
+      "label": "Reverse switch windows directly",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Shift><Alt>Escape"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "maximize",
+      "action": "org.gnome.desktop.wm.keybindings/maximize",
+      "label": "Maximize window",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super>Up"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "minimize",
+      "action": "org.gnome.desktop.wm.keybindings/minimize",
+      "label": "Minimize window",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super>h"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "move-to-monitor-down",
+      "action": "org.gnome.desktop.wm.keybindings/move-to-monitor-down",
+      "label": "Move window to the next monitor below",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super><Shift>Down"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "move-to-monitor-left",
+      "action": "org.gnome.desktop.wm.keybindings/move-to-monitor-left",
+      "label": "Move window to the next monitor on the left",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super><Shift>Left"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "move-to-monitor-right",
+      "action": "org.gnome.desktop.wm.keybindings/move-to-monitor-right",
+      "label": "Move window to the next monitor on the right",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super><Shift>Right"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "move-to-monitor-up",
+      "action": "org.gnome.desktop.wm.keybindings/move-to-monitor-up",
+      "label": "Move window to the next monitor above",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super><Shift>Up"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "move-to-workspace-1",
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-1",
+      "label": "Move window to workspace 1",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super><Shift>Home"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "move-to-workspace-down",
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-down",
+      "label": "Move window one workspace down",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Control><Shift><Alt>Down"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "move-to-workspace-last",
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-last",
+      "label": "Move window to last workspace",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super><Shift>End"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "move-to-workspace-left",
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-left",
+      "label": "Move window one workspace to the left",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super><Shift>Page_Up",
@@ -165,8 +492,9 @@
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "move-to-workspace-right",
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-right",
+      "label": "Move window one workspace to the right",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super><Shift>Page_Down",
@@ -176,24 +504,27 @@
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "move-to-workspace-up",
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-up",
+      "label": "Move window one workspace up",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Control><Shift><Alt>Up"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "panel-run-dialog",
+      "action": "org.gnome.desktop.wm.keybindings/panel-run-dialog",
+      "label": "Show the run command prompt",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Alt>F2"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "switch-applications",
+      "action": "org.gnome.desktop.wm.keybindings/switch-applications",
+      "label": "Switch applications",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super>Tab",
@@ -201,8 +532,9 @@
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "switch-applications-backward",
+      "action": "org.gnome.desktop.wm.keybindings/switch-applications-backward",
+      "label": "Reverse switch applications",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Shift><Super>Tab",
@@ -210,8 +542,9 @@
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "switch-group",
+      "action": "org.gnome.desktop.wm.keybindings/switch-group",
+      "label": "Switch windows of an application",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super>Above_Tab",
@@ -219,8 +552,9 @@
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "switch-group-backward",
+      "action": "org.gnome.desktop.wm.keybindings/switch-group-backward",
+      "label": "Reverse switch windows of an application",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Shift><Super>Above_Tab",
@@ -228,8 +562,9 @@
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "switch-input-source",
+      "action": "org.gnome.desktop.wm.keybindings/switch-input-source",
+      "label": "Switch input source",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super>space",
@@ -237,8 +572,9 @@
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "switch-input-source-backward",
+      "action": "org.gnome.desktop.wm.keybindings/switch-input-source-backward",
+      "label": "Switch input source backward",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Shift><Super>space",
@@ -246,48 +582,54 @@
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "switch-panels",
+      "action": "org.gnome.desktop.wm.keybindings/switch-panels",
+      "label": "Switch system controls",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Control><Alt>Tab"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "switch-panels-backward",
+      "action": "org.gnome.desktop.wm.keybindings/switch-panels-backward",
+      "label": "Reverse switch system controls",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Shift><Control><Alt>Tab"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "switch-to-workspace-1",
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-1",
+      "label": "Switch to workspace 1",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super>Home"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "switch-to-workspace-down",
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-down",
+      "label": "Switch to workspace below",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Control><Alt>Down"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "switch-to-workspace-last",
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-last",
+      "label": "Switch to last workspace",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super>End"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "switch-to-workspace-left",
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-left",
+      "label": "Switch to workspace left",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super>Page_Up",
@@ -297,8 +639,9 @@
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "switch-to-workspace-right",
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-right",
+      "label": "Switch to workspace right",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super>Page_Down",
@@ -308,24 +651,27 @@
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "switch-to-workspace-up",
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-up",
+      "label": "Switch to workspace above",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Control><Alt>Up"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "toggle-maximized",
+      "action": "org.gnome.desktop.wm.keybindings/toggle-maximized",
+      "label": "Toggle maximization state",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Alt>F10"
       ]
     },
     {
-      "schema": "org.gnome.desktop.wm.keybindings",
-      "key": "unmaximize",
+      "action": "org.gnome.desktop.wm.keybindings/unmaximize",
+      "label": "Restore window",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super>Down",
@@ -333,24 +679,27 @@
       ]
     },
     {
-      "schema": "org.gnome.mutter.keybindings",
-      "key": "cancel-input-capture",
+      "action": "org.gnome.mutter.keybindings/cancel-input-capture",
+      "label": "Cancel any active input capture session",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super><Shift>Escape"
       ]
     },
     {
-      "schema": "org.gnome.mutter.keybindings",
-      "key": "rotate-monitor",
+      "action": "org.gnome.mutter.keybindings/rotate-monitor",
+      "label": "Rotates the built-in monitor configuration",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "XF86RotateWindows"
       ]
     },
     {
-      "schema": "org.gnome.mutter.keybindings",
-      "key": "switch-monitor",
+      "action": "org.gnome.mutter.keybindings/switch-monitor",
+      "label": "Switch monitor configurations",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super>p",
@@ -358,449 +707,198 @@
       ]
     },
     {
-      "schema": "org.gnome.mutter.keybindings",
-      "key": "toggle-tiled-left",
+      "action": "org.gnome.mutter.keybindings/toggle-tiled-left",
+      "label": "View split on left",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super>Left"
       ]
     },
     {
-      "schema": "org.gnome.mutter.keybindings",
-      "key": "toggle-tiled-right",
+      "action": "org.gnome.mutter.keybindings/toggle-tiled-right",
+      "label": "View split on right",
+      "group": "Windows",
       "type": "as",
       "accels": [
         "<Super>Right"
       ]
     },
     {
-      "schema": "org.gnome.mutter.wayland.keybindings",
-      "key": "restore-shortcuts",
+      "action": "org.gnome.mutter.wayland.keybindings/restore-shortcuts",
+      "label": "Re-enable shortcuts",
+      "group": "System",
       "type": "as",
       "accels": [
         "<Super>Escape"
       ]
     },
     {
-      "schema": "org.gnome.mutter.wayland.keybindings",
-      "key": "switch-to-session-1",
+      "action": "org.gnome.mutter.wayland.keybindings/switch-to-session-1",
+      "label": "Switch to VT 1",
+      "group": "System",
       "type": "as",
       "accels": [
         "<Primary><Alt>F1"
       ]
     },
     {
-      "schema": "org.gnome.mutter.wayland.keybindings",
-      "key": "switch-to-session-10",
+      "action": "org.gnome.mutter.wayland.keybindings/switch-to-session-10",
+      "label": "Switch to VT 10",
+      "group": "System",
       "type": "as",
       "accels": [
         "<Primary><Alt>F10"
       ]
     },
     {
-      "schema": "org.gnome.mutter.wayland.keybindings",
-      "key": "switch-to-session-11",
+      "action": "org.gnome.mutter.wayland.keybindings/switch-to-session-11",
+      "label": "Switch to VT 11",
+      "group": "System",
       "type": "as",
       "accels": [
         "<Primary><Alt>F11"
       ]
     },
     {
-      "schema": "org.gnome.mutter.wayland.keybindings",
-      "key": "switch-to-session-12",
+      "action": "org.gnome.mutter.wayland.keybindings/switch-to-session-12",
+      "label": "Switch to VT 12",
+      "group": "System",
       "type": "as",
       "accels": [
         "<Primary><Alt>F12"
       ]
     },
     {
-      "schema": "org.gnome.mutter.wayland.keybindings",
-      "key": "switch-to-session-2",
+      "action": "org.gnome.mutter.wayland.keybindings/switch-to-session-2",
+      "label": "Switch to VT 2",
+      "group": "System",
       "type": "as",
       "accels": [
         "<Primary><Alt>F2"
       ]
     },
     {
-      "schema": "org.gnome.mutter.wayland.keybindings",
-      "key": "switch-to-session-3",
+      "action": "org.gnome.mutter.wayland.keybindings/switch-to-session-3",
+      "label": "Switch to VT 3",
+      "group": "System",
       "type": "as",
       "accels": [
         "<Primary><Alt>F3"
       ]
     },
     {
-      "schema": "org.gnome.mutter.wayland.keybindings",
-      "key": "switch-to-session-4",
+      "action": "org.gnome.mutter.wayland.keybindings/switch-to-session-4",
+      "label": "Switch to VT 4",
+      "group": "System",
       "type": "as",
       "accels": [
         "<Primary><Alt>F4"
       ]
     },
     {
-      "schema": "org.gnome.mutter.wayland.keybindings",
-      "key": "switch-to-session-5",
+      "action": "org.gnome.mutter.wayland.keybindings/switch-to-session-5",
+      "label": "Switch to VT 5",
+      "group": "System",
       "type": "as",
       "accels": [
         "<Primary><Alt>F5"
       ]
     },
     {
-      "schema": "org.gnome.mutter.wayland.keybindings",
-      "key": "switch-to-session-6",
+      "action": "org.gnome.mutter.wayland.keybindings/switch-to-session-6",
+      "label": "Switch to VT 6",
+      "group": "System",
       "type": "as",
       "accels": [
         "<Primary><Alt>F6"
       ]
     },
     {
-      "schema": "org.gnome.mutter.wayland.keybindings",
-      "key": "switch-to-session-7",
+      "action": "org.gnome.mutter.wayland.keybindings/switch-to-session-7",
+      "label": "Switch to VT 7",
+      "group": "System",
       "type": "as",
       "accels": [
         "<Primary><Alt>F7"
       ]
     },
     {
-      "schema": "org.gnome.mutter.wayland.keybindings",
-      "key": "switch-to-session-8",
+      "action": "org.gnome.mutter.wayland.keybindings/switch-to-session-8",
+      "label": "Switch to VT 8",
+      "group": "System",
       "type": "as",
       "accels": [
         "<Primary><Alt>F8"
       ]
     },
     {
-      "schema": "org.gnome.mutter.wayland.keybindings",
-      "key": "switch-to-session-9",
+      "action": "org.gnome.mutter.wayland.keybindings/switch-to-session-9",
+      "label": "Switch to VT 9",
+      "group": "System",
       "type": "as",
       "accels": [
         "<Primary><Alt>F9"
       ]
     },
     {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "focus-active-notification",
-      "type": "as",
-      "accels": [
-        "<Super>n"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "open-new-window-application-1",
-      "type": "as",
-      "accels": [
-        "<Super><Control>1"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "open-new-window-application-2",
-      "type": "as",
-      "accels": [
-        "<Super><Control>2"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "open-new-window-application-3",
-      "type": "as",
-      "accels": [
-        "<Super><Control>3"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "open-new-window-application-4",
-      "type": "as",
-      "accels": [
-        "<Super><Control>4"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "open-new-window-application-5",
-      "type": "as",
-      "accels": [
-        "<Super><Control>5"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "open-new-window-application-6",
-      "type": "as",
-      "accels": [
-        "<Super><Control>6"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "open-new-window-application-7",
-      "type": "as",
-      "accels": [
-        "<Super><Control>7"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "open-new-window-application-8",
-      "type": "as",
-      "accels": [
-        "<Super><Control>8"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "open-new-window-application-9",
-      "type": "as",
-      "accels": [
-        "<Super><Control>9"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "screen-brightness-cycle",
-      "type": "as",
-      "accels": [
-        "XF86MonBrightnessCycle"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "screen-brightness-cycle-monitor",
-      "type": "as",
-      "accels": [
-        "<Shift>XF86MonBrightnessCycle"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "screen-brightness-down",
-      "type": "as",
-      "accels": [
-        "XF86MonBrightnessDown"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "screen-brightness-down-monitor",
-      "type": "as",
-      "accels": [
-        "<Shift>XF86MonBrightnessDown"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "screen-brightness-up",
-      "type": "as",
-      "accels": [
-        "XF86MonBrightnessUp"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "screen-brightness-up-monitor",
-      "type": "as",
-      "accels": [
-        "<Shift>XF86MonBrightnessUp"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "screenshot",
-      "type": "as",
-      "accels": [
-        "<Shift>Print"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "screenshot-window",
-      "type": "as",
-      "accels": [
-        "<Alt>Print"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "shift-overview-down",
-      "type": "as",
-      "accels": [
-        "<Super><Alt>Down"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "shift-overview-up",
-      "type": "as",
-      "accels": [
-        "<Super><Alt>Up"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "show-screen-recording-ui",
-      "type": "as",
-      "accels": [
-        "<Ctrl><Shift><Alt>R"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "show-screenshot-ui",
-      "type": "as",
-      "accels": [
-        "Print"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "switch-to-application-1",
-      "type": "as",
-      "accels": [
-        "<Super>1"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "switch-to-application-2",
-      "type": "as",
-      "accels": [
-        "<Super>2"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "switch-to-application-3",
-      "type": "as",
-      "accels": [
-        "<Super>3"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "switch-to-application-4",
-      "type": "as",
-      "accels": [
-        "<Super>4"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "switch-to-application-5",
-      "type": "as",
-      "accels": [
-        "<Super>5"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "switch-to-application-6",
-      "type": "as",
-      "accels": [
-        "<Super>6"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "switch-to-application-7",
-      "type": "as",
-      "accels": [
-        "<Super>7"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "switch-to-application-8",
-      "type": "as",
-      "accels": [
-        "<Super>8"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "switch-to-application-9",
-      "type": "as",
-      "accels": [
-        "<Super>9"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "toggle-application-view",
-      "type": "as",
-      "accels": [
-        "<Super>a"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "toggle-message-tray",
-      "type": "as",
-      "accels": [
-        "<Super>v",
-        "<Super>m"
-      ]
-    },
-    {
-      "schema": "org.gnome.shell.keybindings",
-      "key": "toggle-quick-settings",
-      "type": "as",
-      "accels": [
-        "<Super>s"
-      ]
-    },
-    {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "battery-status-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/battery-status-static",
+      "label": "Show battery status",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86Battery"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "calculator-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/calculator-static",
+      "label": "Launch calculator",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86Calculator"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "control-center-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/control-center-static",
+      "label": "Launch settings",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86Tools"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "eject-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/eject-static",
+      "label": "Eject",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86Eject"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "email-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/email-static",
+      "label": "Launch email client",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86Mail"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "help",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/help",
+      "label": "Launch help browser",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "<Super>F1"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "hibernate-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/hibernate-static",
+      "label": "Hibernate button",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86Suspend",
@@ -808,88 +906,99 @@
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "home-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/home-static",
+      "label": "Home folder",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86Explorer"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "keyboard-brightness-down-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/keyboard-brightness-down-static",
+      "label": "Keyboard brightness down",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86KbdBrightnessDown"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "keyboard-brightness-toggle-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/keyboard-brightness-toggle-static",
+      "label": "Keyboard brightness toggle",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86KbdLightOnOff"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "keyboard-brightness-up-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/keyboard-brightness-up-static",
+      "label": "Keyboard brightness up",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86KbdBrightnessUp"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "logout",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/logout",
+      "label": "Log out",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "<Control><Alt>Delete"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "magnifier",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/magnifier",
+      "label": "Toggle magnifier",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "<Alt><Super>8"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "magnifier-zoom-in",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/magnifier-zoom-in",
+      "label": "Magnifier zoom in",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "<Alt><Super>equal"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "magnifier-zoom-out",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/magnifier-zoom-out",
+      "label": "Magnifier zoom out",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "<Alt><Super>minus"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "media-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/media-static",
+      "label": "Launch media player",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86AudioMedia"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "mic-mute-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/mic-mute-static",
+      "label": "Microphone mute/unmute",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86AudioMicMute"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "next-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/next-static",
+      "label": "Next track",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86AudioNext",
@@ -897,16 +1006,18 @@
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "pause-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/pause-static",
+      "label": "Pause playback",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86AudioPause"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "play-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/play-static",
+      "label": "Play (or play/pause)",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86AudioPlay",
@@ -914,48 +1025,54 @@
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "playback-forward-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/playback-forward-static",
+      "label": "Skip forward in current track",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86AudioForward"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "playback-random-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/playback-random-static",
+      "label": "Toggle random playback mode",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86AudioRandomPlay"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "playback-repeat-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/playback-repeat-static",
+      "label": "Toggle repeat playback mode",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86AudioRepeat"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "playback-rewind-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/playback-rewind-static",
+      "label": "Skip backward in current track",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86AudioRewind"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "power-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/power-static",
+      "label": "Power button",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86PowerOff"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "previous-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/previous-static",
+      "label": "Previous track",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86AudioPrev",
@@ -963,16 +1080,18 @@
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "rfkill-bluetooth-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/rfkill-bluetooth-static",
+      "label": "Bluetooth RF kill",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86Bluetooth"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "rfkill-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/rfkill-static",
+      "label": "RF kill",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86WLAN",
@@ -981,8 +1100,9 @@
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "rotate-video-lock-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/rotate-video-lock-static",
+      "label": "Toggle automatic screen orientation",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "<Super>o",
@@ -990,72 +1110,81 @@
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "screenreader",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/screenreader",
+      "label": "Toggle screen reader",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "<Alt><Super>s"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "screensaver",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/screensaver",
+      "label": "Lock screen",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "<Super>l"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "screensaver-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/screensaver-static",
+      "label": "Lock screen",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86ScreenSaver"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "search-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/search-static",
+      "label": "Search",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86Search"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "stop-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/stop-static",
+      "label": "Stop playback",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86AudioStop"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "suspend-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/suspend-static",
+      "label": "Suspend button",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86Sleep"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "touchpad-off-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/touchpad-off-static",
+      "label": "Switch touchpad off",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86TouchpadOff"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "touchpad-on-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/touchpad-on-static",
+      "label": "Switch touchpad on",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86TouchpadOn"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "touchpad-toggle-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/touchpad-toggle-static",
+      "label": "Magnifier zoom out",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86TouchpadToggle",
@@ -1063,8 +1192,9 @@
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "volume-down-precise-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/volume-down-precise-static",
+      "label": "Precise volume down",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "<Shift>XF86AudioLowerVolume",
@@ -1072,8 +1202,9 @@
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "volume-down-quiet-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/volume-down-quiet-static",
+      "label": "Quiet volume down",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "<Alt>XF86AudioLowerVolume",
@@ -1081,8 +1212,9 @@
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "volume-down-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/volume-down-static",
+      "label": "Volume down",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86AudioLowerVolume",
@@ -1090,24 +1222,27 @@
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "volume-mute-quiet-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/volume-mute-quiet-static",
+      "label": "Quiet volume mute/unmute",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "<Alt>XF86AudioMute"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "volume-mute-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/volume-mute-static",
+      "label": "Volume mute/unmute",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86AudioMute"
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "volume-up-precise-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/volume-up-precise-static",
+      "label": "Precise volume up",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "<Shift>XF86AudioRaiseVolume",
@@ -1115,8 +1250,9 @@
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "volume-up-quiet-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/volume-up-quiet-static",
+      "label": "Quiet volume up",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "<Alt>XF86AudioRaiseVolume",
@@ -1124,8 +1260,9 @@
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "volume-up-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/volume-up-static",
+      "label": "Volume up",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86AudioRaiseVolume",
@@ -1133,11 +1270,21 @@
       ]
     },
     {
-      "schema": "org.gnome.settings-daemon.plugins.media-keys",
-      "key": "www-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/www-static",
+      "label": "Launch web browser",
+      "group": "Media and system",
       "type": "as",
       "accels": [
         "XF86WWW"
+      ]
+    },
+    {
+      "action": "org.gnome.mutter/overlay-key",
+      "label": "Show the overview (the Super key alone)",
+      "group": "Shell",
+      "type": "s",
+      "accels": [
+        "Super"
       ]
     }
   ]
