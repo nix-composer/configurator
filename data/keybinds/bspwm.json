@@ -1,0 +1,685 @@
+{
+  "$comment": "bspwm's example hotkeys: share/doc/bspwm/examples/sxhkdrc in nixpkgs' bspwm (nixos-26.05), for sxhkd; bspwm itself binds no keys, and NixOS only uses this file when services.xserver.windowManager.bspwm.sxhkd.configFile points at it. The action is the command (sxhkd's {a,b} brace sequences expanded; `@` release binds shown as plain presses). Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "urxvt",
+      "label": "Terminal emulator",
+      "group": "Apps",
+      "accels": [
+        "<Super>Return"
+      ]
+    },
+    {
+      "action": "dmenu_run",
+      "label": "Program launcher",
+      "group": "Apps",
+      "accels": [
+        "<Super>space"
+      ]
+    },
+    {
+      "action": "pkill -USR1 -x sxhkd",
+      "label": "Make sxhkd reload its configuration files",
+      "group": "Session",
+      "accels": [
+        "<Super>Escape"
+      ]
+    },
+    {
+      "action": "bspc quit",
+      "label": "Quit bspwm",
+      "group": "Session",
+      "accels": [
+        "<Super><Alt>q"
+      ]
+    },
+    {
+      "action": "bspc wm -r",
+      "label": "Restart bspwm",
+      "group": "Session",
+      "accels": [
+        "<Super><Alt>r"
+      ]
+    },
+    {
+      "action": "bspc node -c",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Super>w"
+      ]
+    },
+    {
+      "action": "bspc node -k",
+      "label": "Kill the window",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>w"
+      ]
+    },
+    {
+      "action": "bspc desktop -l next",
+      "label": "Alternate between the tiled and monocle layout",
+      "group": "Layout",
+      "accels": [
+        "<Super>m"
+      ]
+    },
+    {
+      "action": "bspc node newest.marked.local -n newest.!automatic.local",
+      "label": "Send the newest marked node to the newest preselected node",
+      "group": "Layout",
+      "accels": [
+        "<Super>y"
+      ]
+    },
+    {
+      "action": "bspc node -s biggest.window",
+      "label": "Swap the current node and the biggest window",
+      "group": "Windows",
+      "accels": [
+        "<Super>g"
+      ]
+    },
+    {
+      "action": "bspc node -t tiled",
+      "label": "Make the window tiled",
+      "group": "Layout",
+      "accels": [
+        "<Super>t"
+      ]
+    },
+    {
+      "action": "bspc node -t pseudo_tiled",
+      "label": "Make the window pseudo tiled",
+      "group": "Layout",
+      "accels": [
+        "<Super><Shift>t"
+      ]
+    },
+    {
+      "action": "bspc node -t floating",
+      "label": "Make the window floating",
+      "group": "Windows",
+      "accels": [
+        "<Super>s"
+      ]
+    },
+    {
+      "action": "bspc node -t fullscreen",
+      "label": "Make the window fullscreen",
+      "group": "Windows",
+      "accels": [
+        "<Super>f"
+      ]
+    },
+    {
+      "action": "bspc node -g marked",
+      "label": "Toggle the node's marked flag",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>m"
+      ]
+    },
+    {
+      "action": "bspc node -g locked",
+      "label": "Toggle the node's locked flag",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>x"
+      ]
+    },
+    {
+      "action": "bspc node -g sticky",
+      "label": "Toggle the node's sticky flag",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>y"
+      ]
+    },
+    {
+      "action": "bspc node -g private",
+      "label": "Toggle the node's private flag",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>z"
+      ]
+    },
+    {
+      "action": "bspc node -f west",
+      "label": "Focus the node to the west",
+      "group": "Focus",
+      "accels": [
+        "<Super>h"
+      ]
+    },
+    {
+      "action": "bspc node -f south",
+      "label": "Focus the node to the south",
+      "group": "Focus",
+      "accels": [
+        "<Super>j"
+      ]
+    },
+    {
+      "action": "bspc node -f north",
+      "label": "Focus the node to the north",
+      "group": "Focus",
+      "accels": [
+        "<Super>k"
+      ]
+    },
+    {
+      "action": "bspc node -f east",
+      "label": "Focus the node to the east",
+      "group": "Focus",
+      "accels": [
+        "<Super>l"
+      ]
+    },
+    {
+      "action": "bspc node -s west",
+      "label": "Swap with the node to the west",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>h"
+      ]
+    },
+    {
+      "action": "bspc node -s south",
+      "label": "Swap with the node to the south",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>j"
+      ]
+    },
+    {
+      "action": "bspc node -s north",
+      "label": "Swap with the node to the north",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>k"
+      ]
+    },
+    {
+      "action": "bspc node -s east",
+      "label": "Swap with the node to the east",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>l"
+      ]
+    },
+    {
+      "action": "bspc node -f @parent",
+      "label": "Focus the parent node",
+      "group": "Focus",
+      "accels": [
+        "<Super>p"
+      ]
+    },
+    {
+      "action": "bspc node -f @brother",
+      "label": "Focus the brother node",
+      "group": "Focus",
+      "accels": [
+        "<Super>b"
+      ]
+    },
+    {
+      "action": "bspc node -f @first",
+      "label": "Focus the first node",
+      "group": "Focus",
+      "accels": [
+        "<Super>comma"
+      ]
+    },
+    {
+      "action": "bspc node -f @second",
+      "label": "Focus the second node",
+      "group": "Focus",
+      "accels": [
+        "<Super>period"
+      ]
+    },
+    {
+      "action": "bspc node -f next.local.!hidden.window",
+      "label": "Focus the next window on this desktop",
+      "group": "Focus",
+      "accels": [
+        "<Super>c"
+      ]
+    },
+    {
+      "action": "bspc node -f prev.local.!hidden.window",
+      "label": "Focus the previous window on this desktop",
+      "group": "Focus",
+      "accels": [
+        "<Super><Shift>c"
+      ]
+    },
+    {
+      "action": "bspc desktop -f prev.local",
+      "label": "Focus the previous desktop on this monitor",
+      "group": "Monitors",
+      "accels": [
+        "<Super>bracketleft"
+      ]
+    },
+    {
+      "action": "bspc desktop -f next.local",
+      "label": "Focus the next desktop on this monitor",
+      "group": "Monitors",
+      "accels": [
+        "<Super>bracketright"
+      ]
+    },
+    {
+      "action": "bspc node -f last",
+      "label": "Focus the last node",
+      "group": "Focus",
+      "accels": [
+        "<Super>grave"
+      ]
+    },
+    {
+      "action": "bspc desktop -f last",
+      "label": "Focus the last desktop",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>Tab"
+      ]
+    },
+    {
+      "action": "bspc wm -h off; bspc node older -f; bspc wm -h on",
+      "label": "Focus the older node in the focus history",
+      "group": "Focus",
+      "accels": [
+        "<Super>o"
+      ]
+    },
+    {
+      "action": "bspc wm -h off; bspc node newer -f; bspc wm -h on",
+      "label": "Focus the newer node in the focus history",
+      "group": "Focus",
+      "accels": [
+        "<Super>i"
+      ]
+    },
+    {
+      "action": "bspc desktop -f '^1'",
+      "label": "Focus desktop 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>1"
+      ]
+    },
+    {
+      "action": "bspc desktop -f '^2'",
+      "label": "Focus desktop 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>2"
+      ]
+    },
+    {
+      "action": "bspc desktop -f '^3'",
+      "label": "Focus desktop 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>3"
+      ]
+    },
+    {
+      "action": "bspc desktop -f '^4'",
+      "label": "Focus desktop 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>4"
+      ]
+    },
+    {
+      "action": "bspc desktop -f '^5'",
+      "label": "Focus desktop 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>5"
+      ]
+    },
+    {
+      "action": "bspc desktop -f '^6'",
+      "label": "Focus desktop 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>6"
+      ]
+    },
+    {
+      "action": "bspc desktop -f '^7'",
+      "label": "Focus desktop 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>7"
+      ]
+    },
+    {
+      "action": "bspc desktop -f '^8'",
+      "label": "Focus desktop 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>8"
+      ]
+    },
+    {
+      "action": "bspc desktop -f '^9'",
+      "label": "Focus desktop 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>9"
+      ]
+    },
+    {
+      "action": "bspc desktop -f '^10'",
+      "label": "Focus desktop 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>0"
+      ]
+    },
+    {
+      "action": "bspc node -d '^1'",
+      "label": "Send the window to desktop 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>1"
+      ]
+    },
+    {
+      "action": "bspc node -d '^2'",
+      "label": "Send the window to desktop 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>2"
+      ]
+    },
+    {
+      "action": "bspc node -d '^3'",
+      "label": "Send the window to desktop 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>3"
+      ]
+    },
+    {
+      "action": "bspc node -d '^4'",
+      "label": "Send the window to desktop 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>4"
+      ]
+    },
+    {
+      "action": "bspc node -d '^5'",
+      "label": "Send the window to desktop 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>5"
+      ]
+    },
+    {
+      "action": "bspc node -d '^6'",
+      "label": "Send the window to desktop 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>6"
+      ]
+    },
+    {
+      "action": "bspc node -d '^7'",
+      "label": "Send the window to desktop 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>7"
+      ]
+    },
+    {
+      "action": "bspc node -d '^8'",
+      "label": "Send the window to desktop 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>8"
+      ]
+    },
+    {
+      "action": "bspc node -d '^9'",
+      "label": "Send the window to desktop 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>9"
+      ]
+    },
+    {
+      "action": "bspc node -d '^10'",
+      "label": "Send the window to desktop 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>0"
+      ]
+    },
+    {
+      "action": "bspc node -p west",
+      "label": "Preselect west",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>h"
+      ]
+    },
+    {
+      "action": "bspc node -p south",
+      "label": "Preselect south",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>j"
+      ]
+    },
+    {
+      "action": "bspc node -p north",
+      "label": "Preselect north",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>k"
+      ]
+    },
+    {
+      "action": "bspc node -p east",
+      "label": "Preselect east",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>l"
+      ]
+    },
+    {
+      "action": "bspc node -o 0.1",
+      "label": "Preselect the ratio 0.1",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>1"
+      ]
+    },
+    {
+      "action": "bspc node -o 0.2",
+      "label": "Preselect the ratio 0.2",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>2"
+      ]
+    },
+    {
+      "action": "bspc node -o 0.3",
+      "label": "Preselect the ratio 0.3",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>3"
+      ]
+    },
+    {
+      "action": "bspc node -o 0.4",
+      "label": "Preselect the ratio 0.4",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>4"
+      ]
+    },
+    {
+      "action": "bspc node -o 0.5",
+      "label": "Preselect the ratio 0.5",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>5"
+      ]
+    },
+    {
+      "action": "bspc node -o 0.6",
+      "label": "Preselect the ratio 0.6",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>6"
+      ]
+    },
+    {
+      "action": "bspc node -o 0.7",
+      "label": "Preselect the ratio 0.7",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>7"
+      ]
+    },
+    {
+      "action": "bspc node -o 0.8",
+      "label": "Preselect the ratio 0.8",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>8"
+      ]
+    },
+    {
+      "action": "bspc node -o 0.9",
+      "label": "Preselect the ratio 0.9",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>9"
+      ]
+    },
+    {
+      "action": "bspc node -p cancel",
+      "label": "Cancel the preselection for the focused node",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>space"
+      ]
+    },
+    {
+      "action": "bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel",
+      "label": "Cancel the preselection for the focused desktop",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>space"
+      ]
+    },
+    {
+      "action": "bspc node -z left -20 0",
+      "label": "Expand the window's left side",
+      "group": "Windows",
+      "accels": [
+        "<Super><Alt>h"
+      ]
+    },
+    {
+      "action": "bspc node -z bottom 0 20",
+      "label": "Expand the window's bottom side",
+      "group": "Windows",
+      "accels": [
+        "<Super><Alt>j"
+      ]
+    },
+    {
+      "action": "bspc node -z top 0 -20",
+      "label": "Expand the window's top side",
+      "group": "Windows",
+      "accels": [
+        "<Super><Alt>k"
+      ]
+    },
+    {
+      "action": "bspc node -z right 20 0",
+      "label": "Expand the window's right side",
+      "group": "Windows",
+      "accels": [
+        "<Super><Alt>l"
+      ]
+    },
+    {
+      "action": "bspc node -z right -20 0",
+      "label": "Contract the window's right side",
+      "group": "Windows",
+      "accels": [
+        "<Super><Alt><Shift>h"
+      ]
+    },
+    {
+      "action": "bspc node -z top 0 20",
+      "label": "Contract the window's top side",
+      "group": "Windows",
+      "accels": [
+        "<Super><Alt><Shift>j"
+      ]
+    },
+    {
+      "action": "bspc node -z bottom 0 -20",
+      "label": "Contract the window's bottom side",
+      "group": "Windows",
+      "accels": [
+        "<Super><Alt><Shift>k"
+      ]
+    },
+    {
+      "action": "bspc node -z left 20 0",
+      "label": "Contract the window's left side",
+      "group": "Windows",
+      "accels": [
+        "<Super><Alt><Shift>l"
+      ]
+    },
+    {
+      "action": "bspc node -v -20 0",
+      "label": "Move the floating window left",
+      "group": "Windows",
+      "accels": [
+        "<Super>Left"
+      ]
+    },
+    {
+      "action": "bspc node -v 0 20",
+      "label": "Move the floating window down",
+      "group": "Windows",
+      "accels": [
+        "<Super>Down"
+      ]
+    },
+    {
+      "action": "bspc node -v 0 -20",
+      "label": "Move the floating window up",
+      "group": "Windows",
+      "accels": [
+        "<Super>Up"
+      ]
+    },
+    {
+      "action": "bspc node -v 20 0",
+      "label": "Move the floating window right",
+      "group": "Windows",
+      "accels": [
+        "<Super>Right"
+      ]
+    }
+  ]
+}

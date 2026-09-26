@@ -1,0 +1,125 @@
+{
+  "$comment": "labwc's built-in default keybinds from include/config/default-bindings.h of nixpkgs nixos-26.05 `labwc` (iam1134cf8qji24yg2yckx06hgca7v95-source): loaded when rc.xml has no <keybind> or has <keyboard><default />. The action is the rc.xml <action> element (labwc-actions(5)); labwc writes the XF86 keys as XF86_AudioMute (scripts/keybinds/extract-compositors.py).",
+  "binds": [
+    {
+      "action": "<action name=\"NextWindow\" />",
+      "label": "Switch to the next window",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "<action name=\"PreviousWindow\" />",
+      "label": "Switch to the previous window",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>Tab"
+      ]
+    },
+    {
+      "action": "<action name=\"Execute\" command=\"lab-sensible-terminal\" />",
+      "label": "Open a terminal (lab-sensible-terminal)",
+      "group": "Apps",
+      "accels": [
+        "<Super>Return"
+      ]
+    },
+    {
+      "action": "<action name=\"Close\" />",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F4"
+      ]
+    },
+    {
+      "action": "<action name=\"ToggleMaximize\" />",
+      "label": "Toggle maximize",
+      "group": "Windows",
+      "accels": [
+        "<Super>a"
+      ]
+    },
+    {
+      "action": "<action name=\"SnapToEdge\" direction=\"left\" combine=\"yes\" />",
+      "label": "Snap the window to the left half",
+      "group": "Windows",
+      "accels": [
+        "<Super>Left"
+      ]
+    },
+    {
+      "action": "<action name=\"SnapToEdge\" direction=\"right\" combine=\"yes\" />",
+      "label": "Snap the window to the right half",
+      "group": "Windows",
+      "accels": [
+        "<Super>Right"
+      ]
+    },
+    {
+      "action": "<action name=\"SnapToEdge\" direction=\"up\" combine=\"yes\" />",
+      "label": "Snap the window to the top half",
+      "group": "Windows",
+      "accels": [
+        "<Super>Up"
+      ]
+    },
+    {
+      "action": "<action name=\"SnapToEdge\" direction=\"down\" combine=\"yes\" />",
+      "label": "Snap the window to the bottom half",
+      "group": "Windows",
+      "accels": [
+        "<Super>Down"
+      ]
+    },
+    {
+      "action": "<action name=\"ShowMenu\" menu=\"client-menu\" atCursor=\"no\" />",
+      "label": "Show the window menu",
+      "group": "Windows",
+      "accels": [
+        "<Alt>space"
+      ]
+    },
+    {
+      "action": "<action name=\"Execute\" command=\"amixer sset Master 5%-\" />",
+      "label": "Volume down",
+      "group": "Media",
+      "accels": [
+        "XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "<action name=\"Execute\" command=\"amixer sset Master 5%+\" />",
+      "label": "Volume up",
+      "group": "Media",
+      "accels": [
+        "XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "<action name=\"Execute\" command=\"amixer sset Master toggle\" />",
+      "label": "Mute audio",
+      "group": "Media",
+      "accels": [
+        "XF86AudioMute"
+      ]
+    },
+    {
+      "action": "<action name=\"Execute\" command=\"brightnessctl set +10%\" />",
+      "label": "Brightness up",
+      "group": "Media",
+      "accels": [
+        "XF86MonBrightnessUp"
+      ]
+    },
+    {
+      "action": "<action name=\"Execute\" command=\"brightnessctl set 10%-\" />",
+      "label": "Brightness down",
+      "group": "Media",
+      "accels": [
+        "XF86MonBrightnessDown"
+      ]
+    }
+  ]
+}

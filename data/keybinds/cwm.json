@@ -1,0 +1,430 @@
+{
+  "$comment": "cwm's built-in default keybinds: key_binds[] in conf.c of nixpkgs' cwm (nixos-26.05). The action is the cwmrc(5) function name; labels from cwmrc(5). Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "terminal",
+      "label": "Spawn a new terminal",
+      "group": "Apps",
+      "accels": [
+        "<Control><Alt>Return"
+      ]
+    },
+    {
+      "action": "lock",
+      "label": "Lock the screen",
+      "group": "Session",
+      "accels": [
+        "<Control><Alt>Delete"
+      ]
+    },
+    {
+      "action": "menu-exec",
+      "label": "Launch exec program menu",
+      "group": "Apps",
+      "accels": [
+        "<Alt>question"
+      ]
+    },
+    {
+      "action": "menu-exec-wm",
+      "label": "Launch exec WindowManager menu",
+      "group": "Apps",
+      "accels": [
+        "<Control><Alt>w"
+      ]
+    },
+    {
+      "action": "menu-ssh",
+      "label": "Launch ssh menu",
+      "group": "Apps",
+      "accels": [
+        "<Alt>period"
+      ]
+    },
+    {
+      "action": "window-hide",
+      "label": "Hide current window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>Return"
+      ]
+    },
+    {
+      "action": "window-lower",
+      "label": "Lower current window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>Down"
+      ]
+    },
+    {
+      "action": "window-raise",
+      "label": "Raise current window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>Up"
+      ]
+    },
+    {
+      "action": "menu-window",
+      "label": "Launch window search menu",
+      "group": "Apps",
+      "accels": [
+        "<Alt>slash"
+      ]
+    },
+    {
+      "action": "menu-cmd",
+      "label": "Launch application search menu",
+      "group": "Apps",
+      "accels": [
+        "<Control>slash"
+      ]
+    },
+    {
+      "action": "window-cycle",
+      "label": "Forward cycle through windows",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "window-rcycle",
+      "label": "Reverse cycle through windows",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>Tab"
+      ]
+    },
+    {
+      "action": "window-cycle-inclass",
+      "label": "Forward cycle through windows of the current window class",
+      "group": "Focus",
+      "accels": [
+        "<Alt>grave"
+      ]
+    },
+    {
+      "action": "window-rcycle-inclass",
+      "label": "Reverse cycle through windows of the current window class",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>grave"
+      ]
+    },
+    {
+      "action": "window-menu-label",
+      "label": "Label current window",
+      "group": "Menus",
+      "accels": [
+        "<Control><Alt>n"
+      ]
+    },
+    {
+      "action": "window-close",
+      "label": "Close current window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>x"
+      ]
+    },
+    {
+      "action": "group-toggle-all",
+      "label": "Toggle visibility of all groups",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>a",
+        "<Control><Alt>0"
+      ]
+    },
+    {
+      "action": "group-toggle-1",
+      "label": "Toggle visibility of group 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>1"
+      ]
+    },
+    {
+      "action": "group-toggle-2",
+      "label": "Toggle visibility of group 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>2"
+      ]
+    },
+    {
+      "action": "group-toggle-3",
+      "label": "Toggle visibility of group 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>3"
+      ]
+    },
+    {
+      "action": "group-toggle-4",
+      "label": "Toggle visibility of group 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>4"
+      ]
+    },
+    {
+      "action": "group-toggle-5",
+      "label": "Toggle visibility of group 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>5"
+      ]
+    },
+    {
+      "action": "group-toggle-6",
+      "label": "Toggle visibility of group 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>6"
+      ]
+    },
+    {
+      "action": "group-toggle-7",
+      "label": "Toggle visibility of group 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>7"
+      ]
+    },
+    {
+      "action": "group-toggle-8",
+      "label": "Toggle visibility of group 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>8"
+      ]
+    },
+    {
+      "action": "group-toggle-9",
+      "label": "Toggle visibility of group 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>9"
+      ]
+    },
+    {
+      "action": "group-cycle",
+      "label": "Forward cycle through groups",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>Right"
+      ]
+    },
+    {
+      "action": "group-rcycle",
+      "label": "Reverse cycle through groups",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>Left"
+      ]
+    },
+    {
+      "action": "window-group",
+      "label": "Toggle group membership of current window",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>g"
+      ]
+    },
+    {
+      "action": "window-fullscreen",
+      "label": "Full-screen current window (gap + border removed)",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>f"
+      ]
+    },
+    {
+      "action": "window-maximize",
+      "label": "Maximize current window (gap + border honored)",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>m"
+      ]
+    },
+    {
+      "action": "window-stick",
+      "label": "Stick current window to all groups (same as assigning to nogroup)",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>s"
+      ]
+    },
+    {
+      "action": "window-vmaximize",
+      "label": "Vertically maximize current window (gap + border honored)",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>equal"
+      ]
+    },
+    {
+      "action": "window-hmaximize",
+      "label": "Horizontally maximize current window (gap + border honored)",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>equal"
+      ]
+    },
+    {
+      "action": "window-freeze",
+      "label": "Freeze current window geometry",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>f"
+      ]
+    },
+    {
+      "action": "restart",
+      "label": "Restart the running cwm",
+      "group": "Session",
+      "accels": [
+        "<Control><Alt><Shift>r"
+      ]
+    },
+    {
+      "action": "quit",
+      "label": "Quit cwm",
+      "group": "Session",
+      "accels": [
+        "<Control><Alt><Shift>q"
+      ]
+    },
+    {
+      "action": "window-move-left",
+      "label": "Move window moveamount pixels left",
+      "group": "Windows",
+      "accels": [
+        "<Alt>h"
+      ]
+    },
+    {
+      "action": "window-move-down",
+      "label": "Move window moveamount pixels down",
+      "group": "Windows",
+      "accels": [
+        "<Alt>j"
+      ]
+    },
+    {
+      "action": "window-move-up",
+      "label": "Move window moveamount pixels up",
+      "group": "Windows",
+      "accels": [
+        "<Alt>k"
+      ]
+    },
+    {
+      "action": "window-move-right",
+      "label": "Move window moveamount pixels right",
+      "group": "Windows",
+      "accels": [
+        "<Alt>l"
+      ]
+    },
+    {
+      "action": "window-move-left-big",
+      "label": "Move window 10 times moveamount pixels left",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>h"
+      ]
+    },
+    {
+      "action": "window-move-down-big",
+      "label": "Move window 10 times moveamount pixels down",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>j"
+      ]
+    },
+    {
+      "action": "window-move-up-big",
+      "label": "Move window 10 times moveamount pixels up",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>k"
+      ]
+    },
+    {
+      "action": "window-move-right-big",
+      "label": "Move window 10 times moveamount pixels right",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>l"
+      ]
+    },
+    {
+      "action": "window-resize-left",
+      "label": "Resize window moveamount pixels left",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>h"
+      ]
+    },
+    {
+      "action": "window-resize-down",
+      "label": "Resize window moveamount pixels down",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>j"
+      ]
+    },
+    {
+      "action": "window-resize-up",
+      "label": "Resize window moveamount pixels up",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>k"
+      ]
+    },
+    {
+      "action": "window-resize-right",
+      "label": "Resize window moveamount pixels right",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>l"
+      ]
+    },
+    {
+      "action": "window-resize-left-big",
+      "label": "Resize window 10 times moveamount pixels left",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>h"
+      ]
+    },
+    {
+      "action": "window-resize-down-big",
+      "label": "Resize window 10 times moveamount pixels down",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>j"
+      ]
+    },
+    {
+      "action": "window-resize-up-big",
+      "label": "Resize window 10 times moveamount pixels up",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>k"
+      ]
+    },
+    {
+      "action": "window-resize-right-big",
+      "label": "Resize window 10 times moveamount pixels right",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>l"
+      ]
+    }
+  ]
+}

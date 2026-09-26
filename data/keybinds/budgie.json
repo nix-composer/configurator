@@ -1,0 +1,730 @@
+{
+  "$comment": "Budgie's default keybinds from the GSettings schemas in nixpkgs nixos-26.05 (budgie-gsettings-overrides, budgie-desktop; XDG_CURRENT_DESKTOP=Budgie:GNOME), by scripts/keybinds/extract-dconf-desktops.py: the action is `schema/key`, the label its summary, accels GTK accelerators; type `s` keys hold one accel. Only the keys budgie's labwc bridge reads (the `bridge` attributes of share/budgie-desktop/labwc/rc.xml); an empty media key falls back to its `-static` twin, which is listed instead.",
+  "binds": [
+    {
+      "action": "com.solus-project.budgie-wm/clear-notifications",
+      "label": "The binding to clear Raven notifications",
+      "group": "Shell",
+      "type": "as",
+      "path": "com/solus-project/budgie-wm",
+      "accels": [
+        "<Super>C"
+      ]
+    },
+    {
+      "action": "com.solus-project.budgie-wm/take-full-screenshot",
+      "label": "Take screenshot of all displays",
+      "group": "Screenshots",
+      "type": "as",
+      "path": "com/solus-project/budgie-wm",
+      "accels": [
+        "Print"
+      ]
+    },
+    {
+      "action": "com.solus-project.budgie-wm/take-region-screenshot",
+      "label": "Take screenshot of selectable region",
+      "group": "Screenshots",
+      "type": "as",
+      "path": "com/solus-project/budgie-wm",
+      "accels": [
+        "<Ctrl>Print"
+      ]
+    },
+    {
+      "action": "com.solus-project.budgie-wm/toggle-notifications",
+      "label": "The binding to use to toggle Raven notifications",
+      "group": "Shell",
+      "type": "as",
+      "path": "com/solus-project/budgie-wm",
+      "accels": [
+        "<Super>N"
+      ]
+    },
+    {
+      "action": "com.solus-project.budgie-wm/toggle-raven",
+      "label": "The binding to use to toggle Raven applets view",
+      "group": "Shell",
+      "type": "as",
+      "path": "com/solus-project/budgie-wm",
+      "accels": [
+        "<Super>A"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/begin-move",
+      "label": "Move window",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Alt>F7"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/begin-resize",
+      "label": "Resize window",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Alt>F8"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/close",
+      "label": "Close window",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Alt>F4"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/cycle-group",
+      "label": "Switch windows of an app directly",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Alt>F6"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/cycle-group-backward",
+      "label": "Reverse switch windows of an app directly",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Shift><Alt>F6"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/cycle-panels",
+      "label": "Switch system controls directly",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Control><Alt>Escape"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/cycle-panels-backward",
+      "label": "Reverse switch system controls directly",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Shift><Control><Alt>Escape"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/cycle-windows",
+      "label": "Switch windows directly",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Alt>Escape"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/cycle-windows-backward",
+      "label": "Reverse switch windows directly",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Shift><Alt>Escape"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/maximize",
+      "label": "Maximize window",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super>Up"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/minimize",
+      "label": "Minimize window",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super>h"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/move-to-monitor-down",
+      "label": "Move window to the next monitor below",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>Down"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/move-to-monitor-left",
+      "label": "Move window to the next monitor on the left",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>Left"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/move-to-monitor-right",
+      "label": "Move window to the next monitor on the right",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>Right"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/move-to-monitor-up",
+      "label": "Move window to the next monitor above",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>Up"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-1",
+      "label": "Move window to workspace 1",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>Home"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-last",
+      "label": "Move window to last workspace",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>End"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-left",
+      "label": "Move window one workspace to the left",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>Page_Up",
+        "<Super><Shift>KP_Prior",
+        "<Super><Shift><Alt>Left",
+        "<Control><Shift><Alt>Left"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-right",
+      "label": "Move window one workspace to the right",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>Page_Down",
+        "<Super><Shift>KP_Next",
+        "<Super><Shift><Alt>Right",
+        "<Control><Shift><Alt>Right"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/panel-run-dialog",
+      "label": "Show the run command prompt",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Alt>F2"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/show-desktop",
+      "label": "Hide all normal windows",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super>d"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-applications",
+      "label": "Switch applications",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super>Tab",
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-applications-backward",
+      "label": "Reverse switch applications",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Shift><Super>Tab",
+        "<Shift><Alt>Tab"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-group",
+      "label": "Switch windows of an application",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super>Above_Tab",
+        "<Alt>Above_Tab"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-group-backward",
+      "label": "Reverse switch windows of an application",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Shift><Super>Above_Tab",
+        "<Shift><Alt>Above_Tab"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-input-source",
+      "label": "Switch input source",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Alt>Shift_L",
+        "<Super>space",
+        "XF86Keyboard"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-input-source-backward",
+      "label": "Switch input source backward",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>space",
+        "<Shift>XF86Keyboard"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-panels",
+      "label": "Switch system controls",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Control><Alt>Tab"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-panels-backward",
+      "label": "Reverse switch system controls",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Shift><Control><Alt>Tab"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-1",
+      "label": "Switch to workspace 1",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super>Home"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-last",
+      "label": "Switch to last workspace",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super>End"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-left",
+      "label": "Switch to workspace left",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super>Page_Up",
+        "<Super>KP_Prior",
+        "<Super><Alt>Left",
+        "<Control><Alt>Left"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-right",
+      "label": "Switch to workspace right",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super>Page_Down",
+        "<Super>KP_Next",
+        "<Super><Alt>Right",
+        "<Control><Alt>Right"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/toggle-maximized",
+      "label": "Toggle maximization state",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Alt>F10"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/unmaximize",
+      "label": "Restore window",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super>Down",
+        "<Alt>F5"
+      ]
+    },
+    {
+      "action": "org.gnome.mutter.keybindings/toggle-tiled-left",
+      "label": "View split on left",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/mutter/keybindings",
+      "accels": [
+        "<Super>Left"
+      ]
+    },
+    {
+      "action": "org.gnome.mutter.keybindings/toggle-tiled-right",
+      "label": "View split on right",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/mutter/keybindings",
+      "accels": [
+        "<Super>Right"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/calculator-static",
+      "label": "Launch calculator",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86Calculator"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/control-center-static",
+      "label": "Launch settings",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86Tools"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/eject-static",
+      "label": "Eject",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86Eject"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/email-static",
+      "label": "Launch email client",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86Mail"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/help",
+      "label": "Launch help browser",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "<Super>F1"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/home-static",
+      "label": "Home folder",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86Explorer"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/logout",
+      "label": "Log out",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "<Control><Alt>Delete"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/magnifier",
+      "label": "Toggle magnifier",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "<Alt><Super>8"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/magnifier-zoom-in",
+      "label": "Magnifier zoom in",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "<Alt><Super>equal"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/magnifier-zoom-out",
+      "label": "Magnifier zoom out",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "<Alt><Super>minus"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/media-static",
+      "label": "Launch media player",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioMedia"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/mic-mute-static",
+      "label": "Microphone mute/unmute",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioMicMute"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/next-static",
+      "label": "Next track",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioNext",
+        "<Ctrl>XF86AudioNext"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/pause-static",
+      "label": "Pause playback",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioPause"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/play-static",
+      "label": "Play (or play/pause)",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioPlay",
+        "<Ctrl>XF86AudioPlay"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/previous-static",
+      "label": "Previous track",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioPrev",
+        "<Ctrl>XF86AudioPrev"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/screen-brightness-down-static",
+      "label": "Screen brightness down",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86MonBrightnessDown"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/screen-brightness-up-static",
+      "label": "Screen brightness up",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86MonBrightnessUp"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/screenreader",
+      "label": "Toggle screen reader",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "<Alt><Super>s"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/screensaver",
+      "label": "Lock screen",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "<Super>l"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/search-static",
+      "label": "Search",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86Search"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/stop-static",
+      "label": "Stop playback",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioStop"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/terminal",
+      "label": "Launch terminal",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "<Primary><Alt>t"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/volume-down-static",
+      "label": "Volume down",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioLowerVolume",
+        "<Ctrl>XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/volume-mute-static",
+      "label": "Volume mute/unmute",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioMute"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/volume-up-static",
+      "label": "Volume up",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioRaiseVolume",
+        "<Ctrl>XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "org.buddiesofbudgie.settings-daemon.plugins.media-keys/www-static",
+      "label": "Launch web browser",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/buddiesofbudgie/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86WWW"
+      ]
+    },
+    {
+      "action": "org.gnome.mutter/overlay-key",
+      "label": "Open the Budgie menu (the Super key alone)",
+      "group": "Shell",
+      "type": "s",
+      "path": "org/gnome/mutter",
+      "accels": [
+        "Super_L"
+      ]
+    }
+  ]
+}

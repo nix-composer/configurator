@@ -1,0 +1,681 @@
+{
+  "$comment": "COSMIC's default shortcuts (cosmic-comp's data/keybindings.ron, the `defaults` key of com.system76.CosmicSettings.Shortcuts, nixpkgs nixos-26.05; scripts/keybinds/extract-kde-cosmic-xfce-omarchy.py): the action as the RON names it, labels and groups as COSMIC Settings shows them.",
+  "binds": [
+    {
+      "action": "Terminate",
+      "label": "Terminate",
+      "group": "Other",
+      "accels": [
+        "<Super><Alt>Escape"
+      ]
+    },
+    {
+      "action": "System(LogOut)",
+      "label": "Log Out",
+      "group": "System",
+      "accels": [
+        "<Super><Shift>Escape"
+      ]
+    },
+    {
+      "action": "Debug",
+      "label": "Debug",
+      "group": "Other",
+      "accels": [
+        "<Super><Control>Escape"
+      ]
+    },
+    {
+      "action": "System(LockScreen)",
+      "label": "Lock the screen",
+      "group": "System",
+      "accels": [
+        "<Super>Escape"
+      ]
+    },
+    {
+      "action": "Close",
+      "label": "Close window",
+      "group": "Manage windows",
+      "accels": [
+        "<Super>q",
+        "<Alt>F4"
+      ]
+    },
+    {
+      "action": "Focus(Left)",
+      "label": "Focus window left",
+      "group": "Navigation",
+      "accels": [
+        "<Super>Left",
+        "<Super>h"
+      ]
+    },
+    {
+      "action": "Focus(Right)",
+      "label": "Focus window right",
+      "group": "Navigation",
+      "accels": [
+        "<Super>Right",
+        "<Super>l"
+      ]
+    },
+    {
+      "action": "Focus(Up)",
+      "label": "Focus window up",
+      "group": "Navigation",
+      "accels": [
+        "<Super>Up",
+        "<Super>k"
+      ]
+    },
+    {
+      "action": "Focus(Down)",
+      "label": "Focus window down",
+      "group": "Navigation",
+      "accels": [
+        "<Super>Down",
+        "<Super>j"
+      ]
+    },
+    {
+      "action": "Focus(Out)",
+      "label": "Focus window out",
+      "group": "Navigation",
+      "accels": [
+        "<Super>u"
+      ]
+    },
+    {
+      "action": "Focus(In)",
+      "label": "Focus window in",
+      "group": "Navigation",
+      "accels": [
+        "<Super>i"
+      ]
+    },
+    {
+      "action": "Move(Left)",
+      "label": "Move window left",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Shift>Left",
+        "<Super><Shift>h"
+      ]
+    },
+    {
+      "action": "Move(Right)",
+      "label": "Move window right",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Shift>Right",
+        "<Super><Shift>l"
+      ]
+    },
+    {
+      "action": "Move(Up)",
+      "label": "Move window up",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Shift>Up",
+        "<Super><Shift>k"
+      ]
+    },
+    {
+      "action": "Move(Down)",
+      "label": "Move window down",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Shift>Down",
+        "<Super><Shift>j"
+      ]
+    },
+    {
+      "action": "Workspace(1)",
+      "label": "Switch to workspace 1",
+      "group": "Navigation",
+      "accels": [
+        "<Super>1"
+      ]
+    },
+    {
+      "action": "Workspace(2)",
+      "label": "Switch to workspace 2",
+      "group": "Navigation",
+      "accels": [
+        "<Super>2"
+      ]
+    },
+    {
+      "action": "Workspace(3)",
+      "label": "Switch to workspace 3",
+      "group": "Navigation",
+      "accels": [
+        "<Super>3"
+      ]
+    },
+    {
+      "action": "Workspace(4)",
+      "label": "Switch to workspace 4",
+      "group": "Navigation",
+      "accels": [
+        "<Super>4"
+      ]
+    },
+    {
+      "action": "Workspace(5)",
+      "label": "Switch to workspace 5",
+      "group": "Navigation",
+      "accels": [
+        "<Super>5"
+      ]
+    },
+    {
+      "action": "Workspace(6)",
+      "label": "Switch to workspace 6",
+      "group": "Navigation",
+      "accels": [
+        "<Super>6"
+      ]
+    },
+    {
+      "action": "Workspace(7)",
+      "label": "Switch to workspace 7",
+      "group": "Navigation",
+      "accels": [
+        "<Super>7"
+      ]
+    },
+    {
+      "action": "Workspace(8)",
+      "label": "Switch to workspace 8",
+      "group": "Navigation",
+      "accels": [
+        "<Super>8"
+      ]
+    },
+    {
+      "action": "Workspace(9)",
+      "label": "Switch to workspace 9",
+      "group": "Navigation",
+      "accels": [
+        "<Super>9"
+      ]
+    },
+    {
+      "action": "LastWorkspace",
+      "label": "Focus last workspace",
+      "group": "Navigation",
+      "accels": [
+        "<Super>0"
+      ]
+    },
+    {
+      "action": "MoveToWorkspace(1)",
+      "label": "Move window to workspace 1",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Shift>1"
+      ]
+    },
+    {
+      "action": "MoveToWorkspace(2)",
+      "label": "Move window to workspace 2",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Shift>2"
+      ]
+    },
+    {
+      "action": "MoveToWorkspace(3)",
+      "label": "Move window to workspace 3",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Shift>3"
+      ]
+    },
+    {
+      "action": "MoveToWorkspace(4)",
+      "label": "Move window to workspace 4",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Shift>4"
+      ]
+    },
+    {
+      "action": "MoveToWorkspace(5)",
+      "label": "Move window to workspace 5",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Shift>5"
+      ]
+    },
+    {
+      "action": "MoveToWorkspace(6)",
+      "label": "Move window to workspace 6",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Shift>6"
+      ]
+    },
+    {
+      "action": "MoveToWorkspace(7)",
+      "label": "Move window to workspace 7",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Shift>7"
+      ]
+    },
+    {
+      "action": "MoveToWorkspace(8)",
+      "label": "Move window to workspace 8",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Shift>8"
+      ]
+    },
+    {
+      "action": "MoveToWorkspace(9)",
+      "label": "Move window to workspace 9",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Shift>9"
+      ]
+    },
+    {
+      "action": "MoveToLastWorkspace",
+      "label": "Move window to last workspace",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Shift>0"
+      ]
+    },
+    {
+      "action": "PreviousWorkspace",
+      "label": "Focus previous workspace",
+      "group": "Navigation",
+      "accels": [
+        "<Super><Control>Left",
+        "<Super><Control>Up",
+        "<Super><Control>h",
+        "<Super><Control>k"
+      ]
+    },
+    {
+      "action": "NextWorkspace",
+      "label": "Focus next workspace",
+      "group": "Navigation",
+      "accels": [
+        "<Super><Control>Down",
+        "<Super><Control>Right",
+        "<Super><Control>j",
+        "<Super><Control>l"
+      ]
+    },
+    {
+      "action": "MoveToPreviousWorkspace",
+      "label": "Move window to prev workspace",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Control><Shift>Left",
+        "<Super><Control><Shift>Up",
+        "<Super><Control><Shift>h",
+        "<Super><Control><Shift>k"
+      ]
+    },
+    {
+      "action": "MoveToNextWorkspace",
+      "label": "Move window to next workspace",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Control><Shift>Down",
+        "<Super><Control><Shift>Right",
+        "<Super><Control><Shift>j",
+        "<Super><Control><Shift>l"
+      ]
+    },
+    {
+      "action": "SwitchOutput(Left)",
+      "label": "Switch to output left",
+      "group": "Navigation",
+      "accels": [
+        "<Super><Alt>Left",
+        "<Super><Alt>h"
+      ]
+    },
+    {
+      "action": "SwitchOutput(Down)",
+      "label": "Switch to output down",
+      "group": "Navigation",
+      "accels": [
+        "<Super><Alt>Down",
+        "<Super><Alt>j"
+      ]
+    },
+    {
+      "action": "SwitchOutput(Up)",
+      "label": "Switch to output up",
+      "group": "Navigation",
+      "accels": [
+        "<Super><Alt>Up",
+        "<Super><Alt>k"
+      ]
+    },
+    {
+      "action": "SwitchOutput(Right)",
+      "label": "Switch to output right",
+      "group": "Navigation",
+      "accels": [
+        "<Super><Alt>Right",
+        "<Super><Alt>l"
+      ]
+    },
+    {
+      "action": "MoveToOutput(Left)",
+      "label": "Move window one monitor left",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Alt><Shift>Left",
+        "<Super><Alt><Shift>h"
+      ]
+    },
+    {
+      "action": "MoveToOutput(Down)",
+      "label": "Move window one monitor down",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Alt><Shift>Down",
+        "<Super><Alt><Shift>j"
+      ]
+    },
+    {
+      "action": "MoveToOutput(Up)",
+      "label": "Move window one monitor up",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Alt><Shift>Up",
+        "<Super><Alt><Shift>k"
+      ]
+    },
+    {
+      "action": "MoveToOutput(Right)",
+      "label": "Move window one monitor right",
+      "group": "Move windows",
+      "accels": [
+        "<Super><Alt><Shift>Right",
+        "<Super><Alt><Shift>l"
+      ]
+    },
+    {
+      "action": "ToggleOrientation",
+      "label": "Toggle orientation",
+      "group": "Window tiling",
+      "accels": [
+        "<Super>o"
+      ]
+    },
+    {
+      "action": "ToggleStacking",
+      "label": "Toggle window stacking",
+      "group": "Window tiling",
+      "accels": [
+        "<Super>s"
+      ]
+    },
+    {
+      "action": "ToggleTiling",
+      "label": "Toggle window tiling",
+      "group": "Window tiling",
+      "accels": [
+        "<Super>y"
+      ]
+    },
+    {
+      "action": "ToggleWindowFloating",
+      "label": "Toggle window floating",
+      "group": "Window tiling",
+      "accels": [
+        "<Super>g"
+      ]
+    },
+    {
+      "action": "SwapWindow",
+      "label": "Swap window",
+      "group": "Window tiling",
+      "accels": [
+        "<Super>x"
+      ]
+    },
+    {
+      "action": "Maximize",
+      "label": "Maximize window",
+      "group": "Manage windows",
+      "accels": [
+        "<Super>m"
+      ]
+    },
+    {
+      "action": "Fullscreen",
+      "label": "Fullscreen window",
+      "group": "Manage windows",
+      "accels": [
+        "<Super>F11"
+      ]
+    },
+    {
+      "action": "Resizing(Outwards)",
+      "label": "Resize window outwards",
+      "group": "Manage windows",
+      "accels": [
+        "<Super>r"
+      ]
+    },
+    {
+      "action": "Resizing(Inwards)",
+      "label": "Resize window inwards",
+      "group": "Manage windows",
+      "accels": [
+        "<Super><Shift>r"
+      ]
+    },
+    {
+      "action": "System(ScreenReader)",
+      "label": "Screen reader",
+      "group": "Accessibility",
+      "accels": [
+        "<Super><Alt>s"
+      ]
+    },
+    {
+      "action": "ZoomIn",
+      "label": "Zoom In",
+      "group": "Accessibility",
+      "accels": [
+        "<Super>equal",
+        "<Super>period"
+      ]
+    },
+    {
+      "action": "ZoomOut",
+      "label": "Zoom Out",
+      "group": "Accessibility",
+      "accels": [
+        "<Super>minus",
+        "<Super>comma"
+      ]
+    },
+    {
+      "action": "System(WebBrowser)",
+      "label": "Open a web browser",
+      "group": "System",
+      "accels": [
+        "<Super>b"
+      ]
+    },
+    {
+      "action": "System(HomeFolder)",
+      "label": "Open home folder",
+      "group": "System",
+      "accels": [
+        "<Super>f"
+      ]
+    },
+    {
+      "action": "System(InputSourceSwitch)",
+      "label": "Switch keyboard language input source",
+      "group": "System",
+      "accels": [
+        "<Super>space"
+      ]
+    },
+    {
+      "action": "System(Terminal)",
+      "label": "Open a terminal",
+      "group": "System",
+      "accels": [
+        "<Super>t"
+      ]
+    },
+    {
+      "action": "System(AppLibrary)",
+      "label": "Open the app library",
+      "group": "System",
+      "accels": [
+        "<Super>a"
+      ]
+    },
+    {
+      "action": "System(WorkspaceOverview)",
+      "label": "Open the workspace overview",
+      "group": "System",
+      "accels": [
+        "<Super>w",
+        "XF86LaunchA"
+      ]
+    },
+    {
+      "action": "System(Launcher)",
+      "label": "Open the Launcher",
+      "group": "System",
+      "accels": [
+        "<Super>slash",
+        "Super_L"
+      ]
+    },
+    {
+      "action": "System(WindowSwitcher)",
+      "label": "Switch between open windows",
+      "group": "System",
+      "accels": [
+        "<Alt>Tab",
+        "<Super>Tab"
+      ]
+    },
+    {
+      "action": "System(WindowSwitcherPrevious)",
+      "label": "Switch between open windows reversed",
+      "group": "System",
+      "accels": [
+        "<Alt><Shift>Tab",
+        "<Super><Shift>Tab"
+      ]
+    },
+    {
+      "action": "System(Screenshot)",
+      "label": "Take a screenshot",
+      "group": "System",
+      "accels": [
+        "Print"
+      ]
+    },
+    {
+      "action": "System(VolumeRaise)",
+      "label": "Increase audio output volume",
+      "group": "System",
+      "accels": [
+        "XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "System(VolumeLower)",
+      "label": "Decrease audio output volume",
+      "group": "System",
+      "accels": [
+        "XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "System(Mute)",
+      "label": "Mute audio output",
+      "group": "System",
+      "accels": [
+        "XF86AudioMute"
+      ]
+    },
+    {
+      "action": "System(MuteMic)",
+      "label": "Mutes microphone input",
+      "group": "System",
+      "accels": [
+        "XF86AudioMicMute"
+      ]
+    },
+    {
+      "action": "System(BrightnessUp)",
+      "label": "Increase display brightness",
+      "group": "System",
+      "accels": [
+        "XF86MonBrightnessUp"
+      ]
+    },
+    {
+      "action": "System(BrightnessDown)",
+      "label": "Decrease display brightness",
+      "group": "System",
+      "accels": [
+        "XF86MonBrightnessDown"
+      ]
+    },
+    {
+      "action": "System(PlayPause)",
+      "label": "Play/pause",
+      "group": "System",
+      "accels": [
+        "XF86AudioPlay"
+      ]
+    },
+    {
+      "action": "System(PlayPrev)",
+      "label": "Previous track",
+      "group": "System",
+      "accels": [
+        "XF86AudioPrev"
+      ]
+    },
+    {
+      "action": "System(PlayNext)",
+      "label": "Next track",
+      "group": "System",
+      "accels": [
+        "XF86AudioNext"
+      ]
+    },
+    {
+      "action": "System(PowerOff)",
+      "label": "Power off",
+      "group": "Other",
+      "accels": [
+        "XF86PowerOff"
+      ]
+    },
+    {
+      "action": "System(TouchpadToggle)",
+      "label": "Toggle touchpad",
+      "group": "System",
+      "accels": [
+        "XF86TouchpadToggle",
+        "<Super><Control>XF86TouchpadToggle"
+      ]
+    }
+  ]
+}

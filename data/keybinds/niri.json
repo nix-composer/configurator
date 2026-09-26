@@ -1,0 +1,732 @@
+{
+  "$comment": "niri's default keybinds from resources/default-config.kdl of nixpkgs nixos-26.05 `niri` (bazsf2g3j9imcrqrw18p3zn9911s7lfm-source), the config niri writes to ~/.config/niri/config.kdl when none exists. Mod is Super (on a TTY; Alt when nested). The action is the bind's KDL action node; bind properties (repeat=false, allow-when-locked=true, hotkey-overlay-title=...) are not part of it. Wheel and touchpad binds left out (scripts/keybinds/extract-compositors.py).",
+  "binds": [
+    {
+      "action": "show-hotkey-overlay",
+      "label": "Show the important hotkeys",
+      "group": "System",
+      "accels": [
+        "<Super><Shift>slash"
+      ]
+    },
+    {
+      "action": "spawn \"alacritty\"",
+      "label": "Open a terminal (alacritty)",
+      "group": "Apps",
+      "accels": [
+        "<Super>t"
+      ]
+    },
+    {
+      "action": "spawn \"fuzzel\"",
+      "label": "Open the app launcher (fuzzel)",
+      "group": "Apps",
+      "accels": [
+        "<Super>d"
+      ]
+    },
+    {
+      "action": "spawn \"swaylock\"",
+      "label": "Lock the screen (swaylock)",
+      "group": "System",
+      "accels": [
+        "<Super><Alt>l"
+      ]
+    },
+    {
+      "action": "spawn-sh \"pkill orca || exec orca\"",
+      "label": "Toggle the Orca screen reader",
+      "group": "System",
+      "accels": [
+        "<Super><Alt>s"
+      ]
+    },
+    {
+      "action": "spawn-sh \"wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0\"",
+      "label": "Volume up",
+      "group": "Media",
+      "accels": [
+        "XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "spawn-sh \"wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-\"",
+      "label": "Volume down",
+      "group": "Media",
+      "accels": [
+        "XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "spawn-sh \"wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle\"",
+      "label": "Mute audio",
+      "group": "Media",
+      "accels": [
+        "XF86AudioMute"
+      ]
+    },
+    {
+      "action": "spawn-sh \"wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle\"",
+      "label": "Mute the microphone",
+      "group": "Media",
+      "accels": [
+        "XF86AudioMicMute"
+      ]
+    },
+    {
+      "action": "spawn-sh \"playerctl play-pause\"",
+      "label": "Play or pause",
+      "group": "Media",
+      "accels": [
+        "XF86AudioPlay"
+      ]
+    },
+    {
+      "action": "spawn-sh \"playerctl stop\"",
+      "label": "Stop playback",
+      "group": "Media",
+      "accels": [
+        "XF86AudioStop"
+      ]
+    },
+    {
+      "action": "spawn-sh \"playerctl previous\"",
+      "label": "Previous track",
+      "group": "Media",
+      "accels": [
+        "XF86AudioPrev"
+      ]
+    },
+    {
+      "action": "spawn-sh \"playerctl next\"",
+      "label": "Next track",
+      "group": "Media",
+      "accels": [
+        "XF86AudioNext"
+      ]
+    },
+    {
+      "action": "spawn \"brightnessctl\" \"--class=backlight\" \"set\" \"+10%\"",
+      "label": "Brightness up",
+      "group": "Media",
+      "accels": [
+        "XF86MonBrightnessUp"
+      ]
+    },
+    {
+      "action": "spawn \"brightnessctl\" \"--class=backlight\" \"set\" \"10%-\"",
+      "label": "Brightness down",
+      "group": "Media",
+      "accels": [
+        "XF86MonBrightnessDown"
+      ]
+    },
+    {
+      "action": "toggle-overview",
+      "label": "Toggle the overview",
+      "group": "System",
+      "accels": [
+        "<Super>o"
+      ]
+    },
+    {
+      "action": "close-window",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Super>q"
+      ]
+    },
+    {
+      "action": "focus-column-left",
+      "label": "Focus the column to the left",
+      "group": "Focus",
+      "accels": [
+        "<Super>Left",
+        "<Super>h"
+      ]
+    },
+    {
+      "action": "focus-window-down",
+      "label": "Focus the window below",
+      "group": "Focus",
+      "accels": [
+        "<Super>Down",
+        "<Super>j"
+      ]
+    },
+    {
+      "action": "focus-window-up",
+      "label": "Focus the window above",
+      "group": "Focus",
+      "accels": [
+        "<Super>Up",
+        "<Super>k"
+      ]
+    },
+    {
+      "action": "focus-column-right",
+      "label": "Focus the column to the right",
+      "group": "Focus",
+      "accels": [
+        "<Super>Right",
+        "<Super>l"
+      ]
+    },
+    {
+      "action": "move-column-left",
+      "label": "Move the column left",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>Left",
+        "<Super><Control>h"
+      ]
+    },
+    {
+      "action": "move-window-down",
+      "label": "Move the window down",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>Down",
+        "<Super><Control>j"
+      ]
+    },
+    {
+      "action": "move-window-up",
+      "label": "Move the window up",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>Up",
+        "<Super><Control>k"
+      ]
+    },
+    {
+      "action": "move-column-right",
+      "label": "Move the column right",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>Right",
+        "<Super><Control>l"
+      ]
+    },
+    {
+      "action": "focus-column-first",
+      "label": "Focus the first column",
+      "group": "Focus",
+      "accels": [
+        "<Super>Home"
+      ]
+    },
+    {
+      "action": "focus-column-last",
+      "label": "Focus the last column",
+      "group": "Focus",
+      "accels": [
+        "<Super>End"
+      ]
+    },
+    {
+      "action": "move-column-to-first",
+      "label": "Move the column to the start",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>Home"
+      ]
+    },
+    {
+      "action": "move-column-to-last",
+      "label": "Move the column to the end",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>End"
+      ]
+    },
+    {
+      "action": "focus-monitor-left",
+      "label": "Focus the monitor left",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Shift>Left",
+        "<Super><Shift>h"
+      ]
+    },
+    {
+      "action": "focus-monitor-down",
+      "label": "Focus the monitor down",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Shift>Down",
+        "<Super><Shift>j"
+      ]
+    },
+    {
+      "action": "focus-monitor-up",
+      "label": "Focus the monitor up",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Shift>Up",
+        "<Super><Shift>k"
+      ]
+    },
+    {
+      "action": "focus-monitor-right",
+      "label": "Focus the monitor right",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Shift>Right",
+        "<Super><Shift>l"
+      ]
+    },
+    {
+      "action": "move-column-to-monitor-left",
+      "label": "Move the column to the monitor left",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Control><Shift>Left",
+        "<Super><Control><Shift>h"
+      ]
+    },
+    {
+      "action": "move-column-to-monitor-down",
+      "label": "Move the column to the monitor down",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Control><Shift>Down",
+        "<Super><Control><Shift>j"
+      ]
+    },
+    {
+      "action": "move-column-to-monitor-up",
+      "label": "Move the column to the monitor up",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Control><Shift>Up",
+        "<Super><Control><Shift>k"
+      ]
+    },
+    {
+      "action": "move-column-to-monitor-right",
+      "label": "Move the column to the monitor right",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Control><Shift>Right",
+        "<Super><Control><Shift>l"
+      ]
+    },
+    {
+      "action": "focus-workspace-down",
+      "label": "Focus the workspace below",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>Page_Down",
+        "<Super>u"
+      ]
+    },
+    {
+      "action": "focus-workspace-up",
+      "label": "Focus the workspace above",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>Page_Up",
+        "<Super>i"
+      ]
+    },
+    {
+      "action": "move-column-to-workspace-down",
+      "label": "Move the column to the workspace below",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>Page_Down",
+        "<Super><Control>u"
+      ]
+    },
+    {
+      "action": "move-column-to-workspace-up",
+      "label": "Move the column to the workspace above",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>Page_Up",
+        "<Super><Control>i"
+      ]
+    },
+    {
+      "action": "move-workspace-down",
+      "label": "Move the workspace down",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>Page_Down",
+        "<Super><Shift>u"
+      ]
+    },
+    {
+      "action": "move-workspace-up",
+      "label": "Move the workspace up",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>Page_Up",
+        "<Super><Shift>i"
+      ]
+    },
+    {
+      "action": "focus-workspace 1",
+      "label": "Switch to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>1"
+      ]
+    },
+    {
+      "action": "focus-workspace 2",
+      "label": "Switch to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>2"
+      ]
+    },
+    {
+      "action": "focus-workspace 3",
+      "label": "Switch to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>3"
+      ]
+    },
+    {
+      "action": "focus-workspace 4",
+      "label": "Switch to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>4"
+      ]
+    },
+    {
+      "action": "focus-workspace 5",
+      "label": "Switch to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>5"
+      ]
+    },
+    {
+      "action": "focus-workspace 6",
+      "label": "Switch to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>6"
+      ]
+    },
+    {
+      "action": "focus-workspace 7",
+      "label": "Switch to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>7"
+      ]
+    },
+    {
+      "action": "focus-workspace 8",
+      "label": "Switch to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>8"
+      ]
+    },
+    {
+      "action": "focus-workspace 9",
+      "label": "Switch to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>9"
+      ]
+    },
+    {
+      "action": "move-column-to-workspace 1",
+      "label": "Move the column to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>1"
+      ]
+    },
+    {
+      "action": "move-column-to-workspace 2",
+      "label": "Move the column to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>2"
+      ]
+    },
+    {
+      "action": "move-column-to-workspace 3",
+      "label": "Move the column to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>3"
+      ]
+    },
+    {
+      "action": "move-column-to-workspace 4",
+      "label": "Move the column to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>4"
+      ]
+    },
+    {
+      "action": "move-column-to-workspace 5",
+      "label": "Move the column to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>5"
+      ]
+    },
+    {
+      "action": "move-column-to-workspace 6",
+      "label": "Move the column to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>6"
+      ]
+    },
+    {
+      "action": "move-column-to-workspace 7",
+      "label": "Move the column to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>7"
+      ]
+    },
+    {
+      "action": "move-column-to-workspace 8",
+      "label": "Move the column to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>8"
+      ]
+    },
+    {
+      "action": "move-column-to-workspace 9",
+      "label": "Move the column to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>9"
+      ]
+    },
+    {
+      "action": "consume-or-expel-window-left",
+      "label": "Move the window into or out of the column to the left",
+      "group": "Layout",
+      "accels": [
+        "<Super>bracketleft"
+      ]
+    },
+    {
+      "action": "consume-or-expel-window-right",
+      "label": "Move the window into or out of the column to the right",
+      "group": "Layout",
+      "accels": [
+        "<Super>bracketright"
+      ]
+    },
+    {
+      "action": "consume-window-into-column",
+      "label": "Pull the next window into the column",
+      "group": "Layout",
+      "accels": [
+        "<Super>comma"
+      ]
+    },
+    {
+      "action": "expel-window-from-column",
+      "label": "Push the bottom window out of the column",
+      "group": "Layout",
+      "accels": [
+        "<Super>period"
+      ]
+    },
+    {
+      "action": "switch-preset-column-width",
+      "label": "Cycle column width presets",
+      "group": "Layout",
+      "accels": [
+        "<Super>r"
+      ]
+    },
+    {
+      "action": "switch-preset-column-width-back",
+      "label": "Cycle column width presets backwards",
+      "group": "Layout",
+      "accels": [
+        "<Super><Shift>r"
+      ]
+    },
+    {
+      "action": "switch-preset-window-height",
+      "label": "Cycle window height presets",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control><Shift>r"
+      ]
+    },
+    {
+      "action": "reset-window-height",
+      "label": "Reset the window height",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>r"
+      ]
+    },
+    {
+      "action": "maximize-column",
+      "label": "Maximize the column",
+      "group": "Layout",
+      "accels": [
+        "<Super>f"
+      ]
+    },
+    {
+      "action": "fullscreen-window",
+      "label": "Toggle fullscreen",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>f"
+      ]
+    },
+    {
+      "action": "maximize-window-to-edges",
+      "label": "Maximize the window to the screen edges",
+      "group": "Windows",
+      "accels": [
+        "<Super>m"
+      ]
+    },
+    {
+      "action": "expand-column-to-available-width",
+      "label": "Expand the column to the free width",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "center-column",
+      "label": "Center the column",
+      "group": "Layout",
+      "accels": [
+        "<Super>c"
+      ]
+    },
+    {
+      "action": "center-visible-columns",
+      "label": "Center the visible columns",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "set-column-width \"-10%\"",
+      "label": "Make the column narrower",
+      "group": "Layout",
+      "accels": [
+        "<Super>minus"
+      ]
+    },
+    {
+      "action": "set-column-width \"+10%\"",
+      "label": "Make the column wider",
+      "group": "Layout",
+      "accels": [
+        "<Super>equal"
+      ]
+    },
+    {
+      "action": "set-window-height \"-10%\"",
+      "label": "Make the window shorter",
+      "group": "Layout",
+      "accels": [
+        "<Super><Shift>minus"
+      ]
+    },
+    {
+      "action": "set-window-height \"+10%\"",
+      "label": "Make the window taller",
+      "group": "Layout",
+      "accels": [
+        "<Super><Shift>equal"
+      ]
+    },
+    {
+      "action": "toggle-window-floating",
+      "label": "Toggle floating",
+      "group": "Windows",
+      "accels": [
+        "<Super>v"
+      ]
+    },
+    {
+      "action": "switch-focus-between-floating-and-tiling",
+      "label": "Switch focus between floating and tiling",
+      "group": "Focus",
+      "accels": [
+        "<Super><Shift>v"
+      ]
+    },
+    {
+      "action": "toggle-column-tabbed-display",
+      "label": "Toggle tabbed column",
+      "group": "Layout",
+      "accels": [
+        "<Super>w"
+      ]
+    },
+    {
+      "action": "screenshot",
+      "label": "Take a screenshot (pick an area)",
+      "group": "Screenshots",
+      "accels": [
+        "Print"
+      ]
+    },
+    {
+      "action": "screenshot-screen",
+      "label": "Take a screenshot of the screen",
+      "group": "Screenshots",
+      "accels": [
+        "<Control>Print"
+      ]
+    },
+    {
+      "action": "screenshot-window",
+      "label": "Take a screenshot of the window",
+      "group": "Screenshots",
+      "accels": [
+        "<Alt>Print"
+      ]
+    },
+    {
+      "action": "toggle-keyboard-shortcuts-inhibit",
+      "label": "Let the app take all shortcuts (toggle)",
+      "group": "System",
+      "accels": [
+        "<Super>Escape"
+      ]
+    },
+    {
+      "action": "quit",
+      "label": "Exit niri (asks first)",
+      "group": "Session",
+      "accels": [
+        "<Super><Shift>e",
+        "<Control><Alt>Delete"
+      ]
+    },
+    {
+      "action": "power-off-monitors",
+      "label": "Turn the monitors off",
+      "group": "System",
+      "accels": [
+        "<Super><Shift>p"
+      ]
+    }
+  ]
+}

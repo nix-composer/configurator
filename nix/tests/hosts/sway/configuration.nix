@@ -32,9 +32,11 @@
   # Keybinds, on top of the desktop's defaults.
   environment.etc."sway/config.d/50-configurator-keybinds.conf".text = lib.concatLines [
     "bindsym Mod4+p exec swaymsg exit"
+    "unbindsym Mod4+Return"
     ("bindsym Mod4+Return exec " + lib.getExe pkgs.foot)
     ("bindsym Mod4+Shift+g exec " + (lib.getExe pkgs.chromium + " --app=https://github.com"))
     "unbindsym Mod4+Shift+q"
+    "bindsym Mod4+Shift+x kill"
   ];
 
   # Boot and security.

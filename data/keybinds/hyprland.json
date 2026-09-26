@@ -1,0 +1,350 @@
+{
+  "$comment": "Hyprland's default keybinds from share/hypr/hyprland.lua of nixpkgs nixos-26.05 `hyprland` (13hnfn0v051rvi2j88gas9b0biq38zm9-hyprland-0.55.4), the example Lua config Hyprland also writes to ~/.config/hypr/hyprland.lua when no config exists. The action is the hl.bind dispatcher as a Lua expression, variables resolved; the XF86 binds pass { locked = true } (volume and brightness also repeating = true). Mouse and scroll binds left out (scripts/keybinds/extract-compositors.py).",
+  "binds": [
+    {
+      "action": "hl.dsp.exec_cmd(\"kitty\")",
+      "label": "Open a terminal (kitty)",
+      "group": "Apps",
+      "accels": [
+        "<Super>q"
+      ]
+    },
+    {
+      "action": "hl.dsp.window.close()",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Super>c"
+      ]
+    },
+    {
+      "action": "hl.dsp.exec_cmd(\"command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'\")",
+      "label": "Exit Hyprland",
+      "group": "Session",
+      "accels": [
+        "<Super>m"
+      ]
+    },
+    {
+      "action": "hl.dsp.exec_cmd(\"dolphin\")",
+      "label": "Open the file manager (dolphin)",
+      "group": "Apps",
+      "accels": [
+        "<Super>e"
+      ]
+    },
+    {
+      "action": "hl.dsp.window.float({ action = \"toggle\" })",
+      "label": "Toggle floating",
+      "group": "Windows",
+      "accels": [
+        "<Super>v"
+      ]
+    },
+    {
+      "action": "hl.dsp.exec_cmd(\"hyprlauncher\")",
+      "label": "Open the app launcher (hyprlauncher)",
+      "group": "Apps",
+      "accels": [
+        "<Super>r"
+      ]
+    },
+    {
+      "action": "hl.dsp.window.pseudo()",
+      "label": "Toggle pseudotiling",
+      "group": "Layout",
+      "accels": [
+        "<Super>p"
+      ]
+    },
+    {
+      "action": "hl.dsp.layout(\"togglesplit\")",
+      "label": "Toggle the split direction (dwindle)",
+      "group": "Layout",
+      "accels": [
+        "<Super>j"
+      ]
+    },
+    {
+      "action": "hl.dsp.focus({ direction = \"left\" })",
+      "label": "Focus left",
+      "group": "Focus",
+      "accels": [
+        "<Super>Left"
+      ]
+    },
+    {
+      "action": "hl.dsp.focus({ direction = \"right\" })",
+      "label": "Focus right",
+      "group": "Focus",
+      "accels": [
+        "<Super>Right"
+      ]
+    },
+    {
+      "action": "hl.dsp.focus({ direction = \"up\" })",
+      "label": "Focus up",
+      "group": "Focus",
+      "accels": [
+        "<Super>Up"
+      ]
+    },
+    {
+      "action": "hl.dsp.focus({ direction = \"down\" })",
+      "label": "Focus down",
+      "group": "Focus",
+      "accels": [
+        "<Super>Down"
+      ]
+    },
+    {
+      "action": "hl.dsp.focus({ workspace = 1 })",
+      "label": "Switch to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>1"
+      ]
+    },
+    {
+      "action": "hl.dsp.window.move({ workspace = 1 })",
+      "label": "Move window to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>1"
+      ]
+    },
+    {
+      "action": "hl.dsp.focus({ workspace = 2 })",
+      "label": "Switch to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>2"
+      ]
+    },
+    {
+      "action": "hl.dsp.window.move({ workspace = 2 })",
+      "label": "Move window to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>2"
+      ]
+    },
+    {
+      "action": "hl.dsp.focus({ workspace = 3 })",
+      "label": "Switch to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>3"
+      ]
+    },
+    {
+      "action": "hl.dsp.window.move({ workspace = 3 })",
+      "label": "Move window to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>3"
+      ]
+    },
+    {
+      "action": "hl.dsp.focus({ workspace = 4 })",
+      "label": "Switch to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>4"
+      ]
+    },
+    {
+      "action": "hl.dsp.window.move({ workspace = 4 })",
+      "label": "Move window to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>4"
+      ]
+    },
+    {
+      "action": "hl.dsp.focus({ workspace = 5 })",
+      "label": "Switch to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>5"
+      ]
+    },
+    {
+      "action": "hl.dsp.window.move({ workspace = 5 })",
+      "label": "Move window to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>5"
+      ]
+    },
+    {
+      "action": "hl.dsp.focus({ workspace = 6 })",
+      "label": "Switch to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>6"
+      ]
+    },
+    {
+      "action": "hl.dsp.window.move({ workspace = 6 })",
+      "label": "Move window to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>6"
+      ]
+    },
+    {
+      "action": "hl.dsp.focus({ workspace = 7 })",
+      "label": "Switch to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>7"
+      ]
+    },
+    {
+      "action": "hl.dsp.window.move({ workspace = 7 })",
+      "label": "Move window to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>7"
+      ]
+    },
+    {
+      "action": "hl.dsp.focus({ workspace = 8 })",
+      "label": "Switch to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>8"
+      ]
+    },
+    {
+      "action": "hl.dsp.window.move({ workspace = 8 })",
+      "label": "Move window to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>8"
+      ]
+    },
+    {
+      "action": "hl.dsp.focus({ workspace = 9 })",
+      "label": "Switch to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>9"
+      ]
+    },
+    {
+      "action": "hl.dsp.window.move({ workspace = 9 })",
+      "label": "Move window to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>9"
+      ]
+    },
+    {
+      "action": "hl.dsp.focus({ workspace = 10 })",
+      "label": "Switch to workspace 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>0"
+      ]
+    },
+    {
+      "action": "hl.dsp.window.move({ workspace = 10 })",
+      "label": "Move window to workspace 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>0"
+      ]
+    },
+    {
+      "action": "hl.dsp.workspace.toggle_special(\"magic\")",
+      "label": "Show the scratchpad (special workspace)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>s"
+      ]
+    },
+    {
+      "action": "hl.dsp.window.move({ workspace = \"special:magic\" })",
+      "label": "Move window to the scratchpad",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>s"
+      ]
+    },
+    {
+      "action": "hl.dsp.exec_cmd(\"wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+\")",
+      "label": "Volume up",
+      "group": "Media",
+      "accels": [
+        "XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "hl.dsp.exec_cmd(\"wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-\")",
+      "label": "Volume down",
+      "group": "Media",
+      "accels": [
+        "XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "hl.dsp.exec_cmd(\"wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle\")",
+      "label": "Mute audio",
+      "group": "Media",
+      "accels": [
+        "XF86AudioMute"
+      ]
+    },
+    {
+      "action": "hl.dsp.exec_cmd(\"wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle\")",
+      "label": "Mute the microphone",
+      "group": "Media",
+      "accels": [
+        "XF86AudioMicMute"
+      ]
+    },
+    {
+      "action": "hl.dsp.exec_cmd(\"brightnessctl -e4 -n2 set 5%+\")",
+      "label": "Brightness up",
+      "group": "Media",
+      "accels": [
+        "XF86MonBrightnessUp"
+      ]
+    },
+    {
+      "action": "hl.dsp.exec_cmd(\"brightnessctl -e4 -n2 set 5%-\")",
+      "label": "Brightness down",
+      "group": "Media",
+      "accels": [
+        "XF86MonBrightnessDown"
+      ]
+    },
+    {
+      "action": "hl.dsp.exec_cmd(\"playerctl next\")",
+      "label": "Next track",
+      "group": "Media",
+      "accels": [
+        "XF86AudioNext"
+      ]
+    },
+    {
+      "action": "hl.dsp.exec_cmd(\"playerctl play-pause\")",
+      "label": "Play or pause",
+      "group": "Media",
+      "accels": [
+        "XF86AudioPause",
+        "XF86AudioPlay"
+      ]
+    },
+    {
+      "action": "hl.dsp.exec_cmd(\"playerctl previous\")",
+      "label": "Previous track",
+      "group": "Media",
+      "accels": [
+        "XF86AudioPrev"
+      ]
+    }
+  ]
+}

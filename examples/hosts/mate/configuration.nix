@@ -26,13 +26,13 @@
   programs.dconf.profiles.user.databases = [
     {
       settings = {
-        "org/mate/marco/keybinding-commands" = {
-          command-1 = "firefox --private-window";
-          command-2 = lib.getExe pkgs.alacritty;
-        };
         "org/mate/marco/global-keybindings" = {
           run-command-1 = "<Control><Alt>b";
           run-command-2 = "<Mod4>Return";
+        };
+        "org/mate/marco/keybinding-commands" = {
+          command-1 = "firefox --private-window";
+          command-2 = lib.getExe pkgs.alacritty;
         };
       };
     }

@@ -7,6 +7,15 @@ use configurator_catalog::Desktop;
 use crate::nix::{Key, Nix};
 use crate::{Error, Generator, Section};
 
+/// The answers' binds, split for a dconf desktop: new commands, the
+/// desktop's own actions moved to new keys (action → accelerators), and
+/// every combo taken (with whether it's an unbind).
+struct Split<'a> {
+    commands: Vec<(Combo, &'a Keybind, Nix)>,
+    moved: std::collections::BTreeMap<&'a str, Vec<String>>,
+    taken: Vec<(&'a str, Combo, bool)>,
+}
+
 impl Generator<'_> {
     pub(crate) fn keybinds_section(&self) -> Result<Section, Error> {
         let mut section = Section::new("Keybinds, on top of the desktop's defaults.");
@@ -68,25 +77,115 @@ impl Generator<'_> {
         }
     }
 
-    /// Binds and commands, with unbinds rejected: the dconf desktops need
-    /// the default's schema key to remove it, which comes with the
-    /// keybind layer's defaults data.
-    fn binds_only(&self, desktop: &Desktop) -> Result<Vec<(Combo, &Keybind, Nix)>, Error> {
-        let mut binds = Vec::new();
-        for (combo, bind) in &self.answers.keybinds {
-            let command = self.command(bind)?.ok_or_else(|| {
-                Error::Unsupported(format!(
-                    "removing {}'s default binds ({combo})",
-                    desktop.name
-                ))
-            })?;
-            binds.push((
-                Combo::parse(combo).map_err(Error::Unsupported)?,
-                bind,
-                command,
-            ));
+    /// Splits the answers' binds; `super_name` spells Super in the
+    /// desktop's accelerators (`<Super>`, Marco's `<Mod4>`).
+    fn split(&self, desktop: &Desktop, super_name: &str) -> Result<Split<'_>, Error> {
+        let defaults = self.catalog.default_keybinds.get(&desktop.id);
+        let mut split = Split {
+            commands: Vec::new(),
+            moved: Default::default(),
+            taken: Vec::new(),
+        };
+        for (combo_text, bind) in &self.answers.keybinds {
+            let combo = Combo::parse(combo_text).map_err(Error::Unsupported)?;
+            match bind {
+                Keybind::Action(action) => {
+                    if !defaults.is_some_and(|d| d.iter().any(|b| b.action == *action)) {
+                        return Err(Error::Keybind(format!(
+                            "{combo_text}: {action:?} is not one of {}'s actions",
+                            desktop.name
+                        )));
+                    }
+                    split
+                        .moved
+                        .entry(action)
+                        .or_default()
+                        .push(gtk_accel(&combo, super_name));
+                    split.taken.push((combo_text, combo, false));
+                }
+                Keybind::Unbind => {
+                    if defaults.is_none() {
+                        return Err(Error::Unsupported(format!(
+                            "removing {}'s default binds ({combo_text})",
+                            desktop.name
+                        )));
+                    }
+                    split.taken.push((combo_text, combo, true));
+                }
+                _ => {
+                    let command = self.command(bind)?.expect("a command");
+                    split.taken.push((combo_text, combo.clone(), false));
+                    split.commands.push((combo, bind, command));
+                }
+            }
         }
-        Ok(binds)
+        Ok(split)
+    }
+
+    /// The desktop's default binds after the changes, as dconf settings:
+    /// a moved action's keys become exactly its new ones, and a combo
+    /// taken anywhere leaves the default that held it. `none` is what an
+    /// emptied single-accelerator key holds (Marco's `disabled`).
+    fn changed_defaults(
+        &self,
+        desktop: &Desktop,
+        split: &Split,
+        none: &str,
+    ) -> Result<std::collections::BTreeMap<String, Vec<(Key, Nix)>>, Error> {
+        let mut settings: std::collections::BTreeMap<String, Vec<(Key, Nix)>> = Default::default();
+        let Some(defaults) = self.catalog.default_keybinds.get(&desktop.id) else {
+            return Ok(settings);
+        };
+        let mut keys: Vec<Vec<String>> = defaults
+            .iter()
+            .map(|d| {
+                split
+                    .moved
+                    .get(d.action.as_str())
+                    .cloned()
+                    .unwrap_or_else(|| d.accels.clone())
+            })
+            .collect();
+        for (combo_text, combo, unbind) in &split.taken {
+            let mut held = false;
+            for (d, accels) in defaults.iter().zip(keys.iter_mut()) {
+                let own = split
+                    .moved
+                    .get(d.action.as_str())
+                    .is_some_and(|m| m.iter().any(|a| accel_matches(a, combo)));
+                // An unbind of a moved action's old keys is already done.
+                held |= d.accels.iter().any(|a| accel_matches(a, combo));
+                if own || !accels.iter().any(|a| accel_matches(a, combo)) {
+                    continue;
+                }
+                accels.retain(|a| !accel_matches(a, combo));
+            }
+            if *unbind && !held {
+                return Err(Error::Keybind(format!(
+                    "{combo_text} is not one of {}'s default binds",
+                    desktop.name
+                )));
+            }
+        }
+        for (default, accels) in defaults.iter().zip(keys) {
+            if accels == default.accels {
+                continue;
+            }
+            let Some((dir, key)) = default.dconf() else {
+                continue;
+            };
+            let value = match (default.kind.as_str(), accels.is_empty()) {
+                ("as", true) => Nix::raw("lib.gvariant.mkEmptyArray lib.gvariant.type.string"),
+                ("as", false) => Nix::List(accels.into_iter().map(Nix::str).collect()),
+                (_, true) => Nix::str(none),
+                (_, false) => Nix::str(&accels[0]),
+            };
+            settings
+                .entry(dir)
+                .or_default()
+                .push((Key(vec![key.to_owned()]), value));
+        }
+        Ok(settings)
     }
 
     /// A desktop module's own keybind option (Omarchy's `omarchy.keybinds`),
@@ -96,8 +195,21 @@ impl Generator<'_> {
             .desktop
             .and_then(|d| d.module.webapps.as_ref())
             .map(|w| &w.ids);
+        let defaults = self
+            .desktop
+            .and_then(|d| self.catalog.default_keybinds.get(&d.id));
         let mut binds = Vec::new();
         for (combo, bind) in &self.answers.keybinds {
+            // A default is keyed as the desktop writes it (Omarchy binds
+            // digits by keycode: `SUPER + code:10`), or unbinding misses it.
+            let parsed = Combo::parse(combo).map_err(Error::Unsupported)?;
+            let combo = defaults
+                .and_then(|d| {
+                    d.iter()
+                        .find(|b| b.accels.iter().any(|a| accel_matches(a, &parsed)))
+                })
+                .and_then(|b| quoted_combo(&b.action))
+                .unwrap_or(combo);
             let value = match bind {
                 Keybind::Launch(app) => Nix::attrs([("launch", Nix::str(app))]),
                 // Web apps the desktop ships by id; others by their command.
@@ -130,108 +242,23 @@ impl Generator<'_> {
         desktop: &Desktop,
         base: &str,
     ) -> Result<(), Error> {
-        let defaults = self.catalog.default_keybinds.get(&desktop.id);
-        // dconf path → its keys.
-        let mut settings: std::collections::BTreeMap<String, Vec<(Key, Nix)>> = Default::default();
+        let split = self.split(desktop, "<Super>")?;
+        let mut settings = self.changed_defaults(desktop, &split, "")?;
         let mut paths = Vec::new();
-        // Every combo the answers bind, with whether it's an unbind.
-        let mut taken = Vec::new();
-        // The desktop's own actions bound anew: action → its new accels.
-        let mut moved: std::collections::BTreeMap<&str, Vec<String>> = Default::default();
-        let mut i = 0;
-        for (combo_text, bind) in &self.answers.keybinds {
-            let combo = Combo::parse(combo_text).map_err(Error::Unsupported)?;
-            if let Keybind::Action(action) = bind {
-                if !defaults.is_some_and(|d| d.iter().any(|b| b.action == *action)) {
-                    return Err(Error::Keybind(format!(
-                        "{combo_text}: {action:?} is not one of {}'s actions",
-                        desktop.name
-                    )));
-                }
-                moved
-                    .entry(action)
-                    .or_default()
-                    .push(gtk_accel(&combo, "<Super>"));
-                taken.push((combo_text, combo, false));
-                continue;
-            }
-            let Some(command) = self.command(bind)? else {
-                if defaults.is_none() {
-                    return Err(Error::Unsupported(format!(
-                        "removing {}'s default binds ({combo_text})",
-                        desktop.name
-                    )));
-                }
-                taken.push((combo_text, combo, true));
-                continue;
-            };
+        for (i, (combo, bind, command)) in split.commands.into_iter().enumerate() {
             let path = format!("{base}/custom-keybindings/configurator{i}");
-            i += 1;
             paths.push(Nix::str(format!("/{path}/")));
             settings.entry(path).or_default().extend([
                 (Key::from("name"), Nix::str(Self::describe(bind))),
                 (Key::from("command"), command),
                 (Key::from("binding"), Nix::str(gtk_accel(&combo, "<Super>"))),
             ]);
-            taken.push((combo_text, combo, false));
         }
         if !paths.is_empty() {
             settings
                 .entry(base.to_owned())
                 .or_default()
                 .push((Key::from("custom-keybindings"), Nix::List(paths)));
-        }
-
-        if let Some(defaults) = defaults {
-            // Each default's keys after the changes: moved actions get
-            // exactly their new keys; a combo bound or unbound elsewhere
-            // leaves whichever other default held it.
-            let mut keys: Vec<Vec<String>> = defaults
-                .iter()
-                .map(|d| {
-                    moved
-                        .get(d.action.as_str())
-                        .cloned()
-                        .unwrap_or_else(|| d.accels.clone())
-                })
-                .collect();
-            for (combo_text, combo, unbind) in &taken {
-                let mut held = false;
-                for (d, accels) in defaults.iter().zip(keys.iter_mut()) {
-                    let own = moved
-                        .get(d.action.as_str())
-                        .is_some_and(|m| m.iter().any(|a| accel_matches(a, combo)));
-                    if own || !accels.iter().any(|a| accel_matches(a, combo)) {
-                        continue;
-                    }
-                    held = true;
-                    accels.retain(|a| !accel_matches(a, combo));
-                }
-                if *unbind && !held {
-                    return Err(Error::Keybind(format!(
-                        "{combo_text} is not one of {}'s default binds",
-                        desktop.name
-                    )));
-                }
-            }
-            for (default, accels) in defaults.iter().zip(keys) {
-                if accels == default.accels {
-                    continue;
-                }
-                let Some((schema, key)) = default.gsettings() else {
-                    continue;
-                };
-                let value = match (default.kind.as_str(), accels.is_empty()) {
-                    ("as", true) => Nix::raw("lib.gvariant.mkEmptyArray lib.gvariant.type.string"),
-                    ("as", false) => Nix::List(accels.into_iter().map(Nix::str).collect()),
-                    (_, true) => Nix::str(""),
-                    (_, false) => Nix::str(&accels[0]),
-                };
-                settings
-                    .entry(schema.replace('.', "/"))
-                    .or_default()
-                    .push((Key(vec![key.to_owned()]), value));
-            }
         }
         dconf(
             section,
@@ -246,64 +273,69 @@ impl Generator<'_> {
     /// Cinnamon: like GNOME, but listed by name and with `binding` an array.
     fn dconf_cinnamon(&self, section: &mut Section, desktop: &Desktop) -> Result<(), Error> {
         let base = "org/cinnamon/desktop/keybindings";
-        let mut settings = Vec::new();
+        let split = self.split(desktop, "<Super>")?;
+        let mut settings = self.changed_defaults(desktop, &split, "")?;
         let mut names = Vec::new();
-        for (i, (combo, bind, command)) in self.binds_only(desktop)?.into_iter().enumerate() {
+        for (i, (combo, bind, command)) in split.commands.into_iter().enumerate() {
             let name = format!("configurator{i}");
-            settings.push((
-                Nix::attr(&format!("{base}/custom-keybindings/{name}")),
-                Nix::attrs([
-                    ("name", Nix::str(Self::describe(bind))),
-                    ("command", command),
+            settings
+                .entry(format!("{base}/custom-keybindings/{name}"))
+                .or_default()
+                .extend([
+                    (Key::from("name"), Nix::str(Self::describe(bind))),
+                    (Key::from("command"), command),
                     (
-                        "binding",
+                        Key::from("binding"),
                         Nix::List(vec![Nix::str(gtk_accel(&combo, "<Super>"))]),
                     ),
-                ]),
-            ));
+                ]);
             names.push(Nix::str(name));
         }
-        settings.insert(
-            0,
-            (
-                Nix::attr(base),
-                Nix::attrs([("custom-list", Nix::List(names))]),
-            ),
+        if !names.is_empty() {
+            settings
+                .entry(base.to_owned())
+                .or_default()
+                .push((Key::from("custom-list"), Nix::List(names)));
+        }
+        dconf(
+            section,
+            settings
+                .into_iter()
+                .map(|(path, keys)| (Nix::attr(&path), Nix::Attrs(keys)))
+                .collect(),
         );
-        dconf(section, settings);
         Ok(())
     }
 
     /// MATE's window manager (Marco) runs `command-N` on `run-command-N`,
     /// N from 1 to 12.
     fn dconf_mate(&self, section: &mut Section, desktop: &Desktop) -> Result<(), Error> {
-        let binds = self.binds_only(desktop)?;
-        if binds.len() > 12 {
+        let split = self.split(desktop, "<Mod4>")?;
+        if split.commands.len() > 12 {
             return Err(Error::Unsupported(
                 "more than 12 custom binds on MATE".into(),
             ));
         }
-        let mut commands = Vec::new();
-        let mut keys = Vec::new();
-        for (i, (combo, _, command)) in binds.into_iter().enumerate() {
-            commands.push((Nix::attr(&format!("command-{}", i + 1)), command));
-            keys.push((
-                Nix::attr(&format!("run-command-{}", i + 1)),
-                Nix::str(gtk_accel(&combo, "<Mod4>")),
-            ));
+        let mut settings = self.changed_defaults(desktop, &split, "disabled")?;
+        for (i, (combo, _, command)) in split.commands.into_iter().enumerate() {
+            settings
+                .entry("org/mate/marco/keybinding-commands".into())
+                .or_default()
+                .push((Key::from(format!("command-{}", i + 1).as_str()), command));
+            settings
+                .entry("org/mate/marco/global-keybindings".into())
+                .or_default()
+                .push((
+                    Key::from(format!("run-command-{}", i + 1).as_str()),
+                    Nix::str(gtk_accel(&combo, "<Mod4>")),
+                ));
         }
         dconf(
             section,
-            vec![
-                (
-                    Nix::attr("org/mate/marco/keybinding-commands"),
-                    Nix::Attrs(commands),
-                ),
-                (
-                    Nix::attr("org/mate/marco/global-keybindings"),
-                    Nix::Attrs(keys),
-                ),
-            ],
+            settings
+                .into_iter()
+                .map(|(path, keys)| (Nix::attr(&path), Nix::Attrs(keys)))
+                .collect(),
         );
         Ok(())
     }
@@ -329,7 +361,12 @@ impl Generator<'_> {
                 })
                 .collect();
             keys.push(combo.keysym());
-            let keys = keys.join("+");
+            let mut keys = keys.join("+");
+            // Sway's media and brightness keys are `--locked` binds, and an
+            // unbind has to match a bind's flags.
+            if combo.key.starts_with("XF86") {
+                keys = format!("--locked {keys}");
+            }
             // A default on these keys goes first, so the new bind replaces it.
             let held = defaults.is_some_and(|d| {
                 d.iter()
@@ -384,23 +421,47 @@ impl Generator<'_> {
             ),
             Nix::str("binds {"),
         ];
-        for (combo, _, command) in self.binds_only(desktop)? {
-            let mut keys: Vec<&str> = combo
+        let split = self.split(desktop, "<Super>")?;
+        if let Some((combo_text, _, _)) = split.taken.iter().find(|(_, _, unbind)| *unbind) {
+            return Err(Error::Unsupported(format!(
+                "removing niri's default binds ({combo_text}): niri can't unbind"
+            )));
+        }
+        let niri_keys = |combo: &Combo| {
+            let mut keys: Vec<String> = combo
                 .modifiers
                 .iter()
-                .map(|m| match m {
-                    Modifier::Super => "Super",
-                    Modifier::Ctrl => "Ctrl",
-                    Modifier::Alt => "Alt",
-                    Modifier::Shift => "Shift",
+                .map(|m| {
+                    match m {
+                        // niri's defaults spell Super `Mod`, and a bind only
+                        // replaces one written the same way.
+                        Modifier::Super => "Mod",
+                        Modifier::Ctrl => "Ctrl",
+                        Modifier::Alt => "Alt",
+                        Modifier::Shift => "Shift",
+                    }
+                    .to_string()
                 })
                 .collect();
-            let key = combo.keysym();
-            keys.push(&key);
+            keys.push(combo.keysym());
+            keys.join("+")
+        };
+        // niri's own actions, as its config writes them (`focus-column-left`,
+        // `spawn "alacritty"`), on their new keys.
+        for (combo_text, bind) in &self.answers.keybinds {
+            if let Keybind::Action(action) = bind {
+                let combo = Combo::parse(combo_text).map_err(Error::Unsupported)?;
+                lines.push(Nix::str(format!(
+                    "    {} {{ {action}; }}",
+                    niri_keys(&combo)
+                )));
+            }
+        }
+        for (combo, _, command) in split.commands {
             // A KDL string: builtins.toJSON quotes and escapes it.
             lines.push(Nix::raw(format!(
                 "({} + builtins.toJSON ({}) + \"; }}\")",
-                crate::nix::string(&format!("    {} {{ spawn-sh ", keys.join("+"))),
+                crate::nix::string(&format!("    {} {{ spawn-sh ", niri_keys(&combo))),
                 command.render(2),
             )));
         }
@@ -416,6 +477,14 @@ impl Generator<'_> {
         );
         Ok(())
     }
+}
+
+/// The combo a desktop's own bind action names first: Omarchy's
+/// `o.bind("SUPER + code:10", …)`.
+fn quoted_combo(action: &str) -> Option<&str> {
+    let start = action.find("bind(\"")? + "bind(\"".len();
+    let len = action[start..].find('"')?;
+    Some(&action[start..start + len])
 }
 
 /// Whether a GTK accelerator (`<Super><Shift>h`, `<Primary>q`) is this

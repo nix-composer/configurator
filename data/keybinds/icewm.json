@@ -1,0 +1,689 @@
+{
+  "$comment": "IceWM's default keybinds from nixpkgs' icewm (nixos-26.05): the Key* preferences (their defaults, documented in share/icewm/preferences; the action is the preference name) and the launchers in share/icewm/keys (the action is the command; `switchkey ` marks a switchkey line). Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "KeySysAddressBar",
+      "label": "Open the address bar in the taskbar",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>space"
+      ]
+    },
+    {
+      "action": "KeySysArrange",
+      "label": "Rearranges the windows",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>F5"
+      ]
+    },
+    {
+      "action": "KeySysArrangeIcons",
+      "label": "Rearrange the desktop icons",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>F8"
+      ]
+    },
+    {
+      "action": "KeySysCascade",
+      "label": "Cascade the vertically maximized windows",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>F4"
+      ]
+    },
+    {
+      "action": "KeySysCollapseTaskBar",
+      "label": "Toggles displaying the task bar",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>h"
+      ]
+    },
+    {
+      "action": "KeySysDialog",
+      "label": "Open the IceWM system dialog",
+      "group": "Menus",
+      "accels": [
+        "<Control><Alt>Delete"
+      ]
+    },
+    {
+      "action": "KeySysHideAll",
+      "label": "Hides all windows",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>F11"
+      ]
+    },
+    {
+      "action": "KeySysMenu",
+      "label": "Open the IceWM root menu",
+      "group": "Menus",
+      "accels": [
+        "<Control>Escape"
+      ]
+    },
+    {
+      "action": "KeySysMinimizeAll",
+      "label": "Minimizes all windows",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>F9"
+      ]
+    },
+    {
+      "action": "KeySysShowDesktop",
+      "label": "Show the desktop (minimize all windows)",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>d"
+      ]
+    },
+    {
+      "action": "KeySysSwitchClass",
+      "label": "Switch between the windows of this application",
+      "group": "Focus",
+      "accels": [
+        "<Alt>grave"
+      ]
+    },
+    {
+      "action": "KeySysSwitchLast",
+      "label": "Switch windows backwards (QuickSwitch)",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>Tab"
+      ]
+    },
+    {
+      "action": "KeySysSwitchNext",
+      "label": "Switch windows (QuickSwitch)",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "KeySysTileHorizontal",
+      "label": "Tile all windows top to bottom",
+      "group": "Layout",
+      "accels": [
+        "<Alt><Shift>F3"
+      ]
+    },
+    {
+      "action": "KeySysTileVertical",
+      "label": "Tile all windows left to right",
+      "group": "Layout",
+      "accels": [
+        "<Alt><Shift>F2"
+      ]
+    },
+    {
+      "action": "KeySysUndoArrange",
+      "label": "Undoes arrangement",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>F7"
+      ]
+    },
+    {
+      "action": "KeySysWinMenu",
+      "label": "Posts the system window menu",
+      "group": "Menus",
+      "accels": [
+        "<Shift>Escape"
+      ]
+    },
+    {
+      "action": "KeySysWinNext",
+      "label": "Give focus to the next window and raise it",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Escape"
+      ]
+    },
+    {
+      "action": "KeySysWinPrev",
+      "label": "Give focus to the previous window and raise it",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>Escape"
+      ]
+    },
+    {
+      "action": "KeySysWindowList",
+      "label": "Open the window list",
+      "group": "Menus",
+      "accels": [
+        "<Control><Alt>Escape"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace1",
+      "label": "Goes to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>1"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace10",
+      "label": "Goes to workspace 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>0"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace10TakeWin",
+      "label": "Takes the active window to workspace 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>0"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace11",
+      "label": "Goes to workspace 11",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>minus"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace11TakeWin",
+      "label": "Takes the active window to workspace 11",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>minus"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace12",
+      "label": "Goes to workspace 12",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>equal"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace12TakeWin",
+      "label": "Takes the active window to workspace 12",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>equal"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace1TakeWin",
+      "label": "Takes the active window to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>1"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace2",
+      "label": "Goes to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>2"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace2TakeWin",
+      "label": "Takes the active window to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>2"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace3",
+      "label": "Goes to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>3"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace3TakeWin",
+      "label": "Takes the active window to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>3"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace4",
+      "label": "Goes to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>4"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace4TakeWin",
+      "label": "Takes the active window to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>4"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace5",
+      "label": "Goes to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>5"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace5TakeWin",
+      "label": "Takes the active window to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>5"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace6",
+      "label": "Goes to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>6"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace6TakeWin",
+      "label": "Takes the active window to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>6"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace7",
+      "label": "Goes to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>7"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace7TakeWin",
+      "label": "Takes the active window to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>7"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace8",
+      "label": "Goes to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>8"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace8TakeWin",
+      "label": "Takes the active window to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>8"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace9",
+      "label": "Goes to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>9"
+      ]
+    },
+    {
+      "action": "KeySysWorkspace9TakeWin",
+      "label": "Takes the active window to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>9"
+      ]
+    },
+    {
+      "action": "KeySysWorkspaceLast",
+      "label": "Goes to the previous workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Down"
+      ]
+    },
+    {
+      "action": "KeySysWorkspaceLastTakeWin",
+      "label": "Takes the active window to the previous workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>Down"
+      ]
+    },
+    {
+      "action": "KeySysWorkspaceNext",
+      "label": "Goes one workspace to the right",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Right"
+      ]
+    },
+    {
+      "action": "KeySysWorkspaceNextTakeWin",
+      "label": "Takes the active window one workspace to the right",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>Right"
+      ]
+    },
+    {
+      "action": "KeySysWorkspacePrev",
+      "label": "Goes one workspace to the left",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Left"
+      ]
+    },
+    {
+      "action": "KeySysWorkspacePrevTakeWin",
+      "label": "Takes the active window one workspace to the left",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>Left"
+      ]
+    },
+    {
+      "action": "KeyWinArrangeC",
+      "label": "Move the window to the center of the screen",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>KP_Begin"
+      ]
+    },
+    {
+      "action": "KeyWinArrangeE",
+      "label": "Moves the active window to the middle right of the screen",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>KP_Right"
+      ]
+    },
+    {
+      "action": "KeyWinArrangeN",
+      "label": "Moves the active window to the top middle of the screen",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>KP_Up"
+      ]
+    },
+    {
+      "action": "KeyWinArrangeNE",
+      "label": "Moves the active window to the top right of the screen",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>KP_Prior"
+      ]
+    },
+    {
+      "action": "KeyWinArrangeNW",
+      "label": "Moves the active window to the top left corner of the screen",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>KP_Home"
+      ]
+    },
+    {
+      "action": "KeyWinArrangeS",
+      "label": "Moves the active window to the bottom middle of the screen",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>KP_Down"
+      ]
+    },
+    {
+      "action": "KeyWinArrangeSE",
+      "label": "Moves the active window to the bottom right of the screen",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>KP_Next"
+      ]
+    },
+    {
+      "action": "KeyWinArrangeSW",
+      "label": "Moves the active window to the bottom left of the screen",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>KP_End"
+      ]
+    },
+    {
+      "action": "KeyWinArrangeW",
+      "label": "Moves the active window to the middle left of the screen",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>KP_Left"
+      ]
+    },
+    {
+      "action": "KeyWinClose",
+      "label": "Closes the active window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F4"
+      ]
+    },
+    {
+      "action": "KeyWinFullscreen",
+      "label": "Fullscreen the window (no borders)",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F11"
+      ]
+    },
+    {
+      "action": "KeyWinHide",
+      "label": "Hides the active window",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>F12"
+      ]
+    },
+    {
+      "action": "KeyWinLower",
+      "label": "Lowers the window that currently has input focus",
+      "group": "Focus",
+      "accels": [
+        "<Alt>F3"
+      ]
+    },
+    {
+      "action": "KeyWinMaximize",
+      "label": "Maximizes the active window with borders",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F10"
+      ]
+    },
+    {
+      "action": "KeyWinMaximizeVert",
+      "label": "Maximizes the active window vertically",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>F10"
+      ]
+    },
+    {
+      "action": "KeyWinMenu",
+      "label": "Posts the window menu",
+      "group": "Menus",
+      "accels": [
+        "<Alt>space"
+      ]
+    },
+    {
+      "action": "KeyWinMinimize",
+      "label": "Iconifies the active window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F9"
+      ]
+    },
+    {
+      "action": "KeyWinMove",
+      "label": "Starts movement of the active window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F7"
+      ]
+    },
+    {
+      "action": "KeyWinNext",
+      "label": "Switches focus to the next window",
+      "group": "Focus",
+      "accels": [
+        "<Alt>F6"
+      ]
+    },
+    {
+      "action": "KeyWinOccupyAll",
+      "label": "Makes the active window occupy all work spaces",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F2"
+      ]
+    },
+    {
+      "action": "KeyWinPrev",
+      "label": "Switches focus to the previous window",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>F6"
+      ]
+    },
+    {
+      "action": "KeyWinRaise",
+      "label": "Raises the window that currently has input focus",
+      "group": "Focus",
+      "accels": [
+        "<Alt>F1"
+      ]
+    },
+    {
+      "action": "KeyWinRestore",
+      "label": "Restores the active window to its visible state",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F5"
+      ]
+    },
+    {
+      "action": "KeyWinRollup",
+      "label": "Rolls up the active window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F12"
+      ]
+    },
+    {
+      "action": "KeyWinSize",
+      "label": "Starts resizing of the active window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F8"
+      ]
+    },
+    {
+      "action": "KeyWinSmartPlace",
+      "label": "Smart place the active window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>KP_Begin"
+      ]
+    },
+    {
+      "action": "xterm",
+      "label": "Open a terminal (xterm)",
+      "group": "Apps",
+      "accels": [
+        "<Control><Alt>t"
+      ]
+    },
+    {
+      "action": "xdg-open about:blank",
+      "label": "Open a web browser",
+      "group": "Apps",
+      "accels": [
+        "<Control><Alt>b",
+        "XF86HomePage"
+      ]
+    },
+    {
+      "action": "xdg-open https://www.google.com",
+      "label": "Search the web",
+      "group": "Menus",
+      "accels": [
+        "<Control><Alt>s",
+        "XF86Search"
+      ]
+    },
+    {
+      "action": "amixer sset Master 5%-",
+      "label": "Volume down",
+      "group": "Media",
+      "accels": [
+        "<Super>KP_Subtract",
+        "XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "amixer sset Master 5%+",
+      "label": "Volume up",
+      "group": "Media",
+      "accels": [
+        "<Super>KP_Add",
+        "XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "amixer sset Master toggle",
+      "label": "Mute",
+      "group": "Media",
+      "accels": [
+        "XF86AudioMute"
+      ]
+    },
+    {
+      "action": "eject",
+      "label": "Eject",
+      "group": "Apps",
+      "accels": [
+        "XF86Eject"
+      ]
+    },
+    {
+      "action": "/bin/sh -c \"gnome-calculator || xcalc || ( type bc >/dev/null 2>&1 && xterm -e bc -l)\"",
+      "label": "Calculator",
+      "group": "Apps",
+      "accels": [
+        "XF86Calculator"
+      ]
+    },
+    {
+      "action": "switchkey icewm-menu-xrandr",
+      "label": "Display configuration menu",
+      "group": "Menus",
+      "accels": [
+        "<Super>p"
+      ]
+    }
+  ]
+}

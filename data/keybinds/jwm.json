@@ -1,0 +1,93 @@
+{
+  "$comment": "JWM's default keybinds: the <Key> elements with a mask in etc/system.jwmrc of nixpkgs' jwm (nixos-26.05); the unmodified ones (up, down, left, right, select, escape) only navigate menus. The action is the element's text; key \"#\" means the number keys 1-9. Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "nextstacked",
+      "label": "Next window",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "close",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F4"
+      ]
+    },
+    {
+      "action": "desktop#",
+      "label": "Go to desktop 1-9",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>1",
+        "<Alt>2",
+        "<Alt>3",
+        "<Alt>4",
+        "<Alt>5",
+        "<Alt>6",
+        "<Alt>7",
+        "<Alt>8",
+        "<Alt>9"
+      ]
+    },
+    {
+      "action": "root:1",
+      "label": "Open the root menu",
+      "group": "Menus",
+      "accels": [
+        "<Alt>F1"
+      ]
+    },
+    {
+      "action": "window",
+      "label": "Open the window menu",
+      "group": "Menus",
+      "accels": [
+        "<Alt>F2"
+      ]
+    },
+    {
+      "action": "maximize",
+      "label": "Maximize the window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F10"
+      ]
+    },
+    {
+      "action": "rdesktop",
+      "label": "Desktop to the right",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>Right"
+      ]
+    },
+    {
+      "action": "ldesktop",
+      "label": "Desktop to the left",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>Left"
+      ]
+    },
+    {
+      "action": "udesktop",
+      "label": "Desktop above",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>Up"
+      ]
+    },
+    {
+      "action": "ddesktop",
+      "label": "Desktop below",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>Down"
+      ]
+    }
+  ]
+}

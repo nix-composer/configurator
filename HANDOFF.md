@@ -650,6 +650,35 @@ boot into it, and a VM test that drives it.
 admin's `~/.config/nixos` (was `~/nixos`, which collided with personal
 repos).
 
+**Keybinds (2026-09-26):** the Keybinds layer lists the chosen desktop's
+default shortcuts (data/keybinds/<desktop>.json: action, label, group, GTK
+accelerators, a dconf `path` where it isn't the schema id), grouped and
+searchable, with **Change** (press the new keys) and **Remove**, plus
+"Add a shortcut" (keys + an app or web app picked earlier, or a command).
+Keys are captured, never typed (unshifted key, modifier-only combos like
+the Super key; verified in the live VM through QMP key events). Answers
+gained `{"action": …}`: one of the desktop's own actions on new keys.
+Default data exists for 39 desktops (extracted by scripts/keybinds/*
+and scripts/extract-gnome-keybinds.sh, checked by scripts/keybinds/check.py;
+how each desktop applies changes is researched in docs/keybinds/*.md).
+What the generator can write per desktop:
+- Change + Remove + Add: GNOME, Pantheon, Budgie, Cinnamon, MATE (dconf;
+  a moved action's key holds exactly its new keys), Sway (`unbindsym`,
+  `--locked` for media keys, then `bindsym`).
+- Change + Add (can't unbind): niri (binds written `Mod+…` like its
+  defaults, or they don't replace them).
+- Remove + Add: Omarchy (`omarchy.keybinds`, keyed by each default's own
+  combo string, e.g. `SUPER + code:10`); moving needs `lua` (researched).
+- Listed read-only until their renderers exist (the research says how):
+  KDE (seed ~/.config/kglobalshortcutsrc; /etc/xdg is ignored), COSMIC
+  (a system `custom` shortcuts file), Xfce (/etc/xdg xfconf defaults),
+  Hyprland (/etc/xdg/hypr/hyprland.lua with `hl.unbind`), i3 (a whole
+  config), labwc, river, Wayfire, mangowc and the 22 X11 window managers
+  (from easy system files to compiled-in dwm/xmonad).
+- No data yet: LXQt, Lomiri.
+The GNOME and Sway VM install tests move an action and check it on the
+installed system.
+
 ## Prior art to reuse
 
 - `~/nixos/run.sh`: the current interactive bootstrap (hardware detection,

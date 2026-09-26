@@ -74,3 +74,11 @@ each renderer translates it to the desktop's own syntax.
   output). niri has no unbind.
 
 Others are rejected as "not supported yet" when the answers have binds.
+
+## Status (2026-09-26)
+
+Default shortcuts for 39 desktops are data in `data/keybinds/`, and the
+keybind layer lists them. Per-desktop research on applying changes is in
+`docs/keybinds/` (dconf desktops, compositors, KDE/COSMIC/Xfce/Omarchy, X11
+window managers); see HANDOFF.md ("Keybinds") for which renderers write
+changes today and which lists are read-only.

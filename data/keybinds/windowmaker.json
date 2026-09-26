@@ -1,0 +1,181 @@
+{
+  "$comment": "Window Maker's default keybinds: the *Key settings in etc/WindowMaker/WindowMaker (the global WindowMaker defaults domain) of nixpkgs' windowmaker (nixos-26.05); the action is the setting name. Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "RootMenuKey",
+      "label": "Open the applications menu",
+      "group": "Menus",
+      "accels": [
+        "F12"
+      ]
+    },
+    {
+      "action": "WindowListKey",
+      "label": "Open the window list",
+      "group": "Menus",
+      "accels": [
+        "F11"
+      ]
+    },
+    {
+      "action": "WindowMenuKey",
+      "label": "Open the window menu",
+      "group": "Menus",
+      "accels": [
+        "<Control>Escape"
+      ]
+    },
+    {
+      "action": "MiniaturizeKey",
+      "label": "Miniaturize the window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>m"
+      ]
+    },
+    {
+      "action": "HideKey",
+      "label": "Hide the application",
+      "group": "Windows",
+      "accels": [
+        "<Alt>h"
+      ]
+    },
+    {
+      "action": "RaiseKey",
+      "label": "Raise the window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>Up"
+      ]
+    },
+    {
+      "action": "LowerKey",
+      "label": "Lower the window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>Down"
+      ]
+    },
+    {
+      "action": "FocusNextKey",
+      "label": "Focus the next window",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "FocusPrevKey",
+      "label": "Focus the previous window",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>Tab"
+      ]
+    },
+    {
+      "action": "NextWorkspaceKey",
+      "label": "Next workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Right"
+      ]
+    },
+    {
+      "action": "PrevWorkspaceKey",
+      "label": "Previous workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Left"
+      ]
+    },
+    {
+      "action": "Workspace1Key",
+      "label": "Go to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>1"
+      ]
+    },
+    {
+      "action": "Workspace2Key",
+      "label": "Go to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>2"
+      ]
+    },
+    {
+      "action": "Workspace3Key",
+      "label": "Go to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>3"
+      ]
+    },
+    {
+      "action": "Workspace4Key",
+      "label": "Go to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>4"
+      ]
+    },
+    {
+      "action": "Workspace5Key",
+      "label": "Go to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>5"
+      ]
+    },
+    {
+      "action": "Workspace6Key",
+      "label": "Go to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>6"
+      ]
+    },
+    {
+      "action": "Workspace7Key",
+      "label": "Go to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>7"
+      ]
+    },
+    {
+      "action": "Workspace8Key",
+      "label": "Go to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>8"
+      ]
+    },
+    {
+      "action": "Workspace9Key",
+      "label": "Go to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>9"
+      ]
+    },
+    {
+      "action": "Workspace10Key",
+      "label": "Go to workspace 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>0"
+      ]
+    },
+    {
+      "action": "ScreenCaptureKey",
+      "label": "Take a screenshot",
+      "group": "Screenshots",
+      "accels": [
+        "Print"
+      ]
+    }
+  ]
+}

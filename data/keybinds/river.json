@@ -1,0 +1,662 @@
+{
+  "$comment": "river's default keybinds from example/init of nixpkgs nixos-26.05 `river-classic` (w5bidzj540fzqawwwn5mgfxcpf8bxbbg-river-classic-0.3.17), run with a stub riverctl: the `riverctl map normal` binds. river has no built-in binds; this example is what ~/.config/river/init starts as. The action is the riverctl command after the key (shell-quoted). The media binds are mapped in the locked mode too; pointer binds and the passthrough mode's bind left out (scripts/keybinds/extract-compositors.py).",
+  "binds": [
+    {
+      "action": "spawn foot",
+      "label": "Open a terminal (foot)",
+      "group": "Apps",
+      "accels": [
+        "<Super><Shift>Return"
+      ]
+    },
+    {
+      "action": "close",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Super>q"
+      ]
+    },
+    {
+      "action": "exit",
+      "label": "Exit river",
+      "group": "Session",
+      "accels": [
+        "<Super><Shift>e"
+      ]
+    },
+    {
+      "action": "focus-view next",
+      "label": "Focus the next window",
+      "group": "Focus",
+      "accels": [
+        "<Super>j"
+      ]
+    },
+    {
+      "action": "focus-view previous",
+      "label": "Focus the previous window",
+      "group": "Focus",
+      "accels": [
+        "<Super>k"
+      ]
+    },
+    {
+      "action": "swap next",
+      "label": "Swap with the next window",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>j"
+      ]
+    },
+    {
+      "action": "swap previous",
+      "label": "Swap with the previous window",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>k"
+      ]
+    },
+    {
+      "action": "focus-output next",
+      "label": "Focus the next output",
+      "group": "Monitors",
+      "accels": [
+        "<Super>period"
+      ]
+    },
+    {
+      "action": "focus-output previous",
+      "label": "Focus the previous output",
+      "group": "Monitors",
+      "accels": [
+        "<Super>comma"
+      ]
+    },
+    {
+      "action": "send-to-output next",
+      "label": "Send the window to the next output",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Shift>period"
+      ]
+    },
+    {
+      "action": "send-to-output previous",
+      "label": "Send the window to the previous output",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Shift>comma"
+      ]
+    },
+    {
+      "action": "zoom",
+      "label": "Bump the window to the main area",
+      "group": "Layout",
+      "accels": [
+        "<Super>Return"
+      ]
+    },
+    {
+      "action": "send-layout-cmd rivertile 'main-ratio -0.05'",
+      "label": "Shrink the main area",
+      "group": "Layout",
+      "accels": [
+        "<Super>h"
+      ]
+    },
+    {
+      "action": "send-layout-cmd rivertile 'main-ratio +0.05'",
+      "label": "Grow the main area",
+      "group": "Layout",
+      "accels": [
+        "<Super>l"
+      ]
+    },
+    {
+      "action": "send-layout-cmd rivertile 'main-count +1'",
+      "label": "One more window in the main area",
+      "group": "Layout",
+      "accels": [
+        "<Super><Shift>h"
+      ]
+    },
+    {
+      "action": "send-layout-cmd rivertile 'main-count -1'",
+      "label": "One less window in the main area",
+      "group": "Layout",
+      "accels": [
+        "<Super><Shift>l"
+      ]
+    },
+    {
+      "action": "move left 100",
+      "label": "Move the floating window left",
+      "group": "Windows",
+      "accels": [
+        "<Super><Alt>h"
+      ]
+    },
+    {
+      "action": "move down 100",
+      "label": "Move the floating window down",
+      "group": "Windows",
+      "accels": [
+        "<Super><Alt>j"
+      ]
+    },
+    {
+      "action": "move up 100",
+      "label": "Move the floating window up",
+      "group": "Windows",
+      "accels": [
+        "<Super><Alt>k"
+      ]
+    },
+    {
+      "action": "move right 100",
+      "label": "Move the floating window right",
+      "group": "Windows",
+      "accels": [
+        "<Super><Alt>l"
+      ]
+    },
+    {
+      "action": "snap left",
+      "label": "Snap the floating window to the left edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control><Alt>h"
+      ]
+    },
+    {
+      "action": "snap down",
+      "label": "Snap the floating window to the bottom edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control><Alt>j"
+      ]
+    },
+    {
+      "action": "snap up",
+      "label": "Snap the floating window to the top edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control><Alt>k"
+      ]
+    },
+    {
+      "action": "snap right",
+      "label": "Snap the floating window to the right edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control><Alt>l"
+      ]
+    },
+    {
+      "action": "resize horizontal -100",
+      "label": "Shrink the floating window horizontally",
+      "group": "Windows",
+      "accels": [
+        "<Super><Alt><Shift>h"
+      ]
+    },
+    {
+      "action": "resize vertical 100",
+      "label": "Grow the floating window vertically",
+      "group": "Windows",
+      "accels": [
+        "<Super><Alt><Shift>j"
+      ]
+    },
+    {
+      "action": "resize vertical -100",
+      "label": "Shrink the floating window vertically",
+      "group": "Windows",
+      "accels": [
+        "<Super><Alt><Shift>k"
+      ]
+    },
+    {
+      "action": "resize horizontal 100",
+      "label": "Grow the floating window horizontally",
+      "group": "Windows",
+      "accels": [
+        "<Super><Alt><Shift>l"
+      ]
+    },
+    {
+      "action": "set-focused-tags 1",
+      "label": "Show tag 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>1"
+      ]
+    },
+    {
+      "action": "set-view-tags 1",
+      "label": "Move the window to tag 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>1"
+      ]
+    },
+    {
+      "action": "toggle-focused-tags 1",
+      "label": "Also show tag 1 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>1"
+      ]
+    },
+    {
+      "action": "toggle-view-tags 1",
+      "label": "Also put the window on tag 1 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>1"
+      ]
+    },
+    {
+      "action": "set-focused-tags 2",
+      "label": "Show tag 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>2"
+      ]
+    },
+    {
+      "action": "set-view-tags 2",
+      "label": "Move the window to tag 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>2"
+      ]
+    },
+    {
+      "action": "toggle-focused-tags 2",
+      "label": "Also show tag 2 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>2"
+      ]
+    },
+    {
+      "action": "toggle-view-tags 2",
+      "label": "Also put the window on tag 2 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>2"
+      ]
+    },
+    {
+      "action": "set-focused-tags 4",
+      "label": "Show tag 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>3"
+      ]
+    },
+    {
+      "action": "set-view-tags 4",
+      "label": "Move the window to tag 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>3"
+      ]
+    },
+    {
+      "action": "toggle-focused-tags 4",
+      "label": "Also show tag 3 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>3"
+      ]
+    },
+    {
+      "action": "toggle-view-tags 4",
+      "label": "Also put the window on tag 3 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>3"
+      ]
+    },
+    {
+      "action": "set-focused-tags 8",
+      "label": "Show tag 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>4"
+      ]
+    },
+    {
+      "action": "set-view-tags 8",
+      "label": "Move the window to tag 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>4"
+      ]
+    },
+    {
+      "action": "toggle-focused-tags 8",
+      "label": "Also show tag 4 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>4"
+      ]
+    },
+    {
+      "action": "toggle-view-tags 8",
+      "label": "Also put the window on tag 4 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>4"
+      ]
+    },
+    {
+      "action": "set-focused-tags 16",
+      "label": "Show tag 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>5"
+      ]
+    },
+    {
+      "action": "set-view-tags 16",
+      "label": "Move the window to tag 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>5"
+      ]
+    },
+    {
+      "action": "toggle-focused-tags 16",
+      "label": "Also show tag 5 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>5"
+      ]
+    },
+    {
+      "action": "toggle-view-tags 16",
+      "label": "Also put the window on tag 5 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>5"
+      ]
+    },
+    {
+      "action": "set-focused-tags 32",
+      "label": "Show tag 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>6"
+      ]
+    },
+    {
+      "action": "set-view-tags 32",
+      "label": "Move the window to tag 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>6"
+      ]
+    },
+    {
+      "action": "toggle-focused-tags 32",
+      "label": "Also show tag 6 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>6"
+      ]
+    },
+    {
+      "action": "toggle-view-tags 32",
+      "label": "Also put the window on tag 6 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>6"
+      ]
+    },
+    {
+      "action": "set-focused-tags 64",
+      "label": "Show tag 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>7"
+      ]
+    },
+    {
+      "action": "set-view-tags 64",
+      "label": "Move the window to tag 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>7"
+      ]
+    },
+    {
+      "action": "toggle-focused-tags 64",
+      "label": "Also show tag 7 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>7"
+      ]
+    },
+    {
+      "action": "toggle-view-tags 64",
+      "label": "Also put the window on tag 7 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>7"
+      ]
+    },
+    {
+      "action": "set-focused-tags 128",
+      "label": "Show tag 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>8"
+      ]
+    },
+    {
+      "action": "set-view-tags 128",
+      "label": "Move the window to tag 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>8"
+      ]
+    },
+    {
+      "action": "toggle-focused-tags 128",
+      "label": "Also show tag 8 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>8"
+      ]
+    },
+    {
+      "action": "toggle-view-tags 128",
+      "label": "Also put the window on tag 8 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>8"
+      ]
+    },
+    {
+      "action": "set-focused-tags 256",
+      "label": "Show tag 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>9"
+      ]
+    },
+    {
+      "action": "set-view-tags 256",
+      "label": "Move the window to tag 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>9"
+      ]
+    },
+    {
+      "action": "toggle-focused-tags 256",
+      "label": "Also show tag 9 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>9"
+      ]
+    },
+    {
+      "action": "toggle-view-tags 256",
+      "label": "Also put the window on tag 9 (toggle)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>9"
+      ]
+    },
+    {
+      "action": "set-focused-tags 4294967295",
+      "label": "Show all tags",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>0"
+      ]
+    },
+    {
+      "action": "set-view-tags 4294967295",
+      "label": "Put the window on all tags",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>0"
+      ]
+    },
+    {
+      "action": "toggle-float",
+      "label": "Toggle floating",
+      "group": "Windows",
+      "accels": [
+        "<Super>space"
+      ]
+    },
+    {
+      "action": "toggle-fullscreen",
+      "label": "Toggle fullscreen",
+      "group": "Windows",
+      "accels": [
+        "<Super>f"
+      ]
+    },
+    {
+      "action": "send-layout-cmd rivertile 'main-location top'",
+      "label": "Put the main area at the top",
+      "group": "Layout",
+      "accels": [
+        "<Super>Up"
+      ]
+    },
+    {
+      "action": "send-layout-cmd rivertile 'main-location right'",
+      "label": "Put the main area on the right",
+      "group": "Layout",
+      "accels": [
+        "<Super>Right"
+      ]
+    },
+    {
+      "action": "send-layout-cmd rivertile 'main-location bottom'",
+      "label": "Put the main area at the bottom",
+      "group": "Layout",
+      "accels": [
+        "<Super>Down"
+      ]
+    },
+    {
+      "action": "send-layout-cmd rivertile 'main-location left'",
+      "label": "Put the main area on the left",
+      "group": "Layout",
+      "accels": [
+        "<Super>Left"
+      ]
+    },
+    {
+      "action": "enter-mode passthrough",
+      "label": "Passthrough mode (the same keys leave it)",
+      "group": "System",
+      "accels": [
+        "<Super>F11"
+      ]
+    },
+    {
+      "action": "spawn 'eject -T'",
+      "label": "Eject",
+      "group": "Media",
+      "accels": [
+        "XF86Eject"
+      ]
+    },
+    {
+      "action": "spawn 'pamixer -i 5'",
+      "label": "Volume up",
+      "group": "Media",
+      "accels": [
+        "XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "spawn 'pamixer -d 5'",
+      "label": "Volume down",
+      "group": "Media",
+      "accels": [
+        "XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "spawn 'pamixer --toggle-mute'",
+      "label": "Mute audio",
+      "group": "Media",
+      "accels": [
+        "XF86AudioMute"
+      ]
+    },
+    {
+      "action": "spawn 'playerctl play-pause'",
+      "label": "Play or pause",
+      "group": "Media",
+      "accels": [
+        "XF86AudioMedia",
+        "XF86AudioPlay"
+      ]
+    },
+    {
+      "action": "spawn 'playerctl previous'",
+      "label": "Previous track",
+      "group": "Media",
+      "accels": [
+        "XF86AudioPrev"
+      ]
+    },
+    {
+      "action": "spawn 'playerctl next'",
+      "label": "Next track",
+      "group": "Media",
+      "accels": [
+        "XF86AudioNext"
+      ]
+    },
+    {
+      "action": "spawn 'brightnessctl set +5%'",
+      "label": "Brightness up",
+      "group": "Media",
+      "accels": [
+        "XF86MonBrightnessUp"
+      ]
+    },
+    {
+      "action": "spawn 'brightnessctl set 5%-'",
+      "label": "Brightness down",
+      "group": "Media",
+      "accels": [
+        "XF86MonBrightnessDown"
+      ]
+    }
+  ]
+}

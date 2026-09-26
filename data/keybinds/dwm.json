@@ -1,0 +1,485 @@
+{
+  "$comment": "dwm's compiled-in default keys: keys[] in config.def.h of nixpkgs' dwm (nixos-26.05), MODKEY = Mod1Mask (Alt), TAGKEYS spelled out. The action is `<function> <argument>` as keys[] writes them. Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "spawn {.v = dmenucmd }",
+      "label": "Run a program (dmenu)",
+      "group": "Apps",
+      "accels": [
+        "<Alt>p"
+      ]
+    },
+    {
+      "action": "spawn {.v = termcmd }",
+      "label": "Open a terminal (st)",
+      "group": "Apps",
+      "accels": [
+        "<Alt><Shift>Return"
+      ]
+    },
+    {
+      "action": "togglebar {0}",
+      "label": "Toggle the bar",
+      "group": "Windows",
+      "accels": [
+        "<Alt>b"
+      ]
+    },
+    {
+      "action": "focusstack {.i = +1 }",
+      "label": "Focus the next window",
+      "group": "Focus",
+      "accels": [
+        "<Alt>j"
+      ]
+    },
+    {
+      "action": "focusstack {.i = -1 }",
+      "label": "Focus the previous window",
+      "group": "Focus",
+      "accels": [
+        "<Alt>k"
+      ]
+    },
+    {
+      "action": "incnmaster {.i = +1 }",
+      "label": "More windows in the master area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>i"
+      ]
+    },
+    {
+      "action": "incnmaster {.i = -1 }",
+      "label": "Fewer windows in the master area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>d"
+      ]
+    },
+    {
+      "action": "setmfact {.f = -0.05}",
+      "label": "Shrink the master area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>h"
+      ]
+    },
+    {
+      "action": "setmfact {.f = +0.05}",
+      "label": "Grow the master area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>l"
+      ]
+    },
+    {
+      "action": "zoom {0}",
+      "label": "Move the window to/from the master area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>Return"
+      ]
+    },
+    {
+      "action": "view {0}",
+      "label": "Previous tags",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "killclient {0}",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>c"
+      ]
+    },
+    {
+      "action": "setlayout {.v = &layouts[0]}",
+      "label": "Tiled layout",
+      "group": "Layout",
+      "accels": [
+        "<Alt>t"
+      ]
+    },
+    {
+      "action": "setlayout {.v = &layouts[1]}",
+      "label": "Floating layout",
+      "group": "Layout",
+      "accels": [
+        "<Alt>f"
+      ]
+    },
+    {
+      "action": "setlayout {.v = &layouts[2]}",
+      "label": "Monocle layout",
+      "group": "Layout",
+      "accels": [
+        "<Alt>m"
+      ]
+    },
+    {
+      "action": "setlayout {0}",
+      "label": "Previous layout",
+      "group": "Layout",
+      "accels": [
+        "<Alt>space"
+      ]
+    },
+    {
+      "action": "togglefloating {0}",
+      "label": "Toggle floating",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>space"
+      ]
+    },
+    {
+      "action": "view {.ui = ~0 }",
+      "label": "View all tags",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>0"
+      ]
+    },
+    {
+      "action": "tag {.ui = ~0 }",
+      "label": "Put the window on all tags",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>0"
+      ]
+    },
+    {
+      "action": "focusmon {.i = -1 }",
+      "label": "Focus the previous monitor",
+      "group": "Monitors",
+      "accels": [
+        "<Alt>comma"
+      ]
+    },
+    {
+      "action": "focusmon {.i = +1 }",
+      "label": "Focus the next monitor",
+      "group": "Monitors",
+      "accels": [
+        "<Alt>period"
+      ]
+    },
+    {
+      "action": "tagmon {.i = -1 }",
+      "label": "Send the window to the previous monitor",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>comma"
+      ]
+    },
+    {
+      "action": "tagmon {.i = +1 }",
+      "label": "Send the window to the next monitor",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>period"
+      ]
+    },
+    {
+      "action": "view {.ui = 1 << 0}",
+      "label": "View tag 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>1"
+      ]
+    },
+    {
+      "action": "toggleview {.ui = 1 << 0}",
+      "label": "Toggle viewing tag 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>1"
+      ]
+    },
+    {
+      "action": "tag {.ui = 1 << 0}",
+      "label": "Move the window to tag 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>1"
+      ]
+    },
+    {
+      "action": "toggletag {.ui = 1 << 0}",
+      "label": "Toggle tag 1 on the window",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>1"
+      ]
+    },
+    {
+      "action": "view {.ui = 1 << 1}",
+      "label": "View tag 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>2"
+      ]
+    },
+    {
+      "action": "toggleview {.ui = 1 << 1}",
+      "label": "Toggle viewing tag 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>2"
+      ]
+    },
+    {
+      "action": "tag {.ui = 1 << 1}",
+      "label": "Move the window to tag 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>2"
+      ]
+    },
+    {
+      "action": "toggletag {.ui = 1 << 1}",
+      "label": "Toggle tag 2 on the window",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>2"
+      ]
+    },
+    {
+      "action": "view {.ui = 1 << 2}",
+      "label": "View tag 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>3"
+      ]
+    },
+    {
+      "action": "toggleview {.ui = 1 << 2}",
+      "label": "Toggle viewing tag 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>3"
+      ]
+    },
+    {
+      "action": "tag {.ui = 1 << 2}",
+      "label": "Move the window to tag 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>3"
+      ]
+    },
+    {
+      "action": "toggletag {.ui = 1 << 2}",
+      "label": "Toggle tag 3 on the window",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>3"
+      ]
+    },
+    {
+      "action": "view {.ui = 1 << 3}",
+      "label": "View tag 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>4"
+      ]
+    },
+    {
+      "action": "toggleview {.ui = 1 << 3}",
+      "label": "Toggle viewing tag 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>4"
+      ]
+    },
+    {
+      "action": "tag {.ui = 1 << 3}",
+      "label": "Move the window to tag 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>4"
+      ]
+    },
+    {
+      "action": "toggletag {.ui = 1 << 3}",
+      "label": "Toggle tag 4 on the window",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>4"
+      ]
+    },
+    {
+      "action": "view {.ui = 1 << 4}",
+      "label": "View tag 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>5"
+      ]
+    },
+    {
+      "action": "toggleview {.ui = 1 << 4}",
+      "label": "Toggle viewing tag 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>5"
+      ]
+    },
+    {
+      "action": "tag {.ui = 1 << 4}",
+      "label": "Move the window to tag 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>5"
+      ]
+    },
+    {
+      "action": "toggletag {.ui = 1 << 4}",
+      "label": "Toggle tag 5 on the window",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>5"
+      ]
+    },
+    {
+      "action": "view {.ui = 1 << 5}",
+      "label": "View tag 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>6"
+      ]
+    },
+    {
+      "action": "toggleview {.ui = 1 << 5}",
+      "label": "Toggle viewing tag 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>6"
+      ]
+    },
+    {
+      "action": "tag {.ui = 1 << 5}",
+      "label": "Move the window to tag 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>6"
+      ]
+    },
+    {
+      "action": "toggletag {.ui = 1 << 5}",
+      "label": "Toggle tag 6 on the window",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>6"
+      ]
+    },
+    {
+      "action": "view {.ui = 1 << 6}",
+      "label": "View tag 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>7"
+      ]
+    },
+    {
+      "action": "toggleview {.ui = 1 << 6}",
+      "label": "Toggle viewing tag 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>7"
+      ]
+    },
+    {
+      "action": "tag {.ui = 1 << 6}",
+      "label": "Move the window to tag 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>7"
+      ]
+    },
+    {
+      "action": "toggletag {.ui = 1 << 6}",
+      "label": "Toggle tag 7 on the window",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>7"
+      ]
+    },
+    {
+      "action": "view {.ui = 1 << 7}",
+      "label": "View tag 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>8"
+      ]
+    },
+    {
+      "action": "toggleview {.ui = 1 << 7}",
+      "label": "Toggle viewing tag 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>8"
+      ]
+    },
+    {
+      "action": "tag {.ui = 1 << 7}",
+      "label": "Move the window to tag 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>8"
+      ]
+    },
+    {
+      "action": "toggletag {.ui = 1 << 7}",
+      "label": "Toggle tag 8 on the window",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>8"
+      ]
+    },
+    {
+      "action": "view {.ui = 1 << 8}",
+      "label": "View tag 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>9"
+      ]
+    },
+    {
+      "action": "toggleview {.ui = 1 << 8}",
+      "label": "Toggle viewing tag 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>9"
+      ]
+    },
+    {
+      "action": "tag {.ui = 1 << 8}",
+      "label": "Move the window to tag 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>9"
+      ]
+    },
+    {
+      "action": "toggletag {.ui = 1 << 8}",
+      "label": "Toggle tag 9 on the window",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>9"
+      ]
+    },
+    {
+      "action": "quit {0}",
+      "label": "Quit dwm",
+      "group": "Session",
+      "accels": [
+        "<Alt><Shift>q"
+      ]
+    }
+  ]
+}

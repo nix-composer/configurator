@@ -1,0 +1,1765 @@
+{
+  "$comment": "Omarchy's default keybinds (upstream's default/hypr/bindings/*.lua, as nix-desktops/omarchy loads them with the app and web-app binds on; scripts/keybinds/extract-kde-cosmic-xfce-omarchy.py): the action is the o.bind call as Omarchy writes it (its first argument the Hyprland combo omarchy.keybinds is keyed by), the label its description.",
+  "binds": [
+    {
+      "action": "o.bind(\"SUPER + RETURN\", \"Terminal\", { omarchy = \"terminal\" })",
+      "label": "Terminal",
+      "group": "Applications",
+      "accels": [
+        "<Super>Return"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + RETURN\", \"Browser\", { omarchy = \"browser\" })",
+      "label": "Browser",
+      "group": "Applications",
+      "accels": [
+        "<Super><Shift>Return"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + F\", \"File manager\", { omarchy = \"nautilus\" })",
+      "label": "File manager",
+      "group": "Applications",
+      "accels": [
+        "<Super><Shift>f"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + SHIFT + F\", \"File manager (cwd)\", { omarchy = \"nautilus-cwd\" })",
+      "label": "File manager (cwd)",
+      "group": "Applications",
+      "accels": [
+        "<Super><Alt><Shift>f"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + B\", \"Browser\", { omarchy = \"browser\" })",
+      "label": "Browser",
+      "group": "Applications",
+      "accels": [
+        "<Super><Shift>b"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + B\", \"Browser (private)\", { omarchy = \"browser --private\" })",
+      "label": "Browser (private)",
+      "group": "Applications",
+      "accels": [
+        "<Super><Alt><Shift>b"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + N\", \"Editor\", { omarchy = \"editor\" })",
+      "label": "Editor",
+      "group": "Applications",
+      "accels": [
+        "<Super><Shift>n"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + RETURN\", \"Tmux\", { omarchy = \"terminal-tmux\" })",
+      "label": "Tmux",
+      "group": "TUI launchers",
+      "accels": [
+        "<Super><Alt>Return"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + RETURN\", \"Herdr\", { omarchy = \"terminal-herdr\" })",
+      "label": "Herdr",
+      "group": "Apps (ecosystem)",
+      "accels": [
+        "<Super><Control>Return"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + M\", \"Music\", { omarchy = \"spotify\" })",
+      "label": "Music",
+      "group": "Apps (ecosystem)",
+      "accels": [
+        "<Super><Shift>m"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + M\", \"Music TUI\", { tui = \"cliamp\", focus = true })",
+      "label": "Music TUI",
+      "group": "Apps (ecosystem)",
+      "accels": [
+        "<Super><Alt><Shift>m"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + D\", \"Docker\", { tui = \"omarchy-launch-docker-tui\" })",
+      "label": "Docker",
+      "group": "TUI launchers",
+      "accels": [
+        "<Super><Shift>d"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + G\", \"Signal\", { omarchy = \"signal\" })",
+      "label": "Signal",
+      "group": "Apps (ecosystem)",
+      "accels": [
+        "<Super><Shift>g"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + O\", \"Obsidian\", { launch = \"obsidian\", focus = \"^obsidian$\" })",
+      "label": "Obsidian",
+      "group": "Apps (ecosystem)",
+      "accels": [
+        "<Super><Shift>o"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + W\", \"Omawrite\", { launch = \"omawrite\" })",
+      "label": "Omawrite",
+      "group": "Apps (ecosystem)",
+      "accels": [
+        "<Super><Shift>w"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + SLASH\", \"Passwords\", { omarchy = \"1password\" })",
+      "label": "Passwords",
+      "group": "Apps (ecosystem)",
+      "accels": [
+        "<Super><Shift>slash"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + A\", \"ChatGPT\", { webapp = \"https://chatgpt.com\" })",
+      "label": "ChatGPT",
+      "group": "Web apps (ecosystem)",
+      "accels": [
+        "<Super><Shift>a"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + A\", \"Grok\", { webapp = \"https://grok.com\" })",
+      "label": "Grok",
+      "group": "Web apps (ecosystem)",
+      "accels": [
+        "<Super><Alt><Shift>a"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + C\", \"Calendar\", { webapp = \"https://app.hey.com/calendar/weeks/\" })",
+      "label": "Calendar",
+      "group": "Web apps (ecosystem)",
+      "accels": [
+        "<Super><Shift>c"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + E\", \"Email\", { webapp = \"https://app.hey.com\" })",
+      "label": "Email",
+      "group": "Web apps (ecosystem)",
+      "accels": [
+        "<Super><Shift>e"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + E\", \"New email\", { webapp = \"https://app.hey.com/messages/new?display=standalone&new_window=true\" })",
+      "label": "New email",
+      "group": "Web apps (ecosystem)",
+      "accels": [
+        "<Super><Alt><Shift>e"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + Y\", \"YouTube\", { webapp = \"https://youtube.com/\" })",
+      "label": "YouTube",
+      "group": "Web apps (ecosystem)",
+      "accels": [
+        "<Super><Shift>y"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + G\", \"WhatsApp\", { webapp = \"https://web.whatsapp.com/\", focus = true })",
+      "label": "WhatsApp",
+      "group": "Web apps (ecosystem)",
+      "accels": [
+        "<Super><Alt><Shift>g"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + CTRL + G\", \"Google Messages\", { webapp = \"https://messages.google.com/web/conversations\", focus = true })",
+      "label": "Google Messages",
+      "group": "Web apps (ecosystem)",
+      "accels": [
+        "<Super><Control><Shift>g"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + P\", \"Google Photos\", { webapp = \"https://photos.google.com/\", focus = true })",
+      "label": "Google Photos",
+      "group": "Web apps (ecosystem)",
+      "accels": [
+        "<Super><Shift>p"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + S\", \"Google Maps\", { webapp = \"https://maps.google.com/\", focus = true })",
+      "label": "Google Maps",
+      "group": "Web apps (ecosystem)",
+      "accels": [
+        "<Super><Shift>s"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + X\", \"X\", { webapp = \"https://x.com/\" })",
+      "label": "X",
+      "group": "Web apps (ecosystem)",
+      "accels": [
+        "<Super><Shift>x"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + X\", \"X Post\", { webapp = \"https://x.com/compose/post\" })",
+      "label": "X Post",
+      "group": "Web apps (ecosystem)",
+      "accels": [
+        "<Super><Alt><Shift>x"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + A\", \"Select all\", <Lua function in default/hypr/bindings/clipboard.lua>)",
+      "label": "Select all",
+      "group": "Clipboard",
+      "accels": [
+        "<Super>a"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + C\", \"Universal copy\", <Lua function in default/hypr/bindings/clipboard.lua>)",
+      "label": "Universal copy",
+      "group": "Clipboard",
+      "accels": [
+        "<Super>c"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + V\", \"Universal paste\", <Lua function in default/hypr/bindings/clipboard.lua>)",
+      "label": "Universal paste",
+      "group": "Clipboard",
+      "accels": [
+        "<Super>v"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + X\", \"Universal cut\", <Lua function in default/hypr/bindings/clipboard.lua>)",
+      "label": "Universal cut",
+      "group": "Clipboard",
+      "accels": [
+        "<Super>x"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + V\", \"Clipboard manager\", \"omarchy-shell shell toggle omarchy.clipboard\")",
+      "label": "Clipboard manager",
+      "group": "Clipboard",
+      "accels": [
+        "<Super><Control>v"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86AudioRaiseVolume\", \"Volume up\", \"omarchy-audio-output-volume raise\", { locked = true, repeating = true })",
+      "label": "Volume up",
+      "group": "Media keys",
+      "accels": [
+        "XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86AudioLowerVolume\", \"Volume down\", \"omarchy-audio-output-volume lower\", { locked = true, repeating = true })",
+      "label": "Volume down",
+      "group": "Media keys",
+      "accels": [
+        "XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86AudioMute\", \"Mute\", \"omarchy-audio-output-volume mute-toggle\", { locked = true })",
+      "label": "Mute",
+      "group": "Media keys",
+      "accels": [
+        "XF86AudioMute"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86AudioMicMute\", \"Mute microphone\", \"omarchy-audio-input-mute\", { locked = true })",
+      "label": "Mute microphone",
+      "group": "Media keys",
+      "accels": [
+        "XF86AudioMicMute"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86MonBrightnessUp\", \"Brightness up\", \"omarchy-brightness-display +5%\", { locked = true, repeating = true })",
+      "label": "Brightness up",
+      "group": "Media keys",
+      "accels": [
+        "XF86MonBrightnessUp"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86MonBrightnessDown\", \"Brightness down\", \"omarchy-brightness-display 5%-\", { locked = true, repeating = true })",
+      "label": "Brightness down",
+      "group": "Media keys",
+      "accels": [
+        "XF86MonBrightnessDown"
+      ]
+    },
+    {
+      "action": "o.bind(\"SHIFT + XF86MonBrightnessUp\", \"Brightness maximum\", \"omarchy-brightness-display 100%\", { locked = true, repeating = true })",
+      "label": "Brightness maximum",
+      "group": "Media keys",
+      "accels": [
+        "<Shift>XF86MonBrightnessUp"
+      ]
+    },
+    {
+      "action": "o.bind(\"SHIFT + XF86MonBrightnessDown\", \"Brightness minimum\", \"omarchy-brightness-display 1%\", { locked = true, repeating = true })",
+      "label": "Brightness minimum",
+      "group": "Media keys",
+      "accels": [
+        "<Shift>XF86MonBrightnessDown"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86KbdBrightnessUp\", \"Keyboard brightness up\", \"omarchy-brightness-keyboard up\", { locked = true, repeating = true })",
+      "label": "Keyboard brightness up",
+      "group": "Media keys",
+      "accels": [
+        "XF86KbdBrightnessUp"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86KbdBrightnessDown\", \"Keyboard brightness down\", \"omarchy-brightness-keyboard down\", { locked = true, repeating = true })",
+      "label": "Keyboard brightness down",
+      "group": "Media keys",
+      "accels": [
+        "XF86KbdBrightnessDown"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86KbdLightOnOff\", \"Keyboard backlight cycle\", \"omarchy-brightness-keyboard cycle\", { locked = true })",
+      "label": "Keyboard backlight cycle",
+      "group": "Media keys",
+      "accels": [
+        "XF86KbdLightOnOff"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86TouchpadToggle\", \"Toggle touchpad\", \"omarchy-toggle-touchpad\", { locked = true })",
+      "label": "Toggle touchpad",
+      "group": "Media keys",
+      "accels": [
+        "XF86TouchpadToggle"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86TouchpadOn\", \"Enable touchpad\", \"omarchy-toggle-touchpad on\", { locked = true })",
+      "label": "Enable touchpad",
+      "group": "Media keys",
+      "accels": [
+        "XF86TouchpadOn"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86TouchpadOff\", \"Disable touchpad\", \"omarchy-toggle-touchpad off\", { locked = true })",
+      "label": "Disable touchpad",
+      "group": "Media keys",
+      "accels": [
+        "XF86TouchpadOff"
+      ]
+    },
+    {
+      "action": "o.bind(\"ALT + XF86AudioRaiseVolume\", \"Volume up precise\", \"omarchy-audio-output-volume +1\", { locked = true, repeating = true })",
+      "label": "Volume up precise",
+      "group": "Media keys",
+      "accels": [
+        "<Alt>XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "o.bind(\"ALT + XF86AudioLowerVolume\", \"Volume down precise\", \"omarchy-audio-output-volume -1\", { locked = true, repeating = true })",
+      "label": "Volume down precise",
+      "group": "Media keys",
+      "accels": [
+        "<Alt>XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "o.bind(\"ALT + XF86MonBrightnessUp\", \"Brightness up precise\", \"omarchy-brightness-display +1%\", { locked = true, repeating = true })",
+      "label": "Brightness up precise",
+      "group": "Media keys",
+      "accels": [
+        "<Alt>XF86MonBrightnessUp"
+      ]
+    },
+    {
+      "action": "o.bind(\"ALT + XF86MonBrightnessDown\", \"Brightness down precise\", \"omarchy-brightness-display 1%-\", { locked = true, repeating = true })",
+      "label": "Brightness down precise",
+      "group": "Media keys",
+      "accels": [
+        "<Alt>XF86MonBrightnessDown"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86AudioNext\", \"Next track\", \"omarchy-shell media next\", { locked = true })",
+      "label": "Next track",
+      "group": "Media keys",
+      "accels": [
+        "XF86AudioNext"
+      ]
+    },
+    {
+      "action": "o.bind(\"ALT + XF86AudioPlay\", \"Next track\", \"omarchy-shell media next\", { locked = true })",
+      "label": "Next track",
+      "group": "Media keys",
+      "accels": [
+        "<Alt>XF86AudioPlay"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86AudioPause\", \"Pause\", \"omarchy-shell media playPause\", { locked = true })",
+      "label": "Pause",
+      "group": "Media keys",
+      "accels": [
+        "XF86AudioPause"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86AudioPlay\", \"Play\", \"omarchy-shell media playPause\", { locked = true })",
+      "label": "Play",
+      "group": "Media keys",
+      "accels": [
+        "XF86AudioPlay"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86AudioPrev\", \"Previous track\", \"omarchy-shell media previous\", { locked = true })",
+      "label": "Previous track",
+      "group": "Media keys",
+      "accels": [
+        "XF86AudioPrev"
+      ]
+    },
+    {
+      "action": "o.bind(\"ALT + SHIFT + XF86AudioPlay\", \"Previous track\", \"omarchy-shell media previous\", { locked = true })",
+      "label": "Previous track",
+      "group": "Media keys",
+      "accels": [
+        "<Alt><Shift>XF86AudioPlay"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86Eject\", \"Eject media\", \"eject\", { locked = true })",
+      "label": "Eject media",
+      "group": "Media keys",
+      "accels": [
+        "XF86Eject"
+      ]
+    },
+    {
+      "action": "o.bind(\"SHIFT + XF86AudioMute\", \"Switch audio output\", \"omarchy-audio-output-switch\", { locked = true })",
+      "label": "Switch audio output",
+      "group": "Media keys",
+      "accels": [
+        "<Shift>XF86AudioMute"
+      ]
+    },
+    {
+      "action": "o.bind(\"SHIFT + XF86AudioPause\", \"Switch media source\", \"omarchy-audio-source-switch\", { locked = true })",
+      "label": "Switch media source",
+      "group": "Media keys",
+      "accels": [
+        "<Shift>XF86AudioPause"
+      ]
+    },
+    {
+      "action": "o.bind(\"SHIFT + XF86AudioPlay\", \"Switch media source\", \"omarchy-audio-source-switch\", { locked = true })",
+      "label": "Switch media source",
+      "group": "Media keys",
+      "accels": [
+        "<Shift>XF86AudioPlay"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + W\", \"Close window\", hl.dsp.window.close())",
+      "label": "Close window",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>w"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + Q\", \"Close window\", hl.dsp.window.close())",
+      "label": "Close window",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>q"
+      ]
+    },
+    {
+      "action": "o.bind(\"CTRL + ALT + DELETE\", \"Close all windows\", \"omarchy-hyprland-window-close-all\")",
+      "label": "Close all windows",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Control><Alt>Delete"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + J\", \"Toggle window split\", hl.dsp.layout(\"togglesplit\"))",
+      "label": "Toggle window split",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>j"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + P\", \"Pseudo window\", hl.dsp.window.pseudo())",
+      "label": "Pseudo window",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>p"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + T\", \"Toggle window floating/tiling\", hl.dsp.window.float({ action = \"toggle\" }))",
+      "label": "Toggle window floating/tiling",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>t"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + F\", \"Full screen\", hl.dsp.window.fullscreen({ mode = \"fullscreen\" }))",
+      "label": "Full screen",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>f"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + F\", \"Tiled full screen\", \"omarchy-hyprland-window-tiled-fullscreen-toggle\")",
+      "label": "Tiled full screen",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + F\", \"Full width\", hl.dsp.window.fullscreen({ mode = \"maximized\" }))",
+      "label": "Full width",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>f"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + O\", \"Pop window out (float & pin)\", \"omarchy-hyprland-window-pop\")",
+      "label": "Pop window out (float & pin)",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>o"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + Home\", \"Save window width\", \"omarchy-hyprland-window-width save\")",
+      "label": "Save window width",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>Home"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + Home\", \"Restore window width\", \"omarchy-hyprland-window-width restore\")",
+      "label": "Restore window width",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>Home"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + L\", \"Toggle workspace layout\", \"omarchy-hyprland-workspace-layout-toggle\")",
+      "label": "Toggle workspace layout",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>l"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + LEFT\", \"Focus on left window\", hl.dsp.focus({ direction = \"l\" }))",
+      "label": "Focus on left window",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>Left"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + RIGHT\", \"Focus on right window\", hl.dsp.focus({ direction = \"r\" }))",
+      "label": "Focus on right window",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>Right"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + UP\", \"Focus on above window\", hl.dsp.focus({ direction = \"u\" }))",
+      "label": "Focus on above window",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>Up"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + DOWN\", \"Focus on below window\", hl.dsp.focus({ direction = \"d\" }))",
+      "label": "Focus on below window",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>Down"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + code:10\", \"Switch to workspace 1\", hl.dsp.focus({ workspace = \"1\" }))",
+      "label": "Switch to workspace 1",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>1"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + code:10\", \"Move window to workspace 1\", hl.dsp.window.move({ workspace = \"1\" }))",
+      "label": "Move window to workspace 1",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>1"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + code:10\", \"Move window silently to workspace 1\", hl.dsp.window.move({ follow = false, workspace = \"1\" }))",
+      "label": "Move window silently to workspace 1",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>1"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + code:11\", \"Switch to workspace 2\", hl.dsp.focus({ workspace = \"2\" }))",
+      "label": "Switch to workspace 2",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>2"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + code:11\", \"Move window to workspace 2\", hl.dsp.window.move({ workspace = \"2\" }))",
+      "label": "Move window to workspace 2",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>2"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + code:11\", \"Move window silently to workspace 2\", hl.dsp.window.move({ follow = false, workspace = \"2\" }))",
+      "label": "Move window silently to workspace 2",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>2"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + code:12\", \"Switch to workspace 3\", hl.dsp.focus({ workspace = \"3\" }))",
+      "label": "Switch to workspace 3",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>3"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + code:12\", \"Move window to workspace 3\", hl.dsp.window.move({ workspace = \"3\" }))",
+      "label": "Move window to workspace 3",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>3"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + code:12\", \"Move window silently to workspace 3\", hl.dsp.window.move({ follow = false, workspace = \"3\" }))",
+      "label": "Move window silently to workspace 3",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>3"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + code:13\", \"Switch to workspace 4\", hl.dsp.focus({ workspace = \"4\" }))",
+      "label": "Switch to workspace 4",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>4"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + code:13\", \"Move window to workspace 4\", hl.dsp.window.move({ workspace = \"4\" }))",
+      "label": "Move window to workspace 4",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>4"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + code:13\", \"Move window silently to workspace 4\", hl.dsp.window.move({ follow = false, workspace = \"4\" }))",
+      "label": "Move window silently to workspace 4",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>4"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + code:14\", \"Switch to workspace 5\", hl.dsp.focus({ workspace = \"5\" }))",
+      "label": "Switch to workspace 5",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>5"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + code:14\", \"Move window to workspace 5\", hl.dsp.window.move({ workspace = \"5\" }))",
+      "label": "Move window to workspace 5",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>5"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + code:14\", \"Move window silently to workspace 5\", hl.dsp.window.move({ follow = false, workspace = \"5\" }))",
+      "label": "Move window silently to workspace 5",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>5"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + code:15\", \"Switch to workspace 6\", hl.dsp.focus({ workspace = \"6\" }))",
+      "label": "Switch to workspace 6",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>6"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + code:15\", \"Move window to workspace 6\", hl.dsp.window.move({ workspace = \"6\" }))",
+      "label": "Move window to workspace 6",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>6"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + code:15\", \"Move window silently to workspace 6\", hl.dsp.window.move({ follow = false, workspace = \"6\" }))",
+      "label": "Move window silently to workspace 6",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>6"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + code:16\", \"Switch to workspace 7\", hl.dsp.focus({ workspace = \"7\" }))",
+      "label": "Switch to workspace 7",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>7"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + code:16\", \"Move window to workspace 7\", hl.dsp.window.move({ workspace = \"7\" }))",
+      "label": "Move window to workspace 7",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>7"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + code:16\", \"Move window silently to workspace 7\", hl.dsp.window.move({ follow = false, workspace = \"7\" }))",
+      "label": "Move window silently to workspace 7",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>7"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + code:17\", \"Switch to workspace 8\", hl.dsp.focus({ workspace = \"8\" }))",
+      "label": "Switch to workspace 8",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>8"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + code:17\", \"Move window to workspace 8\", hl.dsp.window.move({ workspace = \"8\" }))",
+      "label": "Move window to workspace 8",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>8"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + code:17\", \"Move window silently to workspace 8\", hl.dsp.window.move({ follow = false, workspace = \"8\" }))",
+      "label": "Move window silently to workspace 8",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>8"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + code:18\", \"Switch to workspace 9\", hl.dsp.focus({ workspace = \"9\" }))",
+      "label": "Switch to workspace 9",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>9"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + code:18\", \"Move window to workspace 9\", hl.dsp.window.move({ workspace = \"9\" }))",
+      "label": "Move window to workspace 9",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>9"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + code:18\", \"Move window silently to workspace 9\", hl.dsp.window.move({ follow = false, workspace = \"9\" }))",
+      "label": "Move window silently to workspace 9",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>9"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + code:19\", \"Switch to workspace 10\", hl.dsp.focus({ workspace = \"10\" }))",
+      "label": "Switch to workspace 10",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>0"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + code:19\", \"Move window to workspace 10\", hl.dsp.window.move({ workspace = \"10\" }))",
+      "label": "Move window to workspace 10",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>0"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + code:19\", \"Move window silently to workspace 10\", hl.dsp.window.move({ follow = false, workspace = \"10\" }))",
+      "label": "Move window silently to workspace 10",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>0"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + S\", \"Toggle scratchpad\", hl.dsp.workspace.toggle_special(\"scratchpad\"))",
+      "label": "Toggle scratchpad",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>s"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + S\", \"Move window to scratchpad\", hl.dsp.window.move({ follow = false, workspace = \"special:scratchpad\" }))",
+      "label": "Move window to scratchpad",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>s"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + grave\", \"Toggle scratchpad\", hl.dsp.workspace.toggle_special(\"scratchpad\"))",
+      "label": "Toggle scratchpad",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>grave"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + grave\", \"Move window to scratchpad\", hl.dsp.window.move({ follow = false, workspace = \"special:scratchpad\" }))",
+      "label": "Move window to scratchpad",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>grave"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + TAB\", \"Next workspace\", hl.dsp.focus({ workspace = \"e+1\" }))",
+      "label": "Next workspace",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>Tab"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + TAB\", \"Previous workspace\", hl.dsp.focus({ workspace = \"e-1\" }))",
+      "label": "Previous workspace",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>Tab"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + TAB\", \"Former workspace\", hl.dsp.focus({ workspace = \"previous\" }))",
+      "label": "Former workspace",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Control>Tab"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + LEFT\", \"Move workspace to left monitor\", hl.dsp.workspace.move({ monitor = \"l\" }))",
+      "label": "Move workspace to left monitor",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>Left"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + RIGHT\", \"Move workspace to right monitor\", hl.dsp.workspace.move({ monitor = \"r\" }))",
+      "label": "Move workspace to right monitor",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>Right"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + UP\", \"Move workspace to up monitor\", hl.dsp.workspace.move({ monitor = \"u\" }))",
+      "label": "Move workspace to up monitor",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>Up"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + DOWN\", \"Move workspace to down monitor\", hl.dsp.workspace.move({ monitor = \"d\" }))",
+      "label": "Move workspace to down monitor",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>Down"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + LEFT\", \"Swap window to the left\", hl.dsp.window.swap({ direction = \"l\" }))",
+      "label": "Swap window to the left",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>Left"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + RIGHT\", \"Swap window to the right\", hl.dsp.window.swap({ direction = \"r\" }))",
+      "label": "Swap window to the right",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>Right"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + UP\", \"Swap window up\", hl.dsp.window.swap({ direction = \"u\" }))",
+      "label": "Swap window up",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>Up"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + DOWN\", \"Swap window down\", hl.dsp.window.swap({ direction = \"d\" }))",
+      "label": "Swap window down",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>Down"
+      ]
+    },
+    {
+      "action": "o.bind(\"ALT + TAB\", \"Focus on next window\", hl.dsp.window.cycle_next()); o.bind(\"ALT + TAB\", \"Reveal active window on top\", hl.dsp.window.bring_to_top())",
+      "label": "Focus on next window, reveal active window on top",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "o.bind(\"ALT + SHIFT + TAB\", \"Focus on previous window\", hl.dsp.window.cycle_next({ next = false })); o.bind(\"ALT + SHIFT + TAB\", \"Reveal active window on top\", hl.dsp.window.bring_to_top())",
+      "label": "Focus on previous window, reveal active window on top",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Alt><Shift>Tab"
+      ]
+    },
+    {
+      "action": "o.bind(\"CTRL + ALT + TAB\", \"Focus on next monitor\", hl.dsp.focus({ monitor = \"+1\" }))",
+      "label": "Focus on next monitor",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Control><Alt>Tab"
+      ]
+    },
+    {
+      "action": "o.bind(\"CTRL + ALT + SHIFT + TAB\", \"Focus on previous monitor\", hl.dsp.focus({ monitor = \"-1\" }))",
+      "label": "Focus on previous monitor",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Control><Alt><Shift>Tab"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + code:20\", \"Expand window left\", hl.dsp.window.resize({ relative = true, x = -100, y = 0 }))",
+      "label": "Expand window left",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>minus"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + code:21\", \"Shrink window left\", hl.dsp.window.resize({ relative = true, x = 100, y = 0 }))",
+      "label": "Shrink window left",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>equal"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + code:20\", \"Shrink window up\", hl.dsp.window.resize({ relative = true, x = 0, y = -100 }))",
+      "label": "Shrink window up",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>minus"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + code:21\", \"Expand window down\", hl.dsp.window.resize({ relative = true, x = 0, y = 100 }))",
+      "label": "Expand window down",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Shift>equal"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + code:20\", \"Expand window left a little\", hl.dsp.window.resize({ relative = true, x = -25, y = 0 }))",
+      "label": "Expand window left a little",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>minus"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + code:21\", \"Shrink window left a little\", hl.dsp.window.resize({ relative = true, x = 25, y = 0 }))",
+      "label": "Shrink window left a little",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>equal"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + code:20\", \"Shrink window up a little\", hl.dsp.window.resize({ relative = true, x = 0, y = -25 }))",
+      "label": "Shrink window up a little",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>minus"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + code:21\", \"Expand window down a little\", hl.dsp.window.resize({ relative = true, x = 0, y = 25 }))",
+      "label": "Expand window down a little",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>equal"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + code:20\", \"Expand window left a lot\", hl.dsp.window.resize({ relative = true, x = -300, y = 0 }))",
+      "label": "Expand window left a lot",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Control>minus"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + code:21\", \"Shrink window left a lot\", hl.dsp.window.resize({ relative = true, x = 300, y = 0 }))",
+      "label": "Shrink window left a lot",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Control>equal"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + SHIFT + code:20\", \"Shrink window up a lot\", hl.dsp.window.resize({ relative = true, x = 0, y = -300 }))",
+      "label": "Shrink window up a lot",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Control><Shift>minus"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + SHIFT + code:21\", \"Expand window down a lot\", hl.dsp.window.resize({ relative = true, x = 0, y = 300 }))",
+      "label": "Expand window down a lot",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Control><Shift>equal"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + G\", \"Toggle window grouping\", hl.dsp.group.toggle())",
+      "label": "Toggle window grouping",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>g"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + G\", \"Move active window out of group\", hl.dsp.window.move({ out_of_group = true }))",
+      "label": "Move active window out of group",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>g"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + LEFT\", \"Move window to group on left\", hl.dsp.window.move({ into_group = \"l\" }))",
+      "label": "Move window to group on left",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>Left"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + RIGHT\", \"Move window to group on right\", hl.dsp.window.move({ into_group = \"r\" }))",
+      "label": "Move window to group on right",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>Right"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + UP\", \"Move window to group on top\", hl.dsp.window.move({ into_group = \"u\" }))",
+      "label": "Move window to group on top",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>Up"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + DOWN\", \"Move window to group on bottom\", hl.dsp.window.move({ into_group = \"d\" }))",
+      "label": "Move window to group on bottom",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>Down"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + TAB\", \"Next window in group\", hl.dsp.group.next())",
+      "label": "Next window in group",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>Tab"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + SHIFT + TAB\", \"Previous window in group\", hl.dsp.group.prev())",
+      "label": "Previous window in group",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt><Shift>Tab"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + LEFT\", \"Move grouped window focus left\", hl.dsp.group.prev())",
+      "label": "Move grouped window focus left",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Control>Left"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + RIGHT\", \"Move grouped window focus right\", hl.dsp.group.next())",
+      "label": "Move grouped window focus right",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Control>Right"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + code:10\", \"Switch to group window 1\", hl.dsp.group.active({ index = 1 }))",
+      "label": "Switch to group window 1",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>1"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + code:11\", \"Switch to group window 2\", hl.dsp.group.active({ index = 2 }))",
+      "label": "Switch to group window 2",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>2"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + code:12\", \"Switch to group window 3\", hl.dsp.group.active({ index = 3 }))",
+      "label": "Switch to group window 3",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>3"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + code:13\", \"Switch to group window 4\", hl.dsp.group.active({ index = 4 }))",
+      "label": "Switch to group window 4",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>4"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + code:14\", \"Switch to group window 5\", hl.dsp.group.active({ index = 5 }))",
+      "label": "Switch to group window 5",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>5"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SLASH\", \"Monitor scaling up\", \"omarchy-hyprland-monitor-scaling up\")",
+      "label": "Monitor scaling up",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super>slash"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + SLASH\", \"Monitor scaling down\", \"omarchy-hyprland-monitor-scaling down\")",
+      "label": "Monitor scaling down",
+      "group": "Windows and workspaces",
+      "accels": [
+        "<Super><Alt>slash"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SPACE\", \"Omarchy menu\", \"omarchy-menu toggle\")",
+      "label": "Omarchy menu",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super>space"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + SPACE\", \"Apps menu\", \"omarchy-menu toggle apps\")",
+      "label": "Apps menu",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Alt>space"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + E\", \"Emojis\", \"omarchy-shell shell toggle omarchy.emojis\")",
+      "label": "Emojis",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>e"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + C\", \"Capture menu\", \"omarchy-menu toggle capture\")",
+      "label": "Capture menu",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + O\", \"Toggle menu\", \"omarchy-menu toggle toggle\")",
+      "label": "Toggle menu",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>o"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + H\", \"Hardware menu\", \"omarchy-menu toggle hardware\")",
+      "label": "Hardware menu",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>h"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + code:201\", \"Omarchy menu\", \"omarchy-menu toggle root\")",
+      "label": "Omarchy menu",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Shift>F23"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ESCAPE\", \"System menu\", \"omarchy-menu toggle system\")",
+      "label": "System menu",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super>Escape"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86PowerOff\", \"Power menu\", \"omarchy-menu toggle system\", { locked = true })",
+      "label": "Power menu",
+      "group": "Menus and utilities",
+      "accels": [
+        "XF86PowerOff"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + K\", \"Keybindings\", \"omarchy-menu-keybindings\")",
+      "label": "Keybindings",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super>k"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + K\", \"Tmux keybindings\", \"omarchy-menu-tmux-keybindings\")",
+      "label": "Tmux keybindings",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Alt>k"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + K\", \"Herdr keybindings\", \"omarchy-menu-herdr-keybindings\")",
+      "label": "Herdr keybindings",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>k"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + Q\", \"Calculator\", \"omacalc\")",
+      "label": "Calculator",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>q"
+      ]
+    },
+    {
+      "action": "o.bind(\"XF86Calculator\", \"Calculator\", \"omacalc\")",
+      "label": "Calculator",
+      "group": "Menus and utilities",
+      "accels": [
+        "XF86Calculator"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + SPACE\", \"Toggle top bar\", \"omarchy-toggle-bar\")",
+      "label": "Toggle top bar",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Shift>space"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + SPACE\", \"Background switcher\", \"omarchy-menu toggle background\")",
+      "label": "Background switcher",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>space"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + CTRL + SPACE\", \"Theme menu\", \"omarchy-menu toggle theme\")",
+      "label": "Theme menu",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control><Shift>space"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + BACKSPACE\", \"Toggle window transparency\", \"omarchy-hyprland-window-transparency-toggle\")",
+      "label": "Toggle window transparency",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super>BackSpace"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + BACKSPACE\", \"Toggle window gaps\", \"omarchy-hyprland-window-gaps-toggle\")",
+      "label": "Toggle window gaps",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Shift>BackSpace"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + BACKSPACE\", \"Toggle single-window square aspect\", \"omarchy-hyprland-window-single-square-aspect-toggle\")",
+      "label": "Toggle single-window square aspect",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>BackSpace"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + ALT + F\", \"Toggle full screen desktop\", \"omarchy-toggle-fullscreen-desktop\")",
+      "label": "Toggle full screen desktop",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control><Alt>f"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + comma\", \"Dismiss last notification\", \"omarchy-shell notifications dismissOne\")",
+      "label": "Dismiss last notification",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super>comma"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + comma\", \"Dismiss all notifications\", \"omarchy-shell notifications dismissAll\")",
+      "label": "Dismiss all notifications",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Shift>comma"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + comma\", \"Toggle silencing notifications\", \"omarchy-toggle-notification-silencing\")",
+      "label": "Toggle silencing notifications",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>comma"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + comma\", \"Invoke last notification\", \"omarchy-shell notifications invokeLast\")",
+      "label": "Invoke last notification",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Alt>comma"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + ALT + comma\", \"Open notification history\", \"omarchy-shell notifications showHistory\")",
+      "label": "Open notification history",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Alt><Shift>comma"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + I\", \"Toggle locking on idle\", \"omarchy-toggle-idle\")",
+      "label": "Toggle locking on idle",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>i"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + N\", \"Toggle nightlight\", \"omarchy-toggle-nightlight\")",
+      "label": "Toggle nightlight",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>n"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + Delete\", \"Toggle laptop display\", \"omarchy-hyprland-monitor-internal toggle\")",
+      "label": "Toggle laptop display",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>Delete"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + ALT + Delete\", \"Toggle laptop display mirroring\", \"omarchy-hyprland-monitor-internal-mirror toggle\")",
+      "label": "Toggle laptop display mirroring",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control><Alt>Delete"
+      ]
+    },
+    {
+      "action": "o.bind(\"PRINT\", \"Screenshot\", \"omarchy-capture-screenshot\")",
+      "label": "Screenshot",
+      "group": "Menus and utilities",
+      "accels": [
+        "Print"
+      ]
+    },
+    {
+      "action": "o.bind(\"ALT + PRINT\", \"Screenrecording\", \"omarchy-capture-screenrecording --stop-recording || omarchy-menu toggle trigger.capture.screenrecord\")",
+      "label": "Screenrecording",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Alt>Print"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + code:34\", \"Make webcam overlay smaller\", \"omarchy-capture-webcam-resize smaller\")",
+      "label": "Make webcam overlay smaller",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Alt>bracketleft"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + ALT + code:35\", \"Make webcam overlay larger\", \"omarchy-capture-webcam-resize larger\")",
+      "label": "Make webcam overlay larger",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Alt>bracketright"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + PRINT\", \"Color picker\", \"pkill hyprpicker || hyprpicker -a\")",
+      "label": "Color picker",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super>Print"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + PRINT\", \"Extract text (OCR) from screenshot\", \"omarchy-capture-text\")",
+      "label": "Extract text (OCR) from screenshot",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>Print"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + S\", \"Share\", \"omarchy-menu toggle share\")",
+      "label": "Share",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>s"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + PERIOD\", \"Transcode\", \"omarchy-transcode\")",
+      "label": "Transcode",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>period"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + R\", \"Set reminder\", \"omarchy-menu toggle reminder-set\")",
+      "label": "Set reminder",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>r"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + ALT + R\", \"Show reminders\", \"omarchy-reminder show\")",
+      "label": "Show reminders",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control><Alt>r"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + CTRL + R\", \"Clear reminders\", \"omarchy-reminder clear\")",
+      "label": "Clear reminders",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control><Shift>r"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + ALT + T\", \"Show time\", \"omarchy-notification-time\")",
+      "label": "Show time",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control><Alt>t"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + ALT + B\", \"Show battery remaining\", \"omarchy-notification-battery\")",
+      "label": "Show battery remaining",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control><Alt>b"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + ALT + W\", \"Toggle weather\", \"omarchy-notification-weather\")",
+      "label": "Toggle weather",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control><Alt>w"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + SHIFT + CTRL + A\", \"Agent\", \"omarchy-agent --pick\")",
+      "label": "Agent",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control><Shift>a"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + A\", \"Audio\", \"omarchy-shell shell toggle omarchy.audio\")",
+      "label": "Audio",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + B\", \"Bluetooth\", \"omarchy-shell shell toggle omarchy.bluetooth\")",
+      "label": "Bluetooth",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>b"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + D\", \"Display\", \"omarchy-shell shell toggle omarchy.monitor\")",
+      "label": "Display",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>d"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + ALT + D\", \"Calendar\", \"omarchy-shell shell toggle omarchy.clock\")",
+      "label": "Calendar",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control><Alt>d"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + W\", \"Network\", \"omarchy-shell shell toggle omarchy.network\")",
+      "label": "Network",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + P\", \"Power\", \"omarchy-shell shell toggle omarchy.power\")",
+      "label": "Power",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>p"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + T\", \"Activity\", { tui = \"btop\" })",
+      "label": "Activity",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>t"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + code:10\", \"Bar panel 1\", \"omarchy-shell -q shell togglePanelAt right 1\")",
+      "label": "Bar panel 1",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>1"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + code:11\", \"Bar panel 2\", \"omarchy-shell -q shell togglePanelAt right 2\")",
+      "label": "Bar panel 2",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>2"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + code:12\", \"Bar panel 3\", \"omarchy-shell -q shell togglePanelAt right 3\")",
+      "label": "Bar panel 3",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>3"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + code:13\", \"Bar panel 4\", \"omarchy-shell -q shell togglePanelAt right 4\")",
+      "label": "Bar panel 4",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>4"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + code:14\", \"Bar panel 5\", \"omarchy-shell -q shell togglePanelAt right 5\")",
+      "label": "Bar panel 5",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>5"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + code:15\", \"Bar panel 6\", \"omarchy-shell -q shell togglePanelAt right 6\")",
+      "label": "Bar panel 6",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>6"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + code:16\", \"Bar panel 7\", \"omarchy-shell -q shell togglePanelAt right 7\")",
+      "label": "Bar panel 7",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>7"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + code:17\", \"Bar panel 8\", \"omarchy-shell -q shell togglePanelAt right 8\")",
+      "label": "Bar panel 8",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>8"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + code:18\", \"Bar panel 9\", \"omarchy-shell -q shell togglePanelAt right 9\")",
+      "label": "Bar panel 9",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>9"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + Z\", \"Zoom in\", <Lua function in default/hypr/bindings/utilities.lua>)",
+      "label": "Zoom in",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>z"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + ALT + Z\", \"Reset zoom\", <Lua function in default/hypr/bindings/utilities.lua>)",
+      "label": "Reset zoom",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control><Alt>z"
+      ]
+    },
+    {
+      "action": "o.bind(\"SUPER + CTRL + L\", \"Lock system\", \"omarchy-system-lock\")",
+      "label": "Lock system",
+      "group": "Menus and utilities",
+      "accels": [
+        "<Super><Control>l"
+      ]
+    }
+  ]
+}

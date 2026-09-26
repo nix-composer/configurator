@@ -1,0 +1,462 @@
+{
+  "$comment": "sway's default keybinds from etc/sway/config of nixpkgs nixos-26.05 `sway` (3975v49fldxik9p1wffbvr4n129yp80z-sway-1.12), the file NixOS links to /etc/sway/config; variables resolved; the XF86 (media) binds are `bindsym --locked` (unbind them with `unbindsym --locked`). Resize mode's binds are left out (scripts/keybinds/extract-compositors.py).",
+  "binds": [
+    {
+      "action": "exec foot",
+      "label": "Open a terminal (foot)",
+      "group": "Apps",
+      "accels": [
+        "<Super>Return"
+      ]
+    },
+    {
+      "action": "kill",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>q"
+      ]
+    },
+    {
+      "action": "exec wmenu-run",
+      "label": "Open the app launcher (wmenu-run)",
+      "group": "Apps",
+      "accels": [
+        "<Super>d"
+      ]
+    },
+    {
+      "action": "reload",
+      "label": "Reload the configuration",
+      "group": "Session",
+      "accels": [
+        "<Super><Shift>c"
+      ]
+    },
+    {
+      "action": "exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'",
+      "label": "Exit sway (asks first)",
+      "group": "Session",
+      "accels": [
+        "<Super><Shift>e"
+      ]
+    },
+    {
+      "action": "focus left",
+      "label": "Focus left",
+      "group": "Focus",
+      "accels": [
+        "<Super>h",
+        "<Super>Left"
+      ]
+    },
+    {
+      "action": "focus down",
+      "label": "Focus down",
+      "group": "Focus",
+      "accels": [
+        "<Super>j",
+        "<Super>Down"
+      ]
+    },
+    {
+      "action": "focus up",
+      "label": "Focus up",
+      "group": "Focus",
+      "accels": [
+        "<Super>k",
+        "<Super>Up"
+      ]
+    },
+    {
+      "action": "focus right",
+      "label": "Focus right",
+      "group": "Focus",
+      "accels": [
+        "<Super>l",
+        "<Super>Right"
+      ]
+    },
+    {
+      "action": "move left",
+      "label": "Move window left",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>h",
+        "<Super><Shift>Left"
+      ]
+    },
+    {
+      "action": "move down",
+      "label": "Move window down",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>j",
+        "<Super><Shift>Down"
+      ]
+    },
+    {
+      "action": "move up",
+      "label": "Move window up",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>k",
+        "<Super><Shift>Up"
+      ]
+    },
+    {
+      "action": "move right",
+      "label": "Move window right",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>l",
+        "<Super><Shift>Right"
+      ]
+    },
+    {
+      "action": "workspace number 1",
+      "label": "Switch to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>1"
+      ]
+    },
+    {
+      "action": "workspace number 2",
+      "label": "Switch to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>2"
+      ]
+    },
+    {
+      "action": "workspace number 3",
+      "label": "Switch to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>3"
+      ]
+    },
+    {
+      "action": "workspace number 4",
+      "label": "Switch to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>4"
+      ]
+    },
+    {
+      "action": "workspace number 5",
+      "label": "Switch to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>5"
+      ]
+    },
+    {
+      "action": "workspace number 6",
+      "label": "Switch to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>6"
+      ]
+    },
+    {
+      "action": "workspace number 7",
+      "label": "Switch to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>7"
+      ]
+    },
+    {
+      "action": "workspace number 8",
+      "label": "Switch to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>8"
+      ]
+    },
+    {
+      "action": "workspace number 9",
+      "label": "Switch to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>9"
+      ]
+    },
+    {
+      "action": "workspace number 10",
+      "label": "Switch to workspace 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>0"
+      ]
+    },
+    {
+      "action": "move container to workspace number 1",
+      "label": "Move window to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>1"
+      ]
+    },
+    {
+      "action": "move container to workspace number 2",
+      "label": "Move window to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>2"
+      ]
+    },
+    {
+      "action": "move container to workspace number 3",
+      "label": "Move window to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>3"
+      ]
+    },
+    {
+      "action": "move container to workspace number 4",
+      "label": "Move window to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>4"
+      ]
+    },
+    {
+      "action": "move container to workspace number 5",
+      "label": "Move window to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>5"
+      ]
+    },
+    {
+      "action": "move container to workspace number 6",
+      "label": "Move window to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>6"
+      ]
+    },
+    {
+      "action": "move container to workspace number 7",
+      "label": "Move window to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>7"
+      ]
+    },
+    {
+      "action": "move container to workspace number 8",
+      "label": "Move window to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>8"
+      ]
+    },
+    {
+      "action": "move container to workspace number 9",
+      "label": "Move window to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>9"
+      ]
+    },
+    {
+      "action": "move container to workspace number 10",
+      "label": "Move window to workspace 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>0"
+      ]
+    },
+    {
+      "action": "splith",
+      "label": "Split horizontally",
+      "group": "Layout",
+      "accels": [
+        "<Super>b"
+      ]
+    },
+    {
+      "action": "splitv",
+      "label": "Split vertically",
+      "group": "Layout",
+      "accels": [
+        "<Super>v"
+      ]
+    },
+    {
+      "action": "layout stacking",
+      "label": "Stacking layout",
+      "group": "Layout",
+      "accels": [
+        "<Super>s"
+      ]
+    },
+    {
+      "action": "layout tabbed",
+      "label": "Tabbed layout",
+      "group": "Layout",
+      "accels": [
+        "<Super>w"
+      ]
+    },
+    {
+      "action": "layout toggle split",
+      "label": "Toggle split layout",
+      "group": "Layout",
+      "accels": [
+        "<Super>e"
+      ]
+    },
+    {
+      "action": "fullscreen",
+      "label": "Toggle fullscreen",
+      "group": "Windows",
+      "accels": [
+        "<Super>f"
+      ]
+    },
+    {
+      "action": "floating toggle",
+      "label": "Toggle floating",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>space"
+      ]
+    },
+    {
+      "action": "focus mode_toggle",
+      "label": "Switch focus between tiling and floating",
+      "group": "Focus",
+      "accels": [
+        "<Super>space"
+      ]
+    },
+    {
+      "action": "focus parent",
+      "label": "Focus the parent container",
+      "group": "Focus",
+      "accels": [
+        "<Super>a"
+      ]
+    },
+    {
+      "action": "move scratchpad",
+      "label": "Move window to the scratchpad",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>minus"
+      ]
+    },
+    {
+      "action": "scratchpad show",
+      "label": "Show the scratchpad",
+      "group": "Windows",
+      "accels": [
+        "<Super>minus"
+      ]
+    },
+    {
+      "action": "mode \"resize\"",
+      "label": "Resize mode",
+      "group": "Windows",
+      "accels": [
+        "<Super>r"
+      ]
+    },
+    {
+      "action": "exec pactl set-sink-mute \\@DEFAULT_SINK@ toggle",
+      "label": "Mute audio",
+      "group": "Media",
+      "accels": [
+        "XF86AudioMute"
+      ]
+    },
+    {
+      "action": "exec pactl set-sink-volume \\@DEFAULT_SINK@ -5%",
+      "label": "Volume down",
+      "group": "Media",
+      "accels": [
+        "XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "exec pactl set-sink-volume \\@DEFAULT_SINK@ +5%",
+      "label": "Volume up",
+      "group": "Media",
+      "accels": [
+        "XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "exec pactl set-source-mute \\@DEFAULT_SOURCE@ toggle",
+      "label": "Mute the microphone",
+      "group": "Media",
+      "accels": [
+        "XF86AudioMicMute"
+      ]
+    },
+    {
+      "action": "exec playerctl play-pause",
+      "label": "Play or pause",
+      "group": "Media",
+      "accels": [
+        "XF86AudioPlay",
+        "XF86AudioPause"
+      ]
+    },
+    {
+      "action": "exec playerctl previous",
+      "label": "Previous track",
+      "group": "Media",
+      "accels": [
+        "XF86AudioPrev"
+      ]
+    },
+    {
+      "action": "exec playerctl next",
+      "label": "Next track",
+      "group": "Media",
+      "accels": [
+        "XF86AudioNext"
+      ]
+    },
+    {
+      "action": "exec playerctl stop",
+      "label": "Stop playback",
+      "group": "Media",
+      "accels": [
+        "XF86AudioStop"
+      ]
+    },
+    {
+      "action": "exec brightnessctl set 5%-",
+      "label": "Brightness down",
+      "group": "Media",
+      "accels": [
+        "XF86MonBrightnessDown"
+      ]
+    },
+    {
+      "action": "exec brightnessctl set 5%+",
+      "label": "Brightness up",
+      "group": "Media",
+      "accels": [
+        "XF86MonBrightnessUp"
+      ]
+    },
+    {
+      "action": "exec grim",
+      "label": "Take a screenshot (grim)",
+      "group": "Screenshots",
+      "accels": [
+        "Print"
+      ]
+    }
+  ]
+}

@@ -1045,12 +1045,11 @@ mod tests {
     fn default_keybinds_are_desktops_and_parse() {
         let catalog = Catalog::builtin().unwrap();
         for (id, binds) in &catalog.default_keybinds {
-            let desktop = catalog
-                .desktop(id)
-                .unwrap_or_else(|| panic!("data/keybinds/{id}.json: no such desktop"));
+            // A desktop's defaults may come before its renderer: the
+            // keybind layer lists them read-only until then.
             assert!(
-                desktop.keybinds.is_some(),
-                "{id}: has defaults but no keybind format"
+                catalog.desktop(id).is_some(),
+                "data/keybinds/{id}.json: no such desktop"
             );
             for bind in binds {
                 for accel in &bind.accels {
@@ -1062,6 +1061,18 @@ mod tests {
                 }
             }
         }
+    }
+
+    #[test]
+    fn omarchy_unbinds_use_its_own_combos() {
+        let catalog = Catalog::builtin().unwrap();
+        let mut answers =
+            Answers::from_json(include_str!("../../../examples/answers/omarchy.json")).unwrap();
+        answers.keybinds.clear();
+        answers.keybinds.insert("SUPER + 1".into(), Keybind::Unbind);
+        let host = generate(&answers, &catalog, &Inputs::default()).unwrap();
+        let config = &host.files["configuration.nix"];
+        assert!(config.contains("\"SUPER + code:10\""), "{config}");
     }
 
     #[test]

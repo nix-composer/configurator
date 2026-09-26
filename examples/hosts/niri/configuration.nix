@@ -24,9 +24,9 @@
   environment.etc."niri/config.kdl".text = lib.concatLines [
     ("include \"" + pkgs.runCommand "niri-default-config.kdl" { } "cp ${pkgs.niri.src}/resources/default-config.kdl $out" + "\"")
     "binds {"
-    ("    Super+d { spawn-sh " + builtins.toJSON ("fuzzel") + "; }")
-    ("    Super+Return { spawn-sh " + builtins.toJSON (lib.getExe pkgs.foot) + "; }")
-    ("    Super+Shift+e { spawn-sh " + builtins.toJSON ("notify-send \"hi there\"") + "; }")
+    ("    Mod+d { spawn-sh " + builtins.toJSON ("fuzzel") + "; }")
+    ("    Mod+Return { spawn-sh " + builtins.toJSON (lib.getExe pkgs.foot) + "; }")
+    ("    Mod+Shift+e { spawn-sh " + builtins.toJSON ("notify-send \"hi there\"") + "; }")
     "}"
   ];
 

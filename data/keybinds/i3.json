@@ -1,0 +1,413 @@
+{
+  "$comment": "i3's default keybinds from etc/i3/config of nixpkgs nixos-26.05 `i3` (pqwrk681wcrhhhkdkh5cz006gkvzlv5s-i3-4.24): the fallback config i3 loads when no user config exists (Mod1 = Alt). Variables resolved; resize mode's binds left out (scripts/keybinds/extract-compositors.py).",
+  "binds": [
+    {
+      "action": "exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && killall -SIGUSR1 i3status",
+      "label": "Volume up",
+      "group": "Media",
+      "accels": [
+        "XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && killall -SIGUSR1 i3status",
+      "label": "Volume down",
+      "group": "Media",
+      "accels": [
+        "XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && killall -SIGUSR1 i3status",
+      "label": "Mute audio",
+      "group": "Media",
+      "accels": [
+        "XF86AudioMute"
+      ]
+    },
+    {
+      "action": "exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && killall -SIGUSR1 i3status",
+      "label": "Mute the microphone",
+      "group": "Media",
+      "accels": [
+        "XF86AudioMicMute"
+      ]
+    },
+    {
+      "action": "exec i3-sensible-terminal",
+      "label": "Open a terminal (i3-sensible-terminal)",
+      "group": "Apps",
+      "accels": [
+        "<Alt>Return"
+      ]
+    },
+    {
+      "action": "kill",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>q"
+      ]
+    },
+    {
+      "action": "exec --no-startup-id dmenu_run",
+      "label": "Open the app launcher (dmenu_run)",
+      "group": "Apps",
+      "accels": [
+        "<Alt>d"
+      ]
+    },
+    {
+      "action": "focus left",
+      "label": "Focus left",
+      "group": "Focus",
+      "accels": [
+        "<Alt>j",
+        "<Alt>Left"
+      ]
+    },
+    {
+      "action": "focus down",
+      "label": "Focus down",
+      "group": "Focus",
+      "accels": [
+        "<Alt>k",
+        "<Alt>Down"
+      ]
+    },
+    {
+      "action": "focus up",
+      "label": "Focus up",
+      "group": "Focus",
+      "accels": [
+        "<Alt>l",
+        "<Alt>Up"
+      ]
+    },
+    {
+      "action": "focus right",
+      "label": "Focus right",
+      "group": "Focus",
+      "accels": [
+        "<Alt>semicolon",
+        "<Alt>Right"
+      ]
+    },
+    {
+      "action": "move left",
+      "label": "Move window left",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>j",
+        "<Alt><Shift>Left"
+      ]
+    },
+    {
+      "action": "move down",
+      "label": "Move window down",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>k",
+        "<Alt><Shift>Down"
+      ]
+    },
+    {
+      "action": "move up",
+      "label": "Move window up",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>l",
+        "<Alt><Shift>Up"
+      ]
+    },
+    {
+      "action": "move right",
+      "label": "Move window right",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>semicolon",
+        "<Alt><Shift>Right"
+      ]
+    },
+    {
+      "action": "split h",
+      "label": "Split horizontally",
+      "group": "Layout",
+      "accels": [
+        "<Alt>h"
+      ]
+    },
+    {
+      "action": "split v",
+      "label": "Split vertically",
+      "group": "Layout",
+      "accels": [
+        "<Alt>v"
+      ]
+    },
+    {
+      "action": "fullscreen toggle",
+      "label": "Toggle fullscreen",
+      "group": "Windows",
+      "accels": [
+        "<Alt>f"
+      ]
+    },
+    {
+      "action": "layout stacking",
+      "label": "Stacking layout",
+      "group": "Layout",
+      "accels": [
+        "<Alt>s"
+      ]
+    },
+    {
+      "action": "layout tabbed",
+      "label": "Tabbed layout",
+      "group": "Layout",
+      "accels": [
+        "<Alt>w"
+      ]
+    },
+    {
+      "action": "layout toggle split",
+      "label": "Toggle split layout",
+      "group": "Layout",
+      "accels": [
+        "<Alt>e"
+      ]
+    },
+    {
+      "action": "floating toggle",
+      "label": "Toggle floating",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>space"
+      ]
+    },
+    {
+      "action": "focus mode_toggle",
+      "label": "Switch focus between tiling and floating",
+      "group": "Focus",
+      "accels": [
+        "<Alt>space"
+      ]
+    },
+    {
+      "action": "focus parent",
+      "label": "Focus the parent container",
+      "group": "Focus",
+      "accels": [
+        "<Alt>a"
+      ]
+    },
+    {
+      "action": "move scratchpad",
+      "label": "Move window to the scratchpad",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>minus"
+      ]
+    },
+    {
+      "action": "scratchpad show",
+      "label": "Show the scratchpad",
+      "group": "Windows",
+      "accels": [
+        "<Alt>minus"
+      ]
+    },
+    {
+      "action": "workspace number \"1\"",
+      "label": "Switch to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>1"
+      ]
+    },
+    {
+      "action": "workspace number \"2\"",
+      "label": "Switch to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>2"
+      ]
+    },
+    {
+      "action": "workspace number \"3\"",
+      "label": "Switch to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>3"
+      ]
+    },
+    {
+      "action": "workspace number \"4\"",
+      "label": "Switch to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>4"
+      ]
+    },
+    {
+      "action": "workspace number \"5\"",
+      "label": "Switch to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>5"
+      ]
+    },
+    {
+      "action": "workspace number \"6\"",
+      "label": "Switch to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>6"
+      ]
+    },
+    {
+      "action": "workspace number \"7\"",
+      "label": "Switch to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>7"
+      ]
+    },
+    {
+      "action": "workspace number \"8\"",
+      "label": "Switch to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>8"
+      ]
+    },
+    {
+      "action": "workspace number \"9\"",
+      "label": "Switch to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>9"
+      ]
+    },
+    {
+      "action": "workspace number \"10\"",
+      "label": "Switch to workspace 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>0"
+      ]
+    },
+    {
+      "action": "move container to workspace number \"1\"",
+      "label": "Move window to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>1"
+      ]
+    },
+    {
+      "action": "move container to workspace number \"2\"",
+      "label": "Move window to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>2"
+      ]
+    },
+    {
+      "action": "move container to workspace number \"3\"",
+      "label": "Move window to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>3"
+      ]
+    },
+    {
+      "action": "move container to workspace number \"4\"",
+      "label": "Move window to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>4"
+      ]
+    },
+    {
+      "action": "move container to workspace number \"5\"",
+      "label": "Move window to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>5"
+      ]
+    },
+    {
+      "action": "move container to workspace number \"6\"",
+      "label": "Move window to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>6"
+      ]
+    },
+    {
+      "action": "move container to workspace number \"7\"",
+      "label": "Move window to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>7"
+      ]
+    },
+    {
+      "action": "move container to workspace number \"8\"",
+      "label": "Move window to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>8"
+      ]
+    },
+    {
+      "action": "move container to workspace number \"9\"",
+      "label": "Move window to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>9"
+      ]
+    },
+    {
+      "action": "move container to workspace number \"10\"",
+      "label": "Move window to workspace 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>0"
+      ]
+    },
+    {
+      "action": "reload",
+      "label": "Reload the configuration",
+      "group": "Session",
+      "accels": [
+        "<Alt><Shift>c"
+      ]
+    },
+    {
+      "action": "restart",
+      "label": "Restart i3 in place",
+      "group": "Session",
+      "accels": [
+        "<Alt><Shift>r"
+      ]
+    },
+    {
+      "action": "exec \"i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'\"",
+      "label": "Exit i3 (asks first)",
+      "group": "Session",
+      "accels": [
+        "<Alt><Shift>e"
+      ]
+    },
+    {
+      "action": "mode \"resize\"",
+      "label": "Resize mode",
+      "group": "Windows",
+      "accels": [
+        "<Alt>r"
+      ]
+    }
+  ]
+}

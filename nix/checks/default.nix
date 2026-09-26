@@ -168,6 +168,8 @@ hostChecks
           target.succeed(f"grep -q '^bindsym Mod4+Return exec /nix/store/.*/bin/foot$' {conf}")
           target.succeed(f"grep -q '^bindsym Mod4+Shift+g exec /nix/store/.*/bin/chromium --app=https://github.com$' {conf}")
           target.succeed(f"grep -q '^unbindsym Mod4+Shift+q$' {conf}")
+          # Sway's own action on new keys.
+          target.succeed(f"grep -q '^bindsym Mod4+Shift+x kill$' {conf}")
           # --validate still starts a backend: a headless one, rendered in software.
           target.succeed(
               "su - erin -c 'mkdir -m 700 -p /tmp/erin-runtime && XDG_RUNTIME_DIR=/tmp/erin-runtime"
@@ -194,8 +196,10 @@ hostChecks
           target.succeed(read.format(f"{base}/custom-keybindings/configurator0/binding") + " | grep -q '<Super>Return'")
           target.succeed(read.format(f"{base}/custom-keybindings/configurator1/command") + " | grep -q 'chromium --app=https://youtube.com/'")
           target.succeed("test -f /run/current-system/sw/share/applications/webapp-youtube.desktop")
-          # ALT + F4 unbound: GNOME's close key is emptied.
-          target.succeed(read.format("/org/gnome/desktop/wm/keybindings/close") + " | grep -qx '@as \\[\\]'")
+          # Close window moved to SUPER + Q (its ALT + F4 gone), the
+          # overview to the right Super key.
+          target.succeed(read.format("/org/gnome/desktop/wm/keybindings/close") + " | grep -qx \"\\['<Super>q'\\]\"")
+          target.succeed(read.format("/org/gnome/mutter/overlay-key") + " | grep -qx \"'Super_R'\"")
       with subtest("GDM comes up"):
           target.wait_for_unit("display-manager.service")
           target.sleep(10)

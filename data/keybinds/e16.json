@@ -1,0 +1,317 @@
+{
+  "$comment": "E16's default keybinds: the KeyDown lines of the KEYBINDINGS action class in share/e16/config/bindings.cfg of nixpkgs' e16 (nixos-26.05). The action is the IPC action as the line writes it. Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "desk arrange size",
+      "label": "Arrange the windows by size",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Home"
+      ]
+    },
+    {
+      "action": "exec xterm",
+      "label": "Run xterm",
+      "group": "Apps",
+      "accels": [
+        "<Control><Alt>Insert"
+      ]
+    },
+    {
+      "action": "exit logout",
+      "label": "Log out",
+      "group": "Session",
+      "accels": [
+        "<Control><Alt>Delete"
+      ]
+    },
+    {
+      "action": "exit restart",
+      "label": "Restart E16",
+      "group": "Session",
+      "accels": [
+        "<Control><Alt>End"
+      ]
+    },
+    {
+      "action": "desk next",
+      "label": "Next desktop",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Right"
+      ]
+    },
+    {
+      "action": "desk prev",
+      "label": "Previous desktop",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Left"
+      ]
+    },
+    {
+      "action": "desk this",
+      "label": "Raise the current desktop",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Return"
+      ]
+    },
+    {
+      "action": "area move 0 1",
+      "label": "Area below",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>Down"
+      ]
+    },
+    {
+      "action": "area move 0 -1",
+      "label": "Area above",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>Up"
+      ]
+    },
+    {
+      "action": "area move -1 0",
+      "label": "Area to the left",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>Left"
+      ]
+    },
+    {
+      "action": "area move 1 0",
+      "label": "Area to the right",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>Right"
+      ]
+    },
+    {
+      "action": "desk goto 0",
+      "label": "Go to desktop 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F1"
+      ]
+    },
+    {
+      "action": "desk goto 1",
+      "label": "Go to desktop 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F2"
+      ]
+    },
+    {
+      "action": "desk goto 2",
+      "label": "Go to desktop 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F3"
+      ]
+    },
+    {
+      "action": "desk goto 3",
+      "label": "Go to desktop 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F4"
+      ]
+    },
+    {
+      "action": "desk goto 4",
+      "label": "Go to desktop 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F5"
+      ]
+    },
+    {
+      "action": "desk goto 5",
+      "label": "Go to desktop 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F6"
+      ]
+    },
+    {
+      "action": "desk goto 6",
+      "label": "Go to desktop 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F7"
+      ]
+    },
+    {
+      "action": "desk goto 7",
+      "label": "Go to desktop 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F8"
+      ]
+    },
+    {
+      "action": "focus next",
+      "label": "Focus the next window",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "wop * raise",
+      "label": "Raise the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>Up"
+      ]
+    },
+    {
+      "action": "wop * lower",
+      "label": "Lower the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>Down"
+      ]
+    },
+    {
+      "action": "wop * fullscreen",
+      "label": "Toggle fullscreen",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>f"
+      ]
+    },
+    {
+      "action": "wop * iconify",
+      "label": "Iconify the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>i"
+      ]
+    },
+    {
+      "action": "wop * kill",
+      "label": "Kill the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>k"
+      ]
+    },
+    {
+      "action": "wop * ts conservative",
+      "label": "Maximize the window (conservative)",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>m"
+      ]
+    },
+    {
+      "action": "wop * pin on *",
+      "label": "Pin the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>p"
+      ]
+    },
+    {
+      "action": "wop * pin off *",
+      "label": "Unpin the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>q"
+      ]
+    },
+    {
+      "action": "wop * shade",
+      "label": "Shade the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>r"
+      ]
+    },
+    {
+      "action": "wop * stick",
+      "label": "Stick the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>s"
+      ]
+    },
+    {
+      "action": "menus show winops.menu",
+      "label": "Window operations menu",
+      "group": "Menus",
+      "accels": [
+        "<Control><Alt>w"
+      ]
+    },
+    {
+      "action": "wop * close",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>x"
+      ]
+    },
+    {
+      "action": "wop * zoom",
+      "label": "Zoom the window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>Return"
+      ]
+    },
+    {
+      "action": "menus show file.menu",
+      "label": "User menu",
+      "group": "Menus",
+      "accels": [
+        "<Control><Shift>F1"
+      ]
+    },
+    {
+      "action": "menus show settings.menu",
+      "label": "Settings menu",
+      "group": "Menus",
+      "accels": [
+        "<Control><Shift>F2"
+      ]
+    },
+    {
+      "action": "menus show windowlist",
+      "label": "Window list",
+      "group": "Menus",
+      "accels": [
+        "<Control><Shift>F4"
+      ]
+    },
+    {
+      "action": "button_show all",
+      "label": "Show/hide all buttons",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>a"
+      ]
+    },
+    {
+      "action": "button_show",
+      "label": "Show/hide the buttons",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>b"
+      ]
+    },
+    {
+      "action": "button_show buttons CONFIG*",
+      "label": "Show/hide the config buttons",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>c"
+      ]
+    }
+  ]
+}

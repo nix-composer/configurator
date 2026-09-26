@@ -1,0 +1,608 @@
+{
+  "$comment": "Xfce 4.20's default keyboard shortcuts (libxfce4ui's xfce4-keyboard-shortcuts.xml, nixpkgs nixos-26.05; scripts/keybinds/extract-kde-cosmic-xfce-omarchy.py): `commands/<command>` and `xfwm4/<action>` as the xfconf values name them, xfwm4 labels as Xfce's settings show them.",
+  "binds": [
+    {
+      "action": "commands/xfce4-popup-applicationsmenu",
+      "label": "xfce4-popup-applicationsmenu",
+      "group": "Commands",
+      "accels": [
+        "<Alt>F1"
+      ]
+    },
+    {
+      "action": "commands/xfce4-appfinder --collapsed",
+      "label": "xfce4-appfinder --collapsed",
+      "group": "Commands",
+      "accels": [
+        "<Alt>F2"
+      ]
+    },
+    {
+      "action": "commands/xfce4-appfinder",
+      "label": "xfce4-appfinder",
+      "group": "Commands",
+      "accels": [
+        "<Alt>F3"
+      ]
+    },
+    {
+      "action": "commands/xfce4-session-logout",
+      "label": "xfce4-session-logout",
+      "group": "Commands",
+      "accels": [
+        "<Control><Alt>Delete"
+      ]
+    },
+    {
+      "action": "commands/xflock4",
+      "label": "xflock4",
+      "group": "Commands",
+      "accels": [
+        "<Control><Alt>l"
+      ]
+    },
+    {
+      "action": "commands/exo-open --launch TerminalEmulator",
+      "label": "exo-open --launch TerminalEmulator",
+      "group": "Commands",
+      "accels": [
+        "<Control><Alt>t"
+      ]
+    },
+    {
+      "action": "commands/xfce4-display-settings --minimal",
+      "label": "xfce4-display-settings --minimal",
+      "group": "Commands",
+      "accels": [
+        "XF86Display",
+        "<Super>p"
+      ]
+    },
+    {
+      "action": "commands/xfdesktop --menu",
+      "label": "xfdesktop --menu",
+      "group": "Commands",
+      "accels": [
+        "<Control>Escape"
+      ]
+    },
+    {
+      "action": "commands/exo-open --launch WebBrowser",
+      "label": "exo-open --launch WebBrowser",
+      "group": "Commands",
+      "accels": [
+        "XF86WWW",
+        "HomePage"
+      ]
+    },
+    {
+      "action": "commands/exo-open --launch MailReader",
+      "label": "exo-open --launch MailReader",
+      "group": "Commands",
+      "accels": [
+        "XF86Mail"
+      ]
+    },
+    {
+      "action": "commands/xfce4-screenshooter",
+      "label": "xfce4-screenshooter",
+      "group": "Commands",
+      "accels": [
+        "Print"
+      ]
+    },
+    {
+      "action": "commands/xfce4-screenshooter -w",
+      "label": "xfce4-screenshooter -w",
+      "group": "Commands",
+      "accels": [
+        "<Alt>Print"
+      ]
+    },
+    {
+      "action": "commands/xfce4-screenshooter -r",
+      "label": "xfce4-screenshooter -r",
+      "group": "Commands",
+      "accels": [
+        "<Shift>Print"
+      ]
+    },
+    {
+      "action": "commands/thunar",
+      "label": "thunar",
+      "group": "Commands",
+      "accels": [
+        "<Super>e",
+        "<Control><Alt>f"
+      ]
+    },
+    {
+      "action": "commands/xkill",
+      "label": "xkill",
+      "group": "Commands",
+      "accels": [
+        "<Control><Alt>Escape"
+      ]
+    },
+    {
+      "action": "commands/xfce4-taskmanager",
+      "label": "xfce4-taskmanager",
+      "group": "Commands",
+      "accels": [
+        "<Control><Shift>Escape"
+      ]
+    },
+    {
+      "action": "commands/xfce4-appfinder -c",
+      "label": "xfce4-appfinder -c",
+      "group": "Commands",
+      "accels": [
+        "<Super>r"
+      ]
+    },
+    {
+      "action": "commands/orca",
+      "label": "orca",
+      "group": "Commands",
+      "accels": [
+        "<Super><Alt>s"
+      ]
+    },
+    {
+      "action": "xfwm4/add_workspace_key",
+      "label": "Add workspace",
+      "group": "Window manager",
+      "accels": [
+        "<Alt>Insert"
+      ]
+    },
+    {
+      "action": "xfwm4/cancel_key",
+      "label": "Cancel",
+      "group": "Window manager (while moving, resizing or cycling)",
+      "accels": [
+        "Escape"
+      ]
+    },
+    {
+      "action": "xfwm4/left_key",
+      "label": "Left",
+      "group": "Window manager (while moving, resizing or cycling)",
+      "accels": [
+        "Left"
+      ]
+    },
+    {
+      "action": "xfwm4/right_key",
+      "label": "Right",
+      "group": "Window manager (while moving, resizing or cycling)",
+      "accels": [
+        "Right"
+      ]
+    },
+    {
+      "action": "xfwm4/up_key",
+      "label": "Up",
+      "group": "Window manager (while moving, resizing or cycling)",
+      "accels": [
+        "Up"
+      ]
+    },
+    {
+      "action": "xfwm4/down_key",
+      "label": "Down",
+      "group": "Window manager (while moving, resizing or cycling)",
+      "accels": [
+        "Down"
+      ]
+    },
+    {
+      "action": "xfwm4/cycle_windows_key",
+      "label": "Cycle windows",
+      "group": "Window manager",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "xfwm4/cycle_reverse_windows_key",
+      "label": "Cycle windows (Reverse)",
+      "group": "Window manager",
+      "accels": [
+        "<Alt><Shift>Tab"
+      ]
+    },
+    {
+      "action": "xfwm4/del_workspace_key",
+      "label": "Delete last workspace",
+      "group": "Window manager",
+      "accels": [
+        "<Alt>Delete"
+      ]
+    },
+    {
+      "action": "xfwm4/down_workspace_key",
+      "label": "Bottom workspace",
+      "group": "Window manager",
+      "accels": [
+        "<Control><Alt>Down"
+      ]
+    },
+    {
+      "action": "xfwm4/left_workspace_key",
+      "label": "Left workspace",
+      "group": "Window manager",
+      "accels": [
+        "<Control><Alt>Left"
+      ]
+    },
+    {
+      "action": "xfwm4/lower_window_key",
+      "label": "Lower window",
+      "group": "Window manager",
+      "accels": [
+        "<Alt><Shift>Page_Down"
+      ]
+    },
+    {
+      "action": "xfwm4/close_window_key",
+      "label": "Close window",
+      "group": "Window manager",
+      "accels": [
+        "<Alt>F4"
+      ]
+    },
+    {
+      "action": "xfwm4/stick_window_key",
+      "label": "Stick window",
+      "group": "Window manager",
+      "accels": [
+        "<Alt>F6"
+      ]
+    },
+    {
+      "action": "xfwm4/move_window_key",
+      "label": "Move window",
+      "group": "Window manager",
+      "accels": [
+        "<Alt>F7"
+      ]
+    },
+    {
+      "action": "xfwm4/resize_window_key",
+      "label": "Resize window",
+      "group": "Window manager",
+      "accels": [
+        "<Alt>F8"
+      ]
+    },
+    {
+      "action": "xfwm4/hide_window_key",
+      "label": "Hide window",
+      "group": "Window manager",
+      "accels": [
+        "<Alt>F9"
+      ]
+    },
+    {
+      "action": "xfwm4/maximize_window_key",
+      "label": "Maximize window",
+      "group": "Window manager",
+      "accels": [
+        "<Alt>F10"
+      ]
+    },
+    {
+      "action": "xfwm4/fullscreen_key",
+      "label": "Toggle fullscreen",
+      "group": "Window manager",
+      "accels": [
+        "<Alt>F11"
+      ]
+    },
+    {
+      "action": "xfwm4/above_key",
+      "label": "Toggle above",
+      "group": "Window manager",
+      "accels": [
+        "<Alt>F12"
+      ]
+    },
+    {
+      "action": "xfwm4/move_window_next_workspace_key",
+      "label": "Move window to next workspace",
+      "group": "Window manager",
+      "accels": [
+        "<Control><Alt>End"
+      ]
+    },
+    {
+      "action": "xfwm4/move_window_prev_workspace_key",
+      "label": "Move window to previous workspace",
+      "group": "Window manager",
+      "accels": [
+        "<Control><Alt>Home"
+      ]
+    },
+    {
+      "action": "xfwm4/move_window_workspace_1_key",
+      "label": "Move window to workspace 1",
+      "group": "Window manager",
+      "accels": [
+        "<Control><Alt>KP_1"
+      ]
+    },
+    {
+      "action": "xfwm4/move_window_workspace_2_key",
+      "label": "Move window to workspace 2",
+      "group": "Window manager",
+      "accels": [
+        "<Control><Alt>KP_2"
+      ]
+    },
+    {
+      "action": "xfwm4/move_window_workspace_3_key",
+      "label": "Move window to workspace 3",
+      "group": "Window manager",
+      "accels": [
+        "<Control><Alt>KP_3"
+      ]
+    },
+    {
+      "action": "xfwm4/move_window_workspace_4_key",
+      "label": "Move window to workspace 4",
+      "group": "Window manager",
+      "accels": [
+        "<Control><Alt>KP_4"
+      ]
+    },
+    {
+      "action": "xfwm4/move_window_workspace_5_key",
+      "label": "Move window to workspace 5",
+      "group": "Window manager",
+      "accels": [
+        "<Control><Alt>KP_5"
+      ]
+    },
+    {
+      "action": "xfwm4/move_window_workspace_6_key",
+      "label": "Move window to workspace 6",
+      "group": "Window manager",
+      "accels": [
+        "<Control><Alt>KP_6"
+      ]
+    },
+    {
+      "action": "xfwm4/move_window_workspace_7_key",
+      "label": "Move window to workspace 7",
+      "group": "Window manager",
+      "accels": [
+        "<Control><Alt>KP_7"
+      ]
+    },
+    {
+      "action": "xfwm4/move_window_workspace_8_key",
+      "label": "Move window to workspace 8",
+      "group": "Window manager",
+      "accels": [
+        "<Control><Alt>KP_8"
+      ]
+    },
+    {
+      "action": "xfwm4/move_window_workspace_9_key",
+      "label": "Move window to workspace 9",
+      "group": "Window manager",
+      "accels": [
+        "<Control><Alt>KP_9"
+      ]
+    },
+    {
+      "action": "xfwm4/popup_menu_key",
+      "label": "Window operations menu",
+      "group": "Window manager",
+      "accels": [
+        "<Alt>space"
+      ]
+    },
+    {
+      "action": "xfwm4/raise_window_key",
+      "label": "Raise window",
+      "group": "Window manager",
+      "accels": [
+        "<Alt><Shift>Page_Up"
+      ]
+    },
+    {
+      "action": "xfwm4/right_workspace_key",
+      "label": "Right workspace",
+      "group": "Window manager",
+      "accels": [
+        "<Control><Alt>Right"
+      ]
+    },
+    {
+      "action": "xfwm4/show_desktop_key",
+      "label": "Show desktop",
+      "group": "Window manager",
+      "accels": [
+        "<Control><Alt>d"
+      ]
+    },
+    {
+      "action": "xfwm4/up_workspace_key",
+      "label": "Upper workspace",
+      "group": "Window manager",
+      "accels": [
+        "<Control><Alt>Up"
+      ]
+    },
+    {
+      "action": "xfwm4/switch_window_key",
+      "label": "Switch window for same application",
+      "group": "Window manager",
+      "accels": [
+        "<Super>Tab"
+      ]
+    },
+    {
+      "action": "xfwm4/workspace_1_key",
+      "label": "Workspace 1",
+      "group": "Window manager",
+      "accels": [
+        "<Control>F1"
+      ]
+    },
+    {
+      "action": "xfwm4/workspace_2_key",
+      "label": "Workspace 2",
+      "group": "Window manager",
+      "accels": [
+        "<Control>F2"
+      ]
+    },
+    {
+      "action": "xfwm4/workspace_3_key",
+      "label": "Workspace 3",
+      "group": "Window manager",
+      "accels": [
+        "<Control>F3"
+      ]
+    },
+    {
+      "action": "xfwm4/workspace_4_key",
+      "label": "Workspace 4",
+      "group": "Window manager",
+      "accels": [
+        "<Control>F4"
+      ]
+    },
+    {
+      "action": "xfwm4/workspace_5_key",
+      "label": "Workspace 5",
+      "group": "Window manager",
+      "accels": [
+        "<Control>F5"
+      ]
+    },
+    {
+      "action": "xfwm4/workspace_6_key",
+      "label": "Workspace 6",
+      "group": "Window manager",
+      "accels": [
+        "<Control>F6"
+      ]
+    },
+    {
+      "action": "xfwm4/workspace_7_key",
+      "label": "Workspace 7",
+      "group": "Window manager",
+      "accels": [
+        "<Control>F7"
+      ]
+    },
+    {
+      "action": "xfwm4/workspace_8_key",
+      "label": "Workspace 8",
+      "group": "Window manager",
+      "accels": [
+        "<Control>F8"
+      ]
+    },
+    {
+      "action": "xfwm4/workspace_9_key",
+      "label": "Workspace 9",
+      "group": "Window manager",
+      "accels": [
+        "<Control>F9"
+      ]
+    },
+    {
+      "action": "xfwm4/workspace_10_key",
+      "label": "Workspace 10",
+      "group": "Window manager",
+      "accels": [
+        "<Control>F10"
+      ]
+    },
+    {
+      "action": "xfwm4/workspace_11_key",
+      "label": "Workspace 11",
+      "group": "Window manager",
+      "accels": [
+        "<Control>F11"
+      ]
+    },
+    {
+      "action": "xfwm4/workspace_12_key",
+      "label": "Workspace 12",
+      "group": "Window manager",
+      "accels": [
+        "<Control>F12"
+      ]
+    },
+    {
+      "action": "xfwm4/tile_left_key",
+      "label": "Tile window to the left",
+      "group": "Window manager",
+      "accels": [
+        "<Super>KP_Left"
+      ]
+    },
+    {
+      "action": "xfwm4/tile_right_key",
+      "label": "Tile window to the right",
+      "group": "Window manager",
+      "accels": [
+        "<Super>KP_Right"
+      ]
+    },
+    {
+      "action": "xfwm4/tile_down_key",
+      "label": "Tile window to the bottom",
+      "group": "Window manager",
+      "accels": [
+        "<Super>KP_Down"
+      ]
+    },
+    {
+      "action": "xfwm4/tile_up_key",
+      "label": "Tile window to the top",
+      "group": "Window manager",
+      "accels": [
+        "<Super>KP_Up"
+      ]
+    },
+    {
+      "action": "xfwm4/tile_up_right_key",
+      "label": "Tile window to the top-right",
+      "group": "Window manager",
+      "accels": [
+        "<Super>KP_Page_Up"
+      ]
+    },
+    {
+      "action": "xfwm4/tile_up_left_key",
+      "label": "Tile window to the top-left",
+      "group": "Window manager",
+      "accels": [
+        "<Super>KP_Home"
+      ]
+    },
+    {
+      "action": "xfwm4/tile_down_left_key",
+      "label": "Tile window to the bottom-left",
+      "group": "Window manager",
+      "accels": [
+        "<Super>KP_End"
+      ]
+    },
+    {
+      "action": "xfwm4/tile_down_right_key",
+      "label": "Tile window to the bottom-right",
+      "group": "Window manager",
+      "accels": [
+        "<Super>KP_Next"
+      ]
+    }
+  ]
+}

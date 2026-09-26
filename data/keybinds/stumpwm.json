@@ -1,0 +1,981 @@
+{
+  "$comment": "StumpWM's built-in default keybinds: the fill-keymap forms of bindings.lisp in nixpkgs' stumpwm (nixos-26.05) for the prefix maps of tile groups (the default group type): *root-map*, *group-root-map*, *tile-group-root-map*, *groups-map* (C-t g), *exchange-window-map* (C-t x) and *help-map* (C-t h). Every bind is behind the prefix C-t, so every accel is <Control>t and the label has the sequences; the action is `<keymap> <command>` (binds with the same command merged). Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "*root-map* exec xterm",
+      "label": "C-t c, C-t C-c: Run xterm",
+      "group": "Apps",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* emacs",
+      "label": "C-t e, C-t C-e: Run or raise Emacs",
+      "group": "Apps",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* banish",
+      "label": "C-t b, C-t C-b: Banish the pointer",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* time",
+      "label": "C-t a, C-t C-a: Show the time",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* exec",
+      "label": "C-t !: Run a shell command",
+      "group": "Apps",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* abort",
+      "label": "C-t C-g: Abort",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* send-escape",
+      "label": "C-t t: Send C-t to the window",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* colon",
+      "label": "C-t ;: Run a StumpWM command",
+      "group": "Apps",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* eval",
+      "label": "C-t :: Evaluate Lisp",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* version",
+      "label": "C-t v: Show the version",
+      "group": "Session",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* lastmsg",
+      "label": "C-t m, C-t C-m: Show the last message",
+      "group": "Session",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* vgroups",
+      "label": "C-t G: List groups and their windows",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* gselect 1",
+      "label": "C-t F1: Go to group 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* gselect 2",
+      "label": "C-t F2: Go to group 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* gselect 3",
+      "label": "C-t F3: Go to group 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* gselect 4",
+      "label": "C-t F4: Go to group 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* gselect 5",
+      "label": "C-t F5: Go to group 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* gselect 6",
+      "label": "C-t F6: Go to group 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* gselect 7",
+      "label": "C-t F7: Go to group 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* gselect 8",
+      "label": "C-t F8: Go to group 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* gselect 9",
+      "label": "C-t F9: Go to group 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* gselect 10",
+      "label": "C-t F10: Go to group 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* next-urgent",
+      "label": "C-t C-u: Next urgent window",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* next",
+      "label": "C-t M-n: Next window",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* prev",
+      "label": "C-t M-p: Previous window",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* other",
+      "label": "C-t o: Last window",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* expose",
+      "label": "C-t Return, C-t C-Return: Show all windows (expose)",
+      "group": "Menus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* windows",
+      "label": "C-t w, C-t C-w: List the windows",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* repack-window-numbers",
+      "label": "C-t BackSpace: Repack window numbers",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* delete",
+      "label": "C-t k, C-t C-k: Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* kill",
+      "label": "C-t K: Kill the window",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* select",
+      "label": "C-t ': Select a window by name",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* windowlist",
+      "label": "C-t \": Window list menu",
+      "group": "Menus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* select-window-by-number 0",
+      "label": "C-t 0: Select window 0",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* select-window-by-number 1",
+      "label": "C-t 1: Select window 1",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* select-window-by-number 2",
+      "label": "C-t 2: Select window 2",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* select-window-by-number 3",
+      "label": "C-t 3: Select window 3",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* select-window-by-number 4",
+      "label": "C-t 4: Select window 4",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* select-window-by-number 5",
+      "label": "C-t 5: Select window 5",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* select-window-by-number 6",
+      "label": "C-t 6: Select window 6",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* select-window-by-number 7",
+      "label": "C-t 7: Select window 7",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* select-window-by-number 8",
+      "label": "C-t 8: Select window 8",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* select-window-by-number 9",
+      "label": "C-t 9: Select window 9",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* number",
+      "label": "C-t C-N: Renumber the window",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* mark",
+      "label": "C-t #: Mark the window",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* fullscreen",
+      "label": "C-t F11: Toggle fullscreen",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* title",
+      "label": "C-t A: Rename the window",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* info",
+      "label": "C-t i: Window information",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*group-root-map* show-window-properties",
+      "label": "C-t I: Show the window's properties",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* pull-hidden-next",
+      "label": "C-t n, C-t C-n, C-t space, C-t C-space: Pull the next hidden window into the frame",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* next-in-frame",
+      "label": "C-t C-M-n: Next window in the frame",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* pull-hidden-previous",
+      "label": "C-t p, C-t C-p: Pull the previous hidden window into the frame",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* prev-in-frame",
+      "label": "C-t C-M-p: Previous window in the frame",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* place-current-window",
+      "label": "C-t P: Place the window by its rules",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* place-existing-windows",
+      "label": "C-t W: Place all windows by their rules",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* pull-hidden-other",
+      "label": "C-t C-t: Pull the last hidden window into the frame",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* other-in-frame",
+      "label": "C-t M-t: Last window in the frame",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* pull 0",
+      "label": "C-t C-0: Pull window 0 into the frame",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* pull 1",
+      "label": "C-t C-1: Pull window 1 into the frame",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* pull 2",
+      "label": "C-t C-2: Pull window 2 into the frame",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* pull 3",
+      "label": "C-t C-3: Pull window 3 into the frame",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* pull 4",
+      "label": "C-t C-4: Pull window 4 into the frame",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* pull 5",
+      "label": "C-t C-5: Pull window 5 into the frame",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* pull 6",
+      "label": "C-t C-6: Pull window 6 into the frame",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* pull 7",
+      "label": "C-t C-7: Pull window 7 into the frame",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* pull 8",
+      "label": "C-t C-8: Pull window 8 into the frame",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* pull 9",
+      "label": "C-t C-9: Pull window 9 into the frame",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* remove",
+      "label": "C-t R: Remove the frame",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* vsplit",
+      "label": "C-t s: Split the frame vertically",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* hsplit",
+      "label": "C-t S: Split the frame horizontally",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* iresize",
+      "label": "C-t r: Resize the frame interactively",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* fnext",
+      "label": "C-t o, C-t Tab: Next frame",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* fother",
+      "label": "C-t M-Tab: Last frame",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* fselect",
+      "label": "C-t f: Select a frame",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* curframe",
+      "label": "C-t F: Show the current frame",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* fclear",
+      "label": "C-t -: Clear the frame",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* only",
+      "label": "C-t Q: Remove all other frames",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* remove-split",
+      "label": "C-t X: Remove the split",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* quit-confirm",
+      "label": "C-t q: Quit StumpWM",
+      "group": "Session",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* move-focus up",
+      "label": "C-t Up: Focus the frame up",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* move-focus down",
+      "label": "C-t Down: Focus the frame down",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* move-focus left",
+      "label": "C-t Left: Focus the frame left",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* move-focus right",
+      "label": "C-t Right: Focus the frame right",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* move-window up",
+      "label": "C-t M-Up: Move the window up",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* move-window down",
+      "label": "C-t M-Down: Move the window down",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* move-window left",
+      "label": "C-t M-Left: Move the window left",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* move-window right",
+      "label": "C-t M-Right: Move the window right",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* balance-frames",
+      "label": "C-t +: Balance the frames",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*tile-group-root-map* redisplay",
+      "label": "C-t l, C-t C-l: Redisplay the window",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* groups",
+      "label": "C-t g g: List the groups",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gnew",
+      "label": "C-t g c: New group",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gnext",
+      "label": "C-t g n, C-t g C-n, C-t g space, C-t g C-space: Next group",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gnext-with-window",
+      "label": "C-t g N: Next group, with the window",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gprev",
+      "label": "C-t g p, C-t g C-p: Previous group",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gprev-with-window",
+      "label": "C-t g P: Previous group, with the window",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gother",
+      "label": "C-t g o: Last group",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gselect",
+      "label": "C-t g ': Select a group",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* grouplist",
+      "label": "C-t g \": Group list menu",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gmove",
+      "label": "C-t g m: Move the window to a group",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gmove-marked",
+      "label": "C-t g M: Move marked windows to a group",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gkill",
+      "label": "C-t g k: Kill the group",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* grename",
+      "label": "C-t g A, C-t g r: Rename the group",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gselect 1",
+      "label": "C-t g 1: Go to group 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gselect 2",
+      "label": "C-t g 2: Go to group 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gselect 3",
+      "label": "C-t g 3: Go to group 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gselect 4",
+      "label": "C-t g 4: Go to group 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gselect 5",
+      "label": "C-t g 5: Go to group 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gselect 6",
+      "label": "C-t g 6: Go to group 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gselect 7",
+      "label": "C-t g 7: Go to group 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gselect 8",
+      "label": "C-t g 8: Go to group 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gselect 9",
+      "label": "C-t g 9: Go to group 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*groups-map* gselect 10",
+      "label": "C-t g 0: Go to group 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*exchange-window-map* exchange-direction up",
+      "label": "C-t x Up, C-t x p, C-t x k: Exchange the window up",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*exchange-window-map* exchange-direction down",
+      "label": "C-t x Down, C-t x n, C-t x j: Exchange the window down",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*exchange-window-map* exchange-direction left",
+      "label": "C-t x Left, C-t x b, C-t x h: Exchange the window left",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*exchange-window-map* exchange-direction right",
+      "label": "C-t x Right, C-t x f, C-t x l: Exchange the window right",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*help-map* describe-variable",
+      "label": "C-t h v: Describe a variable",
+      "group": "Session",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*help-map* describe-function",
+      "label": "C-t h f: Describe a function",
+      "group": "Session",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*help-map* describe-key",
+      "label": "C-t h k: Describe a key",
+      "group": "Session",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*help-map* describe-command",
+      "label": "C-t h c: Describe a command",
+      "group": "Session",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*help-map* where-is",
+      "label": "C-t h w: Where is a command bound",
+      "group": "Session",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "*root-map* help",
+      "label": "C-t ?, C-t C-h (in every prefix map): Show the keybindings",
+      "group": "Session",
+      "accels": [
+        "<Control>t"
+      ]
+    }
+  ]
+}

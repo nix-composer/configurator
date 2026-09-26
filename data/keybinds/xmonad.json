@@ -1,0 +1,368 @@
+{
+  "$comment": "xmonad's built-in default keys: `keys` in src/XMonad/Config.hs of nixpkgs' haskellPackages.xmonad (nixos-26.05), with modMask = mod1Mask (Alt). The action is the bound X () expression as the source writes it (the workspace/screen list comprehensions spelled out); labels are its %! comments. Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "spawn $ XMonad.terminal conf",
+      "label": "Launch terminal",
+      "group": "Apps",
+      "accels": [
+        "<Alt><Shift>Return"
+      ]
+    },
+    {
+      "action": "spawn \"dmenu_run\"",
+      "label": "Launch dmenu",
+      "group": "Apps",
+      "accels": [
+        "<Alt>p"
+      ]
+    },
+    {
+      "action": "spawn \"gmrun\"",
+      "label": "Launch gmrun",
+      "group": "Apps",
+      "accels": [
+        "<Alt><Shift>p"
+      ]
+    },
+    {
+      "action": "kill",
+      "label": "Close the focused window",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>c"
+      ]
+    },
+    {
+      "action": "sendMessage NextLayout",
+      "label": "Rotate through the available layout algorithms",
+      "group": "Layout",
+      "accels": [
+        "<Alt>space"
+      ]
+    },
+    {
+      "action": "setLayout $ XMonad.layoutHook conf",
+      "label": "Reset the layouts on the current workspace to default",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>space"
+      ]
+    },
+    {
+      "action": "refresh",
+      "label": "Resize viewed windows to the correct size",
+      "group": "Windows",
+      "accels": [
+        "<Alt>n"
+      ]
+    },
+    {
+      "action": "windows W.focusDown",
+      "label": "Move focus to the next window",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Tab",
+        "<Alt>j"
+      ]
+    },
+    {
+      "action": "windows W.focusUp",
+      "label": "Move focus to the previous window",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>Tab",
+        "<Alt>k"
+      ]
+    },
+    {
+      "action": "windows W.focusMaster",
+      "label": "Move focus to the master window",
+      "group": "Focus",
+      "accels": [
+        "<Alt>m"
+      ]
+    },
+    {
+      "action": "windows W.swapMaster",
+      "label": "Swap the focused window and the master window",
+      "group": "Layout",
+      "accels": [
+        "<Alt>Return"
+      ]
+    },
+    {
+      "action": "windows W.swapDown",
+      "label": "Swap the focused window with the next window",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>j"
+      ]
+    },
+    {
+      "action": "windows W.swapUp",
+      "label": "Swap the focused window with the previous window",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>k"
+      ]
+    },
+    {
+      "action": "sendMessage Shrink",
+      "label": "Shrink the master area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>h"
+      ]
+    },
+    {
+      "action": "sendMessage Expand",
+      "label": "Expand the master area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>l"
+      ]
+    },
+    {
+      "action": "withFocused $ windows . W.sink",
+      "label": "Push window back into tiling",
+      "group": "Layout",
+      "accels": [
+        "<Alt>t"
+      ]
+    },
+    {
+      "action": "sendMessage (IncMasterN 1)",
+      "label": "Increment the number of windows in the master area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>comma"
+      ]
+    },
+    {
+      "action": "sendMessage (IncMasterN (-1))",
+      "label": "Deincrement the number of windows in the master area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>period"
+      ]
+    },
+    {
+      "action": "io exitSuccess",
+      "label": "Quit xmonad",
+      "group": "Session",
+      "accels": [
+        "<Alt><Shift>q"
+      ]
+    },
+    {
+      "action": "spawn \"if type xmonad; then xmonad --recompile && xmonad --restart; else xmessage xmonad not in \\\\$PATH: \\\"$PATH\\\"; fi\"",
+      "label": "Restart xmonad",
+      "group": "Session",
+      "accels": [
+        "<Alt>q"
+      ]
+    },
+    {
+      "action": "helpCommand",
+      "label": "Run xmessage with a summary of the default keybindings (useful for beginners)",
+      "group": "Session",
+      "accels": [
+        "<Alt><Shift>slash",
+        "<Alt>question"
+      ]
+    },
+    {
+      "action": "windows $ W.greedyView \"1\"",
+      "label": "Switch to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>1"
+      ]
+    },
+    {
+      "action": "windows $ W.shift \"1\"",
+      "label": "Move client to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>1"
+      ]
+    },
+    {
+      "action": "windows $ W.greedyView \"2\"",
+      "label": "Switch to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>2"
+      ]
+    },
+    {
+      "action": "windows $ W.shift \"2\"",
+      "label": "Move client to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>2"
+      ]
+    },
+    {
+      "action": "windows $ W.greedyView \"3\"",
+      "label": "Switch to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>3"
+      ]
+    },
+    {
+      "action": "windows $ W.shift \"3\"",
+      "label": "Move client to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>3"
+      ]
+    },
+    {
+      "action": "windows $ W.greedyView \"4\"",
+      "label": "Switch to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>4"
+      ]
+    },
+    {
+      "action": "windows $ W.shift \"4\"",
+      "label": "Move client to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>4"
+      ]
+    },
+    {
+      "action": "windows $ W.greedyView \"5\"",
+      "label": "Switch to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>5"
+      ]
+    },
+    {
+      "action": "windows $ W.shift \"5\"",
+      "label": "Move client to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>5"
+      ]
+    },
+    {
+      "action": "windows $ W.greedyView \"6\"",
+      "label": "Switch to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>6"
+      ]
+    },
+    {
+      "action": "windows $ W.shift \"6\"",
+      "label": "Move client to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>6"
+      ]
+    },
+    {
+      "action": "windows $ W.greedyView \"7\"",
+      "label": "Switch to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>7"
+      ]
+    },
+    {
+      "action": "windows $ W.shift \"7\"",
+      "label": "Move client to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>7"
+      ]
+    },
+    {
+      "action": "windows $ W.greedyView \"8\"",
+      "label": "Switch to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>8"
+      ]
+    },
+    {
+      "action": "windows $ W.shift \"8\"",
+      "label": "Move client to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>8"
+      ]
+    },
+    {
+      "action": "windows $ W.greedyView \"9\"",
+      "label": "Switch to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>9"
+      ]
+    },
+    {
+      "action": "windows $ W.shift \"9\"",
+      "label": "Move client to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>9"
+      ]
+    },
+    {
+      "action": "screenWorkspace 0 >>= flip whenJust (windows . W.view)",
+      "label": "Switch to physical/Xinerama screen 1",
+      "group": "Monitors",
+      "accels": [
+        "<Alt>w"
+      ]
+    },
+    {
+      "action": "screenWorkspace 0 >>= flip whenJust (windows . W.shift)",
+      "label": "Move client to screen 1",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>w"
+      ]
+    },
+    {
+      "action": "screenWorkspace 1 >>= flip whenJust (windows . W.view)",
+      "label": "Switch to physical/Xinerama screen 2",
+      "group": "Monitors",
+      "accels": [
+        "<Alt>e"
+      ]
+    },
+    {
+      "action": "screenWorkspace 1 >>= flip whenJust (windows . W.shift)",
+      "label": "Move client to screen 2",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>e"
+      ]
+    },
+    {
+      "action": "screenWorkspace 2 >>= flip whenJust (windows . W.view)",
+      "label": "Switch to physical/Xinerama screen 3",
+      "group": "Monitors",
+      "accels": [
+        "<Alt>r"
+      ]
+    },
+    {
+      "action": "screenWorkspace 2 >>= flip whenJust (windows . W.shift)",
+      "label": "Move client to screen 3",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>r"
+      ]
+    }
+  ]
+}

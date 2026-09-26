@@ -1,0 +1,505 @@
+{
+  "$comment": "MATE's default keybinds from the GSettings schemas in nixpkgs nixos-26.05 (mate-gsettings-overrides, marco, mate-settings-daemon; XDG_CURRENT_DESKTOP=MATE), by scripts/keybinds/extract-dconf-desktops.py: the action is `schema/key`, the label its summary, accels GTK accelerators; type `s` keys hold one accel.",
+  "binds": [
+    {
+      "action": "org.mate.Marco.global-keybindings/cycle-group",
+      "label": "Move between windows of an application immediately",
+      "group": "Windows",
+      "type": "s",
+      "path": "org/mate/marco/global-keybindings",
+      "accels": [
+        "<Alt>F6"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.global-keybindings/cycle-panels",
+      "label": "Move between panels and the desktop immediately",
+      "group": "Windows",
+      "type": "s",
+      "path": "org/mate/marco/global-keybindings",
+      "accels": [
+        "<Control><Alt>Escape"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.global-keybindings/cycle-windows",
+      "label": "Move between windows immediately",
+      "group": "Windows",
+      "type": "s",
+      "path": "org/mate/marco/global-keybindings",
+      "accels": [
+        "<Alt>Escape"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.global-keybindings/panel-main-menu",
+      "label": "Show the panel's main menu",
+      "group": "Windows",
+      "type": "s",
+      "path": "org/mate/marco/global-keybindings",
+      "accels": [
+        "<Alt>F1"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.global-keybindings/panel-run-dialog",
+      "label": "Show the panel's \"Run Application\" dialog box",
+      "group": "Windows",
+      "type": "s",
+      "path": "org/mate/marco/global-keybindings",
+      "accels": [
+        "<Alt>F2"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.global-keybindings/run-command-screenshot",
+      "label": "Take a screenshot",
+      "group": "Screenshots",
+      "type": "s",
+      "path": "org/mate/marco/global-keybindings",
+      "accels": [
+        "Print"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.global-keybindings/run-command-window-screenshot",
+      "label": "Take a screenshot of a window",
+      "group": "Screenshots",
+      "type": "s",
+      "path": "org/mate/marco/global-keybindings",
+      "accels": [
+        "<Alt>Print"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.global-keybindings/show-desktop",
+      "label": "Hide all normal windows and set focus to the desktop",
+      "group": "Windows",
+      "type": "s",
+      "path": "org/mate/marco/global-keybindings",
+      "accels": [
+        "<Control><Alt>d"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.global-keybindings/switch-group",
+      "label": "Move between windows of an application, using a popup window",
+      "group": "Windows",
+      "type": "s",
+      "path": "org/mate/marco/global-keybindings",
+      "accels": [
+        "<Alt>grave"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.global-keybindings/switch-panels",
+      "label": "Move between panels and the desktop, using a popup window",
+      "group": "Windows",
+      "type": "s",
+      "path": "org/mate/marco/global-keybindings",
+      "accels": [
+        "<Control><Alt>Tab"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.global-keybindings/switch-to-workspace-down",
+      "label": "Switch to workspace below the current workspace",
+      "group": "Workspaces",
+      "type": "s",
+      "path": "org/mate/marco/global-keybindings",
+      "accels": [
+        "<Control><Alt>Down"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.global-keybindings/switch-to-workspace-left",
+      "label": "Switch to workspace on the left of the current workspace",
+      "group": "Workspaces",
+      "type": "s",
+      "path": "org/mate/marco/global-keybindings",
+      "accels": [
+        "<Control><Alt>Left"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.global-keybindings/switch-to-workspace-right",
+      "label": "Switch to workspace on the right of the current workspace",
+      "group": "Workspaces",
+      "type": "s",
+      "path": "org/mate/marco/global-keybindings",
+      "accels": [
+        "<Control><Alt>Right"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.global-keybindings/switch-to-workspace-up",
+      "label": "Switch to workspace above the current workspace",
+      "group": "Workspaces",
+      "type": "s",
+      "path": "org/mate/marco/global-keybindings",
+      "accels": [
+        "<Control><Alt>Up"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.global-keybindings/switch-windows",
+      "label": "Move between windows, using a popup window",
+      "group": "Windows",
+      "type": "s",
+      "path": "org/mate/marco/global-keybindings",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.window-keybindings/activate-window-menu",
+      "label": "Activate the window menu",
+      "group": "Windows",
+      "type": "s",
+      "path": "org/mate/marco/window-keybindings",
+      "accels": [
+        "<Alt>space"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.window-keybindings/begin-move",
+      "label": "Move window",
+      "group": "Windows",
+      "type": "s",
+      "path": "org/mate/marco/window-keybindings",
+      "accels": [
+        "<Alt>F7"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.window-keybindings/begin-resize",
+      "label": "Resize window",
+      "group": "Windows",
+      "type": "s",
+      "path": "org/mate/marco/window-keybindings",
+      "accels": [
+        "<Alt>F8"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.window-keybindings/close",
+      "label": "Close window",
+      "group": "Windows",
+      "type": "s",
+      "path": "org/mate/marco/window-keybindings",
+      "accels": [
+        "<Alt>F4"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.window-keybindings/minimize",
+      "label": "Minimize window",
+      "group": "Windows",
+      "type": "s",
+      "path": "org/mate/marco/window-keybindings",
+      "accels": [
+        "<Alt>F9"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.window-keybindings/move-to-workspace-down",
+      "label": "Move window one workspace down",
+      "group": "Workspaces",
+      "type": "s",
+      "path": "org/mate/marco/window-keybindings",
+      "accels": [
+        "<Control><Shift><Alt>Down"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.window-keybindings/move-to-workspace-left",
+      "label": "Move window one workspace to the left",
+      "group": "Workspaces",
+      "type": "s",
+      "path": "org/mate/marco/window-keybindings",
+      "accels": [
+        "<Control><Shift><Alt>Left"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.window-keybindings/move-to-workspace-right",
+      "label": "Move window one workspace to the right",
+      "group": "Workspaces",
+      "type": "s",
+      "path": "org/mate/marco/window-keybindings",
+      "accels": [
+        "<Control><Shift><Alt>Right"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.window-keybindings/move-to-workspace-up",
+      "label": "Move window one workspace up",
+      "group": "Workspaces",
+      "type": "s",
+      "path": "org/mate/marco/window-keybindings",
+      "accels": [
+        "<Control><Shift><Alt>Up"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.window-keybindings/toggle-maximized",
+      "label": "Toggle maximization state",
+      "group": "Windows",
+      "type": "s",
+      "path": "org/mate/marco/window-keybindings",
+      "accels": [
+        "<Alt>F10"
+      ]
+    },
+    {
+      "action": "org.mate.Marco.window-keybindings/unmaximize",
+      "label": "Restore window",
+      "group": "Windows",
+      "type": "s",
+      "path": "org/mate/marco/window-keybindings",
+      "accels": [
+        "<Alt>F5"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/calculator",
+      "label": "Launch calculator",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86Calculator"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/control-center",
+      "label": "Launch settings",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86Tools"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/eject",
+      "label": "Eject",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86Eject"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/email",
+      "label": "Launch email client",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86Mail"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/home",
+      "label": "Home folder",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86Explorer"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/media",
+      "label": "Launch media player",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioMedia"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/messenger",
+      "label": "Launch instant messenger",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86Messenger"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/mic-mute",
+      "label": "Microphone mute/unmute",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioMicMute"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/next",
+      "label": "Next track",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioNext"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/pause",
+      "label": "Pause playback",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioPause"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/play",
+      "label": "Play (or play/pause)",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioPlay"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/power",
+      "label": "Shut down",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "<Control><Alt>Delete"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/previous",
+      "label": "Previous track",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioPrev"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/screensaver",
+      "label": "Lock screen",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "<Control><Alt>l"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/search",
+      "label": "Search",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86Search"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/stop",
+      "label": "Stop playback",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioStop"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/touchpad",
+      "label": "Toggle touchpad",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86TouchpadToggle"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/volume-down",
+      "label": "Volume down",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/volume-down-quiet",
+      "label": "Turn the volume down quietly",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "<Alt>XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/volume-mute",
+      "label": "Volume mute",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioMute"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/volume-mute-quiet",
+      "label": "Mute the audio quietly",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "<Alt>XF86AudioMute"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/volume-up",
+      "label": "Volume up",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/volume-up-quiet",
+      "label": "Turn the volume up quietly",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "<Alt>XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "org.mate.SettingsDaemon.plugins.media-keys/www",
+      "label": "Launch web browser",
+      "group": "Media and system",
+      "type": "s",
+      "path": "org/mate/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86WWW"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,533 @@
+{
+  "$comment": "MangoWC's default keybinds from etc/mango/config.conf of nixpkgs nixos-26.05 `mangowc` (ccyl5fzdvg4ilc7qd8116qjx1hj21dqy-mangowc-0.12.8), the config mango reads from /etc/mango/config.conf (NixOS doesn't link it there). The action is `function,arguments` as the bind line writes it after the key. Mouse, axis and gesture binds and the built-in Ctrl+Alt+F1..F12 VT switches left out (scripts/keybinds/extract-compositors.py).",
+  "binds": [
+    {
+      "action": "reload_config",
+      "label": "Reload the configuration",
+      "group": "Session",
+      "accels": [
+        "<Super>r"
+      ]
+    },
+    {
+      "action": "spawn,rofi -show drun",
+      "label": "Open the app launcher (rofi -show drun)",
+      "group": "Apps",
+      "accels": [
+        "<Alt>space"
+      ]
+    },
+    {
+      "action": "spawn,foot",
+      "label": "Open a terminal (foot)",
+      "group": "Apps",
+      "accels": [
+        "<Alt>Return"
+      ]
+    },
+    {
+      "action": "quit",
+      "label": "Exit mango",
+      "group": "Session",
+      "accels": [
+        "<Super>m"
+      ]
+    },
+    {
+      "action": "killclient",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>q"
+      ]
+    },
+    {
+      "action": "focusstack,next",
+      "label": "Focus the next window",
+      "group": "Focus",
+      "accels": [
+        "<Super>Tab"
+      ]
+    },
+    {
+      "action": "focusdir,left",
+      "label": "Focus left",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Left"
+      ]
+    },
+    {
+      "action": "focusdir,right",
+      "label": "Focus right",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Right"
+      ]
+    },
+    {
+      "action": "focusdir,up",
+      "label": "Focus up",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Up"
+      ]
+    },
+    {
+      "action": "focusdir,down",
+      "label": "Focus down",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Down"
+      ]
+    },
+    {
+      "action": "exchange_client,up",
+      "label": "Swap the window up",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>Up"
+      ]
+    },
+    {
+      "action": "exchange_client,down",
+      "label": "Swap the window down",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>Down"
+      ]
+    },
+    {
+      "action": "exchange_client,left",
+      "label": "Swap the window left",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>Left"
+      ]
+    },
+    {
+      "action": "exchange_client,right",
+      "label": "Swap the window right",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>Right"
+      ]
+    },
+    {
+      "action": "toggleglobal",
+      "label": "Toggle the window on all tags",
+      "group": "Windows",
+      "accels": [
+        "<Super>g"
+      ]
+    },
+    {
+      "action": "toggleoverview",
+      "label": "Toggle the overview",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "togglefloating",
+      "label": "Toggle floating",
+      "group": "Windows",
+      "accels": [
+        "<Alt>backslash"
+      ]
+    },
+    {
+      "action": "togglemaximizescreen",
+      "label": "Toggle maximize",
+      "group": "Windows",
+      "accels": [
+        "<Alt>a"
+      ]
+    },
+    {
+      "action": "togglefullscreen",
+      "label": "Toggle fullscreen",
+      "group": "Windows",
+      "accels": [
+        "<Alt>f"
+      ]
+    },
+    {
+      "action": "togglefakefullscreen",
+      "label": "Toggle fake fullscreen",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>f"
+      ]
+    },
+    {
+      "action": "minimized",
+      "label": "Minimize the window",
+      "group": "Windows",
+      "accels": [
+        "<Super>i"
+      ]
+    },
+    {
+      "action": "toggleoverlay",
+      "label": "Toggle the window above others",
+      "group": "Windows",
+      "accels": [
+        "<Super>o"
+      ]
+    },
+    {
+      "action": "restore_minimized",
+      "label": "Restore minimized windows",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>i"
+      ]
+    },
+    {
+      "action": "toggle_scratchpad",
+      "label": "Show the scratchpad",
+      "group": "Windows",
+      "accels": [
+        "<Alt>z"
+      ]
+    },
+    {
+      "action": "set_proportion,1.0",
+      "label": "Make the window full width",
+      "group": "Layout",
+      "accels": [
+        "<Alt>e"
+      ]
+    },
+    {
+      "action": "switch_proportion_preset",
+      "label": "Cycle window width presets",
+      "group": "Layout",
+      "accels": [
+        "<Alt>x"
+      ]
+    },
+    {
+      "action": "switch_layout",
+      "label": "Switch the layout",
+      "group": "Layout",
+      "accels": [
+        "<Super>n"
+      ]
+    },
+    {
+      "action": "viewtoleft,0",
+      "label": "Switch to the tag to the left",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>Left"
+      ]
+    },
+    {
+      "action": "viewtoleft_have_client,0",
+      "label": "Switch to the occupied tag to the left",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>Left"
+      ]
+    },
+    {
+      "action": "viewtoright,0",
+      "label": "Switch to the tag to the right",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>Right"
+      ]
+    },
+    {
+      "action": "viewtoright_have_client,0",
+      "label": "Switch to the occupied tag to the right",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>Right"
+      ]
+    },
+    {
+      "action": "tagtoleft,0",
+      "label": "Move the window to the tag to the left",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>Left"
+      ]
+    },
+    {
+      "action": "tagtoright,0",
+      "label": "Move the window to the tag to the right",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>Right"
+      ]
+    },
+    {
+      "action": "view,1,0",
+      "label": "Switch to tag 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>1"
+      ]
+    },
+    {
+      "action": "view,2,0",
+      "label": "Switch to tag 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>2"
+      ]
+    },
+    {
+      "action": "view,3,0",
+      "label": "Switch to tag 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>3"
+      ]
+    },
+    {
+      "action": "view,4,0",
+      "label": "Switch to tag 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>4"
+      ]
+    },
+    {
+      "action": "view,5,0",
+      "label": "Switch to tag 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>5"
+      ]
+    },
+    {
+      "action": "view,6,0",
+      "label": "Switch to tag 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>6"
+      ]
+    },
+    {
+      "action": "view,7,0",
+      "label": "Switch to tag 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>7"
+      ]
+    },
+    {
+      "action": "view,8,0",
+      "label": "Switch to tag 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>8"
+      ]
+    },
+    {
+      "action": "view,9,0",
+      "label": "Switch to tag 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>9"
+      ]
+    },
+    {
+      "action": "tag,1,0",
+      "label": "Move the window to tag 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>1"
+      ]
+    },
+    {
+      "action": "tag,2,0",
+      "label": "Move the window to tag 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>2"
+      ]
+    },
+    {
+      "action": "tag,3,0",
+      "label": "Move the window to tag 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>3"
+      ]
+    },
+    {
+      "action": "tag,4,0",
+      "label": "Move the window to tag 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>4"
+      ]
+    },
+    {
+      "action": "tag,5,0",
+      "label": "Move the window to tag 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>5"
+      ]
+    },
+    {
+      "action": "tag,6,0",
+      "label": "Move the window to tag 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>6"
+      ]
+    },
+    {
+      "action": "tag,7,0",
+      "label": "Move the window to tag 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>7"
+      ]
+    },
+    {
+      "action": "tag,8,0",
+      "label": "Move the window to tag 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>8"
+      ]
+    },
+    {
+      "action": "tag,9,0",
+      "label": "Move the window to tag 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>9"
+      ]
+    },
+    {
+      "action": "focusmon,left",
+      "label": "Focus the monitor left",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>Left"
+      ]
+    },
+    {
+      "action": "focusmon,right",
+      "label": "Focus the monitor right",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>Right"
+      ]
+    },
+    {
+      "action": "tagmon,left",
+      "label": "Move the window to the monitor left",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Alt>Left"
+      ]
+    },
+    {
+      "action": "tagmon,right",
+      "label": "Move the window to the monitor right",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Alt>Right"
+      ]
+    },
+    {
+      "action": "incgaps,1",
+      "label": "Increase the gaps",
+      "group": "Layout",
+      "accels": [
+        "<Alt><Shift>x"
+      ]
+    },
+    {
+      "action": "incgaps,-1",
+      "label": "Decrease the gaps",
+      "group": "Layout",
+      "accels": [
+        "<Alt><Shift>z"
+      ]
+    },
+    {
+      "action": "togglegaps",
+      "label": "Toggle the gaps",
+      "group": "Layout",
+      "accels": [
+        "<Alt><Shift>r"
+      ]
+    },
+    {
+      "action": "movewin,+0,-50",
+      "label": "Move the floating window up",
+      "group": "Windows",
+      "accels": [
+        "<Control><Shift>Up"
+      ]
+    },
+    {
+      "action": "movewin,+0,+50",
+      "label": "Move the floating window down",
+      "group": "Windows",
+      "accels": [
+        "<Control><Shift>Down"
+      ]
+    },
+    {
+      "action": "movewin,-50,+0",
+      "label": "Move the floating window left",
+      "group": "Windows",
+      "accels": [
+        "<Control><Shift>Left"
+      ]
+    },
+    {
+      "action": "movewin,+50,+0",
+      "label": "Move the floating window right",
+      "group": "Windows",
+      "accels": [
+        "<Control><Shift>Right"
+      ]
+    },
+    {
+      "action": "resizewin,+0,-50",
+      "label": "Shrink the window vertically",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>Up"
+      ]
+    },
+    {
+      "action": "resizewin,+0,+50",
+      "label": "Grow the window vertically",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>Down"
+      ]
+    },
+    {
+      "action": "resizewin,-50,+0",
+      "label": "Shrink the window horizontally",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>Left"
+      ]
+    },
+    {
+      "action": "resizewin,+50,+0",
+      "label": "Grow the window horizontally",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>Right"
+      ]
+    }
+  ]
+}

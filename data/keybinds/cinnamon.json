@@ -1,0 +1,1013 @@
+{
+  "$comment": "Cinnamon's default keybinds from the GSettings schemas in nixpkgs nixos-26.05 (cinnamon-gsettings-overrides, cinnamon, cinnamon-desktop, muffin, cinnamon-settings-daemon; XDG_CURRENT_DESKTOP=X-Cinnamon), by scripts/keybinds/extract-dconf-desktops.py: the action is `schema/key`, the label its summary, accels GTK accelerators; type `s` keys hold one accel.",
+  "binds": [
+    {
+      "action": "org.cinnamon.desktop.keybindings/looking-glass-keybinding",
+      "label": "Keybinding for toggling the looking glass",
+      "group": "Shell",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings",
+      "accels": [
+        "<Super>l"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings/magnifier-zoom-in",
+      "label": "Magnifier zoom in",
+      "group": "Shell",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings",
+      "accels": [
+        "<Alt><Super>equal"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings/magnifier-zoom-out",
+      "label": "Magnifier zoom out",
+      "group": "Shell",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings",
+      "accels": [
+        "<Alt><Super>minus"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings/magnifier-zoom-reset",
+      "label": "Reset magnifier to 1x",
+      "group": "Shell",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings",
+      "accels": [
+        "<Alt><Super>0"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings/show-desklets",
+      "label": "Show desklets",
+      "group": "Shell",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings",
+      "accels": [
+        "<Super>s"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/activate-window-menu",
+      "label": "Activate the window menu",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Alt>space"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/begin-move",
+      "label": "Move window",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Alt>F7"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/begin-resize",
+      "label": "Resize window",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Alt>F8"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/close",
+      "label": "Close window",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Alt>F4"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/move-to-monitor-down",
+      "label": "Move window one monitor down",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Super><Shift>Down"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/move-to-monitor-left",
+      "label": "Move window one monitor to the left",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Super><Shift>Left"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/move-to-monitor-right",
+      "label": "Move window one monitor to the right",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Super><Shift>Right"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/move-to-monitor-up",
+      "label": "Move window one monitor up",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Super><Shift>Up"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/move-to-workspace-down",
+      "label": "Move window one workspace down",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Control><Shift><Alt>Down"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/move-to-workspace-left",
+      "label": "Move window one workspace to the left",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Control><Shift><Alt>Left"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/move-to-workspace-right",
+      "label": "Move window one workspace to the right",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Control><Shift><Alt>Right"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/move-to-workspace-up",
+      "label": "Move window one workspace up",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Control><Shift><Alt>Up"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/panel-run-dialog",
+      "label": "Show the run command prompt",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Alt>F2"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/push-tile-down",
+      "label": "Push tile down",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Super>Down"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/push-tile-left",
+      "label": "Push tile left",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Super>Left"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/push-tile-right",
+      "label": "Push tile right",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Super>Right"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/push-tile-up",
+      "label": "Push tile up",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Super>Up"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/rotate-monitor",
+      "label": "Rotates the built-in monitor configuration",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "XF86RotateWindows"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/show-desktop",
+      "label": "Hide all normal windows",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Super>d"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/switch-group",
+      "label": "Switch windows of an application",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Alt>Above_Tab"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/switch-group-backward",
+      "label": "Reverse switch windows of an application",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Shift><Alt>Above_Tab"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/switch-input-source",
+      "label": "Switch input source",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Super>space",
+        "XF86Keyboard"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/switch-input-source-backward",
+      "label": "Switch input source backward",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Shift><Super>space",
+        "<Shift>XF86Keyboard"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/switch-monitor",
+      "label": "Switch monitor configurations",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Super>p",
+        "XF86Display"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/switch-panels",
+      "label": "Switch system controls",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Control><Alt>Tab"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/switch-panels-backward",
+      "label": "Reverse switch system controls",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Shift><Control><Alt>Tab"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/switch-to-workspace-down",
+      "label": "Switch to workspace below",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Control><Alt>Down"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/switch-to-workspace-left",
+      "label": "Switch to workspace left",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Control><Alt>Left"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/switch-to-workspace-right",
+      "label": "Switch to workspace right",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Control><Alt>Right"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/switch-to-workspace-up",
+      "label": "Switch to workspace above",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Control><Alt>Up",
+        "<Alt>F1"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/switch-windows",
+      "label": "Switch applications",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/switch-windows-backward",
+      "label": "Reverse switch applications",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Shift><Alt>Tab"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/toggle-maximized",
+      "label": "Toggle maximization state",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Alt>F10"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/toggle-recording",
+      "label": "Toggle recording",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Control><Shift><Alt>r"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.wm/unmaximize",
+      "label": "Restore window",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/wm",
+      "accels": [
+        "<Alt>F5"
+      ]
+    },
+    {
+      "action": "org.cinnamon.muffin.wayland.keybindings/restore-shortcuts",
+      "label": "Re-enable shortcuts",
+      "group": "System",
+      "type": "as",
+      "path": "org/cinnamon/muffin/wayland/keybindings",
+      "accels": [
+        "<Super>Escape"
+      ]
+    },
+    {
+      "action": "org.cinnamon.muffin.wayland.keybindings/switch-to-session-1",
+      "label": "Switch to VT 1",
+      "group": "System",
+      "type": "as",
+      "path": "org/cinnamon/muffin/wayland/keybindings",
+      "accels": [
+        "<Primary><Alt>F1"
+      ]
+    },
+    {
+      "action": "org.cinnamon.muffin.wayland.keybindings/switch-to-session-10",
+      "label": "Switch to VT 10",
+      "group": "System",
+      "type": "as",
+      "path": "org/cinnamon/muffin/wayland/keybindings",
+      "accels": [
+        "<Primary><Alt>F10"
+      ]
+    },
+    {
+      "action": "org.cinnamon.muffin.wayland.keybindings/switch-to-session-11",
+      "label": "Switch to VT 11",
+      "group": "System",
+      "type": "as",
+      "path": "org/cinnamon/muffin/wayland/keybindings",
+      "accels": [
+        "<Primary><Alt>F11"
+      ]
+    },
+    {
+      "action": "org.cinnamon.muffin.wayland.keybindings/switch-to-session-12",
+      "label": "Switch to VT 12",
+      "group": "System",
+      "type": "as",
+      "path": "org/cinnamon/muffin/wayland/keybindings",
+      "accels": [
+        "<Primary><Alt>F12"
+      ]
+    },
+    {
+      "action": "org.cinnamon.muffin.wayland.keybindings/switch-to-session-2",
+      "label": "Switch to VT 2",
+      "group": "System",
+      "type": "as",
+      "path": "org/cinnamon/muffin/wayland/keybindings",
+      "accels": [
+        "<Primary><Alt>F2"
+      ]
+    },
+    {
+      "action": "org.cinnamon.muffin.wayland.keybindings/switch-to-session-3",
+      "label": "Switch to VT 3",
+      "group": "System",
+      "type": "as",
+      "path": "org/cinnamon/muffin/wayland/keybindings",
+      "accels": [
+        "<Primary><Alt>F3"
+      ]
+    },
+    {
+      "action": "org.cinnamon.muffin.wayland.keybindings/switch-to-session-4",
+      "label": "Switch to VT 4",
+      "group": "System",
+      "type": "as",
+      "path": "org/cinnamon/muffin/wayland/keybindings",
+      "accels": [
+        "<Primary><Alt>F4"
+      ]
+    },
+    {
+      "action": "org.cinnamon.muffin.wayland.keybindings/switch-to-session-5",
+      "label": "Switch to VT 5",
+      "group": "System",
+      "type": "as",
+      "path": "org/cinnamon/muffin/wayland/keybindings",
+      "accels": [
+        "<Primary><Alt>F5"
+      ]
+    },
+    {
+      "action": "org.cinnamon.muffin.wayland.keybindings/switch-to-session-6",
+      "label": "Switch to VT 6",
+      "group": "System",
+      "type": "as",
+      "path": "org/cinnamon/muffin/wayland/keybindings",
+      "accels": [
+        "<Primary><Alt>F6"
+      ]
+    },
+    {
+      "action": "org.cinnamon.muffin.wayland.keybindings/switch-to-session-7",
+      "label": "Switch to VT 7",
+      "group": "System",
+      "type": "as",
+      "path": "org/cinnamon/muffin/wayland/keybindings",
+      "accels": [
+        "<Primary><Alt>F7"
+      ]
+    },
+    {
+      "action": "org.cinnamon.muffin.wayland.keybindings/switch-to-session-8",
+      "label": "Switch to VT 8",
+      "group": "System",
+      "type": "as",
+      "path": "org/cinnamon/muffin/wayland/keybindings",
+      "accels": [
+        "<Primary><Alt>F8"
+      ]
+    },
+    {
+      "action": "org.cinnamon.muffin.wayland.keybindings/switch-to-session-9",
+      "label": "Switch to VT 9",
+      "group": "System",
+      "type": "as",
+      "path": "org/cinnamon/muffin/wayland/keybindings",
+      "accels": [
+        "<Primary><Alt>F9"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/area-screenshot",
+      "label": "Take a screenshot of an area",
+      "group": "Screenshots",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "<Shift>Print"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/area-screenshot-clip",
+      "label": "Copy a screenshot of an area to clipboard",
+      "group": "Screenshots",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "<Control><Shift>Print"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/audio-forward",
+      "label": "Fast-forward the currently playing stream",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86AudioForward"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/audio-random",
+      "label": "Choose an audio track at random",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86AudioRandomPlay"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/audio-repeat",
+      "label": "Toggle audio repeat modes",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86AudioRepeat"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/audio-rewind",
+      "label": "Rewind the currently playing stream",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86AudioRewind"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/battery",
+      "label": "Display battery status",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86Battery"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/calculator",
+      "label": "Launch calculator",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86Calculator"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/eject",
+      "label": "Eject",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86Eject"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/email",
+      "label": "Launch email client",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86Mail"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/hibernate",
+      "label": "Hibernate the system",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86Suspend",
+        "XF86Hibernate"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/home",
+      "label": "Home folder",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "<Super>e",
+        "XF86Explorer"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/kbd-brightness-down",
+      "label": "Decrease keyboard backlight brightness",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86KbdBrightnessDown"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/kbd-brightness-toggle",
+      "label": "Toggle keyboard backlight",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86KbdLightOnOff"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/kbd-brightness-up",
+      "label": "Increase keyboard backlight brightness",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86KbdBrightnessUp"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/logout",
+      "label": "Log out",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "<Control><Alt>Delete"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/media",
+      "label": "Launch media player",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86AudioMedia"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/mic-mute",
+      "label": "Mic mute",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86AudioMicMute"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/mute-quiet",
+      "label": "Mute the audio quietly",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "<Alt>XF86AudioMute"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/next",
+      "label": "Next track",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86AudioNext"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/pause",
+      "label": "Pause playback",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86AudioPause"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/play",
+      "label": "Play (or play/pause)",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86AudioPlay"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/previous",
+      "label": "Previous track",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86AudioPrev"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/restart-cinnamon",
+      "label": "Restart Cinnamon",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "<Control><Alt>Escape"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/screen-brightness-down",
+      "label": "Decrease display brightness",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86MonBrightnessDown"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/screen-brightness-up",
+      "label": "Increase display brightness",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86MonBrightnessUp"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/screenreader",
+      "label": "Toggle screen reader",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "<Alt><Super>s"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/screensaver",
+      "label": "Lock screen",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "<Control><Alt>l",
+        "XF86ScreenSaver"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/screenshot",
+      "label": "Take a screenshot",
+      "group": "Screenshots",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "Print"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/screenshot-clip",
+      "label": "Copy a screenshot to clipboard",
+      "group": "Screenshots",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "<Control>Print"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/search",
+      "label": "Search",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86Search"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/shutdown",
+      "label": "Shut down the computer",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "<Control><Alt>End",
+        "XF86PowerOff"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/stop",
+      "label": "Stop playback",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86AudioStop"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/suspend",
+      "label": "Suspend the system",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86Sleep"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/terminal",
+      "label": "Launch terminal",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "<Primary><Alt>t"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/touchpad-off",
+      "label": "Turn the touchpad off",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86TouchpadOff"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/touchpad-on",
+      "label": "Turn the touchpad on",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86TouchpadOn"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/touchpad-toggle",
+      "label": "Toggle the touchpad on and off",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86TouchpadToggle"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/video-rotation-lock",
+      "label": "Orientation Lock",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "<Super>o"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/volume-down",
+      "label": "Volume down",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/volume-down-quiet",
+      "label": "Turn the volume down quietly",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "<Alt>XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/volume-mute",
+      "label": "Volume mute",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86AudioMute"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/volume-up",
+      "label": "Volume up",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/volume-up-quiet",
+      "label": "Turn the volume up quietly",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "<Alt>XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/window-screenshot",
+      "label": "Take a screenshot of a window",
+      "group": "Screenshots",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "<Alt>Print"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/window-screenshot-clip",
+      "label": "Copy a screenshot of a window to clipboard",
+      "group": "Screenshots",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "<Control><Alt>Print"
+      ]
+    },
+    {
+      "action": "org.cinnamon.desktop.keybindings.media-keys/www",
+      "label": "Launch web browser",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/cinnamon/desktop/keybindings/media-keys",
+      "accels": [
+        "XF86WWW"
+      ]
+    }
+  ]
+}

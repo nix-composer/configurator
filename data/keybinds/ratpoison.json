@@ -1,0 +1,429 @@
+{
+  "$comment": "ratpoison's built-in default keybinds: initialize_default_keybindings() in src/actions.c of nixpkgs' ratpoison (nixos-26.05). Everything but the prefix is a sequence behind C-t (the root keymap), so every accel is the prefix <Control>t and the label has the sequences; the action is the ratpoison command (binds with the same command merged). Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "abort",
+      "label": "C-t C-g: Abort",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "select 0",
+      "label": "C-t 0: Select window 0",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "select 1",
+      "label": "C-t 1: Select window 1",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "select 2",
+      "label": "C-t 2: Select window 2",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "select 3",
+      "label": "C-t 3: Select window 3",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "select 4",
+      "label": "C-t 4: Select window 4",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "select 5",
+      "label": "C-t 5: Select window 5",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "select 6",
+      "label": "C-t 6: Select window 6",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "select 7",
+      "label": "C-t 7: Select window 7",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "select 8",
+      "label": "C-t 8: Select window 8",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "select 9",
+      "label": "C-t 9: Select window 9",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "select -",
+      "label": "C-t minus: Show an empty frame",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "title",
+      "label": "C-t A, C-t C-A: Rename the window",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "kill",
+      "label": "C-t K, C-t C-K: Kill the window's client",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "next",
+      "label": "C-t Return, C-t C-Return, C-t n, C-t C-n, C-t space, C-t C-space: Next window",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "time",
+      "label": "C-t a, C-t C-a: Show the time",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "banish",
+      "label": "C-t b, C-t C-b: Banish the mouse pointer",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "exec xterm",
+      "label": "C-t c, C-t C-c: Open a terminal (xterm)",
+      "group": "Apps",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "colon",
+      "label": "C-t colon: Run a ratpoison command",
+      "group": "Apps",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "exec",
+      "label": "C-t exclam: Run a shell command",
+      "group": "Apps",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "colon exec xterm -e",
+      "label": "C-t C-exclam: Run a command in a terminal",
+      "group": "Apps",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "info",
+      "label": "C-t i, C-t C-i: Window information",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "delete",
+      "label": "C-t k, C-t C-k: Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "redisplay",
+      "label": "C-t l, C-t C-l: Redisplay the window",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "lastmsg",
+      "label": "C-t m, C-t C-m: Show the last message",
+      "group": "Session",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "prev",
+      "label": "C-t p, C-t C-p: Previous window",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "select",
+      "label": "C-t quoteright, C-t C-quoteright: Select a window by name/number",
+      "group": "Focus",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "version",
+      "label": "C-t v, C-t C-v: Show the version",
+      "group": "Session",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "license",
+      "label": "C-t V, C-t C-V: Show the license",
+      "group": "Session",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "windows",
+      "label": "C-t w, C-t C-w: List the windows",
+      "group": "Windows",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "split",
+      "label": "C-t s, C-t C-s: Split the frame vertically",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "hsplit",
+      "label": "C-t S, C-t C-S: Split the frame horizontally",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "focus",
+      "label": "C-t Tab: Focus the next frame",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "focuslast",
+      "label": "C-t M-Tab: Focus the last frame",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "exchangeleft",
+      "label": "C-t C-Left: Exchange the window with the frame to the left",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "exchangeright",
+      "label": "C-t C-Right: Exchange the window with the frame to the right",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "exchangeup",
+      "label": "C-t C-Up: Exchange the window with the frame above",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "exchangedown",
+      "label": "C-t C-Down: Exchange the window with the frame below",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "focusleft",
+      "label": "C-t Left: Focus the frame to the left",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "focusright",
+      "label": "C-t Right: Focus the frame to the right",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "focusup",
+      "label": "C-t Up: Focus the frame above",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "focusdown",
+      "label": "C-t Down: Focus the frame below",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "only",
+      "label": "C-t Q: Remove all other frames",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "remove",
+      "label": "C-t R: Remove the frame",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "fselect",
+      "label": "C-t f, C-t C-f: Select a frame",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "curframe",
+      "label": "C-t F: Show the current frame",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "resize",
+      "label": "C-t r, C-t C-r: Resize the frame",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "help root",
+      "label": "C-t question: Show the keybindings",
+      "group": "Session",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "undo",
+      "label": "C-t C-underscore, C-t u, C-t C-u: Undo the last frame change",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "redo",
+      "label": "C-t U: Redo the frame change",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "swap",
+      "label": "C-t x, C-t C-x: Swap two frames' windows",
+      "group": "Layout",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "nextscreen",
+      "label": "C-t N: Next screen",
+      "group": "Monitors",
+      "accels": [
+        "<Control>t"
+      ]
+    },
+    {
+      "action": "prevscreen",
+      "label": "C-t P: Previous screen",
+      "group": "Monitors",
+      "accels": [
+        "<Control>t"
+      ]
+    }
+  ]
+}

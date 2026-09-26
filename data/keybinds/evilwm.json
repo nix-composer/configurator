@@ -1,0 +1,278 @@
+{
+  "$comment": "evilwm's built-in default keybinds: control_builtins[] in bind.c of nixpkgs' evilwm (nixos-26.05; QWERTY build), mask1 = Control+Alt, mask2 = Alt, altmask = Shift. The action is the function as `bind KEY=function,flags` takes it. Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "move,relative+up",
+      "label": "Move the window up",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>k"
+      ]
+    },
+    {
+      "action": "move,relative+down",
+      "label": "Move the window down",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>j"
+      ]
+    },
+    {
+      "action": "move,relative+left",
+      "label": "Move the window left",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>h"
+      ]
+    },
+    {
+      "action": "move,relative+right",
+      "label": "Move the window right",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>l"
+      ]
+    },
+    {
+      "action": "move,top+left",
+      "label": "Move the window to the top left",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>y"
+      ]
+    },
+    {
+      "action": "move,top+right",
+      "label": "Move the window to the top right",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>u"
+      ]
+    },
+    {
+      "action": "move,bottom+left",
+      "label": "Move the window to the bottom left",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>b"
+      ]
+    },
+    {
+      "action": "move,bottom+right",
+      "label": "Move the window to the bottom right",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>n"
+      ]
+    },
+    {
+      "action": "resize,relative+up",
+      "label": "Shrink the window vertically",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>k"
+      ]
+    },
+    {
+      "action": "resize,relative+down",
+      "label": "Grow the window vertically",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>j"
+      ]
+    },
+    {
+      "action": "resize,relative+left",
+      "label": "Shrink the window horizontally",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>h"
+      ]
+    },
+    {
+      "action": "resize,relative+right",
+      "label": "Grow the window horizontally",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>l"
+      ]
+    },
+    {
+      "action": "resize,toggle+v+h",
+      "label": "Toggle maximized",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>x"
+      ]
+    },
+    {
+      "action": "resize,toggle+v",
+      "label": "Toggle maximized vertically",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>equal"
+      ]
+    },
+    {
+      "action": "resize,toggle+h",
+      "label": "Toggle maximized horizontally",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>equal"
+      ]
+    },
+    {
+      "action": "delete",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>Escape"
+      ]
+    },
+    {
+      "action": "kill",
+      "label": "Kill the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>Escape"
+      ]
+    },
+    {
+      "action": "info",
+      "label": "Window information",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>i"
+      ]
+    },
+    {
+      "action": "lower",
+      "label": "Lower the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>Insert",
+        "<Control><Alt>KP_Insert"
+      ]
+    },
+    {
+      "action": "next",
+      "label": "Next window",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "spawn",
+      "label": "Open a terminal",
+      "group": "Apps",
+      "accels": [
+        "<Control><Alt>Return"
+      ]
+    },
+    {
+      "action": "fix,toggle",
+      "label": "Toggle the window on all desktops",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>f"
+      ]
+    },
+    {
+      "action": "vdesk,0",
+      "label": "Go to desktop 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>1"
+      ]
+    },
+    {
+      "action": "vdesk,1",
+      "label": "Go to desktop 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>2"
+      ]
+    },
+    {
+      "action": "vdesk,2",
+      "label": "Go to desktop 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>3"
+      ]
+    },
+    {
+      "action": "vdesk,3",
+      "label": "Go to desktop 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>4"
+      ]
+    },
+    {
+      "action": "vdesk,4",
+      "label": "Go to desktop 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>5"
+      ]
+    },
+    {
+      "action": "vdesk,5",
+      "label": "Go to desktop 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>6"
+      ]
+    },
+    {
+      "action": "vdesk,6",
+      "label": "Go to desktop 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>7"
+      ]
+    },
+    {
+      "action": "vdesk,7",
+      "label": "Go to desktop 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>8"
+      ]
+    },
+    {
+      "action": "vdesk,toggle",
+      "label": "Last desktop",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>a"
+      ]
+    },
+    {
+      "action": "vdesk,relative+down",
+      "label": "Previous desktop",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Left"
+      ]
+    },
+    {
+      "action": "vdesk,relative+up",
+      "label": "Next desktop",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Right"
+      ]
+    },
+    {
+      "action": "dock,toggle",
+      "label": "Toggle docks",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>d"
+      ]
+    }
+  ]
+}

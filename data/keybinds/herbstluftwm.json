@@ -1,0 +1,441 @@
+{
+  "$comment": "herbstluftwm's default keybinds: etc/xdg/herbstluftwm/autostart in nixpkgs' herbstluftwm (nixos-26.05), Mod=Mod1 (Alt). The action is the herbstclient command after `hc keybind KEY` (variables filled in; the tag loop spelled out). Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "quit",
+      "label": "Quit herbstluftwm",
+      "group": "Session",
+      "accels": [
+        "<Alt><Shift>q"
+      ]
+    },
+    {
+      "action": "reload",
+      "label": "Reload the configuration",
+      "group": "Session",
+      "accels": [
+        "<Alt><Shift>r"
+      ]
+    },
+    {
+      "action": "close",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>c"
+      ]
+    },
+    {
+      "action": "spawn \"${TERMINAL:-xterm}\"",
+      "label": "Open a terminal ($TERMINAL, else xterm)",
+      "group": "Apps",
+      "accels": [
+        "<Alt>Return"
+      ]
+    },
+    {
+      "action": "focus left",
+      "label": "Focus the window left",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Left",
+        "<Alt>h"
+      ]
+    },
+    {
+      "action": "focus down",
+      "label": "Focus the window down",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Down",
+        "<Alt>j"
+      ]
+    },
+    {
+      "action": "focus up",
+      "label": "Focus the window up",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Up",
+        "<Alt>k"
+      ]
+    },
+    {
+      "action": "focus right",
+      "label": "Focus the window right",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Right",
+        "<Alt>l"
+      ]
+    },
+    {
+      "action": "shift left",
+      "label": "Move the window left",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>Left",
+        "<Alt><Shift>h"
+      ]
+    },
+    {
+      "action": "shift down",
+      "label": "Move the window down",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>Down",
+        "<Alt><Shift>j"
+      ]
+    },
+    {
+      "action": "shift up",
+      "label": "Move the window up",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>Up",
+        "<Alt><Shift>k"
+      ]
+    },
+    {
+      "action": "shift right",
+      "label": "Move the window right",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>Right",
+        "<Alt><Shift>l"
+      ]
+    },
+    {
+      "action": "split bottom 0.5",
+      "label": "Split the frame: new frame below",
+      "group": "Layout",
+      "accels": [
+        "<Alt>u"
+      ]
+    },
+    {
+      "action": "split right 0.5",
+      "label": "Split the frame: new frame to the right",
+      "group": "Layout",
+      "accels": [
+        "<Alt>o"
+      ]
+    },
+    {
+      "action": "split explode",
+      "label": "Explode the frame into subframes",
+      "group": "Layout",
+      "accels": [
+        "<Control><Alt>space"
+      ]
+    },
+    {
+      "action": "resize left +0.02",
+      "label": "Resize the frame left",
+      "group": "Layout",
+      "accels": [
+        "<Control><Alt>h",
+        "<Control><Alt>Left"
+      ]
+    },
+    {
+      "action": "resize down +0.02",
+      "label": "Resize the frame down",
+      "group": "Layout",
+      "accels": [
+        "<Control><Alt>j",
+        "<Control><Alt>Down"
+      ]
+    },
+    {
+      "action": "resize up +0.02",
+      "label": "Resize the frame up",
+      "group": "Layout",
+      "accels": [
+        "<Control><Alt>k",
+        "<Control><Alt>Up"
+      ]
+    },
+    {
+      "action": "resize right +0.02",
+      "label": "Resize the frame right",
+      "group": "Layout",
+      "accels": [
+        "<Control><Alt>l",
+        "<Control><Alt>Right"
+      ]
+    },
+    {
+      "action": "use_index +1 --skip-visible",
+      "label": "Next tag",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>period"
+      ]
+    },
+    {
+      "action": "use_index -1 --skip-visible",
+      "label": "Previous tag",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>comma"
+      ]
+    },
+    {
+      "action": "remove",
+      "label": "Remove the frame",
+      "group": "Layout",
+      "accels": [
+        "<Alt>r"
+      ]
+    },
+    {
+      "action": "floating toggle",
+      "label": "Toggle floating on this tag",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>s"
+      ]
+    },
+    {
+      "action": "fullscreen toggle",
+      "label": "Toggle fullscreen",
+      "group": "Windows",
+      "accels": [
+        "<Alt>f"
+      ]
+    },
+    {
+      "action": "set_attr clients.focus.floating toggle",
+      "label": "Toggle the window floating",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>f"
+      ]
+    },
+    {
+      "action": "set_attr clients.focus.decorated toggle",
+      "label": "Toggle the window's decorations",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>d"
+      ]
+    },
+    {
+      "action": "set_attr clients.focus.minimized true",
+      "label": "Minimize the window",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>m"
+      ]
+    },
+    {
+      "action": "jumpto last-minimized",
+      "label": "Restore the last minimized window",
+      "group": "Focus",
+      "accels": [
+        "<Control><Alt>m"
+      ]
+    },
+    {
+      "action": "pseudotile toggle",
+      "label": "Toggle pseudotiling",
+      "group": "Layout",
+      "accels": [
+        "<Alt>p"
+      ]
+    },
+    {
+      "action": "or , and . compare tags.focus.curframe_wcount = 2 . cycle_layout +1 vertical horizontal max vertical grid , cycle_layout +1",
+      "label": "Cycle the frame's layout",
+      "group": "Layout",
+      "accels": [
+        "<Alt>space"
+      ]
+    },
+    {
+      "action": "cycle_monitor",
+      "label": "Focus the next monitor",
+      "group": "Monitors",
+      "accels": [
+        "<Alt>BackSpace"
+      ]
+    },
+    {
+      "action": "cycle_all +1",
+      "label": "Focus the next window",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "cycle_all -1",
+      "label": "Focus the previous window",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>Tab"
+      ]
+    },
+    {
+      "action": "cycle",
+      "label": "Cycle the windows in the frame",
+      "group": "Layout",
+      "accels": [
+        "<Alt>c"
+      ]
+    },
+    {
+      "action": "jumpto urgent",
+      "label": "Focus the urgent window",
+      "group": "Focus",
+      "accels": [
+        "<Alt>i"
+      ]
+    },
+    {
+      "action": "use_index 0",
+      "label": "Go to tag 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>1"
+      ]
+    },
+    {
+      "action": "move_index 0",
+      "label": "Move the window to tag 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>1"
+      ]
+    },
+    {
+      "action": "use_index 1",
+      "label": "Go to tag 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>2"
+      ]
+    },
+    {
+      "action": "move_index 1",
+      "label": "Move the window to tag 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>2"
+      ]
+    },
+    {
+      "action": "use_index 2",
+      "label": "Go to tag 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>3"
+      ]
+    },
+    {
+      "action": "move_index 2",
+      "label": "Move the window to tag 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>3"
+      ]
+    },
+    {
+      "action": "use_index 3",
+      "label": "Go to tag 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>4"
+      ]
+    },
+    {
+      "action": "move_index 3",
+      "label": "Move the window to tag 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>4"
+      ]
+    },
+    {
+      "action": "use_index 4",
+      "label": "Go to tag 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>5"
+      ]
+    },
+    {
+      "action": "move_index 4",
+      "label": "Move the window to tag 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>5"
+      ]
+    },
+    {
+      "action": "use_index 5",
+      "label": "Go to tag 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>6"
+      ]
+    },
+    {
+      "action": "move_index 5",
+      "label": "Move the window to tag 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>6"
+      ]
+    },
+    {
+      "action": "use_index 6",
+      "label": "Go to tag 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>7"
+      ]
+    },
+    {
+      "action": "move_index 6",
+      "label": "Move the window to tag 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>7"
+      ]
+    },
+    {
+      "action": "use_index 7",
+      "label": "Go to tag 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>8"
+      ]
+    },
+    {
+      "action": "move_index 7",
+      "label": "Move the window to tag 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>8"
+      ]
+    },
+    {
+      "action": "use_index 8",
+      "label": "Go to tag 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>9"
+      ]
+    },
+    {
+      "action": "move_index 8",
+      "label": "Move the window to tag 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>9"
+      ]
+    }
+  ]
+}

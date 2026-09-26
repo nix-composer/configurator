@@ -409,3 +409,14 @@ flowboxchild {
   background: @error_bg_color;
   font-weight: bold;
 }
+
+/* Keybinds: keys as keycaps. */
+.keycap {
+  font-family: monospace;
+  font-size: 0.85em;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: alpha(currentColor, 0.08);
+  box-shadow: inset 0 -2px 0 alpha(currentColor, 0.15);
+}

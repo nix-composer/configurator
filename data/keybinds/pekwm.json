@@ -1,0 +1,1621 @@
+{
+  "$comment": "pekwm's default keybinds: the Global section of etc/pekwm/keys in nixpkgs' pekwm (nixos-26.05), copied to ~/.pekwm/keys on first start (the MoveResize, InputDialog and Menu sections are modal and left out). The action is the Actions string; a bind inside a Chain is written as its Chain block, its accel is the chain's first combo and the label has the whole sequence. Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "NextFrameMRU TempRaise",
+      "label": "Next frame (most recently used)",
+      "group": "Layout",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "PrevFrameMRU TempRaise",
+      "label": "Previous frame (most recently used)",
+      "group": "Layout",
+      "accels": [
+        "<Alt><Shift>Tab"
+      ]
+    },
+    {
+      "action": "NextFrame EndRaise",
+      "label": "Next frame",
+      "group": "Layout",
+      "accels": [
+        "<Control><Alt>Tab"
+      ]
+    },
+    {
+      "action": "PrevFrame EndRaise",
+      "label": "Previous frame",
+      "group": "Layout",
+      "accels": [
+        "<Control><Alt><Shift>Tab"
+      ]
+    },
+    {
+      "action": "ActivateClientRel 1",
+      "label": "Next tab in the frame",
+      "group": "Layout",
+      "accels": [
+        "<Super>Tab"
+      ]
+    },
+    {
+      "action": "ActivateClientRel -1",
+      "label": "Previous tab in the frame",
+      "group": "Layout",
+      "accels": [
+        "<Super><Shift>Tab"
+      ]
+    },
+    {
+      "action": "MoveClientRel 1",
+      "label": "Move the tab right",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>Right"
+      ]
+    },
+    {
+      "action": "MoveClientRel -1",
+      "label": "Move the tab left",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>Left"
+      ]
+    },
+    {
+      "action": "FocusDirectional Left",
+      "label": "Focus directional left",
+      "group": "Focus",
+      "accels": [
+        "<Super>Left"
+      ]
+    },
+    {
+      "action": "FocusDirectional Right",
+      "label": "Focus directional right",
+      "group": "Focus",
+      "accels": [
+        "<Super>Right"
+      ]
+    },
+    {
+      "action": "FocusDirectional Up",
+      "label": "Focus directional up",
+      "group": "Focus",
+      "accels": [
+        "<Super>Up"
+      ]
+    },
+    {
+      "action": "FocusDirectional Down",
+      "label": "Focus directional down",
+      "group": "Focus",
+      "accels": [
+        "<Super>Down"
+      ]
+    },
+    {
+      "action": "GotoWorkspace Left",
+      "label": "Go to workspace left",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Left"
+      ]
+    },
+    {
+      "action": "GotoWorkspace Right",
+      "label": "Go to workspace right",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Right"
+      ]
+    },
+    {
+      "action": "GotoWorkspace Up",
+      "label": "Go to workspace up",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Up"
+      ]
+    },
+    {
+      "action": "GotoWorkspace Down",
+      "label": "Go to workspace down",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Down"
+      ]
+    },
+    {
+      "action": "GotoWorkspace LeftN",
+      "label": "Go to workspace left n",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>Left"
+      ]
+    },
+    {
+      "action": "GotoWorkspace RightN",
+      "label": "Go to workspace right n",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>Right"
+      ]
+    },
+    {
+      "action": "GotoWorkspace 1",
+      "label": "Go to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>1"
+      ]
+    },
+    {
+      "action": "GotoWorkspace 2",
+      "label": "Go to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>2"
+      ]
+    },
+    {
+      "action": "GotoWorkspace 3",
+      "label": "Go to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>3"
+      ]
+    },
+    {
+      "action": "GotoWorkspace 4",
+      "label": "Go to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>4"
+      ]
+    },
+    {
+      "action": "GotoWorkspace 5",
+      "label": "Go to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>5"
+      ]
+    },
+    {
+      "action": "GotoWorkspace 6",
+      "label": "Go to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>6"
+      ]
+    },
+    {
+      "action": "GotoWorkspace 7",
+      "label": "Go to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>7"
+      ]
+    },
+    {
+      "action": "GotoWorkspace 8",
+      "label": "Go to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>8"
+      ]
+    },
+    {
+      "action": "GotoWorkspace 9",
+      "label": "Go to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>9"
+      ]
+    },
+    {
+      "action": "SendToWorkspace Next KeepFocus; GoToWorkspace Next",
+      "label": "Take the window to workspace next",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>Left"
+      ]
+    },
+    {
+      "action": "SendToWorkspace Prev KeepFocus; GoToWorkspace Prev",
+      "label": "Take the window to workspace prev",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>Right"
+      ]
+    },
+    {
+      "action": "SendToWorkspace NextV KeepFocus; GoToWorkspace NextV",
+      "label": "Take the window to workspace next v",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>Up"
+      ]
+    },
+    {
+      "action": "SendToWorkspace PrevV KeepFocus; GoToWorkspace PrevV",
+      "label": "Take the window to workspace prev v",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt><Shift>Down"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 1",
+      "label": "Send the window to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>1"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 2",
+      "label": "Send the window to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>2"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 3",
+      "label": "Send the window to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>3"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 4",
+      "label": "Send the window to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>4"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 5",
+      "label": "Send the window to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>5"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 6",
+      "label": "Send the window to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>6"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 7",
+      "label": "Send the window to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>7"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 8",
+      "label": "Send the window to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>8"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 9",
+      "label": "Send the window to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>9"
+      ]
+    },
+    {
+      "action": "Toggle Maximized False True",
+      "label": "Toggle maximized vertically",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>v"
+      ]
+    },
+    {
+      "action": "Toggle Maximized True True",
+      "label": "Toggle maximized",
+      "group": "Windows",
+      "accels": [
+        "<Super>m"
+      ]
+    },
+    {
+      "action": "SetGeometry 50%x50% current HonourStrut",
+      "label": "Resize to a quarter of the screen",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>u"
+      ]
+    },
+    {
+      "action": "SetGeometry 50%x100% current HonourStrut",
+      "label": "Resize to the left/right half of the screen",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>z"
+      ]
+    },
+    {
+      "action": "SetGeometry 100%x50% current HonourStrut",
+      "label": "Resize to the top/bottom half of the screen",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>h"
+      ]
+    },
+    {
+      "action": "Maxfill True True",
+      "label": "Fill the free space",
+      "group": "Windows",
+      "accels": [
+        "<Super>g"
+      ]
+    },
+    {
+      "action": "Toggle FullScreen",
+      "label": "Toggle full screen",
+      "group": "Windows",
+      "accels": [
+        "<Super>f"
+      ]
+    },
+    {
+      "action": "MoveResize",
+      "label": "Keyboard move/resize",
+      "group": "Windows",
+      "accels": [
+        "<Super>Return"
+      ]
+    },
+    {
+      "action": "MoveToEdge LeftEdge",
+      "label": "Move to edge left edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>Left"
+      ]
+    },
+    {
+      "action": "MoveToEdge RightEdge",
+      "label": "Move to edge right edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>Right"
+      ]
+    },
+    {
+      "action": "MoveToEdge TopEdge",
+      "label": "Move to edge top edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>Up"
+      ]
+    },
+    {
+      "action": "MoveToEdge BottomEdge",
+      "label": "Move to edge bottom edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>Down"
+      ]
+    },
+    {
+      "action": "Close",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Super>q"
+      ]
+    },
+    {
+      "action": "Toggle Shaded",
+      "label": "Toggle shaded",
+      "group": "Windows",
+      "accels": [
+        "<Super>s"
+      ]
+    },
+    {
+      "action": "Toggle Iconified",
+      "label": "Toggle iconified",
+      "group": "Windows",
+      "accels": [
+        "<Super>i"
+      ]
+    },
+    {
+      "action": "Toggle Marked",
+      "label": "Toggle marked",
+      "group": "Windows",
+      "accels": [
+        "<Super>z"
+      ]
+    },
+    {
+      "action": "AttachMarked",
+      "label": "Attach marked",
+      "group": "Windows",
+      "accels": [
+        "<Super>a"
+      ]
+    },
+    {
+      "action": "Toggle Tagged False",
+      "label": "Toggle tagging the frame",
+      "group": "Layout",
+      "accels": [
+        "<Super>t"
+      ]
+    },
+    {
+      "action": "ShowMenu Root",
+      "label": "Show menu root",
+      "group": "Menus",
+      "accels": [
+        "<Super>r"
+      ]
+    },
+    {
+      "action": "ShowMenu Window",
+      "label": "Show menu window",
+      "group": "Menus",
+      "accels": [
+        "<Super>w"
+      ]
+    },
+    {
+      "action": "ShowMenu Goto",
+      "label": "Show menu goto",
+      "group": "Menus",
+      "accels": [
+        "<Super>l"
+      ]
+    },
+    {
+      "action": "ShowMenu GotoClient",
+      "label": "Show menu goto client",
+      "group": "Menus",
+      "accels": [
+        "<Super>c"
+      ]
+    },
+    {
+      "action": "ShowMenu Icon",
+      "label": "Show menu icon",
+      "group": "Menus",
+      "accels": [
+        "<Super><Shift>i"
+      ]
+    },
+    {
+      "action": "HideAllMenus",
+      "label": "Hide all menus",
+      "group": "Menus",
+      "accels": [
+        "<Super>x"
+      ]
+    },
+    {
+      "action": "Exec pekwm_screenshot",
+      "label": "Run pekwm_screenshot",
+      "group": "Screenshots",
+      "accels": [
+        "<Alt>Print"
+      ]
+    },
+    {
+      "action": "Exec $TERM",
+      "label": "Run $TERM",
+      "group": "Apps",
+      "accels": [
+        "<Super>e"
+      ]
+    },
+    {
+      "action": "Reload",
+      "label": "Reload pekwm",
+      "group": "Session",
+      "accels": [
+        "<Control><Alt>Delete"
+      ]
+    },
+    {
+      "action": "ShowCmdDialog",
+      "label": "Command dialog",
+      "group": "Menus",
+      "accels": [
+        "<Super>d"
+      ]
+    },
+    {
+      "action": "ShowSearchDialog",
+      "label": "Search dialog",
+      "group": "Menus",
+      "accels": [
+        "<Super>v"
+      ]
+    },
+    {
+      "action": "Toggle HarbourHidden",
+      "label": "Toggle harbour hidden",
+      "group": "Windows",
+      "accels": [
+        "<Super>h"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"Q\" { Actions = \"MoveToEdge TopLeft\" } }",
+      "label": "Ctrl+Mod4+C, Q: Move to edge top left",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"Y\" { Actions = \"MoveToEdge TopCenterEdge\" } }",
+      "label": "Ctrl+Mod4+C, Y: Move to edge top center edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"W\" { Actions = \"MoveToEdge TopCenterEdge\" } }",
+      "label": "Ctrl+Mod4+C, W: Move to edge top center edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"Shift Y\" { Actions = \"MoveToEdge TopEdge\" } }",
+      "label": "Ctrl+Mod4+C, Shift+Y: Move to edge top edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"Shift W\" { Actions = \"MoveToEdge TopEdge\" } }",
+      "label": "Ctrl+Mod4+C, Shift+W: Move to edge top edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"P\" { Actions = \"MoveToEdge TopRight\" } }",
+      "label": "Ctrl+Mod4+C, P: Move to edge top right",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"E\" { Actions = \"MoveToEdge TopRight\" } }",
+      "label": "Ctrl+Mod4+C, E: Move to edge top right",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"A\" { Actions = \"MoveToEdge LeftCenterEdge\" } }",
+      "label": "Ctrl+Mod4+C, A: Move to edge left center edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"Shift A\" { Actions = \"MoveToEdge LeftEdge\" } }",
+      "label": "Ctrl+Mod4+C, Shift+A: Move to edge left edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"L\" { Actions = \"MoveToEdge RightCenterEdge\" } }",
+      "label": "Ctrl+Mod4+C, L: Move to edge right center edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"D\" { Actions = \"MoveToEdge RightCenterEdge\" } }",
+      "label": "Ctrl+Mod4+C, D: Move to edge right center edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"Shift L\" { Actions = \"MoveToEdge RightEdge\" } }",
+      "label": "Ctrl+Mod4+C, Shift+L: Move to edge right edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"Shift D\" { Actions = \"MoveToEdge RightEdge\" } }",
+      "label": "Ctrl+Mod4+C, Shift+D: Move to edge right edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"Z\" { Actions = \"MoveToEdge BottomLeft\" } }",
+      "label": "Ctrl+Mod4+C, Z: Move to edge bottom left",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"B\" { Actions = \"MoveToEdge BottomCenterEdge\" } }",
+      "label": "Ctrl+Mod4+C, B: Move to edge bottom center edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"X\" { Actions = \"MoveToEdge BottomCenterEdge\" } }",
+      "label": "Ctrl+Mod4+C, X: Move to edge bottom center edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"Shift B\" { Actions = \"MoveToEdge BottomEdge\" } }",
+      "label": "Ctrl+Mod4+C, Shift+B: Move to edge bottom edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"Shift X\" { Actions = \"MoveToEdge BottomEdge\" } }",
+      "label": "Ctrl+Mod4+C, Shift+X: Move to edge bottom edge",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"M\" { Actions = \"MoveToEdge BottomRight\" } }",
+      "label": "Ctrl+Mod4+C, M: Move to edge bottom right",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"C\" { Actions = \"MoveToEdge BottomRight\" } }",
+      "label": "Ctrl+Mod4+C, C: Move to edge bottom right",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"H\" { Actions = \"MoveToEdge Center\" } }",
+      "label": "Ctrl+Mod4+C, H: Move to edge center",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 C\" { KeyPress = \"S\" { Actions = \"MoveToEdge Center\" } }",
+      "label": "Ctrl+Mod4+C, S: Move to edge center",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>c"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 M\" { KeyPress = \"R\" { Actions = \"ShowMenu Root\" } }",
+      "label": "Ctrl+Mod4+M, R: Show menu root",
+      "group": "Menus",
+      "accels": [
+        "<Super><Control>m"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 M\" { KeyPress = \"W\" { Actions = \"ShowMenu Window\" } }",
+      "label": "Ctrl+Mod4+M, W: Show menu window",
+      "group": "Menus",
+      "accels": [
+        "<Super><Control>m"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 M\" { KeyPress = \"I\" { Actions = \"ShowMenu Icon\" } }",
+      "label": "Ctrl+Mod4+M, I: Show menu icon",
+      "group": "Menus",
+      "accels": [
+        "<Super><Control>m"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 M\" { KeyPress = \"G\" { Actions = \"ShowMenu Goto\" } }",
+      "label": "Ctrl+Mod4+M, G: Show menu goto",
+      "group": "Menus",
+      "accels": [
+        "<Super><Control>m"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 M\" { KeyPress = \"C\" { Actions = \"ShowMenu GotoClient\" } }",
+      "label": "Ctrl+Mod4+M, C: Show menu goto client",
+      "group": "Menus",
+      "accels": [
+        "<Super><Control>m"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 M\" { KeyPress = \"D\" { Actions = \"ShowMenu Decor\" } }",
+      "label": "Ctrl+Mod4+M, D: Show menu decor",
+      "group": "Menus",
+      "accels": [
+        "<Super><Control>m"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 M\" { KeyPress = \"A\" { Actions = \"ShowMenu AttachClientInFrame\" } }",
+      "label": "Ctrl+Mod4+M, A: Show menu attach client in frame",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>m"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 M\" { KeyPress = \"F\" { Actions = \"ShowMenu AttachFrameInFrame\" } }",
+      "label": "Ctrl+Mod4+M, F: Show menu attach frame in frame",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>m"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 M\" { KeyPress = \"Shift A\" { Actions = \"ShowMenu AttachClient\" } }",
+      "label": "Ctrl+Mod4+M, Shift+A: Show menu attach client",
+      "group": "Menus",
+      "accels": [
+        "<Super><Control>m"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 M\" { KeyPress = \"Shift F\" { Actions = \"ShowMenu AttachFrame\" } }",
+      "label": "Ctrl+Mod4+M, Shift+F: Show menu attach frame",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>m"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 M\" { KeyPress = \"X\" { Actions = \"HideAllMenus\" } }",
+      "label": "Ctrl+Mod4+M, X: Hide all menus",
+      "group": "Menus",
+      "accels": [
+        "<Super><Control>m"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 T\" { KeyPress = \"T\" { Actions = \"Toggle Tagged False\" } }",
+      "label": "Ctrl+Mod4+T, T: Toggle tagging the frame",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>t"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 T\" { KeyPress = \"B\" { Actions = \"Toggle Tagged True\" } }",
+      "label": "Ctrl+Mod4+T, B: Toggle tagging the frame (behind)",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>t"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 T\" { KeyPress = \"C\" { Actions = \"Unset Tagged\" } }",
+      "label": "Ctrl+Mod4+T, C: Unset tagged",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>t"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 T\" { KeyPress = \"G\" { Actions = \"Toggle GlobalGrouping\" } }",
+      "label": "Ctrl+Mod4+T, G: Toggle global grouping",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>t"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 T\" { KeyPress = \"M\" { Actions = \"Toggle Marked\" } }",
+      "label": "Ctrl+Mod4+T, M: Toggle marked",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>t"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 T\" { KeyPress = \"A\" { Actions = \"AttachMarked\" } }",
+      "label": "Ctrl+Mod4+T, A: Attach marked",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>t"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 T\" { KeyPress = \"D\" { Actions = \"Detach\" } }",
+      "label": "Ctrl+Mod4+T, D: Detach",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>t"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 T\" { KeyPress = \"P\" { Actions = \"AttachClientInNextFrame\" } }",
+      "label": "Ctrl+Mod4+T, P: Attach client in next frame",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>t"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 T\" { KeyPress = \"O\" { Actions = \"AttachClientInPrevFrame\" } }",
+      "label": "Ctrl+Mod4+T, O: Attach client in prev frame",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>t"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 T\" { KeyPress = \"I\" { Actions = \"AttachFrameInNextFrame\" } }",
+      "label": "Ctrl+Mod4+T, I: Attach frame in next frame",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>t"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 T\" { KeyPress = \"U\" { Actions = \"AttachFrameInPrevFrame\" } }",
+      "label": "Ctrl+Mod4+T, U: Attach frame in prev frame",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>t"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 D\" { KeyPress = \"B\" { Actions = \"Toggle DecorBorder\" } }",
+      "label": "Ctrl+Mod4+D, B: Toggle decor border",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>d"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 D\" { KeyPress = \"T\" { Actions = \"Toggle DecorTitlebar\" } }",
+      "label": "Ctrl+Mod4+D, T: Toggle decor titlebar",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>d"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 D\" { KeyPress = \"D\" { Actions = \"Toggle DecorBorder; Toggle DecorTitlebar\" } }",
+      "label": "Ctrl+Mod4+D, D: Toggle the border and titlebar",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>d"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { Chain = \"G\" { KeyPress = \"G\" { Actions = \"MaxFill True True\" } } }",
+      "label": "Ctrl+Mod4+A, G, G: Fill the free space",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { Chain = \"G\" { KeyPress = \"V\" { Actions = \"MaxFill False True\" } } }",
+      "label": "Ctrl+Mod4+A, G, V: Fill the free space vertically",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { Chain = \"G\" { KeyPress = \"H\" { Actions = \"MaxFill True False\" } } }",
+      "label": "Ctrl+Mod4+A, G, H: Fill the free space horizontally",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { Chain = \"M\" { KeyPress = \"M\" { Actions = \"Toggle Maximized True True\" } } }",
+      "label": "Ctrl+Mod4+A, M, M: Toggle maximized",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { Chain = \"M\" { KeyPress = \"V\" { Actions = \"Toggle Maximized False True\" } } }",
+      "label": "Ctrl+Mod4+A, M, V: Toggle maximized vertically",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { Chain = \"M\" { KeyPress = \"H\" { Actions = \"Toggle Maximized True False\" } } }",
+      "label": "Ctrl+Mod4+A, M, H: Toggle maximized horizontally",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { Chain = \"Q\" { KeyPress = \"Q\" { Actions = \"Close\" } } }",
+      "label": "Ctrl+Mod4+A, Q, Q: Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { Chain = \"Q\" { KeyPress = \"F\" { Actions = \"CloseFrame\" } } }",
+      "label": "Ctrl+Mod4+A, Q, F: Close frame",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { Chain = \"Q\" { KeyPress = \"K\" { Actions = \"Kill\" } } }",
+      "label": "Ctrl+Mod4+A, Q, K: Kill",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { KeyPress = \"S\" { Actions = \"Toggle Shaded\" } }",
+      "label": "Ctrl+Mod4+A, S: Toggle shaded",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { KeyPress = \"A\" { Actions = \"Toggle Sticky\" } }",
+      "label": "Ctrl+Mod4+A, A: Toggle sticky",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { KeyPress = \"O\" { Actions = \"Toggle AlwaysOnTop\" } }",
+      "label": "Ctrl+Mod4+A, O: Toggle always on top",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { KeyPress = \"B\" { Actions = \"Toggle AlwaysBelow\" } }",
+      "label": "Ctrl+Mod4+A, B: Toggle always below",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { KeyPress = \"I\" { Actions = \"Set Iconified\" } }",
+      "label": "Ctrl+Mod4+A, I: Set iconified",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { KeyPress = \"R\" { Actions = \"Raise\" } }",
+      "label": "Ctrl+Mod4+A, R: Raise",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { KeyPress = \"Shift R\" { Actions = \"Raise True\" } }",
+      "label": "Ctrl+Mod4+A, Shift+R: Raise true",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { KeyPress = \"L\" { Actions = \"Lower\" } }",
+      "label": "Ctrl+Mod4+A, L: Lower",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { KeyPress = \"Shift L\" { Actions = \"Lower True\" } }",
+      "label": "Ctrl+Mod4+A, Shift+L: Lower true",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { KeyPress = \"X\" { Actions = \"ActivateOrRaise\" } }",
+      "label": "Ctrl+Mod4+A, X: Activate or raise",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { KeyPress = \"Return\" { Actions = \"MoveResize\" } }",
+      "label": "Ctrl+Mod4+A, Return: Keyboard move/resize",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { KeyPress = \"F\" { Actions = \"Toggle Fullscreen\" } }",
+      "label": "Ctrl+Mod4+A, F: Toggle fullscreen",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { KeyPress = \"Left\" { Actions = \"GrowDirection Left\" } }",
+      "label": "Ctrl+Mod4+A, Left: Grow direction left",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { KeyPress = \"Right\" { Actions = \"GrowDirection Right\" } }",
+      "label": "Ctrl+Mod4+A, Right: Grow direction right",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { KeyPress = \"Up\" { Actions = \"GrowDirection Up\" } }",
+      "label": "Ctrl+Mod4+A, Up: Grow direction up",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 A\" { KeyPress = \"Down\" { Actions = \"GrowDirection Down\" } }",
+      "label": "Ctrl+Mod4+A, Down: Grow direction down",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"P\" { Actions = \"NextFrame AlwaysRaise\" } }",
+      "label": "Ctrl+Mod4+F, P: Next frame",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"O\" { Actions = \"PrevFrame AlwaysRaise\" } }",
+      "label": "Ctrl+Mod4+F, O: Previous frame",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"Shift P\" { Actions = \"NextFrameMRU EndRaise\" } }",
+      "label": "Ctrl+Mod4+F, Shift+P: Next frame (most recently used)",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"Shift O\" { Actions = \"PrevFrameMRU EndRaise\" } }",
+      "label": "Ctrl+Mod4+F, Shift+O: Previous frame (most recently used)",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"I\" { Actions = \"ActivateClientRel 1\" } }",
+      "label": "Ctrl+Mod4+F, I: Next tab in the frame",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"U\" { Actions = \"ActivateClientRel -1\" } }",
+      "label": "Ctrl+Mod4+F, U: Previous tab in the frame",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"Shift I\" { Actions = \"MoveClientRel 1\" } }",
+      "label": "Ctrl+Mod4+F, Shift+I: Move the tab right",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"Shift U\" { Actions = \"MoveClientRel -1\" } }",
+      "label": "Ctrl+Mod4+F, Shift+U: Move the tab left",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"Up\" { Actions = \"FocusDirectional Up\" } }",
+      "label": "Ctrl+Mod4+F, Up: Focus directional up",
+      "group": "Focus",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"Down\" { Actions = \"FocusDirectional Down\" } }",
+      "label": "Ctrl+Mod4+F, Down: Focus directional down",
+      "group": "Focus",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"Left\" { Actions = \"FocusDirectional Left\" } }",
+      "label": "Ctrl+Mod4+F, Left: Focus directional left",
+      "group": "Focus",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"Right\" { Actions = \"FocusDirectional Right\" } }",
+      "label": "Ctrl+Mod4+F, Right: Focus directional right",
+      "group": "Focus",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"1\" { Actions = \"ActivateClientNum 1\" } }",
+      "label": "Ctrl+Mod4+F, 1: Activate client num 1",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"2\" { Actions = \"ActivateClientNum 2\" } }",
+      "label": "Ctrl+Mod4+F, 2: Activate client num 2",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"3\" { Actions = \"ActivateClientNum 3\" } }",
+      "label": "Ctrl+Mod4+F, 3: Activate client num 3",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"4\" { Actions = \"ActivateClientNum 4\" } }",
+      "label": "Ctrl+Mod4+F, 4: Activate client num 4",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"5\" { Actions = \"ActivateClientNum 5\" } }",
+      "label": "Ctrl+Mod4+F, 5: Activate client num 5",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"6\" { Actions = \"ActivateClientNum 6\" } }",
+      "label": "Ctrl+Mod4+F, 6: Activate client num 6",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"7\" { Actions = \"ActivateClientNum 7\" } }",
+      "label": "Ctrl+Mod4+F, 7: Activate client num 7",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"8\" { Actions = \"ActivateClientNum 8\" } }",
+      "label": "Ctrl+Mod4+F, 8: Activate client num 8",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"9\" { Actions = \"ActivateClientNum 9\" } }",
+      "label": "Ctrl+Mod4+F, 9: Activate client num 9",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"0\" { Actions = \"ActivateClientNum 10\" } }",
+      "label": "Ctrl+Mod4+F, 0: Activate client num 10",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 F\" { KeyPress = \"C\" { Actions = \"ShowCmdDialog GotoClientID\" } }",
+      "label": "Ctrl+Mod4+F, C: Command dialog",
+      "group": "Menus",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"Right\" { Actions = \"GoToWorkspace Right\" } }",
+      "label": "Ctrl+Mod4+W, Right: Go to workspace right",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"Left\" { Actions = \"GoToWorkspace Left\" } }",
+      "label": "Ctrl+Mod4+W, Left: Go to workspace left",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"N\" { Actions = \"GoToWorkspace Next\" } }",
+      "label": "Ctrl+Mod4+W, N: Go to workspace next",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"P\" { Actions = \"GoToWorkspace Prev\" } }",
+      "label": "Ctrl+Mod4+W, P: Go to workspace prev",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"1\" { Actions = \"GoToWorkspace 1\" } }",
+      "label": "Ctrl+Mod4+W, 1: Go to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"2\" { Actions = \"GoToWorkspace 2\" } }",
+      "label": "Ctrl+Mod4+W, 2: Go to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"3\" { Actions = \"GoToWorkspace 3\" } }",
+      "label": "Ctrl+Mod4+W, 3: Go to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"4\" { Actions = \"GoToWorkspace 4\" } }",
+      "label": "Ctrl+Mod4+W, 4: Go to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"5\" { Actions = \"GoToWorkspace 5\" } }",
+      "label": "Ctrl+Mod4+W, 5: Go to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"6\" { Actions = \"GoToWorkspace 6\" } }",
+      "label": "Ctrl+Mod4+W, 6: Go to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"7\" { Actions = \"GoToWorkspace 7\" } }",
+      "label": "Ctrl+Mod4+W, 7: Go to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"8\" { Actions = \"GoToWorkspace 8\" } }",
+      "label": "Ctrl+Mod4+W, 8: Go to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"9\" { Actions = \"GoToWorkspace 9\" } }",
+      "label": "Ctrl+Mod4+W, 9: Go to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"Up\" { Actions = \"SendToWorkspace Next KeepFocus; GoToWorkspace Next\" } }",
+      "label": "Ctrl+Mod4+W, Up: Take the window to workspace next",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"Down\" { Actions = \"SendToWorkspace Prev KeepFocus; GoToWorkspace Prev\" } }",
+      "label": "Ctrl+Mod4+W, Down: Take the window to workspace prev",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"F1\" { Actions = \"SendToWorkspace 1\" } }",
+      "label": "Ctrl+Mod4+W, F1: Send the window to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"F2\" { Actions = \"SendToWorkspace 2\" } }",
+      "label": "Ctrl+Mod4+W, F2: Send the window to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"F3\" { Actions = \"SendToWorkspace 3\" } }",
+      "label": "Ctrl+Mod4+W, F3: Send the window to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"F4\" { Actions = \"SendToWorkspace 4\" } }",
+      "label": "Ctrl+Mod4+W, F4: Send the window to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"F5\" { Actions = \"SendToWorkspace 5\" } }",
+      "label": "Ctrl+Mod4+W, F5: Send the window to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"F6\" { Actions = \"SendToWorkspace 6\" } }",
+      "label": "Ctrl+Mod4+W, F6: Send the window to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"F7\" { Actions = \"SendToWorkspace 7\" } }",
+      "label": "Ctrl+Mod4+W, F7: Send the window to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"F8\" { Actions = \"SendToWorkspace 8\" } }",
+      "label": "Ctrl+Mod4+W, F8: Send the window to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 W\" { KeyPress = \"F9\" { Actions = \"SendToWorkspace 9\" } }",
+      "label": "Ctrl+Mod4+W, F9: Send the window to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>w"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 E\" { KeyPress = \"E\" { Actions = \"Exec $TERM\" } }",
+      "label": "Ctrl+Mod4+E, E: Run $TERM",
+      "group": "Apps",
+      "accels": [
+        "<Super><Control>e"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 E\" { KeyPress = \"L\" { Actions = \"Exec xlock -mode blank\" } }",
+      "label": "Ctrl+Mod4+E, L: Run xlock -mode blank",
+      "group": "Session",
+      "accels": [
+        "<Super><Control>e"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 E\" { KeyPress = \"S\" { Actions = \"Exec pekwm_screenshot\" } }",
+      "label": "Ctrl+Mod4+E, S: Run pekwm_screenshot",
+      "group": "Screenshots",
+      "accels": [
+        "<Super><Control>e"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 E\" { KeyPress = \"C\" { Actions = \"ShowCmdDialog\" } }",
+      "label": "Ctrl+Mod4+E, C: Command dialog",
+      "group": "Menus",
+      "accels": [
+        "<Super><Control>e"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 P\" { KeyPress = \"Delete\" { Actions = \"Reload\" } }",
+      "label": "Ctrl+Mod4+P, Delete: Reload pekwm",
+      "group": "Session",
+      "accels": [
+        "<Super><Control>p"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 P\" { KeyPress = \"Next\" { Actions = \"Restart\" } }",
+      "label": "Ctrl+Mod4+P, Next: Restart pekwm",
+      "group": "Session",
+      "accels": [
+        "<Super><Control>p"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 P\" { KeyPress = \"End\" { Actions = \"Exit\" } }",
+      "label": "Ctrl+Mod4+P, End: Exit pekwm",
+      "group": "Session",
+      "accels": [
+        "<Super><Control>p"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 P\" { KeyPress = \"Prior\" { Actions = \"RestartOther twm\" } }",
+      "label": "Ctrl+Mod4+P, Prior: Restart other twm",
+      "group": "Session",
+      "accels": [
+        "<Super><Control>p"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 P\" { KeyPress = \"D\" { Actions = \"ShowCmdDialog\" } }",
+      "label": "Ctrl+Mod4+P, D: Command dialog",
+      "group": "Menus",
+      "accels": [
+        "<Super><Control>p"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 P\" { KeyPress = \"H\" { Actions = \"Toggle HarbourHidden\" } }",
+      "label": "Ctrl+Mod4+P, H: Toggle harbour hidden",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>p"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 S\" { KeyPress = \"M\" { Actions = \"Toggle Skip Menus\" } }",
+      "label": "Ctrl+Mod4+S, M: Toggle skip menus",
+      "group": "Menus",
+      "accels": [
+        "<Super><Control>s"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 S\" { KeyPress = \"F\" { Actions = \"Toggle Skip FocusToggle\" } }",
+      "label": "Ctrl+Mod4+S, F: Toggle skip focus toggle",
+      "group": "Focus",
+      "accels": [
+        "<Super><Control>s"
+      ]
+    },
+    {
+      "action": "Chain = \"Ctrl Mod4 S\" { KeyPress = \"S\" { Actions = \"Toggle Skip Snap\" } }",
+      "label": "Ctrl+Mod4+S, S: Toggle skip snap",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>s"
+      ]
+    }
+  ]
+}

@@ -39,8 +39,11 @@ import xml.etree.ElementTree as ET
 d = sys.argv[1]
 # Each key's summary, the label GNOME Settings shows too.
 summaries = {}
+paths = {}
 for f in glob.glob(f"{d}/*.gschema.xml"):
     for schema in ET.parse(f).getroot().iter("schema"):
+        if schema.get("path"):
+            paths.setdefault(schema.get("id"), schema.get("path").strip("/"))
         for key in schema.iter("key"):
             s = key.findtext("summary")
             if s:
@@ -66,6 +69,7 @@ for line in open(f"{d}/values"):
         "label": label.rstrip("."),
         "group": group,
         "type": kind,
+        "path": paths[schema],
         "accels": accels,
     })
 json.dump({

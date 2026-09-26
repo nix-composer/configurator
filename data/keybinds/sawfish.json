@@ -1,0 +1,62 @@
+{
+  "$comment": "Sawfish's default keybinds: the key (not mouse) bindings of global-keymap and window-keymap in share/sawfish/lisp/sawfish/wm/keymaps.jl of nixpkgs' sawfish (nixos-26.05). W is the wm-modifier, Meta by default (Alt on a standard layout); H-ISO_Left_Tab (Hyper) is left out. The action is `<keymap>: <command>`. Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "global-keymap: previous-workspace",
+      "label": "Previous workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>Left"
+      ]
+    },
+    {
+      "action": "global-keymap: next-workspace",
+      "label": "Next workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>Right"
+      ]
+    },
+    {
+      "action": "global-keymap: cycle-windows",
+      "label": "Cycle through the windows",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "global-keymap: cabinet-switch",
+      "label": "Switch windows (cabinet)",
+      "group": "Focus",
+      "accels": [
+        "<Super>Tab",
+        "<Control>Tab"
+      ]
+    },
+    {
+      "action": "window-keymap: raise-window",
+      "label": "Raise window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>Up"
+      ]
+    },
+    {
+      "action": "window-keymap: lower-window",
+      "label": "Lower window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>Down"
+      ]
+    },
+    {
+      "action": "window-keymap: tab-raise-left-window",
+      "label": "Raise the tab to the left",
+      "group": "Windows",
+      "accels": [
+        "<Alt>ISO_Left_Tab"
+      ]
+    }
+  ]
+}

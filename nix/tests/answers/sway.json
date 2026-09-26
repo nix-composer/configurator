@@ -26,6 +26,9 @@
     "SUPER + SHIFT + Q": "unbind",
     "SUPER + P": {
       "exec": "swaymsg exit"
+    },
+    "SUPER + SHIFT + X": {
+      "action": "kill"
     }
   },
   "disk": {

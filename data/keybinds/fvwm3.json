@@ -1,0 +1,126 @@
+{
+  "$comment": "FVWM3's default keybinds: the Key lines of share/fvwm3/default-config/config in nixpkgs' fvwm3 (nixos-26.05). The action is `<context> <command>` (fvwm's Key line minus key and modifiers); modifier `A` (any) is shown as no modifier. Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "A Menu MenuFvwmRoot",
+      "label": "Open the root menu",
+      "group": "Menus",
+      "accels": [
+        "<Alt>F1",
+        "Menu"
+      ]
+    },
+    {
+      "action": "A WindowList Root c c NoDeskSort, NoGeometry, SelectOnRelease Meta_L, CurrentAtEnd",
+      "label": "Window list",
+      "group": "Menus",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "A GotoDesk 0 0",
+      "label": "Go to desk 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F1"
+      ]
+    },
+    {
+      "action": "A GotoDesk 0 1",
+      "label": "Go to desk 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F2"
+      ]
+    },
+    {
+      "action": "A GotoDesk 0 2",
+      "label": "Go to desk 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F3"
+      ]
+    },
+    {
+      "action": "A GotoDesk 0 3",
+      "label": "Go to desk 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F4"
+      ]
+    },
+    {
+      "action": "A Exec exec $[infostore.terminal]",
+      "label": "Open a terminal (with any modifiers)",
+      "group": "Apps",
+      "accels": [
+        "Super_R"
+      ]
+    },
+    {
+      "action": "WTSF ShuffleDir up",
+      "label": "Move the window up (shuffle)",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>Up"
+      ]
+    },
+    {
+      "action": "WTSF ShuffleDir down",
+      "label": "Move the window down (shuffle)",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>Down"
+      ]
+    },
+    {
+      "action": "WTSF ShuffleDir left",
+      "label": "Move the window left (shuffle)",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>Left"
+      ]
+    },
+    {
+      "action": "WTSF ShuffleDir right",
+      "label": "Move the window right (shuffle)",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt>Right"
+      ]
+    },
+    {
+      "action": "WTSF Maximize True 0 growup",
+      "label": "Grow the window up",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>Up"
+      ]
+    },
+    {
+      "action": "WTSF Maximize True 0 growdown",
+      "label": "Grow the window down",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>Down"
+      ]
+    },
+    {
+      "action": "WTSF Maximize True growright 0",
+      "label": "Grow the window right",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>Right"
+      ]
+    },
+    {
+      "action": "WTSF Maximize True growleft 0",
+      "label": "Grow the window left",
+      "group": "Windows",
+      "accels": [
+        "<Control><Alt><Shift>Left"
+      ]
+    }
+  ]
+}

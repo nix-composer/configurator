@@ -1,0 +1,293 @@
+{
+  "$comment": "LeftWM's built-in default keybinds: Config::default() in leftwm/src/config/default.rs of nixpkgs' leftwm (nixos-26.05), modkey = Mod4 (Super); LeftWM writes them to ~/.config/leftwm/config.ron on first start. The action is `<command> <value>` as config.ron's keybind entries hold them. Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "Execute dmenu_run",
+      "label": "Run a program (dmenu_run)",
+      "group": "Apps",
+      "accels": [
+        "<Super>p"
+      ]
+    },
+    {
+      "action": "Execute default_terminal()",
+      "label": "Open a terminal (the first of alacritty, termite, kitty, urxvt, rxvt, st, roxterm, eterm, xterm found)",
+      "group": "Apps",
+      "accels": [
+        "<Super><Shift>Return"
+      ]
+    },
+    {
+      "action": "CloseWindow",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>q"
+      ]
+    },
+    {
+      "action": "SoftReload",
+      "label": "Reload LeftWM",
+      "group": "Session",
+      "accels": [
+        "<Super><Shift>r"
+      ]
+    },
+    {
+      "action": "Execute exit_strategy()",
+      "label": "Exit LeftWM (loginctl kill-session, else pkill leftwm)",
+      "group": "Session",
+      "accels": [
+        "<Super><Shift>x"
+      ]
+    },
+    {
+      "action": "Execute slock",
+      "label": "Lock the screen (slock)",
+      "group": "Session",
+      "accels": [
+        "<Super><Control>l"
+      ]
+    },
+    {
+      "action": "MoveToLastWorkspace",
+      "label": "Move the window to the last workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>w"
+      ]
+    },
+    {
+      "action": "SwapTags",
+      "label": "Swap the tags of the last two active workspaces",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>w"
+      ]
+    },
+    {
+      "action": "MoveWindowUp",
+      "label": "Move the window up",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>k",
+        "<Super><Shift>Up"
+      ]
+    },
+    {
+      "action": "MoveWindowDown",
+      "label": "Move the window down",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>j",
+        "<Super><Shift>Down"
+      ]
+    },
+    {
+      "action": "MoveWindowTop",
+      "label": "Move the window to the top",
+      "group": "Windows",
+      "accels": [
+        "<Super>Return"
+      ]
+    },
+    {
+      "action": "FocusWindowUp",
+      "label": "Focus the window above",
+      "group": "Focus",
+      "accels": [
+        "<Super>k",
+        "<Super>Up"
+      ]
+    },
+    {
+      "action": "FocusWindowDown",
+      "label": "Focus the window below",
+      "group": "Focus",
+      "accels": [
+        "<Super>j",
+        "<Super>Down"
+      ]
+    },
+    {
+      "action": "NextLayout",
+      "label": "Next layout",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>k",
+        "<Super><Control>Up"
+      ]
+    },
+    {
+      "action": "PreviousLayout",
+      "label": "Previous layout",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>j",
+        "<Super><Control>Down"
+      ]
+    },
+    {
+      "action": "FocusWorkspaceNext",
+      "label": "Next workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>l",
+        "<Super>Right"
+      ]
+    },
+    {
+      "action": "FocusWorkspacePrevious",
+      "label": "Previous workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>h",
+        "<Super>Left"
+      ]
+    },
+    {
+      "action": "GotoTag 1",
+      "label": "Go to tag 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>1"
+      ]
+    },
+    {
+      "action": "GotoTag 2",
+      "label": "Go to tag 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>2"
+      ]
+    },
+    {
+      "action": "GotoTag 3",
+      "label": "Go to tag 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>3"
+      ]
+    },
+    {
+      "action": "GotoTag 4",
+      "label": "Go to tag 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>4"
+      ]
+    },
+    {
+      "action": "GotoTag 5",
+      "label": "Go to tag 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>5"
+      ]
+    },
+    {
+      "action": "GotoTag 6",
+      "label": "Go to tag 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>6"
+      ]
+    },
+    {
+      "action": "GotoTag 7",
+      "label": "Go to tag 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>7"
+      ]
+    },
+    {
+      "action": "GotoTag 8",
+      "label": "Go to tag 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>8"
+      ]
+    },
+    {
+      "action": "GotoTag 9",
+      "label": "Go to tag 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>9"
+      ]
+    },
+    {
+      "action": "MoveToTag 1",
+      "label": "Move the window to tag 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>1"
+      ]
+    },
+    {
+      "action": "MoveToTag 2",
+      "label": "Move the window to tag 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>2"
+      ]
+    },
+    {
+      "action": "MoveToTag 3",
+      "label": "Move the window to tag 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>3"
+      ]
+    },
+    {
+      "action": "MoveToTag 4",
+      "label": "Move the window to tag 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>4"
+      ]
+    },
+    {
+      "action": "MoveToTag 5",
+      "label": "Move the window to tag 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>5"
+      ]
+    },
+    {
+      "action": "MoveToTag 6",
+      "label": "Move the window to tag 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>6"
+      ]
+    },
+    {
+      "action": "MoveToTag 7",
+      "label": "Move the window to tag 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>7"
+      ]
+    },
+    {
+      "action": "MoveToTag 8",
+      "label": "Move the window to tag 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>8"
+      ]
+    },
+    {
+      "action": "MoveToTag 9",
+      "label": "Move the window to tag 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>9"
+      ]
+    }
+  ]
+}

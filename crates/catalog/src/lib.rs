@@ -169,6 +169,9 @@ pub struct DefaultBind {
     /// GNOME's GVariant type: `as` (most) or `s`.
     #[serde(rename = "type", default = "string_array")]
     pub kind: String,
+    /// The dconf directory of a GSettings key (`org/mate/marco/global-keybindings`).
+    #[serde(default)]
+    pub path: Option<String>,
     /// Its keys as GTK accelerators (`<Super><Shift>q`).
     pub accels: Vec<String>,
 }
@@ -178,9 +181,14 @@ fn string_array() -> String {
 }
 
 impl DefaultBind {
-    /// GNOME's GSettings schema and key, from `action`.
-    pub fn gsettings(&self) -> Option<(&str, &str)> {
-        self.action.split_once('/')
+    /// The dconf directory and key a GSettings action is stored under.
+    pub fn dconf(&self) -> Option<(String, &str)> {
+        let (schema, key) = self.action.split_once('/')?;
+        let dir = self
+            .path
+            .clone()
+            .unwrap_or_else(|| schema.replace('.', "/"));
+        Some((dir, key))
     }
 }
 

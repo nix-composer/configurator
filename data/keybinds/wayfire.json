@@ -1,0 +1,258 @@
+{
+  "$comment": "Wayfire's default keybinds from share/wayfire/metadata/*.xml of nixpkgs nixos-26.05 `wayfire` (pyrpvav78sx5jr0gqp5p47ln9kwq5dcf-wayfire-0.10.1): the key and activator defaults of the plugins enabled by default (core/plugins). The action is `section/option` as wayfire.ini names it; its value holds all the combos, separated by `|`. Mouse-button and scroll-modifier options left out (scripts/keybinds/extract-compositors.py).",
+  "binds": [
+    {
+      "action": "core/close_top_view",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Super>q",
+        "<Alt>F4"
+      ]
+    },
+    {
+      "action": "core/exit",
+      "label": "Exit Wayfire",
+      "group": "Session",
+      "accels": [
+        "<Control><Alt>BackSpace"
+      ]
+    },
+    {
+      "action": "expo/toggle",
+      "label": "Show all workspaces (expo)",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>e"
+      ]
+    },
+    {
+      "action": "fast-switcher/activate",
+      "label": "Switch to the next window (fast)",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Escape"
+      ]
+    },
+    {
+      "action": "fast-switcher/activate_backward",
+      "label": "Switch to the previous window (fast)",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>Escape"
+      ]
+    },
+    {
+      "action": "fisheye/toggle",
+      "label": "Toggle the fisheye effect",
+      "group": "Effects",
+      "accels": [
+        "<Super><Control>f"
+      ]
+    },
+    {
+      "action": "grid/slot_bl",
+      "label": "Tile the window bottom left",
+      "group": "Windows",
+      "accels": [
+        "<Super>KP_1"
+      ]
+    },
+    {
+      "action": "grid/slot_b",
+      "label": "Tile the window to the bottom half",
+      "group": "Windows",
+      "accels": [
+        "<Super>KP_2"
+      ]
+    },
+    {
+      "action": "grid/slot_br",
+      "label": "Tile the window bottom right",
+      "group": "Windows",
+      "accels": [
+        "<Super>KP_3"
+      ]
+    },
+    {
+      "action": "grid/slot_l",
+      "label": "Tile the window to the left half",
+      "group": "Windows",
+      "accels": [
+        "<Super>Left",
+        "<Super>KP_4"
+      ]
+    },
+    {
+      "action": "grid/slot_c",
+      "label": "Maximize the window",
+      "group": "Windows",
+      "accels": [
+        "<Super>Up",
+        "<Super>KP_5"
+      ]
+    },
+    {
+      "action": "grid/slot_r",
+      "label": "Tile the window to the right half",
+      "group": "Windows",
+      "accels": [
+        "<Super>Right",
+        "<Super>KP_6"
+      ]
+    },
+    {
+      "action": "grid/slot_tl",
+      "label": "Tile the window top left",
+      "group": "Windows",
+      "accels": [
+        "<Super>KP_7"
+      ]
+    },
+    {
+      "action": "grid/slot_t",
+      "label": "Tile the window to the top half",
+      "group": "Windows",
+      "accels": [
+        "<Super>KP_8"
+      ]
+    },
+    {
+      "action": "grid/slot_tr",
+      "label": "Tile the window top right",
+      "group": "Windows",
+      "accels": [
+        "<Super>KP_9"
+      ]
+    },
+    {
+      "action": "grid/restore",
+      "label": "Restore the window size",
+      "group": "Windows",
+      "accels": [
+        "<Super>Down",
+        "<Super>KP_0"
+      ]
+    },
+    {
+      "action": "invert/toggle",
+      "label": "Invert the screen colors",
+      "group": "Effects",
+      "accels": [
+        "<Super>i"
+      ]
+    },
+    {
+      "action": "oswitch/next_output",
+      "label": "Focus the next output",
+      "group": "Monitors",
+      "accels": [
+        "<Super>o"
+      ]
+    },
+    {
+      "action": "oswitch/next_output_with_win",
+      "label": "Move the window to the next output",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Shift>o"
+      ]
+    },
+    {
+      "action": "switcher/next_view",
+      "label": "Switch to the next window",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "switcher/prev_view",
+      "label": "Switch to the previous window",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>Tab"
+      ]
+    },
+    {
+      "action": "vswitch/binding_left",
+      "label": "Switch to the workspace to the left",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Alt>Left"
+      ]
+    },
+    {
+      "action": "vswitch/binding_right",
+      "label": "Switch to the workspace to the right",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Alt>Right"
+      ]
+    },
+    {
+      "action": "vswitch/binding_up",
+      "label": "Switch to the workspace above",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Alt>Up"
+      ]
+    },
+    {
+      "action": "vswitch/binding_down",
+      "label": "Switch to the workspace below",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Alt>Down"
+      ]
+    },
+    {
+      "action": "vswitch/with_win_left",
+      "label": "Move the window to the workspace to the left",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Alt><Shift>Left"
+      ]
+    },
+    {
+      "action": "vswitch/with_win_right",
+      "label": "Move the window to the workspace to the right",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Alt><Shift>Right"
+      ]
+    },
+    {
+      "action": "vswitch/with_win_up",
+      "label": "Move the window to the workspace above",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Alt><Shift>Up"
+      ]
+    },
+    {
+      "action": "wayfire-shell/toggle_menu",
+      "label": "Open the menu (wf-shell; the Super key alone)",
+      "group": "Apps",
+      "accels": [
+        "Super"
+      ]
+    },
+    {
+      "action": "wrot/reset-one",
+      "label": "Reset the window's rotation",
+      "group": "Effects",
+      "accels": [
+        "<Super>r"
+      ]
+    },
+    {
+      "action": "wrot/reset",
+      "label": "Reset all windows' rotation",
+      "group": "Effects",
+      "accels": [
+        "<Super><Control>r"
+      ]
+    }
+  ]
+}

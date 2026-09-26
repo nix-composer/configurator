@@ -1,345 +1,309 @@
 {
-  "$comment": "GNOME's default keybinds from the GSettings schemas in nixpkgs nixos-26.05 (scripts/extract-gnome-keybinds.sh): the action is `schema/key`, the label its summary, accels GTK accelerators.",
+  "$comment": "Pantheon's default keybinds from the GSettings schemas in nixpkgs nixos-26.05 (pantheon.elementary-gsettings-schemas, pantheon.gala, pantheon.elementary-dock, pantheon.gnome-settings-daemon, pantheon.mutter; XDG_CURRENT_DESKTOP=Pantheon), by scripts/keybinds/extract-dconf-desktops.py: the action is `schema/key`, the label its summary, accels GTK accelerators; type `s` keys hold one accel.",
   "binds": [
     {
-      "action": "org.gnome.shell.keybindings/focus-active-notification",
-      "label": "Keybinding to focus the active notification",
-      "group": "Shell",
+      "action": "io.elementary.desktop.wm.keybindings/area-screenshot",
+      "label": "Take a screenshot of an area",
+      "group": "Screenshots",
       "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super>n"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/open-new-window-application-1",
-      "label": "Open a new instance of application 1",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super><Control>1"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/open-new-window-application-2",
-      "label": "Open a new instance of application 2",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super><Control>2"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/open-new-window-application-3",
-      "label": "Open a new instance of application 3",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super><Control>3"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/open-new-window-application-4",
-      "label": "Open a new instance of application 4",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super><Control>4"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/open-new-window-application-5",
-      "label": "Open a new instance of application 5",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super><Control>5"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/open-new-window-application-6",
-      "label": "Open a new instance of application 6",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super><Control>6"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/open-new-window-application-7",
-      "label": "Open a new instance of application 7",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super><Control>7"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/open-new-window-application-8",
-      "label": "Open a new instance of application 8",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super><Control>8"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/open-new-window-application-9",
-      "label": "Open a new instance of application 9",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super><Control>9"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/screen-brightness-cycle",
-      "label": "Screen brightness cycle",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "XF86MonBrightnessCycle"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/screen-brightness-cycle-monitor",
-      "label": "Screen brightness cycle on current monitor",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Shift>XF86MonBrightnessCycle"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/screen-brightness-down",
-      "label": "Screen brightness down",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "XF86MonBrightnessDown"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/screen-brightness-down-monitor",
-      "label": "Screen brightness down on current monitor",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Shift>XF86MonBrightnessDown"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/screen-brightness-up",
-      "label": "Screen brightness up",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "XF86MonBrightnessUp"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/screen-brightness-up-monitor",
-      "label": "Screen brightness up on current monitor",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Shift>XF86MonBrightnessUp"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/screenshot",
-      "label": "Take a screenshot",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
+      "path": "io/elementary/desktop/wm/keybindings",
       "accels": [
         "<Shift>Print"
       ]
     },
     {
-      "action": "org.gnome.shell.keybindings/screenshot-window",
-      "label": "Take a screenshot of a window",
-      "group": "Shell",
+      "action": "io.elementary.desktop.wm.keybindings/area-screenshot-clip",
+      "label": "Copy a screenshot of an area to clipboard",
+      "group": "Screenshots",
       "type": "as",
-      "path": "org/gnome/shell/keybindings",
+      "path": "io/elementary/desktop/wm/keybindings",
       "accels": [
-        "<Alt>Print"
+        "<Control><Shift>Print"
       ]
     },
     {
-      "action": "org.gnome.shell.keybindings/shift-overview-down",
-      "label": "Keybinding to shift between overview states",
+      "action": "io.elementary.desktop.wm.keybindings/cycle-workspaces-next",
+      "label": "Cycle to the next workspace to the right or to back to the first",
       "group": "Shell",
       "type": "as",
-      "path": "org/gnome/shell/keybindings",
+      "path": "io/elementary/desktop/wm/keybindings",
       "accels": [
-        "<Super><Alt>Down"
+        "<Super>Tab"
       ]
     },
     {
-      "action": "org.gnome.shell.keybindings/shift-overview-up",
-      "label": "Keybinding to shift between overview states",
+      "action": "io.elementary.desktop.wm.keybindings/cycle-workspaces-previous",
+      "label": "Cycle to the next workspace to the right or to back to the first",
       "group": "Shell",
       "type": "as",
-      "path": "org/gnome/shell/keybindings",
+      "path": "io/elementary/desktop/wm/keybindings",
       "accels": [
-        "<Super><Alt>Up"
+        "<Super><Shift>Tab"
       ]
     },
     {
-      "action": "org.gnome.shell.keybindings/show-screen-recording-ui",
-      "label": "Record a screencast interactively",
+      "action": "io.elementary.desktop.wm.keybindings/expose-all-windows",
+      "label": "Shortcut to open the window overview for all windows",
       "group": "Shell",
       "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Ctrl><Shift><Alt>R"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/show-screenshot-ui",
-      "label": "Take a screenshot interactively",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "Print"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/switch-to-application-1",
-      "label": "Switch to application 1",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super>1"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/switch-to-application-2",
-      "label": "Switch to application 2",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super>2"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/switch-to-application-3",
-      "label": "Switch to application 3",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super>3"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/switch-to-application-4",
-      "label": "Switch to application 4",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super>4"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/switch-to-application-5",
-      "label": "Switch to application 5",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super>5"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/switch-to-application-6",
-      "label": "Switch to application 6",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super>6"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/switch-to-application-7",
-      "label": "Switch to application 7",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super>7"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/switch-to-application-8",
-      "label": "Switch to application 8",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super>8"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/switch-to-application-9",
-      "label": "Switch to application 9",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
-      "accels": [
-        "<Super>9"
-      ]
-    },
-    {
-      "action": "org.gnome.shell.keybindings/toggle-application-view",
-      "label": "Keybinding to open the “Show Applications” view",
-      "group": "Shell",
-      "type": "as",
-      "path": "org/gnome/shell/keybindings",
+      "path": "io/elementary/desktop/wm/keybindings",
       "accels": [
         "<Super>a"
       ]
     },
     {
-      "action": "org.gnome.shell.keybindings/toggle-message-tray",
-      "label": "Keybinding to toggle the visibility of the notification list",
-      "group": "Shell",
+      "action": "io.elementary.desktop.wm.keybindings/interactive-screenshot",
+      "label": "Launch the interactive screenshot tool",
+      "group": "Screenshots",
       "type": "as",
-      "path": "org/gnome/shell/keybindings",
+      "path": "io/elementary/desktop/wm/keybindings",
       "accels": [
-        "<Super>v",
-        "<Super>m"
+        "<Super>Print"
       ]
     },
     {
-      "action": "org.gnome.shell.keybindings/toggle-quick-settings",
-      "label": "Keybinding to toggle the quick settings menu",
+      "action": "io.elementary.desktop.wm.keybindings/move-to-workspace-first",
+      "label": "Shortcut to move the current window to first workspace",
       "group": "Shell",
       "type": "as",
-      "path": "org/gnome/shell/keybindings",
+      "path": "io/elementary/desktop/wm/keybindings",
       "accels": [
+        "<Super><Shift>Home"
+      ]
+    },
+    {
+      "action": "io.elementary.desktop.wm.keybindings/move-to-workspace-last",
+      "label": "Shortcut to move the current window to last workspace",
+      "group": "Shell",
+      "type": "as",
+      "path": "io/elementary/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>End",
+        "<Super><Shift>0"
+      ]
+    },
+    {
+      "action": "io.elementary.desktop.wm.keybindings/panel-main-menu",
+      "label": "Open the applications menu",
+      "group": "Shell",
+      "type": "as",
+      "path": "io/elementary/desktop/wm/keybindings",
+      "accels": [
+        "<Alt>F2"
+      ]
+    },
+    {
+      "action": "io.elementary.desktop.wm.keybindings/pip",
+      "label": "The shortcut to enable picture-in-picture window",
+      "group": "Shell",
+      "type": "as",
+      "path": "io/elementary/desktop/wm/keybindings",
+      "accels": [
+        "<Super>f"
+      ]
+    },
+    {
+      "action": "io.elementary.desktop.wm.keybindings/screenshot",
+      "label": "Take a screenshot",
+      "group": "Screenshots",
+      "type": "as",
+      "path": "io/elementary/desktop/wm/keybindings",
+      "accels": [
+        "Print"
+      ]
+    },
+    {
+      "action": "io.elementary.desktop.wm.keybindings/screenshot-clip",
+      "label": "Copy a screenshot to clipboard",
+      "group": "Screenshots",
+      "type": "as",
+      "path": "io/elementary/desktop/wm/keybindings",
+      "accels": [
+        "<Control>Print"
+      ]
+    },
+    {
+      "action": "io.elementary.desktop.wm.keybindings/switch-input-source",
+      "label": "Cycle to next keyboard layout",
+      "group": "Shell",
+      "type": "as",
+      "path": "io/elementary/desktop/wm/keybindings",
+      "accels": [
+        "<Super>Space"
+      ]
+    },
+    {
+      "action": "io.elementary.desktop.wm.keybindings/switch-input-source-backward",
+      "label": "Cycle to previous keyboard layout",
+      "group": "Shell",
+      "type": "as",
+      "path": "io/elementary/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>Space"
+      ]
+    },
+    {
+      "action": "io.elementary.desktop.wm.keybindings/switch-to-workspace-first",
+      "label": "Shortcut to move to first workspace",
+      "group": "Shell",
+      "type": "as",
+      "path": "io/elementary/desktop/wm/keybindings",
+      "accels": [
+        "<Super>Home"
+      ]
+    },
+    {
+      "action": "io.elementary.desktop.wm.keybindings/switch-to-workspace-last",
+      "label": "Shortcut to move to last workspace",
+      "group": "Shell",
+      "type": "as",
+      "path": "io/elementary/desktop/wm/keybindings",
+      "accels": [
+        "<Super>End",
+        "<Super>0"
+      ]
+    },
+    {
+      "action": "io.elementary.desktop.wm.keybindings/toggle-multitasking-view",
+      "label": "Toggle multitasking view",
+      "group": "Shell",
+      "type": "as",
+      "path": "io/elementary/desktop/wm/keybindings",
+      "accels": [
+        "<Super>Down",
         "<Super>s"
+      ]
+    },
+    {
+      "action": "io.elementary.desktop.wm.keybindings/window-screenshot",
+      "label": "Take a screenshot of a window",
+      "group": "Screenshots",
+      "type": "as",
+      "path": "io/elementary/desktop/wm/keybindings",
+      "accels": [
+        "<Alt>Print"
+      ]
+    },
+    {
+      "action": "io.elementary.desktop.wm.keybindings/window-screenshot-clip",
+      "label": "Copy a screenshot of a window to clipboard",
+      "group": "Screenshots",
+      "type": "as",
+      "path": "io/elementary/desktop/wm/keybindings",
+      "accels": [
+        "<Control><Alt>Print"
+      ]
+    },
+    {
+      "action": "io.elementary.desktop.wm.keybindings/zoom-in",
+      "label": "Zoom in",
+      "group": "Shell",
+      "type": "as",
+      "path": "io/elementary/desktop/wm/keybindings",
+      "accels": [
+        "<Super>plus",
+        "<Super>KP_Add"
+      ]
+    },
+    {
+      "action": "io.elementary.desktop.wm.keybindings/zoom-out",
+      "label": "Zoom out",
+      "group": "Shell",
+      "type": "as",
+      "path": "io/elementary/desktop/wm/keybindings",
+      "accels": [
+        "<Super>minus",
+        "<Super>KP_Subtract"
+      ]
+    },
+    {
+      "action": "io.elementary.dock.keybindings/launch-dock-1",
+      "label": "Launch the first dock item",
+      "group": "Dock",
+      "type": "as",
+      "path": "io/elementary/dock/keybindings",
+      "accels": [
+        "<Super>1"
+      ]
+    },
+    {
+      "action": "io.elementary.dock.keybindings/launch-dock-2",
+      "label": "Launch the second dock item",
+      "group": "Dock",
+      "type": "as",
+      "path": "io/elementary/dock/keybindings",
+      "accels": [
+        "<Super>2"
+      ]
+    },
+    {
+      "action": "io.elementary.dock.keybindings/launch-dock-3",
+      "label": "Launch the third dock item",
+      "group": "Dock",
+      "type": "as",
+      "path": "io/elementary/dock/keybindings",
+      "accels": [
+        "<Super>3"
+      ]
+    },
+    {
+      "action": "io.elementary.dock.keybindings/launch-dock-4",
+      "label": "Launch the fourth dock item",
+      "group": "Dock",
+      "type": "as",
+      "path": "io/elementary/dock/keybindings",
+      "accels": [
+        "<Super>4"
+      ]
+    },
+    {
+      "action": "io.elementary.dock.keybindings/launch-dock-5",
+      "label": "Launch the fith dock item",
+      "group": "Dock",
+      "type": "as",
+      "path": "io/elementary/dock/keybindings",
+      "accels": [
+        "<Super>5"
+      ]
+    },
+    {
+      "action": "io.elementary.dock.keybindings/launch-dock-6",
+      "label": "Launch the sixth dock item",
+      "group": "Dock",
+      "type": "as",
+      "path": "io/elementary/dock/keybindings",
+      "accels": [
+        "<Super>6"
+      ]
+    },
+    {
+      "action": "io.elementary.dock.keybindings/launch-dock-7",
+      "label": "Launch the seventh dock item",
+      "group": "Dock",
+      "type": "as",
+      "path": "io/elementary/dock/keybindings",
+      "accels": [
+        "<Super>7"
+      ]
+    },
+    {
+      "action": "io.elementary.dock.keybindings/launch-dock-8",
+      "label": "Launch the eigth dock item",
+      "group": "Dock",
+      "type": "as",
+      "path": "io/elementary/dock/keybindings",
+      "accels": [
+        "<Super>8"
+      ]
+    },
+    {
+      "action": "io.elementary.dock.keybindings/launch-dock-9",
+      "label": "Launch the nineth dock item",
+      "group": "Dock",
+      "type": "as",
+      "path": "io/elementary/dock/keybindings",
+      "accels": [
+        "<Super>9"
       ]
     },
     {
@@ -443,16 +407,6 @@
       ]
     },
     {
-      "action": "org.gnome.desktop.wm.keybindings/maximize",
-      "label": "Maximize window",
-      "group": "Windows",
-      "type": "as",
-      "path": "org/gnome/desktop/wm/keybindings",
-      "accels": [
-        "<Super>Up"
-      ]
-    },
-    {
       "action": "org.gnome.desktop.wm.keybindings/minimize",
       "label": "Minimize window",
       "group": "Windows",
@@ -505,17 +459,97 @@
     {
       "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-1",
       "label": "Move window to workspace 1",
-      "group": "Windows",
+      "group": "Workspaces",
       "type": "as",
       "path": "org/gnome/desktop/wm/keybindings",
       "accels": [
-        "<Super><Shift>Home"
+        "<Super><Alt>1"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-2",
+      "label": "Move window to workspace 2",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Alt>2"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-3",
+      "label": "Move window to workspace 3",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Alt>3"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-4",
+      "label": "Move window to workspace 4",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Alt>4"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-5",
+      "label": "Move window to workspace 5",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Alt>5"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-6",
+      "label": "Move window to workspace 6",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Alt>6"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-7",
+      "label": "Move window to workspace 7",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Alt>7"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-8",
+      "label": "Move window to workspace 8",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Alt>8"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-9",
+      "label": "Move window to workspace 9",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Alt>9"
       ]
     },
     {
       "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-down",
       "label": "Move window one workspace down",
-      "group": "Windows",
+      "group": "Workspaces",
       "type": "as",
       "path": "org/gnome/desktop/wm/keybindings",
       "accels": [
@@ -525,7 +559,7 @@
     {
       "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-last",
       "label": "Move window to last workspace",
-      "group": "Windows",
+      "group": "Workspaces",
       "type": "as",
       "path": "org/gnome/desktop/wm/keybindings",
       "accels": [
@@ -535,69 +569,31 @@
     {
       "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-left",
       "label": "Move window one workspace to the left",
-      "group": "Windows",
+      "group": "Workspaces",
       "type": "as",
       "path": "org/gnome/desktop/wm/keybindings",
       "accels": [
-        "<Super><Shift>Page_Up",
-        "<Super><Shift>KP_Prior",
-        "<Super><Shift><Alt>Left",
-        "<Control><Shift><Alt>Left"
+        "<Super><Alt>Left"
       ]
     },
     {
       "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-right",
       "label": "Move window one workspace to the right",
-      "group": "Windows",
+      "group": "Workspaces",
       "type": "as",
       "path": "org/gnome/desktop/wm/keybindings",
       "accels": [
-        "<Super><Shift>Page_Down",
-        "<Super><Shift>KP_Next",
-        "<Super><Shift><Alt>Right",
-        "<Control><Shift><Alt>Right"
+        "<Super><Alt>Right"
       ]
     },
     {
       "action": "org.gnome.desktop.wm.keybindings/move-to-workspace-up",
       "label": "Move window one workspace up",
-      "group": "Windows",
+      "group": "Workspaces",
       "type": "as",
       "path": "org/gnome/desktop/wm/keybindings",
       "accels": [
         "<Control><Shift><Alt>Up"
-      ]
-    },
-    {
-      "action": "org.gnome.desktop.wm.keybindings/panel-run-dialog",
-      "label": "Show the run command prompt",
-      "group": "Windows",
-      "type": "as",
-      "path": "org/gnome/desktop/wm/keybindings",
-      "accels": [
-        "<Alt>F2"
-      ]
-    },
-    {
-      "action": "org.gnome.desktop.wm.keybindings/switch-applications",
-      "label": "Switch applications",
-      "group": "Windows",
-      "type": "as",
-      "path": "org/gnome/desktop/wm/keybindings",
-      "accels": [
-        "<Super>Tab",
-        "<Alt>Tab"
-      ]
-    },
-    {
-      "action": "org.gnome.desktop.wm.keybindings/switch-applications-backward",
-      "label": "Reverse switch applications",
-      "group": "Windows",
-      "type": "as",
-      "path": "org/gnome/desktop/wm/keybindings",
-      "accels": [
-        "<Shift><Super>Tab",
-        "<Shift><Alt>Tab"
       ]
     },
     {
@@ -607,8 +603,7 @@
       "type": "as",
       "path": "org/gnome/desktop/wm/keybindings",
       "accels": [
-        "<Super>Above_Tab",
-        "<Alt>Above_Tab"
+        "<Super>grave"
       ]
     },
     {
@@ -618,30 +613,7 @@
       "type": "as",
       "path": "org/gnome/desktop/wm/keybindings",
       "accels": [
-        "<Shift><Super>Above_Tab",
-        "<Shift><Alt>Above_Tab"
-      ]
-    },
-    {
-      "action": "org.gnome.desktop.wm.keybindings/switch-input-source",
-      "label": "Switch input source",
-      "group": "Windows",
-      "type": "as",
-      "path": "org/gnome/desktop/wm/keybindings",
-      "accels": [
-        "<Super>space",
-        "XF86Keyboard"
-      ]
-    },
-    {
-      "action": "org.gnome.desktop.wm.keybindings/switch-input-source-backward",
-      "label": "Switch input source backward",
-      "group": "Windows",
-      "type": "as",
-      "path": "org/gnome/desktop/wm/keybindings",
-      "accels": [
-        "<Shift><Super>space",
-        "<Shift>XF86Keyboard"
+        "<Shift><Super>grave"
       ]
     },
     {
@@ -667,27 +639,97 @@
     {
       "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-1",
       "label": "Switch to workspace 1",
-      "group": "Windows",
+      "group": "Workspaces",
       "type": "as",
       "path": "org/gnome/desktop/wm/keybindings",
       "accels": [
-        "<Super>Home"
+        "<Super><Shift>1"
       ]
     },
     {
-      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-down",
-      "label": "Switch to workspace below",
-      "group": "Windows",
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-2",
+      "label": "Switch to workspace 2",
+      "group": "Workspaces",
       "type": "as",
       "path": "org/gnome/desktop/wm/keybindings",
       "accels": [
-        "<Control><Alt>Down"
+        "<Super><Shift>2"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-3",
+      "label": "Switch to workspace 3",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>3"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-4",
+      "label": "Switch to workspace 4",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>4"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-5",
+      "label": "Switch to workspace 5",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>5"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-6",
+      "label": "Switch to workspace 6",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>6"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-7",
+      "label": "Switch to workspace 7",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>7"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-8",
+      "label": "Switch to workspace 8",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>8"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-9",
+      "label": "Switch to workspace 9",
+      "group": "Workspaces",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Super><Shift>9"
       ]
     },
     {
       "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-last",
       "label": "Switch to last workspace",
-      "group": "Windows",
+      "group": "Workspaces",
       "type": "as",
       "path": "org/gnome/desktop/wm/keybindings",
       "accels": [
@@ -697,37 +739,41 @@
     {
       "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-left",
       "label": "Switch to workspace left",
-      "group": "Windows",
+      "group": "Workspaces",
       "type": "as",
       "path": "org/gnome/desktop/wm/keybindings",
       "accels": [
-        "<Super>Page_Up",
-        "<Super>KP_Prior",
-        "<Super><Alt>Left",
-        "<Control><Alt>Left"
+        "<Super>Left"
       ]
     },
     {
       "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-right",
       "label": "Switch to workspace right",
-      "group": "Windows",
+      "group": "Workspaces",
       "type": "as",
       "path": "org/gnome/desktop/wm/keybindings",
       "accels": [
-        "<Super>Page_Down",
-        "<Super>KP_Next",
-        "<Super><Alt>Right",
-        "<Control><Alt>Right"
+        "<Super>Right"
       ]
     },
     {
-      "action": "org.gnome.desktop.wm.keybindings/switch-to-workspace-up",
-      "label": "Switch to workspace above",
+      "action": "org.gnome.desktop.wm.keybindings/switch-windows",
+      "label": "Switch windows",
       "group": "Windows",
       "type": "as",
       "path": "org/gnome/desktop/wm/keybindings",
       "accels": [
-        "<Control><Alt>Up"
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "org.gnome.desktop.wm.keybindings/switch-windows-backward",
+      "label": "Reverse switch windows",
+      "group": "Windows",
+      "type": "as",
+      "path": "org/gnome/desktop/wm/keybindings",
+      "accels": [
+        "<Alt><Shift>Tab"
       ]
     },
     {
@@ -737,7 +783,7 @@
       "type": "as",
       "path": "org/gnome/desktop/wm/keybindings",
       "accels": [
-        "<Alt>F10"
+        "<Ctrl><Super>Up"
       ]
     },
     {
@@ -747,7 +793,6 @@
       "type": "as",
       "path": "org/gnome/desktop/wm/keybindings",
       "accels": [
-        "<Super>Down",
         "<Alt>F5"
       ]
     },
@@ -789,7 +834,7 @@
       "type": "as",
       "path": "org/gnome/mutter/keybindings",
       "accels": [
-        "<Super>Left"
+        "<Control><Super>Left"
       ]
     },
     {
@@ -799,7 +844,7 @@
       "type": "as",
       "path": "org/gnome/mutter/keybindings",
       "accels": [
-        "<Super>Right"
+        "<Control><Super>Right"
       ]
     },
     {
@@ -963,7 +1008,7 @@
       ]
     },
     {
-      "action": "org.gnome.settings-daemon.plugins.media-keys/eject-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/eject",
       "label": "Eject",
       "group": "Media and system",
       "type": "as",
@@ -973,7 +1018,7 @@
       ]
     },
     {
-      "action": "org.gnome.settings-daemon.plugins.media-keys/email-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/email",
       "label": "Launch email client",
       "group": "Media and system",
       "type": "as",
@@ -1004,7 +1049,7 @@
       ]
     },
     {
-      "action": "org.gnome.settings-daemon.plugins.media-keys/home-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/home",
       "label": "Home folder",
       "group": "Media and system",
       "type": "as",
@@ -1084,7 +1129,7 @@
       ]
     },
     {
-      "action": "org.gnome.settings-daemon.plugins.media-keys/media-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/media",
       "label": "Launch media player",
       "group": "Media and system",
       "type": "as",
@@ -1104,7 +1149,7 @@
       ]
     },
     {
-      "action": "org.gnome.settings-daemon.plugins.media-keys/next-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/next",
       "label": "Next track",
       "group": "Media and system",
       "type": "as",
@@ -1115,7 +1160,7 @@
       ]
     },
     {
-      "action": "org.gnome.settings-daemon.plugins.media-keys/pause-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/pause",
       "label": "Pause playback",
       "group": "Media and system",
       "type": "as",
@@ -1125,7 +1170,7 @@
       ]
     },
     {
-      "action": "org.gnome.settings-daemon.plugins.media-keys/play-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/play",
       "label": "Play (or play/pause)",
       "group": "Media and system",
       "type": "as",
@@ -1186,7 +1231,7 @@
       ]
     },
     {
-      "action": "org.gnome.settings-daemon.plugins.media-keys/previous-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/previous",
       "label": "Previous track",
       "group": "Media and system",
       "type": "as",
@@ -1230,6 +1275,36 @@
       ]
     },
     {
+      "action": "org.gnome.settings-daemon.plugins.media-keys/screen-brightness-cycle-static",
+      "label": "Screen brightness cycle",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/gnome/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86MonBrightnessCycle"
+      ]
+    },
+    {
+      "action": "org.gnome.settings-daemon.plugins.media-keys/screen-brightness-down-static",
+      "label": "Screen brightness down",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/gnome/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86MonBrightnessDown"
+      ]
+    },
+    {
+      "action": "org.gnome.settings-daemon.plugins.media-keys/screen-brightness-up-static",
+      "label": "Screen brightness up",
+      "group": "Media and system",
+      "type": "as",
+      "path": "org/gnome/settings-daemon/plugins/media-keys",
+      "accels": [
+        "XF86MonBrightnessUp"
+      ]
+    },
+    {
       "action": "org.gnome.settings-daemon.plugins.media-keys/screenreader",
       "label": "Toggle screen reader",
       "group": "Media and system",
@@ -1270,7 +1345,7 @@
       ]
     },
     {
-      "action": "org.gnome.settings-daemon.plugins.media-keys/stop-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/stop",
       "label": "Stop playback",
       "group": "Media and system",
       "type": "as",
@@ -1343,17 +1418,6 @@
       ]
     },
     {
-      "action": "org.gnome.settings-daemon.plugins.media-keys/volume-down-static",
-      "label": "Volume down",
-      "group": "Media and system",
-      "type": "as",
-      "path": "org/gnome/settings-daemon/plugins/media-keys",
-      "accels": [
-        "XF86AudioLowerVolume",
-        "<Ctrl>XF86AudioLowerVolume"
-      ]
-    },
-    {
       "action": "org.gnome.settings-daemon.plugins.media-keys/volume-mute-quiet-static",
       "label": "Quiet volume mute/unmute",
       "group": "Media and system",
@@ -1361,16 +1425,6 @@
       "path": "org/gnome/settings-daemon/plugins/media-keys",
       "accels": [
         "<Alt>XF86AudioMute"
-      ]
-    },
-    {
-      "action": "org.gnome.settings-daemon.plugins.media-keys/volume-mute-static",
-      "label": "Volume mute/unmute",
-      "group": "Media and system",
-      "type": "as",
-      "path": "org/gnome/settings-daemon/plugins/media-keys",
-      "accels": [
-        "XF86AudioMute"
       ]
     },
     {
@@ -1396,18 +1450,7 @@
       ]
     },
     {
-      "action": "org.gnome.settings-daemon.plugins.media-keys/volume-up-static",
-      "label": "Volume up",
-      "group": "Media and system",
-      "type": "as",
-      "path": "org/gnome/settings-daemon/plugins/media-keys",
-      "accels": [
-        "XF86AudioRaiseVolume",
-        "<Ctrl>XF86AudioRaiseVolume"
-      ]
-    },
-    {
-      "action": "org.gnome.settings-daemon.plugins.media-keys/www-static",
+      "action": "org.gnome.settings-daemon.plugins.media-keys/www",
       "label": "Launch web browser",
       "group": "Media and system",
       "type": "as",
@@ -1418,12 +1461,12 @@
     },
     {
       "action": "org.gnome.mutter/overlay-key",
-      "label": "Show the overview (the Super key alone)",
+      "label": "Open the Applications Menu (the Super key alone)",
       "group": "Shell",
       "type": "s",
       "path": "org/gnome/mutter",
       "accels": [
-        "Super"
+        "Super_L"
       ]
     }
   ]

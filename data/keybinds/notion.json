@@ -1,0 +1,569 @@
+{
+  "$comment": "Notion's default keybinds: the defbindings of etc/notion/cfg_bindings.lua (loaded by cfg_notioncore.lua), cfg_tiling.lua, cfg_dock.lua and cfg_sp.lua in nixpkgs' notion (nixos-26.05), META = 'Mod4+', ALTMETA = 'Mod4+Shift+' (ioncore_ext.lua); the modal maps (move/resize mode, queries, menus) are left out. The action is `<context>: <lua>` (a submap bind `<context>: submap <key>: <lua>`, accel the submap key); labels are the bdoc texts. Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "WScreen: WScreen.switch_nth(_, 0)",
+      "label": "Switch to object 0 (workspace, full screen client window) within current screen",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>1"
+      ]
+    },
+    {
+      "action": "WScreen: WScreen.switch_nth(_, 1)",
+      "label": "Switch to object 1 (workspace, full screen client window) within current screen",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>2"
+      ]
+    },
+    {
+      "action": "WScreen: WScreen.switch_nth(_, 2)",
+      "label": "Switch to object 2 (workspace, full screen client window) within current screen",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>3"
+      ]
+    },
+    {
+      "action": "WScreen: WScreen.switch_nth(_, 3)",
+      "label": "Switch to object 3 (workspace, full screen client window) within current screen",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>4"
+      ]
+    },
+    {
+      "action": "WScreen: WScreen.switch_nth(_, 4)",
+      "label": "Switch to object 4 (workspace, full screen client window) within current screen",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>5"
+      ]
+    },
+    {
+      "action": "WScreen: WScreen.switch_nth(_, 5)",
+      "label": "Switch to object 5 (workspace, full screen client window) within current screen",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>6"
+      ]
+    },
+    {
+      "action": "WScreen: WScreen.switch_nth(_, 6)",
+      "label": "Switch to object 6 (workspace, full screen client window) within current screen",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>7"
+      ]
+    },
+    {
+      "action": "WScreen: WScreen.switch_nth(_, 7)",
+      "label": "Switch to object 7 (workspace, full screen client window) within current screen",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>8"
+      ]
+    },
+    {
+      "action": "WScreen: WScreen.switch_nth(_, 8)",
+      "label": "Switch to object 8 (workspace, full screen client window) within current screen",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>9"
+      ]
+    },
+    {
+      "action": "WScreen: WScreen.switch_nth(_, 9)",
+      "label": "Switch to object 9 (workspace, full screen client window) within current screen",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>0"
+      ]
+    },
+    {
+      "action": "WScreen: WScreen.switch_next(_)",
+      "label": "Switch to next object (workspace, full screen client window) within current screen",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>grave"
+      ]
+    },
+    {
+      "action": "WScreen: WScreen.switch_prev(_)",
+      "label": "Switch to previous object (workspace, full screen client window) within current screen",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>asciitilde"
+      ]
+    },
+    {
+      "action": "WScreen: submap Mod4+O: mod_menu.grabmenu(_, _sub, 'focuslist')",
+      "label": "Mod4+O, O: Open first region demanding attention or previously active one",
+      "group": "Monitors",
+      "accels": [
+        "<Super>o"
+      ]
+    },
+    {
+      "action": "WScreen: ioncore.goto_nth_screen(0)",
+      "label": "Go to screen 0 on multihead setup",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Shift>1",
+        "<Super>F1"
+      ]
+    },
+    {
+      "action": "WScreen: ioncore.goto_nth_screen(1)",
+      "label": "Go to screen 1 on multihead setup",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Shift>2",
+        "<Super>F2"
+      ]
+    },
+    {
+      "action": "WScreen: ioncore.goto_nth_screen(2)",
+      "label": "Go to screen 2 on multihead setup",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Shift>3",
+        "<Super>F3"
+      ]
+    },
+    {
+      "action": "WScreen: ioncore.goto_nth_screen(3)",
+      "label": "Go to screen 3 on multihead setup",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Shift>4"
+      ]
+    },
+    {
+      "action": "WScreen: ioncore.goto_prev_screen()",
+      "label": "Go to previous screen on multihead setup",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Shift>Escape"
+      ]
+    },
+    {
+      "action": "WScreen: ioncore.goto_next_screen()",
+      "label": "Go to next screen on multihead setup",
+      "group": "Monitors",
+      "accels": [
+        "<Super>Escape"
+      ]
+    },
+    {
+      "action": "WScreen: ioncore.create_ws(_)",
+      "label": "Create a new workspace of chosen default type",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>F9"
+      ]
+    },
+    {
+      "action": "WScreen: mod_menu.menu(_, _sub, 'mainmenu', {big=true})",
+      "label": "Display the main menu",
+      "group": "Menus",
+      "accels": [
+        "F12"
+      ]
+    },
+    {
+      "action": "WScreen: mod_query.query_menu(_, _sub, 'mainmenu', 'Main menu:')",
+      "label": "Display the main menu",
+      "group": "Menus",
+      "accels": [
+        "<Super>F12"
+      ]
+    },
+    {
+      "action": "WScreen: ioncore.goto_next(_chld, 'right')",
+      "label": "Forward-circulate focus",
+      "group": "Focus",
+      "accels": [
+        "<Super>Tab"
+      ]
+    },
+    {
+      "action": "WScreen: ioncore.goto_next(_chld, 'left')",
+      "label": "Backward-circulate focus",
+      "group": "Focus",
+      "accels": [
+        "<Super><Shift>Tab"
+      ]
+    },
+    {
+      "action": "WScreen: WRegion.rqorder(_chld, 'front')",
+      "label": "Raise focused object, if possible",
+      "group": "Focus",
+      "accels": [
+        "<Super><Shift>r"
+      ]
+    },
+    {
+      "action": "WClientWin: WClientWin.nudge(_)",
+      "label": "Nudge the client window. This might help with some programs' resizing problems",
+      "group": "Apps",
+      "accels": [
+        "<Super><Shift>l"
+      ]
+    },
+    {
+      "action": "WClientWin: WClientWin.kill(_)",
+      "label": "Kill client owning the client window",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>c"
+      ]
+    },
+    {
+      "action": "WClientWin: WClientWin.quote_next(_)",
+      "label": "Send next key press to the client window. Some programs may not allow this by default",
+      "group": "Apps",
+      "accels": [
+        "<Super><Shift>q"
+      ]
+    },
+    {
+      "action": "WGroupCW: WGroup.set_fullscreen(_, 'toggle')",
+      "label": "Toggle client window group full-screen mode",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>q"
+      ]
+    },
+    {
+      "action": "WMPlex: WRegion.rqclose_propagate(_, _sub)",
+      "label": "Close current object",
+      "group": "Windows",
+      "accels": [
+        "<Super>c"
+      ]
+    },
+    {
+      "action": "WMPlex: ioncore.detach(_chld, 'toggle')",
+      "label": "Detach (float) or reattach an object to its previous location",
+      "group": "Focus",
+      "accels": [
+        "<Super><Shift>d"
+      ]
+    },
+    {
+      "action": "WMPlex.toplevel: WRegion.set_tagged(_sub, 'toggle')",
+      "label": "Toggle tag of current object",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>t"
+      ]
+    },
+    {
+      "action": "WMPlex.toplevel: ioncore.clear_tags()",
+      "label": "Clear all tags",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>t"
+      ]
+    },
+    {
+      "action": "WMPlex.toplevel: notioncore.exec_on(_, notioncore.lookup_script('notion-lock'))",
+      "label": "Lock screen",
+      "group": "Session",
+      "accels": [
+        "<Super>l"
+      ]
+    },
+    {
+      "action": "WMPlex.toplevel: mod_query.exec_on_merr(_, XTERM or 'xterm')",
+      "label": "Run a terminal emulator",
+      "group": "Apps",
+      "accels": [
+        "<Super>Return",
+        "F2"
+      ]
+    },
+    {
+      "action": "WMPlex.toplevel: mod_query.query_exec(_)",
+      "label": "Query for command line to execute",
+      "group": "Apps",
+      "accels": [
+        "<Super>j"
+      ]
+    },
+    {
+      "action": "WMPlex.toplevel: mod_query.query_lua(_)",
+      "label": "Query for Lua code to execute",
+      "group": "Apps",
+      "accels": [
+        "<Super><Shift>j"
+      ]
+    },
+    {
+      "action": "WMPlex.toplevel: mod_query.query_ssh(_, ':ssh')",
+      "label": "Query for host to connect to with SSH",
+      "group": "Apps",
+      "accels": [
+        "<Super>F4"
+      ]
+    },
+    {
+      "action": "WMPlex.toplevel: mod_query.query_editfile(_, EDIT_COMMAND or 'run-mailcap --action=edit')",
+      "label": "Query for file to edit",
+      "group": "Apps",
+      "accels": [
+        "<Super>F5"
+      ]
+    },
+    {
+      "action": "WMPlex.toplevel: mod_query.query_runfile(_, VIEW_COMMAND or 'xdg-open')",
+      "label": "Query for file to view",
+      "group": "Apps",
+      "accels": [
+        "<Super>F6"
+      ]
+    },
+    {
+      "action": "WMPlex.toplevel: mod_query.query_binding(_, _sub)",
+      "label": "Query for keybinding",
+      "group": "Session",
+      "accels": [
+        "<Super>F7"
+      ]
+    },
+    {
+      "action": "WMPlex.toplevel: mod_query.query_workspace(_)",
+      "label": "Query for workspace to go to or create a new one",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>F9"
+      ]
+    },
+    {
+      "action": "WMPlex.toplevel: mod_query.query_gotoclient(_)",
+      "label": "Query for a client window to go to",
+      "group": "Windows",
+      "accels": [
+        "<Super>g"
+      ]
+    },
+    {
+      "action": "WMPlex.toplevel: mod_menu.menu(_, _sub, 'ctxmenu')",
+      "label": "Display context menu",
+      "group": "Menus",
+      "accels": [
+        "<Super>m"
+      ]
+    },
+    {
+      "action": "WMPlex.toplevel: mod_query.query_menu(_, _sub, 'ctxmenu', 'Context menu:')",
+      "label": "Query for context menu",
+      "group": "Menus",
+      "accels": [
+        "<Super><Shift>m"
+      ]
+    },
+    {
+      "action": "WMPlex.toplevel: notioncore.show_live_docs(_)",
+      "label": "Show Notion 'live docs'",
+      "group": "Session",
+      "accels": [
+        "<Super>slash"
+      ]
+    },
+    {
+      "action": "WMPlex.toplevel: mod_query.query_man(_, ':man')",
+      "label": "Query for manual page to be displayed",
+      "group": "Apps",
+      "accels": [
+        "<Super><Shift>slash"
+      ]
+    },
+    {
+      "action": "WFrame: WFrame.maximize_horiz(_)",
+      "label": "Maximize the frame horizontally",
+      "group": "Layout",
+      "accels": [
+        "<Super>h"
+      ]
+    },
+    {
+      "action": "WFrame: WFrame.maximize_vert(_)",
+      "label": "Maximize the frame vertically",
+      "group": "Layout",
+      "accels": [
+        "<Super>v"
+      ]
+    },
+    {
+      "action": "WFrame: WFrame.begin_kbresize(_)",
+      "label": "Begin move/resize mode",
+      "group": "Windows",
+      "accels": [
+        "<Super>r"
+      ]
+    },
+    {
+      "action": "WFrame: WFrame.switch_next(_)",
+      "label": "Switch to next object within the frame",
+      "group": "Layout",
+      "accels": [
+        "<Super>Caps_Lock"
+      ]
+    },
+    {
+      "action": "WFrame: WFrame.switch_prev(_)",
+      "label": "Switch to previous object within the frame",
+      "group": "Layout",
+      "accels": [
+        "<Super><Shift>Caps_Lock"
+      ]
+    },
+    {
+      "action": "WFrame.toplevel: ioncore.tagged_attach(_)",
+      "label": "Attach tagged objects to this frame",
+      "group": "Layout",
+      "accels": [
+        "<Super>n"
+      ]
+    },
+    {
+      "action": "WFrame.toplevel: mod_query.query_attachclient(_)",
+      "label": "Query for a client window to attach ('nick')",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>n"
+      ]
+    },
+    {
+      "action": "WFrame.toplevel: WFrame.switch_nth(_, 0)",
+      "label": "Switch to tab 0 in this frame",
+      "group": "Layout",
+      "accels": [
+        "<Super>a"
+      ]
+    },
+    {
+      "action": "WFrame.toplevel: WFrame.switch_nth(_, 1)",
+      "label": "Switch to tab 1 in this frame",
+      "group": "Layout",
+      "accels": [
+        "<Super>s"
+      ]
+    },
+    {
+      "action": "WFrame.toplevel: WFrame.switch_nth(_, 2)",
+      "label": "Switch to tab 2 in this frame",
+      "group": "Layout",
+      "accels": [
+        "<Super>d"
+      ]
+    },
+    {
+      "action": "WFrame.toplevel: WFrame.switch_nth(_, 3)",
+      "label": "Switch to tab 3 in this frame",
+      "group": "Layout",
+      "accels": [
+        "<Super>f"
+      ]
+    },
+    {
+      "action": "WFrame.toplevel: WFrame.dec_index(_, _sub)",
+      "label": "Move current tab to the right within the frame",
+      "group": "Layout",
+      "accels": [
+        "<Super>comma"
+      ]
+    },
+    {
+      "action": "WFrame.toplevel: WFrame.inc_index(_, _sub)",
+      "label": "Move current tab to the left within the frame",
+      "group": "Layout",
+      "accels": [
+        "<Super>period"
+      ]
+    },
+    {
+      "action": "WFrame.toplevel: WFrame.maximize_horiz(_)",
+      "label": "Maximize the frame horizontally/vertically",
+      "group": "Layout",
+      "accels": [
+        "<Super>h"
+      ]
+    },
+    {
+      "action": "WFrame.toplevel: WFrame.maximize_vert(_)",
+      "label": "Maximize the frame horizontally/vertically",
+      "group": "Layout",
+      "accels": [
+        "<Super>v"
+      ]
+    },
+    {
+      "action": "WTiling: WTiling.split_at(_, _sub, 'right', true)",
+      "label": "Split current into columns",
+      "group": "Layout",
+      "accels": [
+        "<Super>i"
+      ]
+    },
+    {
+      "action": "WTiling: WTiling.split_at(_, _sub, 'bottom', true)",
+      "label": "Split current into rows",
+      "group": "Layout",
+      "accels": [
+        "<Super><Shift>i"
+      ]
+    },
+    {
+      "action": "WTiling: WTiling.unsplit_at(_, _sub)",
+      "label": "Destroy current frame",
+      "group": "Layout",
+      "accels": [
+        "<Super>x"
+      ]
+    },
+    {
+      "action": "WTiling: ioncore.goto_next(_sub, 'down', {no_ascend=_})",
+      "label": "Go to frame below current frame",
+      "group": "Layout",
+      "accels": [
+        "<Super>w"
+      ]
+    },
+    {
+      "action": "WTiling: ioncore.goto_next(_sub, 'up', {no_ascend=_})",
+      "label": "Go to frame above current frame",
+      "group": "Layout",
+      "accels": [
+        "<Super><Shift>w"
+      ]
+    },
+    {
+      "action": "WFrame.floating: mod_tiling.mkbottom(_)",
+      "label": "Tile frame, if no tiling exists on the workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>b"
+      ]
+    },
+    {
+      "action": "WScreen: mod_dock.set_floating_shown_on(_, 'toggle')",
+      "label": "Toggle floating dock",
+      "group": "Windows",
+      "accels": [
+        "<Super>d"
+      ]
+    },
+    {
+      "action": "WScreen: mod_sp.set_shown_on(_, 'toggle')",
+      "label": "Toggle scratchpad",
+      "group": "Windows",
+      "accels": [
+        "<Super>space"
+      ]
+    }
+  ]
+}

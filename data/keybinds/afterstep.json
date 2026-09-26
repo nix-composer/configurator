@@ -1,0 +1,319 @@
+{
+  "$comment": "AfterStep's default keybinds: the Key lines of share/afterstep/non-configurable/0_feel (a copy of feels/feel.DEFAULT) in nixpkgs' afterstep (nixos-26.05). The action is `<context> <function>`; modifier A (any) is shown as none. Ctrl+Shift+F1 is bound twice upstream (Help form and GetHelp). Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "A Scroll -100 0",
+      "label": "Scroll the desktop view left",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>Left"
+      ]
+    },
+    {
+      "action": "A Scroll +100 +0",
+      "label": "Scroll the desktop view right",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>Right"
+      ]
+    },
+    {
+      "action": "A Scroll +0   -100",
+      "label": "Scroll the desktop view up",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>Up"
+      ]
+    },
+    {
+      "action": "A Scroll +0   +100",
+      "label": "Scroll the desktop view down",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>Down"
+      ]
+    },
+    {
+      "action": "A CursorMove -1 0",
+      "label": "Move the pointer left",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>Left"
+      ]
+    },
+    {
+      "action": "A CursorMove +1 +0",
+      "label": "Move the pointer right",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>Right"
+      ]
+    },
+    {
+      "action": "A CursorMove +0 -1",
+      "label": "Move the pointer up",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>Up"
+      ]
+    },
+    {
+      "action": "A CursorMove +0 +1",
+      "label": "Move the pointer down",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>Down"
+      ]
+    },
+    {
+      "action": "A Desk 0 0",
+      "label": "Go to desk 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F1"
+      ]
+    },
+    {
+      "action": "A Desk 0 1",
+      "label": "Go to desk 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F2"
+      ]
+    },
+    {
+      "action": "A Desk 0 2",
+      "label": "Go to desk 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F3"
+      ]
+    },
+    {
+      "action": "A Desk 0 3",
+      "label": "Go to desk 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F4"
+      ]
+    },
+    {
+      "action": "A Module \"Help\" Form HELPForm",
+      "label": "Help form",
+      "group": "Session",
+      "accels": [
+        "<Control><Shift>F1"
+      ]
+    },
+    {
+      "action": "A GetHelp",
+      "label": "Help",
+      "group": "Session",
+      "accels": [
+        "<Control><Shift>F1",
+        "Sys_Req"
+      ]
+    },
+    {
+      "action": "A Iconify",
+      "label": "Iconify the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Shift>F2"
+      ]
+    },
+    {
+      "action": "A Resize",
+      "label": "Resize the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Shift>F3"
+      ]
+    },
+    {
+      "action": "A Delete",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Shift>F4"
+      ]
+    },
+    {
+      "action": "A Move",
+      "label": "Move the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Shift>F5"
+      ]
+    },
+    {
+      "action": "A Destroy",
+      "label": "Kill the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Shift>F6"
+      ]
+    },
+    {
+      "action": "A ChangeWindowUp",
+      "label": "Next window",
+      "group": "Focus",
+      "accels": [
+        "<Control><Shift>F7"
+      ]
+    },
+    {
+      "action": "A Module \"Run\"  Form RUNForm",
+      "label": "Run a program",
+      "group": "Apps",
+      "accels": [
+        "<Control><Shift>F8"
+      ]
+    },
+    {
+      "action": "A Maximize",
+      "label": "Maximize the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Shift>F9"
+      ]
+    },
+    {
+      "action": "A PutOnBack",
+      "label": "Lower the window",
+      "group": "Windows",
+      "accels": [
+        "<Control><Shift>F10"
+      ]
+    },
+    {
+      "action": "A WindowList",
+      "label": "List all windows",
+      "group": "Menus",
+      "accels": [
+        "<Control><Shift>F11",
+        "<Shift>Menu"
+      ]
+    },
+    {
+      "action": "A PopUp \"Start Menu\"  0",
+      "label": "Open the start menu",
+      "group": "Menus",
+      "accels": [
+        "<Control><Shift>F12"
+      ]
+    },
+    {
+      "action": "A Exec \"-\" GWCommand jump",
+      "label": "Jump to a window",
+      "group": "Focus",
+      "accels": [
+        "<Control><Alt>j"
+      ]
+    },
+    {
+      "action": "A Exec \"-\" GWCommand iconify",
+      "label": "Iconify a window",
+      "group": "Apps",
+      "accels": [
+        "<Control><Alt>i"
+      ]
+    },
+    {
+      "action": "A Exec \"-\" GWCommand center",
+      "label": "Center a window",
+      "group": "Apps",
+      "accels": [
+        "<Control><Alt>c"
+      ]
+    },
+    {
+      "action": "A Exec \"-\" GWCommand sendtodesk",
+      "label": "Send a window to a desk",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>s"
+      ]
+    },
+    {
+      "action": "A Popup \"Start Menu\" 0",
+      "label": "Open the start menu (with any modifiers)",
+      "group": "Menus",
+      "accels": [
+        "Menu"
+      ]
+    },
+    {
+      "action": "A WindowList 2",
+      "label": "List this desk's windows",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>Menu"
+      ]
+    },
+    {
+      "action": "A WarpFore",
+      "label": "Next window (warp)",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "A WarpBack",
+      "label": "Previous window (warp)",
+      "group": "Focus",
+      "accels": [
+        "<Alt>q"
+      ]
+    },
+    {
+      "action": "A Focus",
+      "label": "Focus the window",
+      "group": "Focus",
+      "accels": [
+        "<Shift>Tab"
+      ]
+    },
+    {
+      "action": "A TakeScreenShot",
+      "label": "Screenshot (with any modifiers)",
+      "group": "Screenshots",
+      "accels": [
+        "Print"
+      ]
+    },
+    {
+      "action": "A TakeWindowShot",
+      "label": "Screenshot of the window",
+      "group": "Screenshots",
+      "accels": [
+        "<Shift>Print"
+      ]
+    },
+    {
+      "action": "A TakeFrameShot",
+      "label": "Screenshot of the window with its frame",
+      "group": "Screenshots",
+      "accels": [
+        "<Alt>Print"
+      ]
+    },
+    {
+      "action": "A Exec \"xscreensaver\" exec xscreensaver-command -lock",
+      "label": "Lock the screen (with any modifiers)",
+      "group": "Session",
+      "accels": [
+        "Pause"
+      ]
+    },
+    {
+      "action": "A Exec \"x-terminal-emulator\" exec x-terminal-emulator",
+      "label": "Open a terminal",
+      "group": "Apps",
+      "accels": [
+        "<Control>asterisk"
+      ]
+    }
+  ]
+}

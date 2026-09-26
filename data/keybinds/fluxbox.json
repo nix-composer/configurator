@@ -1,0 +1,541 @@
+{
+  "$comment": "Fluxbox's default keybinds: share/fluxbox/keys in nixpkgs' fluxbox (nixos-26.05), copied to ~/.fluxbox/keys on first start. The action is the command after the colon; the volume keys are keycodes 176/174/160 there, given here as their keysyms. Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "NextWindow {groups} (workspace=[current])",
+      "label": "Next window on this workspace",
+      "group": "Focus",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "PrevWindow {groups} (workspace=[current])",
+      "label": "Previous window on this workspace",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>Tab"
+      ]
+    },
+    {
+      "action": "NextTab",
+      "label": "Next tab in the window",
+      "group": "Focus",
+      "accels": [
+        "<Super>Tab"
+      ]
+    },
+    {
+      "action": "PrevTab",
+      "label": "Previous tab in the window",
+      "group": "Focus",
+      "accels": [
+        "<Super><Shift>Tab"
+      ]
+    },
+    {
+      "action": "Tab 1",
+      "label": "Go to tab 1",
+      "group": "Windows",
+      "accels": [
+        "<Super>1"
+      ]
+    },
+    {
+      "action": "Tab 2",
+      "label": "Go to tab 2",
+      "group": "Windows",
+      "accels": [
+        "<Super>2"
+      ]
+    },
+    {
+      "action": "Tab 3",
+      "label": "Go to tab 3",
+      "group": "Windows",
+      "accels": [
+        "<Super>3"
+      ]
+    },
+    {
+      "action": "Tab 4",
+      "label": "Go to tab 4",
+      "group": "Windows",
+      "accels": [
+        "<Super>4"
+      ]
+    },
+    {
+      "action": "Tab 5",
+      "label": "Go to tab 5",
+      "group": "Windows",
+      "accels": [
+        "<Super>5"
+      ]
+    },
+    {
+      "action": "Tab 6",
+      "label": "Go to tab 6",
+      "group": "Windows",
+      "accels": [
+        "<Super>6"
+      ]
+    },
+    {
+      "action": "Tab 7",
+      "label": "Go to tab 7",
+      "group": "Windows",
+      "accels": [
+        "<Super>7"
+      ]
+    },
+    {
+      "action": "Tab 8",
+      "label": "Go to tab 8",
+      "group": "Windows",
+      "accels": [
+        "<Super>8"
+      ]
+    },
+    {
+      "action": "Tab 9",
+      "label": "Go to tab 9",
+      "group": "Windows",
+      "accels": [
+        "<Super>9"
+      ]
+    },
+    {
+      "action": "Exec xterm",
+      "label": "Open a terminal (xterm)",
+      "group": "Apps",
+      "accels": [
+        "<Alt>F1"
+      ]
+    },
+    {
+      "action": "Exec fbrun",
+      "label": "Run a program (fbrun)",
+      "group": "Apps",
+      "accels": [
+        "<Alt>F2"
+      ]
+    },
+    {
+      "action": "Exec amixer sset Master,0 1+",
+      "label": "Volume up (keycode 176)",
+      "group": "Media",
+      "accels": [
+        "XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "Exec amixer sset Master,0 1-",
+      "label": "Volume down (keycode 174)",
+      "group": "Media",
+      "accels": [
+        "XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "Exec amixer sset Master,0 toggle",
+      "label": "Mute (keycode 160)",
+      "group": "Media",
+      "accels": [
+        "XF86AudioMute"
+      ]
+    },
+    {
+      "action": "Close",
+      "label": "Close the window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F4"
+      ]
+    },
+    {
+      "action": "Kill",
+      "label": "Kill the window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F5"
+      ]
+    },
+    {
+      "action": "Minimize",
+      "label": "Minimize the window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F9"
+      ]
+    },
+    {
+      "action": "Maximize",
+      "label": "Maximize the window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F10"
+      ]
+    },
+    {
+      "action": "Fullscreen",
+      "label": "Toggle fullscreen",
+      "group": "Windows",
+      "accels": [
+        "<Alt>F11"
+      ]
+    },
+    {
+      "action": "WindowMenu",
+      "label": "Window menu",
+      "group": "Menus",
+      "accels": [
+        "<Alt>space"
+      ]
+    },
+    {
+      "action": "Exit",
+      "label": "Exit Fluxbox",
+      "group": "Session",
+      "accels": [
+        "<Control><Alt>Delete"
+      ]
+    },
+    {
+      "action": "PrevWorkspace",
+      "label": "Previous workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Left"
+      ]
+    },
+    {
+      "action": "NextWorkspace",
+      "label": "Next workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Control><Alt>Right"
+      ]
+    },
+    {
+      "action": "SendToPrevWorkspace",
+      "label": "Send to prev workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>Left"
+      ]
+    },
+    {
+      "action": "SendToNextWorkspace",
+      "label": "Send to next workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>Right"
+      ]
+    },
+    {
+      "action": "TakeToPrevWorkspace",
+      "label": "Take to prev workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>Left"
+      ]
+    },
+    {
+      "action": "TakeToNextWorkspace",
+      "label": "Take to next workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>Right"
+      ]
+    },
+    {
+      "action": "Workspace 1",
+      "label": "Go to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F1"
+      ]
+    },
+    {
+      "action": "Workspace 2",
+      "label": "Go to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F2"
+      ]
+    },
+    {
+      "action": "Workspace 3",
+      "label": "Go to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F3"
+      ]
+    },
+    {
+      "action": "Workspace 4",
+      "label": "Go to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F4"
+      ]
+    },
+    {
+      "action": "Workspace 5",
+      "label": "Go to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F5"
+      ]
+    },
+    {
+      "action": "Workspace 6",
+      "label": "Go to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F6"
+      ]
+    },
+    {
+      "action": "Workspace 7",
+      "label": "Go to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F7"
+      ]
+    },
+    {
+      "action": "Workspace 8",
+      "label": "Go to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F8"
+      ]
+    },
+    {
+      "action": "Workspace 9",
+      "label": "Go to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F9"
+      ]
+    },
+    {
+      "action": "Workspace 10",
+      "label": "Go to workspace 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F10"
+      ]
+    },
+    {
+      "action": "Workspace 11",
+      "label": "Go to workspace 11",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F11"
+      ]
+    },
+    {
+      "action": "Workspace 12",
+      "label": "Go to workspace 12",
+      "group": "Workspaces",
+      "accels": [
+        "<Control>F12"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 1",
+      "label": "Send to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>F1"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 2",
+      "label": "Send to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>F2"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 3",
+      "label": "Send to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>F3"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 4",
+      "label": "Send to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>F4"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 5",
+      "label": "Send to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>F5"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 6",
+      "label": "Send to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>F6"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 7",
+      "label": "Send to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>F7"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 8",
+      "label": "Send to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>F8"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 9",
+      "label": "Send to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>F9"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 10",
+      "label": "Send to workspace 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>F10"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 11",
+      "label": "Send to workspace 11",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>F11"
+      ]
+    },
+    {
+      "action": "SendToWorkspace 12",
+      "label": "Send to workspace 12",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>F12"
+      ]
+    },
+    {
+      "action": "TakeToWorkspace 1",
+      "label": "Take to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>F1"
+      ]
+    },
+    {
+      "action": "TakeToWorkspace 2",
+      "label": "Take to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>F2"
+      ]
+    },
+    {
+      "action": "TakeToWorkspace 3",
+      "label": "Take to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>F3"
+      ]
+    },
+    {
+      "action": "TakeToWorkspace 4",
+      "label": "Take to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>F4"
+      ]
+    },
+    {
+      "action": "TakeToWorkspace 5",
+      "label": "Take to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>F5"
+      ]
+    },
+    {
+      "action": "TakeToWorkspace 6",
+      "label": "Take to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>F6"
+      ]
+    },
+    {
+      "action": "TakeToWorkspace 7",
+      "label": "Take to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>F7"
+      ]
+    },
+    {
+      "action": "TakeToWorkspace 8",
+      "label": "Take to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>F8"
+      ]
+    },
+    {
+      "action": "TakeToWorkspace 9",
+      "label": "Take to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>F9"
+      ]
+    },
+    {
+      "action": "TakeToWorkspace 10",
+      "label": "Take to workspace 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>F10"
+      ]
+    },
+    {
+      "action": "TakeToWorkspace 11",
+      "label": "Take to workspace 11",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>F11"
+      ]
+    },
+    {
+      "action": "TakeToWorkspace 12",
+      "label": "Take to workspace 12",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>F12"
+      ]
+    }
+  ]
+}

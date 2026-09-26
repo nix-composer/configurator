@@ -1,0 +1,999 @@
+{
+  "$comment": "spectrwm's built-in default keybinds: setup_keybindings() in spectrwm.c of nixpkgs' spectrwm (nixos-26.05; etc/spectrwm.conf only has them commented out), MOD = Mod1 (Alt). The action is spectrwm's action name as `bind[...]` takes it (a program name for the spawn binds); labels from spectrwm(1). Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "focus_free",
+      "label": "Focus on a window in free mode, if any",
+      "group": "Focus",
+      "accels": [
+        "<Alt>grave"
+      ]
+    },
+    {
+      "action": "free_toggle",
+      "label": "Toggle focused window between workspace mode and free mode",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>grave"
+      ]
+    },
+    {
+      "action": "bar_toggle",
+      "label": "Toggle overall visibility of status bars",
+      "group": "Windows",
+      "accels": [
+        "<Alt>b"
+      ]
+    },
+    {
+      "action": "bar_toggle_ws",
+      "label": "Toggle status bar on current workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>b"
+      ]
+    },
+    {
+      "action": "button2",
+      "label": "Fake a middle mouse button click (Button2)",
+      "group": "Windows",
+      "accels": [
+        "<Alt>v"
+      ]
+    },
+    {
+      "action": "center_layout",
+      "label": "Toggle centering of the master area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>backslash"
+      ]
+    },
+    {
+      "action": "cycle_layout",
+      "label": "Switch to the next layout",
+      "group": "Layout",
+      "accels": [
+        "<Alt>space"
+      ]
+    },
+    {
+      "action": "flip_layout",
+      "label": "Swap the master and stacking areas",
+      "group": "Layout",
+      "accels": [
+        "<Alt><Shift>backslash"
+      ]
+    },
+    {
+      "action": "float_toggle",
+      "label": "Toggle focused window between tiled and floating",
+      "group": "Layout",
+      "accels": [
+        "<Alt>t"
+      ]
+    },
+    {
+      "action": "below_toggle",
+      "label": "Toggle below state on current window",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>t"
+      ]
+    },
+    {
+      "action": "focus_main",
+      "label": "Focus on main window in workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>m"
+      ]
+    },
+    {
+      "action": "focus_next",
+      "label": "Focus next window in workspace",
+      "group": "Focus",
+      "accels": [
+        "<Alt>j",
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "focus_prev",
+      "label": "Focus previous window in workspace",
+      "group": "Focus",
+      "accels": [
+        "<Alt>k",
+        "<Alt><Shift>Tab"
+      ]
+    },
+    {
+      "action": "focus_prior",
+      "label": "Focus last focused window in workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>a"
+      ]
+    },
+    {
+      "action": "focus_urgent",
+      "label": "Focus on next window with the urgency hint flag set. The workspace is switched if needed",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>u"
+      ]
+    },
+    {
+      "action": "fullscreen_toggle",
+      "label": "Toggle fullscreen state of focused window",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>e"
+      ]
+    },
+    {
+      "action": "maximize_toggle",
+      "label": "Toggle maximization of focused window",
+      "group": "Focus",
+      "accels": [
+        "<Alt>e"
+      ]
+    },
+    {
+      "action": "height_grow",
+      "label": "Grow the height of a floating window",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>equal"
+      ]
+    },
+    {
+      "action": "height_shrink",
+      "label": "Shrink the height of a floating window",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>minus"
+      ]
+    },
+    {
+      "action": "iconify",
+      "label": "Minimize (unmap) currently focused window",
+      "group": "Focus",
+      "accels": [
+        "<Alt>w"
+      ]
+    },
+    {
+      "action": "master_shrink",
+      "label": "Shrink master area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>h"
+      ]
+    },
+    {
+      "action": "master_grow",
+      "label": "Grow master area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>l"
+      ]
+    },
+    {
+      "action": "master_add",
+      "label": "Add windows to master area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>comma"
+      ]
+    },
+    {
+      "action": "master_del",
+      "label": "Remove windows from master area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>period"
+      ]
+    },
+    {
+      "action": "move_down",
+      "label": "Move a floating window a step downwards",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>bracketright"
+      ]
+    },
+    {
+      "action": "move_left",
+      "label": "Move a floating window a step to the left",
+      "group": "Windows",
+      "accels": [
+        "<Alt>bracketleft"
+      ]
+    },
+    {
+      "action": "move_right",
+      "label": "Move a floating window a step to the right",
+      "group": "Windows",
+      "accels": [
+        "<Alt>bracketright"
+      ]
+    },
+    {
+      "action": "move_up",
+      "label": "Move a floating window a step upwards",
+      "group": "Windows",
+      "accels": [
+        "<Alt><Shift>bracketleft"
+      ]
+    },
+    {
+      "action": "mvrg_1",
+      "label": "Move current window to region 1",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>KP_End"
+      ]
+    },
+    {
+      "action": "mvrg_2",
+      "label": "Move current window to region 2",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>KP_Down"
+      ]
+    },
+    {
+      "action": "mvrg_3",
+      "label": "Move current window to region 3",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>KP_Next"
+      ]
+    },
+    {
+      "action": "mvrg_4",
+      "label": "Move current window to region 4",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>KP_Left"
+      ]
+    },
+    {
+      "action": "mvrg_5",
+      "label": "Move current window to region 5",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>KP_Begin"
+      ]
+    },
+    {
+      "action": "mvrg_6",
+      "label": "Move current window to region 6",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>KP_Right"
+      ]
+    },
+    {
+      "action": "mvrg_7",
+      "label": "Move current window to region 7",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>KP_Home"
+      ]
+    },
+    {
+      "action": "mvrg_8",
+      "label": "Move current window to region 8",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>KP_Up"
+      ]
+    },
+    {
+      "action": "mvrg_9",
+      "label": "Move current window to region 9",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>KP_Prior"
+      ]
+    },
+    {
+      "action": "mvws_1",
+      "label": "Move current window to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>1"
+      ]
+    },
+    {
+      "action": "mvws_2",
+      "label": "Move current window to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>2"
+      ]
+    },
+    {
+      "action": "mvws_3",
+      "label": "Move current window to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>3"
+      ]
+    },
+    {
+      "action": "mvws_4",
+      "label": "Move current window to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>4"
+      ]
+    },
+    {
+      "action": "mvws_5",
+      "label": "Move current window to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>5"
+      ]
+    },
+    {
+      "action": "mvws_6",
+      "label": "Move current window to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>6"
+      ]
+    },
+    {
+      "action": "mvws_7",
+      "label": "Move current window to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>7"
+      ]
+    },
+    {
+      "action": "mvws_8",
+      "label": "Move current window to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>8"
+      ]
+    },
+    {
+      "action": "mvws_9",
+      "label": "Move current window to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>9"
+      ]
+    },
+    {
+      "action": "mvws_10",
+      "label": "Move current window to workspace 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>0"
+      ]
+    },
+    {
+      "action": "mvws_11",
+      "label": "Move current window to workspace 11",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>F1"
+      ]
+    },
+    {
+      "action": "mvws_12",
+      "label": "Move current window to workspace 12",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>F2"
+      ]
+    },
+    {
+      "action": "mvws_13",
+      "label": "Move current window to workspace 13",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>F3"
+      ]
+    },
+    {
+      "action": "mvws_14",
+      "label": "Move current window to workspace 14",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>F4"
+      ]
+    },
+    {
+      "action": "mvws_15",
+      "label": "Move current window to workspace 15",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>F5"
+      ]
+    },
+    {
+      "action": "mvws_16",
+      "label": "Move current window to workspace 16",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>F6"
+      ]
+    },
+    {
+      "action": "mvws_17",
+      "label": "Move current window to workspace 17",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>F7"
+      ]
+    },
+    {
+      "action": "mvws_18",
+      "label": "Move current window to workspace 18",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>F8"
+      ]
+    },
+    {
+      "action": "mvws_19",
+      "label": "Move current window to workspace 19",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>F9"
+      ]
+    },
+    {
+      "action": "mvws_20",
+      "label": "Move current window to workspace 20",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>F10"
+      ]
+    },
+    {
+      "action": "mvws_21",
+      "label": "Move current window to workspace 21",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>F11"
+      ]
+    },
+    {
+      "action": "mvws_22",
+      "label": "Move current window to workspace 22",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>F12"
+      ]
+    },
+    {
+      "action": "name_workspace",
+      "label": "Name the workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>slash"
+      ]
+    },
+    {
+      "action": "quit",
+      "label": "Quit",
+      "group": "Session",
+      "accels": [
+        "<Alt><Shift>q"
+      ]
+    },
+    {
+      "action": "raise",
+      "label": "Raise the current window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>r"
+      ]
+    },
+    {
+      "action": "raise_toggle",
+      "label": "Toggle raising the focused window",
+      "group": "Focus",
+      "accels": [
+        "<Alt><Shift>r"
+      ]
+    },
+    {
+      "action": "restart",
+      "label": "Restart",
+      "group": "Session",
+      "accels": [
+        "<Alt>q"
+      ]
+    },
+    {
+      "action": "rg_1",
+      "label": "Focus on region 1",
+      "group": "Monitors",
+      "accels": [
+        "<Alt>KP_End"
+      ]
+    },
+    {
+      "action": "rg_2",
+      "label": "Focus on region 2",
+      "group": "Monitors",
+      "accels": [
+        "<Alt>KP_Down"
+      ]
+    },
+    {
+      "action": "rg_3",
+      "label": "Focus on region 3",
+      "group": "Monitors",
+      "accels": [
+        "<Alt>KP_Next"
+      ]
+    },
+    {
+      "action": "rg_4",
+      "label": "Focus on region 4",
+      "group": "Monitors",
+      "accels": [
+        "<Alt>KP_Left"
+      ]
+    },
+    {
+      "action": "rg_5",
+      "label": "Focus on region 5",
+      "group": "Monitors",
+      "accels": [
+        "<Alt>KP_Begin"
+      ]
+    },
+    {
+      "action": "rg_6",
+      "label": "Focus on region 6",
+      "group": "Monitors",
+      "accels": [
+        "<Alt>KP_Right"
+      ]
+    },
+    {
+      "action": "rg_7",
+      "label": "Focus on region 7",
+      "group": "Monitors",
+      "accels": [
+        "<Alt>KP_Home"
+      ]
+    },
+    {
+      "action": "rg_8",
+      "label": "Focus on region 8",
+      "group": "Monitors",
+      "accels": [
+        "<Alt>KP_Up"
+      ]
+    },
+    {
+      "action": "rg_9",
+      "label": "Focus on region 9",
+      "group": "Monitors",
+      "accels": [
+        "<Alt>KP_Prior"
+      ]
+    },
+    {
+      "action": "rg_next",
+      "label": "Switch to next region",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>Right"
+      ]
+    },
+    {
+      "action": "rg_prev",
+      "label": "Switch to previous region",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>Left"
+      ]
+    },
+    {
+      "action": "search_win",
+      "label": "Search the windows in the current workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>f"
+      ]
+    },
+    {
+      "action": "search_workspace",
+      "label": "Search for a workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>slash"
+      ]
+    },
+    {
+      "action": "initscr",
+      "label": "Reinitialize the screens (initscreen.sh)",
+      "group": "Monitors",
+      "accels": [
+        "<Alt><Shift>i"
+      ]
+    },
+    {
+      "action": "lock",
+      "label": "Lock the screen (xlock)",
+      "group": "Session",
+      "accels": [
+        "<Alt><Shift>Delete"
+      ]
+    },
+    {
+      "action": "menu",
+      "label": "Run a program (dmenu_run)",
+      "group": "Apps",
+      "accels": [
+        "<Alt>p"
+      ]
+    },
+    {
+      "action": "screenshot_all",
+      "label": "Screenshot of the whole screen",
+      "group": "Screenshots",
+      "accels": [
+        "<Alt>s"
+      ]
+    },
+    {
+      "action": "screenshot_wind",
+      "label": "Screenshot of a window",
+      "group": "Screenshots",
+      "accels": [
+        "<Alt><Shift>s"
+      ]
+    },
+    {
+      "action": "term",
+      "label": "Open a terminal (xterm)",
+      "group": "Apps",
+      "accels": [
+        "<Alt><Shift>Return"
+      ]
+    },
+    {
+      "action": "stack_inc",
+      "label": "Add columns/rows to stacking area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>comma"
+      ]
+    },
+    {
+      "action": "stack_dec",
+      "label": "Remove columns/rows from stacking area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>period"
+      ]
+    },
+    {
+      "action": "stack_reset",
+      "label": "Reset layout",
+      "group": "Layout",
+      "accels": [
+        "<Alt><Shift>space"
+      ]
+    },
+    {
+      "action": "swap_main",
+      "label": "Move current window to master area",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>Return"
+      ]
+    },
+    {
+      "action": "swap_next",
+      "label": "Swap with next window in workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>j"
+      ]
+    },
+    {
+      "action": "swap_prev",
+      "label": "Swap with previous window in workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>k"
+      ]
+    },
+    {
+      "action": "uniconify",
+      "label": "Restore (map) window returned by dmenu selection",
+      "group": "Apps",
+      "accels": [
+        "<Alt><Shift>w"
+      ]
+    },
+    {
+      "action": "version",
+      "label": "Toggle version in status bar",
+      "group": "Session",
+      "accels": [
+        "<Alt><Shift>v"
+      ]
+    },
+    {
+      "action": "width_grow",
+      "label": "Grow the width of a floating window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>equal"
+      ]
+    },
+    {
+      "action": "width_shrink",
+      "label": "Shrink the width of a floating window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>minus"
+      ]
+    },
+    {
+      "action": "wind_del",
+      "label": "Delete current window",
+      "group": "Windows",
+      "accels": [
+        "<Alt>x"
+      ]
+    },
+    {
+      "action": "wind_kill",
+      "label": "Kill the program that created the current window",
+      "group": "Apps",
+      "accels": [
+        "<Alt><Shift>x"
+      ]
+    },
+    {
+      "action": "ws_1",
+      "label": "Switch to workspace 1",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>1"
+      ]
+    },
+    {
+      "action": "ws_2",
+      "label": "Switch to workspace 2",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>2"
+      ]
+    },
+    {
+      "action": "ws_3",
+      "label": "Switch to workspace 3",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>3"
+      ]
+    },
+    {
+      "action": "ws_4",
+      "label": "Switch to workspace 4",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>4"
+      ]
+    },
+    {
+      "action": "ws_5",
+      "label": "Switch to workspace 5",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>5"
+      ]
+    },
+    {
+      "action": "ws_6",
+      "label": "Switch to workspace 6",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>6"
+      ]
+    },
+    {
+      "action": "ws_7",
+      "label": "Switch to workspace 7",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>7"
+      ]
+    },
+    {
+      "action": "ws_8",
+      "label": "Switch to workspace 8",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>8"
+      ]
+    },
+    {
+      "action": "ws_9",
+      "label": "Switch to workspace 9",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>9"
+      ]
+    },
+    {
+      "action": "ws_10",
+      "label": "Switch to workspace 10",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>0"
+      ]
+    },
+    {
+      "action": "ws_11",
+      "label": "Switch to workspace 11",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F1"
+      ]
+    },
+    {
+      "action": "ws_12",
+      "label": "Switch to workspace 12",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F2"
+      ]
+    },
+    {
+      "action": "ws_13",
+      "label": "Switch to workspace 13",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F3"
+      ]
+    },
+    {
+      "action": "ws_14",
+      "label": "Switch to workspace 14",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F4"
+      ]
+    },
+    {
+      "action": "ws_15",
+      "label": "Switch to workspace 15",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F5"
+      ]
+    },
+    {
+      "action": "ws_16",
+      "label": "Switch to workspace 16",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F6"
+      ]
+    },
+    {
+      "action": "ws_17",
+      "label": "Switch to workspace 17",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F7"
+      ]
+    },
+    {
+      "action": "ws_18",
+      "label": "Switch to workspace 18",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F8"
+      ]
+    },
+    {
+      "action": "ws_19",
+      "label": "Switch to workspace 19",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F9"
+      ]
+    },
+    {
+      "action": "ws_20",
+      "label": "Switch to workspace 20",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F10"
+      ]
+    },
+    {
+      "action": "ws_21",
+      "label": "Switch to workspace 21",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F11"
+      ]
+    },
+    {
+      "action": "ws_22",
+      "label": "Switch to workspace 22",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>F12"
+      ]
+    },
+    {
+      "action": "ws_next",
+      "label": "Switch to next workspace with a window in it",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>Right"
+      ]
+    },
+    {
+      "action": "ws_prev",
+      "label": "Switch to previous workspace with a window in it",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>Left"
+      ]
+    },
+    {
+      "action": "ws_next_all",
+      "label": "Switch to next workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>Up"
+      ]
+    },
+    {
+      "action": "ws_prev_all",
+      "label": "Switch to previous workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>Down"
+      ]
+    },
+    {
+      "action": "ws_next_move",
+      "label": "Switch to next workspace with the current window",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>Up"
+      ]
+    },
+    {
+      "action": "ws_prev_move",
+      "label": "Switch to previous workspace with the current window",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt><Shift>Down"
+      ]
+    },
+    {
+      "action": "ws_prior",
+      "label": "Switch to last visited workspace",
+      "group": "Workspaces",
+      "accels": [
+        "<Alt>a"
+      ]
+    }
+  ]
+}

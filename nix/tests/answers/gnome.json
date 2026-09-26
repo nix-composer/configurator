@@ -24,7 +24,13 @@
     "SUPER + SHIFT + Y": {
       "webapp": "youtube"
     },
-    "ALT + F4": "unbind"
+    "ALT + F4": "unbind",
+    "SUPER + Q": {
+      "action": "org.gnome.desktop.wm.keybindings/close"
+    },
+    "Super_R": {
+      "action": "org.gnome.mutter/overlay-key"
+    }
   },
   "disk": {
     "device": "/dev/vdb",

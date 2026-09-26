@@ -1,0 +1,903 @@
+{
+  "$comment": "KDE Plasma 6's default global shortcuts (kglobalacceld's registrations after a Wayland login on nixpkgs nixos-26.05, scripts/keybinds/extract-kde-cosmic-xfce-omarchy.py): the action is `<kglobalshortcutsrc group>/<action>` (`kwin/Window Close`; app launchers `services/<desktop file>/_launch`), the label KDE's friendly name, the group the component.",
+  "binds": [
+    {
+      "action": "kwin/Activate Window Demanding Attention",
+      "label": "Activate Window Demanding Attention",
+      "group": "KWin",
+      "accels": [
+        "<Super><Control>a"
+      ]
+    },
+    {
+      "action": "kwin/disableInputCapture",
+      "label": "Disable Active Input Capture",
+      "group": "KWin",
+      "accels": [
+        "<Super><Shift>Escape"
+      ]
+    },
+    {
+      "action": "kwin/Edit Tiles",
+      "label": "Toggle Tiles Editor",
+      "group": "KWin",
+      "accels": [
+        "<Super>t"
+      ]
+    },
+    {
+      "action": "kwin/Expose",
+      "label": "Toggle Present Windows (Current desktop)",
+      "group": "KWin",
+      "accels": [
+        "<Super>F9",
+        "<Control>F9"
+      ]
+    },
+    {
+      "action": "kwin/ExposeAll",
+      "label": "Toggle Present Windows (All desktops)",
+      "group": "KWin",
+      "accels": [
+        "<Super>F10",
+        "XF86LaunchC",
+        "<Control>F10"
+      ]
+    },
+    {
+      "action": "kwin/ExposeClass",
+      "label": "Toggle Present Windows (Window class)",
+      "group": "KWin",
+      "accels": [
+        "<Super>F7",
+        "<Control>F7"
+      ]
+    },
+    {
+      "action": "kwin/Grid View",
+      "label": "Toggle Grid View",
+      "group": "KWin",
+      "accels": [
+        "<Super>g"
+      ]
+    },
+    {
+      "action": "kwin/Kill Window",
+      "label": "Kill Window",
+      "group": "KWin",
+      "accels": [
+        "<Super><Control>Escape"
+      ]
+    },
+    {
+      "action": "kwin/MoveMouseToCenter",
+      "label": "Move Mouse to Center",
+      "group": "KWin",
+      "accels": [
+        "<Super>F6"
+      ]
+    },
+    {
+      "action": "kwin/MoveMouseToFocus",
+      "label": "Move Mouse to Focus",
+      "group": "KWin",
+      "accels": [
+        "<Super>F5"
+      ]
+    },
+    {
+      "action": "kwin/Overview",
+      "label": "Toggle Overview",
+      "group": "KWin",
+      "accels": [
+        "<Super>w"
+      ]
+    },
+    {
+      "action": "kwin/Show Desktop",
+      "label": "Peek at Desktop",
+      "group": "KWin",
+      "accels": [
+        "<Super>d"
+      ]
+    },
+    {
+      "action": "kwin/Switch One Desktop Down",
+      "label": "Switch One Desktop Down",
+      "group": "KWin",
+      "accels": [
+        "<Super><Control>Down"
+      ]
+    },
+    {
+      "action": "kwin/Switch One Desktop to the Left",
+      "label": "Switch One Desktop to the Left",
+      "group": "KWin",
+      "accels": [
+        "<Super><Control>Left"
+      ]
+    },
+    {
+      "action": "kwin/Switch One Desktop to the Right",
+      "label": "Switch One Desktop to the Right",
+      "group": "KWin",
+      "accels": [
+        "<Super><Control>Right"
+      ]
+    },
+    {
+      "action": "kwin/Switch One Desktop Up",
+      "label": "Switch One Desktop Up",
+      "group": "KWin",
+      "accels": [
+        "<Super><Control>Up"
+      ]
+    },
+    {
+      "action": "kwin/Switch to Desktop 1",
+      "label": "Switch to Desktop 1",
+      "group": "KWin",
+      "accels": [
+        "<Super>F1",
+        "<Control>F1"
+      ]
+    },
+    {
+      "action": "kwin/Switch to Desktop 2",
+      "label": "Switch to Desktop 2",
+      "group": "KWin",
+      "accels": [
+        "<Super>F2",
+        "<Control>F2"
+      ]
+    },
+    {
+      "action": "kwin/Switch to Desktop 3",
+      "label": "Switch to Desktop 3",
+      "group": "KWin",
+      "accels": [
+        "<Super>F3",
+        "<Control>F3"
+      ]
+    },
+    {
+      "action": "kwin/Switch to Desktop 4",
+      "label": "Switch to Desktop 4",
+      "group": "KWin",
+      "accels": [
+        "<Super>F4",
+        "<Control>F4"
+      ]
+    },
+    {
+      "action": "kwin/Switch Window Down",
+      "label": "Switch to Window Below",
+      "group": "KWin",
+      "accels": [
+        "<Super><Alt>Down"
+      ]
+    },
+    {
+      "action": "kwin/Switch Window Left",
+      "label": "Switch to Window to the Left",
+      "group": "KWin",
+      "accels": [
+        "<Super><Alt>Left"
+      ]
+    },
+    {
+      "action": "kwin/Switch Window Right",
+      "label": "Switch to Window to the Right",
+      "group": "KWin",
+      "accels": [
+        "<Super><Alt>Right"
+      ]
+    },
+    {
+      "action": "kwin/Switch Window Up",
+      "label": "Switch to Window Above",
+      "group": "KWin",
+      "accels": [
+        "<Super><Alt>Up"
+      ]
+    },
+    {
+      "action": "kwin/view_actual_size",
+      "label": "Zoom to Actual Size",
+      "group": "KWin",
+      "accels": [
+        "<Super>0"
+      ]
+    },
+    {
+      "action": "kwin/view_zoom_in",
+      "label": "Zoom In",
+      "group": "KWin",
+      "accels": [
+        "<Super>plus",
+        "<Super>equal"
+      ]
+    },
+    {
+      "action": "kwin/view_zoom_out",
+      "label": "Zoom Out",
+      "group": "KWin",
+      "accels": [
+        "<Super>minus"
+      ]
+    },
+    {
+      "action": "kwin/Walk Through Windows",
+      "label": "Walk Through Windows",
+      "group": "KWin",
+      "accels": [
+        "<Super>Tab",
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "kwin/Walk Through Windows (Reverse)",
+      "label": "Walk Through Windows (Reverse)",
+      "group": "KWin",
+      "accels": [
+        "<Super><Shift>Tab",
+        "<Alt><Shift>Tab"
+      ]
+    },
+    {
+      "action": "kwin/Walk Through Windows of Current Application",
+      "label": "Walk Through Windows of Current Application",
+      "group": "KWin",
+      "accels": [
+        "<Super>grave",
+        "<Alt>grave"
+      ]
+    },
+    {
+      "action": "kwin/Walk Through Windows of Current Application (Reverse)",
+      "label": "Walk Through Windows of Current Application (Reverse)",
+      "group": "KWin",
+      "accels": [
+        "<Super>asciitilde",
+        "<Alt>asciitilde"
+      ]
+    },
+    {
+      "action": "kwin/Window Close",
+      "label": "Close Window",
+      "group": "KWin",
+      "accels": [
+        "<Alt>F4"
+      ]
+    },
+    {
+      "action": "kwin/Window Maximize",
+      "label": "Maximize Window",
+      "group": "KWin",
+      "accels": [
+        "<Super>Page_Up"
+      ]
+    },
+    {
+      "action": "kwin/Window Minimize",
+      "label": "Minimize Window",
+      "group": "KWin",
+      "accels": [
+        "<Super>Page_Down"
+      ]
+    },
+    {
+      "action": "kwin/Window One Desktop Down",
+      "label": "Window One Desktop Down",
+      "group": "KWin",
+      "accels": [
+        "<Super><Control><Shift>Down"
+      ]
+    },
+    {
+      "action": "kwin/Window One Desktop to the Left",
+      "label": "Window One Desktop to the Left",
+      "group": "KWin",
+      "accels": [
+        "<Super><Control><Shift>Left"
+      ]
+    },
+    {
+      "action": "kwin/Window One Desktop to the Right",
+      "label": "Window One Desktop to the Right",
+      "group": "KWin",
+      "accels": [
+        "<Super><Control><Shift>Right"
+      ]
+    },
+    {
+      "action": "kwin/Window One Desktop Up",
+      "label": "Window One Desktop Up",
+      "group": "KWin",
+      "accels": [
+        "<Super><Control><Shift>Up"
+      ]
+    },
+    {
+      "action": "kwin/Window Operations Menu",
+      "label": "Window Menu",
+      "group": "KWin",
+      "accels": [
+        "<Alt>F3"
+      ]
+    },
+    {
+      "action": "kwin/Window Quick Tile Bottom",
+      "label": "Quick Tile Window to the Bottom",
+      "group": "KWin",
+      "accels": [
+        "<Super>Down"
+      ]
+    },
+    {
+      "action": "kwin/Window Quick Tile Left",
+      "label": "Quick Tile Window to the Left",
+      "group": "KWin",
+      "accels": [
+        "<Super>Left"
+      ]
+    },
+    {
+      "action": "kwin/Window Quick Tile Right",
+      "label": "Quick Tile Window to the Right",
+      "group": "KWin",
+      "accels": [
+        "<Super>Right"
+      ]
+    },
+    {
+      "action": "kwin/Window Quick Tile Top",
+      "label": "Quick Tile Window to the Top",
+      "group": "KWin",
+      "accels": [
+        "<Super>Up"
+      ]
+    },
+    {
+      "action": "kwin/Window to Next Screen",
+      "label": "Move Window to Next Screen",
+      "group": "KWin",
+      "accels": [
+        "<Super><Shift>Right"
+      ]
+    },
+    {
+      "action": "kwin/Window to Previous Screen",
+      "label": "Move Window to Previous Screen",
+      "group": "KWin",
+      "accels": [
+        "<Super><Shift>Left"
+      ]
+    },
+    {
+      "action": "plasmashell/activate application launcher",
+      "label": "Activate Application Launcher",
+      "group": "plasmashell",
+      "accels": [
+        "Super_L",
+        "<Alt>F1"
+      ]
+    },
+    {
+      "action": "plasmashell/activate task manager entry 1",
+      "label": "Activate Task Manager Entry 1",
+      "group": "plasmashell",
+      "accels": [
+        "<Super>1"
+      ]
+    },
+    {
+      "action": "plasmashell/activate task manager entry 2",
+      "label": "Activate Task Manager Entry 2",
+      "group": "plasmashell",
+      "accels": [
+        "<Super>2"
+      ]
+    },
+    {
+      "action": "plasmashell/activate task manager entry 3",
+      "label": "Activate Task Manager Entry 3",
+      "group": "plasmashell",
+      "accels": [
+        "<Super>3"
+      ]
+    },
+    {
+      "action": "plasmashell/activate task manager entry 4",
+      "label": "Activate Task Manager Entry 4",
+      "group": "plasmashell",
+      "accels": [
+        "<Super>4"
+      ]
+    },
+    {
+      "action": "plasmashell/activate task manager entry 5",
+      "label": "Activate Task Manager Entry 5",
+      "group": "plasmashell",
+      "accels": [
+        "<Super>5"
+      ]
+    },
+    {
+      "action": "plasmashell/activate task manager entry 6",
+      "label": "Activate Task Manager Entry 6",
+      "group": "plasmashell",
+      "accels": [
+        "<Super>6"
+      ]
+    },
+    {
+      "action": "plasmashell/activate task manager entry 7",
+      "label": "Activate Task Manager Entry 7",
+      "group": "plasmashell",
+      "accels": [
+        "<Super>7"
+      ]
+    },
+    {
+      "action": "plasmashell/activate task manager entry 8",
+      "label": "Activate Task Manager Entry 8",
+      "group": "plasmashell",
+      "accels": [
+        "<Super>8"
+      ]
+    },
+    {
+      "action": "plasmashell/activate task manager entry 9",
+      "label": "Activate Task Manager Entry 9",
+      "group": "plasmashell",
+      "accels": [
+        "<Super>9"
+      ]
+    },
+    {
+      "action": "plasmashell/clipboard_action",
+      "label": "Automatic Action Popup Menu",
+      "group": "plasmashell",
+      "accels": [
+        "<Super><Control>x"
+      ]
+    },
+    {
+      "action": "plasmashell/cycle-panels",
+      "label": "Move keyboard focus between panels",
+      "group": "plasmashell",
+      "accels": [
+        "<Super><Alt>p"
+      ]
+    },
+    {
+      "action": "plasmashell/manage activities",
+      "label": "Show Activity Switcher",
+      "group": "plasmashell",
+      "accels": [
+        "<Super>q"
+      ]
+    },
+    {
+      "action": "plasmashell/show dashboard",
+      "label": "Show Desktop",
+      "group": "plasmashell",
+      "accels": [
+        "<Control>F12"
+      ]
+    },
+    {
+      "action": "plasmashell/show-on-mouse-pos",
+      "label": "Show Clipboard Items at Mouse Position",
+      "group": "plasmashell",
+      "accels": [
+        "<Super>v"
+      ]
+    },
+    {
+      "action": "ksmserver/Lock Session",
+      "label": "Lock Session",
+      "group": "Session Management",
+      "accels": [
+        "<Super>l",
+        "XF86ScreenSaver"
+      ]
+    },
+    {
+      "action": "ksmserver/Log Out",
+      "label": "Show Logout Screen",
+      "group": "Session Management",
+      "accels": [
+        "<Control><Alt>Delete"
+      ]
+    },
+    {
+      "action": "kmix/decrease_volume",
+      "label": "Decrease Volume",
+      "group": "Audio Volume",
+      "accels": [
+        "XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "kmix/decrease_volume_small",
+      "label": "Decrease Volume by 1%",
+      "group": "Audio Volume",
+      "accels": [
+        "<Shift>XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "kmix/increase_volume",
+      "label": "Increase Volume",
+      "group": "Audio Volume",
+      "accels": [
+        "XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "kmix/increase_volume_small",
+      "label": "Increase Volume by 1%",
+      "group": "Audio Volume",
+      "accels": [
+        "<Shift>XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "kmix/mic_mute",
+      "label": "Mute Microphone",
+      "group": "Audio Volume",
+      "accels": [
+        "XF86AudioMicMute",
+        "<Super>XF86AudioMute"
+      ]
+    },
+    {
+      "action": "kmix/mute",
+      "label": "Mute",
+      "group": "Audio Volume",
+      "accels": [
+        "XF86AudioMute"
+      ]
+    },
+    {
+      "action": "mediacontrol/nextmedia",
+      "label": "Media playback next",
+      "group": "Media Controller",
+      "accels": [
+        "XF86AudioNext"
+      ]
+    },
+    {
+      "action": "mediacontrol/pausemedia",
+      "label": "Pause media playback",
+      "group": "Media Controller",
+      "accels": [
+        "XF86AudioPause"
+      ]
+    },
+    {
+      "action": "mediacontrol/playpausemedia",
+      "label": "Play/Pause media playback",
+      "group": "Media Controller",
+      "accels": [
+        "XF86AudioPlay"
+      ]
+    },
+    {
+      "action": "mediacontrol/previousmedia",
+      "label": "Media playback previous",
+      "group": "Media Controller",
+      "accels": [
+        "XF86AudioPrev"
+      ]
+    },
+    {
+      "action": "mediacontrol/seekbackwardmedia",
+      "label": "Media playback seek backward 5s",
+      "group": "Media Controller",
+      "accels": [
+        "XF86AudioRewind"
+      ]
+    },
+    {
+      "action": "mediacontrol/seekforwardmedia",
+      "label": "Media playback seek forward 5s",
+      "group": "Media Controller",
+      "accels": [
+        "XF86AudioForward"
+      ]
+    },
+    {
+      "action": "mediacontrol/stopmedia",
+      "label": "Stop media playback",
+      "group": "Media Controller",
+      "accels": [
+        "XF86AudioStop"
+      ]
+    },
+    {
+      "action": "org_kde_powerdevil/Decrease Keyboard Brightness",
+      "label": "Decrease Keyboard Brightness",
+      "group": "Power Management",
+      "accels": [
+        "XF86KbdBrightnessDown"
+      ]
+    },
+    {
+      "action": "org_kde_powerdevil/Decrease Screen Brightness",
+      "label": "Decrease Screen Brightness",
+      "group": "Power Management",
+      "accels": [
+        "XF86MonBrightnessDown"
+      ]
+    },
+    {
+      "action": "org_kde_powerdevil/Decrease Screen Brightness Small",
+      "label": "Decrease Screen Brightness by 1%",
+      "group": "Power Management",
+      "accels": [
+        "<Shift>XF86MonBrightnessDown"
+      ]
+    },
+    {
+      "action": "org_kde_powerdevil/Hibernate",
+      "label": "Hibernate",
+      "group": "Power Management",
+      "accels": [
+        "XF86Hibernate"
+      ]
+    },
+    {
+      "action": "org_kde_powerdevil/Increase Keyboard Brightness",
+      "label": "Increase Keyboard Brightness",
+      "group": "Power Management",
+      "accels": [
+        "XF86KbdBrightnessUp"
+      ]
+    },
+    {
+      "action": "org_kde_powerdevil/Increase Screen Brightness",
+      "label": "Increase Screen Brightness",
+      "group": "Power Management",
+      "accels": [
+        "XF86MonBrightnessUp"
+      ]
+    },
+    {
+      "action": "org_kde_powerdevil/Increase Screen Brightness Small",
+      "label": "Increase Screen Brightness by 1%",
+      "group": "Power Management",
+      "accels": [
+        "<Shift>XF86MonBrightnessUp"
+      ]
+    },
+    {
+      "action": "org_kde_powerdevil/PowerDown",
+      "label": "Power Down",
+      "group": "Power Management",
+      "accels": [
+        "XF86PowerDown"
+      ]
+    },
+    {
+      "action": "org_kde_powerdevil/PowerOff",
+      "label": "Power Off",
+      "group": "Power Management",
+      "accels": [
+        "XF86PowerOff"
+      ]
+    },
+    {
+      "action": "org_kde_powerdevil/powerProfile",
+      "label": "Switch Power Profile",
+      "group": "Power Management",
+      "accels": [
+        "XF86Battery",
+        "<Super>b"
+      ]
+    },
+    {
+      "action": "org_kde_powerdevil/Sleep",
+      "label": "Suspend",
+      "group": "Power Management",
+      "accels": [
+        "XF86Sleep"
+      ]
+    },
+    {
+      "action": "org_kde_powerdevil/Toggle Keyboard Backlight",
+      "label": "Toggle Keyboard Backlight",
+      "group": "Power Management",
+      "accels": [
+        "XF86KbdLightOnOff"
+      ]
+    },
+    {
+      "action": "kaccess/Toggle Screen Reader On and Off",
+      "label": "Toggle Screen Reader On and Off",
+      "group": "Accessibility",
+      "accels": [
+        "<Super><Alt>s"
+      ]
+    },
+    {
+      "action": "KDE Keyboard Layout Switcher/Switch to Last-Used Keyboard Layout",
+      "label": "Switch to Last-Used Keyboard Layout",
+      "group": "Keyboard Layout Switcher",
+      "accels": [
+        "<Super><Alt>l"
+      ]
+    },
+    {
+      "action": "KDE Keyboard Layout Switcher/Switch to Next Keyboard Layout",
+      "label": "Switch to Next Keyboard Layout",
+      "group": "Keyboard Layout Switcher",
+      "accels": [
+        "<Super><Alt>k"
+      ]
+    },
+    {
+      "action": "services/org.kde.dolphin.desktop/_launch",
+      "label": "Launch Dolphin",
+      "group": "Dolphin",
+      "accels": [
+        "<Super>e"
+      ]
+    },
+    {
+      "action": "services/org.kde.konsole.desktop/_launch",
+      "label": "Launch Konsole",
+      "group": "Konsole",
+      "accels": [
+        "<Control><Alt>t"
+      ]
+    },
+    {
+      "action": "services/org.kde.krunner.desktop/_launch",
+      "label": "Launch KRunner",
+      "group": "KRunner",
+      "accels": [
+        "<Alt>space",
+        "<Alt>F2",
+        "XF86Search"
+      ]
+    },
+    {
+      "action": "services/org.kde.krunner.desktop/RunClipboard",
+      "label": "Run command on clipboard contents",
+      "group": "KRunner",
+      "accels": [
+        "<Alt><Shift>F2"
+      ]
+    },
+    {
+      "action": "services/org.kde.kscreen.desktop/ShowOSD",
+      "label": "Switch Display",
+      "group": "Display Configuration",
+      "accels": [
+        "XF86Display",
+        "<Super>p"
+      ]
+    },
+    {
+      "action": "services/org.kde.plasma-systemmonitor.desktop/_launch",
+      "label": "Launch System Monitor",
+      "group": "System Monitor",
+      "accels": [
+        "<Super>Escape"
+      ]
+    },
+    {
+      "action": "services/org.kde.plasma.emojier.desktop/_launch",
+      "label": "Launch Emoji Selector",
+      "group": "Emoji Selector",
+      "accels": [
+        "<Super>period",
+        "<Super><Control><Alt><Shift>space"
+      ]
+    },
+    {
+      "action": "services/org.kde.spectacle.desktop/_launch",
+      "label": "Launch Spectacle",
+      "group": "Spectacle",
+      "accels": [
+        "Print",
+        "<Super><Shift>s"
+      ]
+    },
+    {
+      "action": "services/org.kde.spectacle.desktop/ActiveWindowScreenShot",
+      "label": "Capture Active Window",
+      "group": "Spectacle",
+      "accels": [
+        "<Super>Print"
+      ]
+    },
+    {
+      "action": "services/org.kde.spectacle.desktop/FullScreenScreenShot",
+      "label": "Capture Entire Desktop",
+      "group": "Spectacle",
+      "accels": [
+        "<Shift>Print"
+      ]
+    },
+    {
+      "action": "services/org.kde.spectacle.desktop/RecordRegion",
+      "label": "Start/Stop Region Recording",
+      "group": "Spectacle",
+      "accels": [
+        "<Super><Shift>r",
+        "<Super>r"
+      ]
+    },
+    {
+      "action": "services/org.kde.spectacle.desktop/RecordScreen",
+      "label": "Start/Stop Screen Recording",
+      "group": "Spectacle",
+      "accels": [
+        "<Super><Alt>r"
+      ]
+    },
+    {
+      "action": "services/org.kde.spectacle.desktop/RecordWindow",
+      "label": "Start/Stop Window Recording",
+      "group": "Spectacle",
+      "accels": [
+        "<Super><Control>r"
+      ]
+    },
+    {
+      "action": "services/org.kde.spectacle.desktop/RectangularRegionScreenShot",
+      "label": "Capture Rectangular Region",
+      "group": "Spectacle",
+      "accels": [
+        "<Super><Shift>Print"
+      ]
+    },
+    {
+      "action": "services/org.kde.spectacle.desktop/WindowUnderCursorScreenShot",
+      "label": "Capture Window Under Cursor",
+      "group": "Spectacle",
+      "accels": [
+        "<Super><Control>Print"
+      ]
+    },
+    {
+      "action": "services/org.kde.touchpadshortcuts.desktop/DisableTouchpad",
+      "label": "Disable Touchpad",
+      "group": "Touchpad",
+      "accels": [
+        "XF86TouchpadOff"
+      ]
+    },
+    {
+      "action": "services/org.kde.touchpadshortcuts.desktop/EnableTouchpad",
+      "label": "Enable Touchpad",
+      "group": "Touchpad",
+      "accels": [
+        "XF86TouchpadOn"
+      ]
+    },
+    {
+      "action": "services/org.kde.touchpadshortcuts.desktop/ToggleTouchpad",
+      "label": "Toggle Touchpad",
+      "group": "Touchpad",
+      "accels": [
+        "XF86TouchpadToggle",
+        "<Super><Control>XF86TouchpadToggle",
+        "<Super><Control>Zenkaku_Hankaku"
+      ]
+    },
+    {
+      "action": "services/systemsettings.desktop/_launch",
+      "label": "Launch System Settings",
+      "group": "System Settings",
+      "accels": [
+        "XF86Tools",
+        "<Super>i"
+      ]
+    }
+  ]
+}

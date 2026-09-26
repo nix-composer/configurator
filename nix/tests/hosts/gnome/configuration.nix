@@ -41,7 +41,10 @@
     {
       settings = {
         "org/gnome/desktop/wm/keybindings" = {
-          close = lib.gvariant.mkEmptyArray lib.gvariant.type.string;
+          close = [ "<Super>q" ];
+        };
+        "org/gnome/mutter" = {
+          overlay-key = "Super_R";
         };
         "org/gnome/settings-daemon/plugins/media-keys" = {
           custom-keybindings = [

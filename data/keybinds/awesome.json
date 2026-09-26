@@ -1,0 +1,597 @@
+{
+  "$comment": "awesome's default keybinds: the Key bindings section of etc/xdg/awesome/rc.lua in nixpkgs' awesome (nixos-26.05). The action is `globalkeys: ` or `clientkeys: ` plus the bound function as rc.lua writes it (whitespace collapsed; the tag binds of the `for i = 1, 9` loop with i filled in, keys #10-#18 are keycodes of the 1-9 row). Label and group from the key's description. Regenerate with scripts/keybinds/extract-x11-wms.py.",
+  "binds": [
+    {
+      "action": "globalkeys: hotkeys_popup.show_help",
+      "label": "Show help",
+      "group": "Session",
+      "accels": [
+        "<Super>s"
+      ]
+    },
+    {
+      "action": "globalkeys: awful.tag.viewprev",
+      "label": "View previous",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>Left"
+      ]
+    },
+    {
+      "action": "globalkeys: awful.tag.viewnext",
+      "label": "View next",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>Right"
+      ]
+    },
+    {
+      "action": "globalkeys: awful.tag.history.restore",
+      "label": "Go back",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>Escape"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.client.focus.byidx( 1) end",
+      "label": "Focus next by index",
+      "group": "Windows",
+      "accels": [
+        "<Super>j"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.client.focus.byidx(-1) end",
+      "label": "Focus previous by index",
+      "group": "Windows",
+      "accels": [
+        "<Super>k"
+      ]
+    },
+    {
+      "action": "globalkeys: function () mymainmenu:show() end",
+      "label": "Show main menu",
+      "group": "Session",
+      "accels": [
+        "<Super>w"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.client.swap.byidx( 1) end",
+      "label": "Swap with next client by index",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>j"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.client.swap.byidx( -1) end",
+      "label": "Swap with previous client by index",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>k"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.screen.focus_relative( 1) end",
+      "label": "Focus the next screen",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Control>j"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.screen.focus_relative(-1) end",
+      "label": "Focus the previous screen",
+      "group": "Monitors",
+      "accels": [
+        "<Super><Control>k"
+      ]
+    },
+    {
+      "action": "globalkeys: awful.client.urgent.jumpto",
+      "label": "Jump to urgent client",
+      "group": "Windows",
+      "accels": [
+        "<Super>u"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.client.focus.history.previous() if client.focus then client.focus:raise() end end",
+      "label": "Go back",
+      "group": "Windows",
+      "accels": [
+        "<Super>Tab"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.spawn(terminal) end",
+      "label": "Open a terminal",
+      "group": "Apps",
+      "accels": [
+        "<Super>Return"
+      ]
+    },
+    {
+      "action": "globalkeys: awesome.restart",
+      "label": "Reload awesome",
+      "group": "Session",
+      "accels": [
+        "<Super><Control>r"
+      ]
+    },
+    {
+      "action": "globalkeys: awesome.quit",
+      "label": "Quit awesome",
+      "group": "Session",
+      "accels": [
+        "<Super><Shift>q"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.tag.incmwfact( 0.05) end",
+      "label": "Increase master width factor",
+      "group": "Layout",
+      "accels": [
+        "<Super>l"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.tag.incmwfact(-0.05) end",
+      "label": "Decrease master width factor",
+      "group": "Layout",
+      "accels": [
+        "<Super>h"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.tag.incnmaster( 1, nil, true) end",
+      "label": "Increase the number of master clients",
+      "group": "Layout",
+      "accels": [
+        "<Super><Shift>h"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.tag.incnmaster(-1, nil, true) end",
+      "label": "Decrease the number of master clients",
+      "group": "Layout",
+      "accels": [
+        "<Super><Shift>l"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.tag.incncol( 1, nil, true) end",
+      "label": "Increase the number of columns",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>h"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.tag.incncol(-1, nil, true) end",
+      "label": "Decrease the number of columns",
+      "group": "Layout",
+      "accels": [
+        "<Super><Control>l"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.layout.inc( 1) end",
+      "label": "Select next",
+      "group": "Layout",
+      "accels": [
+        "<Super>space"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.layout.inc(-1) end",
+      "label": "Select previous",
+      "group": "Layout",
+      "accels": [
+        "<Super><Shift>space"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local c = awful.client.restore() if c then c:emit_signal( \"request::activate\", \"key.unminimize\", {raise = true} ) end end",
+      "label": "Restore minimized",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>n"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.screen.focused().mypromptbox:run() end",
+      "label": "Run prompt",
+      "group": "Apps",
+      "accels": [
+        "<Super>r"
+      ]
+    },
+    {
+      "action": "globalkeys: function () awful.prompt.run { prompt = \"Run Lua code: \", textbox = awful.screen.focused().mypromptbox.widget, exe_callback = awful.util.eval, history_path = awful.util.get_cache_dir() .. \"/history_eval\" } end",
+      "label": "Lua execute prompt",
+      "group": "Session",
+      "accels": [
+        "<Super>x"
+      ]
+    },
+    {
+      "action": "globalkeys: function() menubar.show() end",
+      "label": "Show the menubar",
+      "group": "Apps",
+      "accels": [
+        "<Super>p"
+      ]
+    },
+    {
+      "action": "clientkeys: function (c) c.fullscreen = not c.fullscreen c:raise() end",
+      "label": "Toggle fullscreen",
+      "group": "Windows",
+      "accels": [
+        "<Super>f"
+      ]
+    },
+    {
+      "action": "clientkeys: function (c) c:kill() end",
+      "label": "Close",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>c"
+      ]
+    },
+    {
+      "action": "clientkeys: awful.client.floating.toggle",
+      "label": "Toggle floating",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>space"
+      ]
+    },
+    {
+      "action": "clientkeys: function (c) c:swap(awful.client.getmaster()) end",
+      "label": "Move to master",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>Return"
+      ]
+    },
+    {
+      "action": "clientkeys: function (c) c:move_to_screen() end",
+      "label": "Move to screen",
+      "group": "Windows",
+      "accels": [
+        "<Super>o"
+      ]
+    },
+    {
+      "action": "clientkeys: function (c) c.ontop = not c.ontop end",
+      "label": "Toggle keep on top",
+      "group": "Windows",
+      "accels": [
+        "<Super>t"
+      ]
+    },
+    {
+      "action": "clientkeys: function (c) c.minimized = true end",
+      "label": "Minimize",
+      "group": "Windows",
+      "accels": [
+        "<Super>n"
+      ]
+    },
+    {
+      "action": "clientkeys: function (c) c.maximized = not c.maximized c:raise() end",
+      "label": "(un)maximize",
+      "group": "Windows",
+      "accels": [
+        "<Super>m"
+      ]
+    },
+    {
+      "action": "clientkeys: function (c) c.maximized_vertical = not c.maximized_vertical c:raise() end",
+      "label": "(un)maximize vertically",
+      "group": "Windows",
+      "accels": [
+        "<Super><Control>m"
+      ]
+    },
+    {
+      "action": "clientkeys: function (c) c.maximized_horizontal = not c.maximized_horizontal c:raise() end",
+      "label": "(un)maximize horizontally",
+      "group": "Windows",
+      "accels": [
+        "<Super><Shift>m"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[1] if tag then tag:view_only() end end",
+      "label": "View tag #1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>1"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[2] if tag then tag:view_only() end end",
+      "label": "View tag #2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>2"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[3] if tag then tag:view_only() end end",
+      "label": "View tag #3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>3"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[4] if tag then tag:view_only() end end",
+      "label": "View tag #4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>4"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[5] if tag then tag:view_only() end end",
+      "label": "View tag #5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>5"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[6] if tag then tag:view_only() end end",
+      "label": "View tag #6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>6"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[7] if tag then tag:view_only() end end",
+      "label": "View tag #7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>7"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[8] if tag then tag:view_only() end end",
+      "label": "View tag #8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>8"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[9] if tag then tag:view_only() end end",
+      "label": "View tag #9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super>9"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[1] if tag then awful.tag.viewtoggle(tag) end end",
+      "label": "Toggle tag #1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>1"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[2] if tag then awful.tag.viewtoggle(tag) end end",
+      "label": "Toggle tag #2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>2"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[3] if tag then awful.tag.viewtoggle(tag) end end",
+      "label": "Toggle tag #3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>3"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[4] if tag then awful.tag.viewtoggle(tag) end end",
+      "label": "Toggle tag #4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>4"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[5] if tag then awful.tag.viewtoggle(tag) end end",
+      "label": "Toggle tag #5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>5"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[6] if tag then awful.tag.viewtoggle(tag) end end",
+      "label": "Toggle tag #6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>6"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[7] if tag then awful.tag.viewtoggle(tag) end end",
+      "label": "Toggle tag #7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>7"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[8] if tag then awful.tag.viewtoggle(tag) end end",
+      "label": "Toggle tag #8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>8"
+      ]
+    },
+    {
+      "action": "globalkeys: function () local screen = awful.screen.focused() local tag = screen.tags[9] if tag then awful.tag.viewtoggle(tag) end end",
+      "label": "Toggle tag #9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control>9"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[1] if tag then client.focus:move_to_tag(tag) end end end",
+      "label": "Move focused client to tag #1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>1"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[2] if tag then client.focus:move_to_tag(tag) end end end",
+      "label": "Move focused client to tag #2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>2"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[3] if tag then client.focus:move_to_tag(tag) end end end",
+      "label": "Move focused client to tag #3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>3"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[4] if tag then client.focus:move_to_tag(tag) end end end",
+      "label": "Move focused client to tag #4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>4"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[5] if tag then client.focus:move_to_tag(tag) end end end",
+      "label": "Move focused client to tag #5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>5"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[6] if tag then client.focus:move_to_tag(tag) end end end",
+      "label": "Move focused client to tag #6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>6"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[7] if tag then client.focus:move_to_tag(tag) end end end",
+      "label": "Move focused client to tag #7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>7"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[8] if tag then client.focus:move_to_tag(tag) end end end",
+      "label": "Move focused client to tag #8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>8"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[9] if tag then client.focus:move_to_tag(tag) end end end",
+      "label": "Move focused client to tag #9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Shift>9"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[1] if tag then client.focus:toggle_tag(tag) end end end",
+      "label": "Toggle focused client on tag #1",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>1"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[2] if tag then client.focus:toggle_tag(tag) end end end",
+      "label": "Toggle focused client on tag #2",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>2"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[3] if tag then client.focus:toggle_tag(tag) end end end",
+      "label": "Toggle focused client on tag #3",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>3"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[4] if tag then client.focus:toggle_tag(tag) end end end",
+      "label": "Toggle focused client on tag #4",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>4"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[5] if tag then client.focus:toggle_tag(tag) end end end",
+      "label": "Toggle focused client on tag #5",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>5"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[6] if tag then client.focus:toggle_tag(tag) end end end",
+      "label": "Toggle focused client on tag #6",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>6"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[7] if tag then client.focus:toggle_tag(tag) end end end",
+      "label": "Toggle focused client on tag #7",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>7"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[8] if tag then client.focus:toggle_tag(tag) end end end",
+      "label": "Toggle focused client on tag #8",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>8"
+      ]
+    },
+    {
+      "action": "globalkeys: function () if client.focus then local tag = client.focus.screen.tags[9] if tag then client.focus:toggle_tag(tag) end end end",
+      "label": "Toggle focused client on tag #9",
+      "group": "Workspaces",
+      "accels": [
+        "<Super><Control><Shift>9"
+      ]
+    }
+  ]
+}
