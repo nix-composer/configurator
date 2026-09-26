@@ -146,7 +146,7 @@
         }
       },
       "loginManager": "sddm",
-      "keybinds": null
+      "keybinds": { "format": "lxqt" }
     },
     {
       "id": "mate",
@@ -303,7 +303,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "openbox" }
     }
     ,{
       "id": "icewm",
@@ -318,7 +318,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "icewm" }
     }
     ,{
       "id": "fluxbox",
@@ -333,7 +333,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "fluxbox" }
     }
     ,{
       "id": "awesome",
@@ -363,7 +363,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "bspwm" }
     }
     ,{
       "id": "xmonad",
@@ -378,7 +378,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "xmonad", "unsupported": "xmonad compiles its keybinds into its own binary from a Haskell config (xmonad.hs); change them there after the install." }
     }
     ,{
       "id": "herbstluftwm",
@@ -393,7 +393,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "herbstluftwm" }
     }
     ,{
       "id": "fvwm3",
@@ -408,7 +408,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "fvwm3" }
     }
     ,{
       "id": "jwm",
@@ -423,7 +423,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "jwm" }
     }
     ,{
       "id": "windowmaker",
@@ -453,7 +453,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "spectrwm" }
     }
     ,{
       "id": "leftwm",
@@ -528,7 +528,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "cwm" }
     }
     ,{
       "id": "evilwm",
@@ -544,7 +544,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "evilwm" }
     }
     ,{
       "id": "afterstep",
@@ -651,7 +651,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "dwm", "unsupported": "dwm compiles its keybinds in from config.h; change them by overriding its package in your flake (services.xserver.windowManager.dwm.package = pkgs.dwm.override { conf = ./config.h; })." }
     }
   ]
 }

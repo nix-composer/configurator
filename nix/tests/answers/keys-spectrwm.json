@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "en_US.UTF-8",
+    "keyboardLayout": "us",
+    "timezone": "UTC"
+  },
+  "desktop": {
+    "id": "spectrwm"
+  },
+  "apps": {
+    "packages": [
+      "xterm",
+      "dmenu"
+    ]
+  },
+  "keybinds": {
+    "SUPER + F11": {
+      "action": "term"
+    },
+    "SUPER + F10": {
+      "action": "wind_del"
+    },
+    "ALT + P": "unbind",
+    "SUPER + F9": {
+      "exec": "touch /tmp/kb-added"
+    }
+  },
+  "disk": {
+    "device": "/dev/vdb",
+    "filesystem": "ext4"
+  },
+  "users": [
+    {
+      "name": "kim",
+      "admin": true
+    }
+  ],
+  "hostname": "keys"
+}

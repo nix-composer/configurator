@@ -32,6 +32,13 @@ fn renderer(format: &str) -> Option<Abilities> {
         | "cosmic"
         | "kde-kglobalshortcuts" => ALL,
         "labwc" | "river" | "wayfire" | "mangowc" => ALL,
+        "openbox" | "icewm" | "fluxbox" | "bspwm" | "herbstluftwm" | "spectrwm" | "jwm" | "cwm"
+        | "fvwm3" | "lxqt" => ALL,
+        // evilwm binds only its own functions (its `spawn` is the terminal).
+        "evilwm" => Abilities {
+            add: false,
+            ..ALL
+        },
         _ => return None,
     })
 }

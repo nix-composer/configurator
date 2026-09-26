@@ -9,6 +9,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    configurator = {
+      url = "github:nix-composer/configurator";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = { nixpkgs, ... }@inputs: {
     nixosConfigurations.tiles = nixpkgs.lib.nixosSystem {

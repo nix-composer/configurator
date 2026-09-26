@@ -324,6 +324,8 @@ hostChecks
   # the user's own change surviving a rebuild (nix/tests/keybinds.nix).
   keybinds-tiling = keybindsTests.tiling;
   keybinds-wlroots = keybindsTests.wlroots;
+  keybinds-x11-a = keybindsTests.x11-a;
+  keybinds-x11-b = keybindsTests.x11-b;
   keybinds-desktops = keybindsTests.desktops;
 
   # Secure Boot keys enrolled during install, TPM2 + PIN sealed on the

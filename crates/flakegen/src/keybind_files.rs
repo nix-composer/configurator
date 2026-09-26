@@ -1054,7 +1054,7 @@ fn wayfire_keys(combo: &Combo) -> String {
 /// Every way a config may write this combo, as extended regular
 /// expressions: modifiers in any order (`spell` gives each one's
 /// spellings), joined by `sep`, then the key.
-fn key_spellings(
+pub(crate) fn key_spellings(
     combo: &Combo,
     spell: impl Fn(Modifier) -> &'static str,
     sep: &str,
@@ -1085,7 +1085,7 @@ fn key_spellings(
 }
 
 /// X11-style keys: modifiers by the given names, then the keysym.
-fn x11_keys(combo: &Combo, sup: &str, ctrl: &str, alt: &str, shift: &str, sep: &str) -> String {
+pub(crate) fn x11_keys(combo: &Combo, sup: &str, ctrl: &str, alt: &str, shift: &str, sep: &str) -> String {
     let mut parts: Vec<String> = combo
         .modifiers
         .iter()
@@ -1259,9 +1259,49 @@ pub(crate) fn seed_text(section: &mut Section, path: &str, mode: &str, content: 
             Part::Expr(e) => line.expr(&e),
         };
     }
-    let dir = path.rsplit_once('/').map_or("", |(d, _)| d);
-    let rules = Nix::List(vec![Nix::str(format!("d %h/{dir} 0755 - - -")), line.nix()]);
-    section.set("systemd.user.tmpfiles.rules", rules);
+    let mut rules = dir_rule(path);
+    rules.push(line.nix());
+    tmpfiles(section, rules);
+}
+
+/// The directory a file in the home goes in, made if missing.
+fn dir_rule(path: &str) -> Vec<Nix> {
+    match path.rsplit_once('/') {
+        Some((dir, _)) => vec![Nix::str(format!("d %h/{dir} 0755 - - -"))],
+        None => Vec::new(),
+    }
+}
+
+/// A file in each user's home copied once from the store (as `seed`),
+/// then made theirs to edit (the store copy is read-only).
+pub(crate) fn seed_copy(section: &mut Section, path: &str, mode: &str, source: &str) {
+    let mut rules = dir_rule(path);
+    rules.extend([
+        Text::new()
+            .lit(&format!("C %h/{path} - - - - "))
+            .expr(source)
+            .nix(),
+        Nix::str(format!("z %h/{path} {mode} - - -")),
+    ]);
+    tmpfiles(section, rules);
+}
+
+/// User tmpfiles rules, added to the section's list.
+fn tmpfiles(section: &mut Section, rules: Vec<Nix>) {
+    let key = Key::from("systemd.user.tmpfiles.rules");
+    for (k, v) in &mut section.entries {
+        if *k == key
+            && let Nix::List(items) = v
+        {
+            for r in rules {
+                if !items.contains(&r) {
+                    items.push(r);
+                }
+            }
+            return;
+        }
+    }
+    section.set("systemd.user.tmpfiles.rules", Nix::List(rules));
 }
 
 fn push_remove<'a>(

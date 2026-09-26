@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "en_US.UTF-8",
+    "keyboardLayout": "us",
+    "timezone": "UTC"
+  },
+  "desktop": {
+    "id": "evilwm"
+  },
+  "apps": {
+    "packages": [
+      "xterm"
+    ]
+  },
+  "keybinds": {
+    "SUPER + F11": {
+      "action": "spawn"
+    },
+    "SUPER + F10": {
+      "action": "delete"
+    },
+    "CTRL + ALT + K": "unbind"
+  },
+  "disk": {
+    "device": "/dev/vdb",
+    "filesystem": "ext4"
+  },
+  "users": [
+    {
+      "name": "kim",
+      "admin": true
+    }
+  ],
+  "hostname": "keys"
+}

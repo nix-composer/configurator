@@ -114,16 +114,19 @@ pkgs.testers.runNixOSTest {
         niri = m.execute(f"ls {rt}/niri.*.sock 2>/dev/null | head -1")[1].strip()
         if niri:
             env += f" NIRI_SOCKET={niri}"
+        sway = m.execute(f"ls {rt}/sway-ipc.*.sock 2>/dev/null | head -1")[1].strip()
+        if sway:
+            env += f" SWAYSOCK={sway}"
         if m.execute("test -e /tmp/.X11-unix/X0")[0] == 0:
             env += " DISPLAY=:0"
         return env
 
     def logged_in(m, user, process, timeout=300):
         """Waits for the session: its compositor or window manager runs
-        (`process`: a pattern for its command line, as wrapped ones show
-        `.Hyprland-wrapped`)."""
+        (by its command line: wrapped ones run as `.name-wrapped`)."""
         m.wait_for_unit("display-manager.service")
-        m.wait_until_succeeds(f"pgrep -u {user} -f {shlex.quote(process)}", timeout=timeout)
+        pattern = shlex.quote(f"(^|/)[.]?{process}( |$|-wrapped)")
+        m.wait_until_succeeds(f"pgrep -u {user} -f {pattern}", timeout=timeout)
         # Let it settle: panels, config, the user's own autostart.
         m.sleep(15)
 

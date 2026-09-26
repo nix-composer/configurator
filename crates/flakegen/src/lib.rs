@@ -6,6 +6,7 @@
 //! modules are imported from their flakes, never copied in.
 
 mod keybind_files;
+mod keybind_x11;
 mod keybinds;
 pub mod nix;
 
@@ -97,9 +98,13 @@ pub fn generate(answers: &Answers, catalog: &Catalog, inputs: &Inputs) -> Result
     };
 
     let mut host = Host::default();
-    host.files.insert("flake.nix".into(), generator.flake());
-    host.files
-        .insert("configuration.nix".into(), generator.configuration()?);
+    let configuration = generator.configuration()?;
+    // configuration.nix may name the configurator input (web app icons).
+    host.files.insert(
+        "flake.nix".into(),
+        generator.flake(configuration.contains("inputs.configurator")),
+    );
+    host.files.insert("configuration.nix".into(), configuration);
     host.files.insert(
         "hardware.nix".into(),
         generator.hardware(
@@ -206,7 +211,7 @@ impl Generator<'_> {
         self.flake_module().is_some_and(|f| f.home_manager)
     }
 
-    fn flake(&self) -> String {
+    fn flake(&self, uses_configurator: bool) -> String {
         let a = self.answers;
         let mut inputs = vec![
             (
@@ -250,12 +255,15 @@ impl Generator<'_> {
             ));
             modules.push(Nix::raw("inputs.lanzaboote.nixosModules.lanzaboote"));
         }
-        if a.security.tpm_pin {
-            // First-boot tasks (TPM2 + PIN sealing) from the configurator.
+        if a.security.tpm_pin || uses_configurator {
+            // First-boot tasks (TPM2 + PIN sealing) and web app icons come
+            // from the configurator.
             inputs.push((
                 Key::from("configurator"),
                 follows_nixpkgs("github:nix-composer/configurator"),
             ));
+        }
+        if a.security.tpm_pin {
             modules.push(Nix::raw("inputs.configurator.nixosModules.default"));
         }
         modules.extend(["./disko.nix", "./hardware.nix", "./configuration.nix"].map(Nix::raw));

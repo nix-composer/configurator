@@ -45,6 +45,10 @@ let
       });
     };
 
+  # How many of a program's processes the user runs (a shell command);
+  # wrapped programs run as `.name-wrapped`.
+  procs = name: "pgrep -c -u kim -f '(^|/)[.]?${name}( |$|-wrapped)' || true";
+
   # The common checks, given how to count the terminal's windows (a
   # shell command printing a number) and the keys: the terminal's action
   # moved to Super+F11 (from `term`), closing a window to Super+F10 (from
@@ -76,6 +80,32 @@ let
     pressed(m, "meta_l-f9", "test -e /tmp/kb-added")
     pressed(m, "meta_l-f7", "test -e /tmp/kb-rebuilt")
   '';
+  # X11 window managers: xterm is the terminal, opened by the moved action
+  # or by hand where the window manager binds no terminal.
+  x11 = wm: ''
+    logged_in(m, user, "${wm}")
+    m.wait_for_file("/tmp/.X11-unix/X0")
+    m.sleep(5)
+    xterm = ${builtins.toJSON (procs "xterm")}
+    m.diagnose = f"pgrep -a -u {user} -f xterm; {as_user(m, user, 'xdotool getactivewindow getwindowname')}"
+    def open_xterm():
+        m.succeed(as_user(m, user, "setsid -f xterm >/dev/null 2>&1"))
+        m.wait_until_succeeds(f"test $({xterm}) -eq 1")
+        m.sleep(3)
+    def closed_by(old):
+        not_pressed(m, old, f"test $({xterm}) -eq 0")
+        pressed(m, "meta_l-f10", f"test $({xterm}) -eq 0")
+    def after_rebuild(files, reload, keys=("f8", "f9")):
+        before = [m.succeed(f"sha256sum {f}") for f in files]
+        rebuild(m)
+        assert [m.succeed(f"sha256sum {f}") for f in files] == before, "the rebuild changed the user's files"
+        m.succeed("rm -f /tmp/kb-user /tmp/kb-added")
+        reload()
+        m.sleep(3)
+        for k in keys:
+            pressed(m, f"meta_l-{k}", "test -e /tmp/kb-" + ("user" if k == "f8" else "added"))
+  '';
+
 in
 {
   # Tiling compositors and window managers whose config is a file.
@@ -93,7 +123,7 @@ in
           };
         script = ''
           import json
-          logged_in(m, user, "bin/[.]?Hyprland")
+          logged_in(m, user, "Hyprland")
           ${hyprland}
           hypr_ready()
           m.diagnose = as_user(m, user, "hyprctl clients; hyprctl activewindow; hyprctl binds | grep -B2 -A8 F10")
@@ -130,11 +160,16 @@ in
         rebuilt =
           { lib, ... }:
           {
-            environment.etc."niri/config.kdl".text =
-              lib.mkAfter ''binds { Mod+F7 { spawn-sh "touch /tmp/kb-rebuilt"; } }'';
+            # (One file holds one binds block; an include adds another.)
+            environment.etc."niri/config.kdl".text = lib.mkAfter ''include "/etc/niri/rebuilt.kdl"'';
+            environment.etc."niri/rebuilt.kdl".text = ''
+              binds {
+                  Mod+F7 { spawn-sh "touch /tmp/kb-rebuilt"; }
+              }
+            '';
           };
         script = ''
-          logged_in(m, user, "bin/[.]?niri")
+          logged_in(m, user, "niri")
           m.wait_until_succeeds(as_user(m, user, "niri msg version"), timeout=60)
           cfg = f"/home/{user}/.config/niri/config.kdl"
           m.succeed(f"test -f {cfg} && test ! -L {cfg} && test $(stat -c %U {cfg}) = {user}")
@@ -167,7 +202,7 @@ in
         rebuilt.environment.etc."sway/config.d/60-rebuilt.conf".text =
           "bindsym Mod4+F7 exec touch /tmp/kb-rebuilt\n";
         script = ''
-          logged_in(m, user, "bin/[.]?sway")
+          logged_in(m, user, "sway")
           m.wait_until_succeeds(as_user(m, user, "swaymsg -t get_version"), timeout=60)
           m.diagnose = as_user(m, user, "SWAYSOCK=$(ls /run/user/1000/sway-ipc.* | head -1) swaymsg -t get_tree | jq -c \"[.. | objects | select(.app_id? != null) | {app_id, focused}]\"")
           ${moved {
@@ -202,7 +237,7 @@ in
             environment.etc."xdg/i3/config".text = lib.mkAfter "bindsym Mod4+F7 exec touch /tmp/kb-rebuilt";
           };
         script = ''
-          logged_in(m, user, "bin/[.]?i3")
+          logged_in(m, user, "i3")
           m.wait_for_file("/tmp/.X11-unix/X0")
           m.wait_until_succeeds(as_user(m, user, "i3-msg -t get_version"), timeout=60)
           # No config errors (i3-nagbar shows them), no first-run wizard.
@@ -211,7 +246,7 @@ in
           m.fail("pgrep -f i3-config-wizard")
           m.diagnose = as_user(m, user, "xdotool getactivewindow getwindowname; pgrep -a xterm")
           ${moved {
-            windows = "pgrep -c -u kim -x xterm || true";
+            windows = (procs "xterm");
             term = "alt-ret";
             close = "alt-shift-q";
           }}
@@ -241,20 +276,20 @@ in
     desktops = {
       labwc = {
         script = ''
-          logged_in(m, user, "bin/[.]?labwc")
+          logged_in(m, user, "labwc")
           m.sleep(5)
           m.succeed("grep -q 'W-a\"><action name=\"None\"' /etc/xdg/labwc/rc.xml")
           m.succeed("pgrep -u kim -a labwc | grep -q -- --merge-config")
           m.diagnose = "pgrep -a -u kim foot"
           ${moved {
-            windows = "pgrep -c -u kim -x foot || true";
+            windows = (procs "foot");
             term = "meta_l-ret";
             close = "alt-f4";
           }}
 
           # The user's own rc.xml adds to the system one (--merge-config).
           run("mkdir -p ~/.config/labwc && echo '<labwc_config><keyboard><keybind key=\"W-F8\"><action name=\"Execute\" command=\"touch /tmp/kb-user\" /></keybind></keyboard></labwc_config>' > ~/.config/labwc/rc.xml")
-          run("labwc --reconfigure")
+          m.succeed("pkill -HUP -u kim -f '(^|/)[.]?labwc( |$|-wrapped)'")
           m.sleep(2)
           pressed(m, "meta_l-f8", "test -e /tmp/kb-user")
           m.succeed("rm -f /tmp/kb-added")
@@ -263,7 +298,7 @@ in
           rebuild(m)
           assert m.succeed(f"sha256sum /home/{user}/.config/labwc/rc.xml") == before
           m.succeed("rm -f /tmp/kb-user /tmp/kb-added")
-          run("labwc --reconfigure")
+          m.succeed("pkill -HUP -u kim -f '(^|/)[.]?labwc( |$|-wrapped)'")
           m.sleep(2)
           pressed(m, "meta_l-f8", "test -e /tmp/kb-user")
           pressed(m, "meta_l-f9", "test -e /tmp/kb-added")
@@ -277,21 +312,21 @@ in
             environment.etc."river/init".text = lib.mkAfter "riverctl map normal Super F7 spawn 'touch /tmp/kb-rebuilt'";
           };
         script = ''
-          logged_in(m, user, "bin/[.]?river")
+          logged_in(m, user, "river")
           m.sleep(5)
           init = f"/home/{user}/.config/river/init"
           m.succeed(f"test -x {init} && test ! -L {init} && test $(stat -c %U {init}) = {user}")
           m.succeed(f"grep -qx '. /etc/river/init' {init}")
           m.diagnose = "pgrep -a -u kim foot"
           ${moved {
-            windows = "pgrep -c -u kim -x foot || true";
+            windows = (procs "foot");
             term = "meta_l-shift-ret";
             close = "meta_l-q";
           }}
           # Removed: Super+Shift+E (exit): the session stays.
           m.send_key("meta_l-shift-e")
           m.sleep(5)
-          m.succeed("pgrep -u kim -f bin/[.]?river")
+          m.succeed("pgrep -u kim -f '(^|/)[.]?river( |$|-wrapped)'")
 
           # The user's own map, in their init (river runs it at login; here
           # it's run as the user would after editing it).
@@ -311,13 +346,13 @@ in
 
       wayfire = {
         script = ''
-          logged_in(m, user, "bin/[.]?wayfire")
+          logged_in(m, user, "wayfire")
           m.sleep(5)
           ini = f"/home/{user}/.config/wayfire.ini"
           m.succeed(f"test -f {ini} && test ! -L {ini} && test $(stat -c %U {ini}) = {user}")
           m.diagnose = "pgrep -a -u kim foot"
           # Moved: closing a window, from Super+Q (and Alt+F4) to Super+F10.
-          windows = "pgrep -c -u kim -x foot || true"
+          windows = (procs "foot")
           m.succeed(as_user(m, user, "setsid -f foot >/dev/null 2>&1"))
           m.wait_until_succeeds(f"test $({windows}) -eq 1")
           m.sleep(2)
@@ -347,20 +382,20 @@ in
             environment.etc."mango/config.conf".text = lib.mkAfter "bind=SUPER,F7,spawn,touch /tmp/kb-rebuilt";
           };
         script = ''
-          logged_in(m, user, "bin/[.]?mango")
+          logged_in(m, user, "mango")
           m.sleep(5)
           cfg = f"/home/{user}/.config/mango/config.conf"
           m.succeed(f"test -f {cfg} && test ! -L {cfg} && test $(stat -c %U {cfg}) = {user}")
           m.diagnose = "pgrep -a -u kim foot"
           ${moved {
-            windows = "pgrep -c -u kim -x foot || true";
+            windows = (procs "foot");
             term = "alt-ret";
             close = "alt-q";
           }}
           # Removed: Super+M (quit): the session stays.
           m.send_key("meta_l-m")
           m.sleep(5)
-          m.succeed("pgrep -u kim -f bin/[.]?mango")
+          m.succeed("pgrep -u kim -f '(^|/)[.]?mango( |$|-wrapped)'")
 
           # The user's own bind, after the source line; Super+R reloads.
           run(f"echo 'bind=SUPER,F8,spawn,touch /tmp/kb-user' >> {cfg}")
@@ -379,6 +414,231 @@ in
     };
   };
 
+  # X11 window managers, first half.
+  x11-a = keybindsTest {
+    name = "x11-a";
+    desktops = {
+      openbox.script = ''
+        ${x11 "openbox"}
+        home = f"/home/{user}"
+        open_xterm()
+        closed_by("alt-f4")
+        pressed(m, "meta_l-f9", "test -e /tmp/kb-added")
+        # Removed: Alt+Space (the window menu).
+        m.fail("grep -q 'key=\"A-space\"' /etc/xdg/openbox/rc.xml")
+        # The user's own rc.xml (a copy of the system one, as obconf makes).
+        run("mkdir -p ~/.config/openbox && sed 's|</keyboard>|<keybind key=\"W-F8\"><action name=\"Execute\"><command>touch /tmp/kb-user</command></action></keybind></keyboard>|' /etc/xdg/openbox/rc.xml > ~/.config/openbox/rc.xml")
+        run("openbox --reconfigure")
+        m.sleep(2)
+        pressed(m, "meta_l-f8", "test -e /tmp/kb-user")
+        after_rebuild([f"{home}/.config/openbox/rc.xml"], lambda: run("openbox --reconfigure"))
+      '';
+
+      icewm.script = ''
+        ${x11 "icewm"}
+        home = f"/home/{user}"
+        pressed(m, "meta_l-f11", f"test $({xterm}) -eq 1", timeout=60)
+        not_pressed(m, "ctrl-alt-t", f"test $({xterm}) -gt 1")
+        closed_by("alt-f4")
+        pressed(m, "meta_l-f9", "test -e /tmp/kb-added")
+        # Removed: Ctrl+Alt+B.
+        m.fail("grep -qi 'key \"Alt+Ctrl+b\"' /etc/icewm/keys")
+        # The user's own keys file (a copy of the system one).
+        run("mkdir -p ~/.icewm && cp /etc/icewm/keys ~/.icewm/keys && chmod u+w ~/.icewm/keys && echo 'key \"Super+F8\" touch /tmp/kb-user' >> ~/.icewm/keys")
+        run("icewm --restart")
+        m.sleep(5)
+        pressed(m, "meta_l-f8", "test -e /tmp/kb-user")
+        after_rebuild([f"{home}/.icewm/keys"], lambda: run("icewm --restart"))
+      '';
+
+      fluxbox.script = ''
+        ${x11 "fluxbox"}
+        home = f"/home/{user}"
+        keys = f"{home}/.fluxbox/keys"
+        m.succeed(f"test -f {keys} && test ! -L {keys} && test $(stat -c %U {keys}) = {user}")
+        pressed(m, "meta_l-f11", f"test $({xterm}) -eq 1", timeout=60)
+        not_pressed(m, "alt-f1", f"test $({xterm}) -gt 1")
+        closed_by("alt-f4")
+        pressed(m, "meta_l-f9", "test -e /tmp/kb-added")
+        # Removed: Alt+F2 (fbrun).
+        not_pressed(m, "alt-f2", "pgrep -u kim fbrun")
+        # The user's own bind, in their keys file.
+        run(f"echo 'Mod4 F8 :Exec touch /tmp/kb-user' >> {keys}")
+        reload = lambda: m.succeed("pkill -HUP -u kim -f '(^|/)[.]?fluxbox( |$|-wrapped)'")
+        reload()
+        m.sleep(5)
+        pressed(m, "meta_l-f8", "test -e /tmp/kb-user")
+        after_rebuild([keys], reload)
+      '';
+
+      bspwm.script = ''
+        ${x11 "bspwm"}
+        home = f"/home/{user}"
+        rc = f"{home}/.config/sxhkd/sxhkdrc"
+        m.succeed(f"test -f {rc} && test ! -L {rc} && test $(stat -c %U {rc}) = {user}")
+        urxvt = ${builtins.toJSON (procs "urxvt")}
+        m.diagnose = f"pgrep -a -u {user} -f urxvt"
+        pressed(m, "meta_l-f11", f"test $({urxvt}) -eq 1", timeout=60)
+        not_pressed(m, "meta_l-ret", f"test $({urxvt}) -gt 1")
+        not_pressed(m, "meta_l-w", f"test $({urxvt}) -eq 0")
+        pressed(m, "meta_l-f10", f"test $({urxvt}) -eq 0")
+        pressed(m, "meta_l-f9", "test -e /tmp/kb-added")
+        # Removed: Super+Space (dmenu).
+        not_pressed(m, "meta_l-spc", "pgrep -u kim dmenu")
+        # The user's own bind, in their sxhkdrc.
+        run(f"printf 'super + F8\\n\\ttouch /tmp/kb-user\\n' >> {rc}")
+        reload = lambda: m.succeed("pkill -USR1 -u kim -x sxhkd")
+        reload()
+        m.sleep(2)
+        pressed(m, "meta_l-f8", "test -e /tmp/kb-user")
+        after_rebuild([rc], reload)
+      '';
+
+      herbstluftwm.script = ''
+        ${x11 "herbstluftwm"}
+        home = f"/home/{user}"
+        autostart = f"{home}/.config/herbstluftwm/autostart"
+        m.succeed(f"test -x {autostart} && test ! -L {autostart} && test $(stat -c %U {autostart}) = {user}")
+        pressed(m, "meta_l-f11", f"test $({xterm}) -eq 1", timeout=60)
+        not_pressed(m, "alt-ret", f"test $({xterm}) -gt 1")
+        closed_by("alt-shift-c")
+        pressed(m, "meta_l-f9", "test -e /tmp/kb-added")
+        # Removed: Alt+Shift+Q (quit): the session stays.
+        m.send_key("alt-shift-q")
+        m.sleep(5)
+        m.succeed("pgrep -u kim -f '(^|/)[.]?herbstluftwm( |$|-wrapped)'")
+        # The user's own bind, in their autostart.
+        run(f"echo 'herbstclient keybind Mod4-F8 spawn touch /tmp/kb-user' >> {autostart}")
+        reload = lambda: run("herbstclient reload")
+        reload()
+        m.sleep(3)
+        pressed(m, "meta_l-f8", "test -e /tmp/kb-user")
+        after_rebuild([autostart], reload)
+      '';
+    };
+  };
+
+  # X11 window managers, second half.
+  x11-b = keybindsTest {
+    name = "x11-b";
+    desktops = {
+      spectrwm.script = ''
+        ${x11 "spectrwm"}
+        home = f"/home/{user}"
+        pressed(m, "meta_l-f11", f"test $({xterm}) -eq 1", timeout=60)
+        not_pressed(m, "alt-shift-ret", f"test $({xterm}) -gt 1")
+        closed_by("alt-x")
+        pressed(m, "meta_l-f9", "test -e /tmp/kb-added")
+        # Removed: Alt+P (dmenu).
+        not_pressed(m, "alt-p", "pgrep -u kim dmenu")
+        # The user's own config (a copy of the system one), then Alt+Q
+        # restarts spectrwm.
+        run("cp /etc/xdg/spectrwm/spectrwm.conf ~/.spectrwm.conf && chmod u+w ~/.spectrwm.conf && printf 'program[mine] = touch /tmp/kb-user\\nbind[mine] = Mod4+F8\\n' >> ~/.spectrwm.conf")
+        reload = lambda: m.send_key("alt-q")
+        reload()
+        m.sleep(5)
+        pressed(m, "meta_l-f8", "test -e /tmp/kb-user")
+        after_rebuild([f"{home}/.spectrwm.conf"], reload)
+      '';
+
+      jwm.script = ''
+        ${x11 "jwm"}
+        home = f"/home/{user}"
+        rc = f"{home}/.jwmrc"
+        m.succeed(f"test -f {rc} && test ! -L {rc} && test $(stat -c %U {rc}) = {user}")
+        open_xterm()
+        closed_by("alt-f4")
+        pressed(m, "meta_l-f9", "test -e /tmp/kb-added")
+        # Removed: Alt+F1 (the root menu) runs nothing now.
+        m.succeed("grep -q 'mask=\"A\" key=\"F1\">exec:true' /etc/jwm/jwmrc")
+        # The user's own key, in their ~/.jwmrc after the include.
+        run(f"sed -i 's|</JWM>|<Key mask=\"4\" key=\"F8\">exec:touch /tmp/kb-user</Key></JWM>|' {rc}")
+        reload = lambda: run("jwm -reload")
+        reload()
+        m.sleep(3)
+        pressed(m, "meta_l-f8", "test -e /tmp/kb-user")
+        after_rebuild([rc], reload)
+      '';
+
+      cwm.script = ''
+        ${x11 "cwm"}
+        home = f"/home/{user}"
+        rc = f"{home}/.cwmrc"
+        m.succeed(f"test -f {rc} && test ! -L {rc} && test $(stat -c %U {rc}) = {user}")
+        pressed(m, "meta_l-f11", f"test $({xterm}) -eq 1", timeout=60)
+        not_pressed(m, "ctrl-alt-ret", f"test $({xterm}) -gt 1")
+        closed_by("ctrl-alt-x")
+        pressed(m, "meta_l-f9", "test -e /tmp/kb-added")
+        # Removed: Alt+Return (hide the window).
+        m.succeed(f"grep -qx 'unbind-key M-Return' {rc}")
+        # The user's own bind, in their ~/.cwmrc; cwm restarts on SIGHUP.
+        run(f"echo 'bind-key 4-F8 \"touch /tmp/kb-user\"' >> {rc}")
+        reload = lambda: m.succeed("pkill -HUP -u kim -x cwm")
+        reload()
+        m.sleep(3)
+        pressed(m, "meta_l-f8", "test -e /tmp/kb-user")
+        after_rebuild([rc], reload)
+      '';
+
+      evilwm.script = ''
+        ${x11 "evilwm"}
+        home = f"/home/{user}"
+        rc = f"{home}/.evilwmrc"
+        m.succeed(f"test -f {rc} && test ! -L {rc} && test $(stat -c %U {rc}) = {user}")
+        pressed(m, "meta_l-f11", f"test $({xterm}) -eq 1", timeout=60)
+        not_pressed(m, "ctrl-alt-ret", f"test $({xterm}) -gt 1")
+        closed_by("ctrl-alt-esc")
+        # Removed: Ctrl+Alt+K.
+        m.succeed(f"grep -qx 'bind control+mod1+k' {rc}")
+        # The user's file stays theirs.
+        run(f"echo '# mine' >> {rc}")
+        before = m.succeed(f"sha256sum {rc}")
+        rebuild(m)
+        assert m.succeed(f"sha256sum {rc}") == before
+      '';
+
+      lxqt.script = ''
+        ${x11 "openbox"}
+        m.wait_until_succeeds("pgrep -u kim -f lxqt-globalkeysd")
+        m.sleep(10)
+        home = f"/home/{user}"
+        rc = f"{home}/.config/lxqt/globalkeyshortcuts.conf"
+        m.succeed(f"test -f {rc} && test ! -L {rc} && test $(stat -c %U {rc}) = {user}")
+        qterminal = ${builtins.toJSON (procs "qterminal")}
+        pressed(m, "meta_l-f11", f"test $({qterminal}) -eq 1", timeout=60)
+        not_pressed(m, "ctrl-alt-t", f"test $({qterminal}) -gt 1")
+        not_pressed(m, "alt-f4", f"test $({qterminal}) -eq 0")
+        pressed(m, "meta_l-f10", f"test $({qterminal}) -eq 0")
+        pressed(m, "meta_l-f9", "test -e /tmp/kb-added")
+        # Removed: Alt+F2 (the runner), kept disabled so it isn't registered again.
+        m.succeed(f"grep -A2 '^\\[Alt%2BF2' {rc} | grep -qx Enabled=false")
+        # The user's file stays theirs over a rebuild.
+        before = m.succeed(f"sha256sum {rc}")
+        rebuild(m)
+        assert m.succeed(f"sha256sum {rc}") == before
+        m.succeed("rm -f /tmp/kb-added")
+        pressed(m, "meta_l-f9", "test -e /tmp/kb-added")
+      '';
+
+      fvwm3.script = ''
+        ${x11 "fvwm3"}
+        home = f"/home/{user}"
+        rc = f"{home}/.fvwm/config"
+        m.succeed(f"test -f {rc} && test ! -L {rc} && test $(stat -c %U {rc}) = {user}")
+        pressed(m, "meta_l-f11", f"test $({xterm}) -eq 1", timeout=60)
+        not_pressed(m, "meta_r", f"test $({xterm}) -gt 1")
+        pressed(m, "meta_l-f9", "test -e /tmp/kb-added")
+        # Removed: Alt+F1 (the root menu).
+        m.succeed("grep -qx 'Key F1 A M -' /etc/fvwm3/config")
+        # The user's file stays theirs.
+        run(f"echo 'Key F8 A 4 Exec exec touch /tmp/kb-user' >> {rc}")
+        before = m.succeed(f"sha256sum {rc}")
+        rebuild(m)
+        assert m.succeed(f"sha256sum {rc}") == before
+      '';
+    };
+  };
+
   # Desktop environments with their own settings stores.
   desktops = keybindsTest {
     name = "desktops";
@@ -388,7 +648,7 @@ in
         script = ''
           logged_in(m, user, "xfce4-session")
           m.wait_for_file("/tmp/.X11-unix/X0")
-          m.wait_until_succeeds("pgrep -u kim -x xfwm4 && pgrep -u kim xfsettingsd")
+          m.wait_until_succeeds("pgrep -u kim -f xfwm4 && pgrep -u kim -f xfsettingsd")
           m.sleep(10)
           query = "xfconf-query -c xfce4-keyboard-shortcuts -p"
           # The user's shortcuts start from the system defaults.
@@ -415,14 +675,22 @@ in
       };
 
       cosmic = {
+        # Past COSMIC's first-run setup, as a user who went through it.
+        config =
+          { pkgs, ... }:
+          {
+            environment.cosmic.excludePackages = [ pkgs.cosmic-initial-setup ];
+            services.desktopManager.cosmic.showExcludedPkgsWarning = false;
+          };
         script = ''
-          logged_in(m, user, "bin/[.]?cosmic-comp")
+          logged_in(m, user, "cosmic-comp")
           m.sleep(20)
           system = "/run/current-system/sw/share/cosmic/com.system76.CosmicSettings.Shortcuts/v1"
           m.succeed(f"grep -q 'key: \"Escape\"): Disable' {system}/custom")
           m.succeed(f"test -f {system}/defaults")
+          m.diagnose = "pgrep -a -u kim | tail -40; journalctl -b --no-pager | grep -i 'shortcut\\|custom' | tail -20"
           ${moved {
-            windows = "pgrep -c -u kim -x cosmic-term || true";
+            windows = (procs "cosmic-term");
             term = "meta_l-t";
             close = "meta_l-q";
           }}
@@ -445,7 +713,10 @@ in
       plasma = {
         script = ''
           logged_in(m, user, "kwin_wayland")
-          m.wait_until_succeeds("pgrep -u kim -f kglobalacceld", timeout=120)
+          konsole = ${builtins.toJSON (procs "konsole")}
+          # Global shortcuts: kglobalaccel, inside KWin on Wayland.
+          m.wait_until_succeeds("pgrep -u kim -f plasmashell", timeout=120)
+          m.wait_until_succeeds(as_user(m, user, "busctl --user status org.kde.kglobalaccel"), timeout=120)
           m.sleep(20)
           rc = f"/home/{user}/.config/kglobalshortcutsrc"
           # Seeded before the first login, a regular file of the user's that
@@ -453,7 +724,7 @@ in
           m.succeed(f"test -f {rc} && test ! -L {rc} && test $(stat -c %U {rc}) = {user}")
           m.succeed(f"grep -qx '_launch=Meta+F11' {rc}")
           ${moved {
-            windows = "pgrep -c -u kim -x konsole || true";
+            windows = (procs "konsole");
             term = "ctrl-alt-t";
             close = "alt-f4";
           }}
@@ -461,16 +732,22 @@ in
           not_pressed(m, "meta_l-e", "pgrep -u kim dolphin")
 
           # The user's own shortcut, as System Settings writes it.
+          # (kglobalaccel reads the file when the session starts: log in again.)
           run("kwriteconfig6 --file kglobalshortcutsrc --group services --group org.kde.konsole.desktop --key _launch Meta+F8")
-          run("systemctl --user restart plasma-kglobalaccel.service")
-          m.sleep(5)
-          pressed(m, "meta_l-f8", "test $(pgrep -c -u kim -x konsole) -ge 1", timeout=60)
-          m.succeed("pkill -u kim -x konsole")
+          m.succeed("loginctl terminate-user kim")
+          m.wait_until_fails("pgrep -u kim -f kwin_wayland", timeout=60)
+          m.succeed("systemctl restart display-manager")
+          logged_in(m, user, "kwin_wayland")
+          m.wait_until_succeeds(as_user(m, user, "busctl --user status org.kde.kglobalaccel"), timeout=120)
+          m.sleep(20)
+          m.succeed(f"grep -qx '_launch=Meta+F8' {rc}")
+          pressed(m, "meta_l-f8", f"test $({konsole}) -ge 1", timeout=60)
+          m.succeed("pkill -u kim -f konsole")
           before = m.succeed(f"sha256sum {rc}")
           rebuild(m)
           assert m.succeed(f"sha256sum {rc}") == before, "the rebuild changed the user's file"
           m.succeed("rm -f /tmp/kb-added")
-          pressed(m, "meta_l-f8", "test $(pgrep -c -u kim -x konsole) -ge 1", timeout=60)
+          pressed(m, "meta_l-f8", f"test $({konsole}) -ge 1", timeout=60)
           pressed(m, "meta_l-f9", "test -e /tmp/kb-added")
         '';
       };
@@ -488,7 +765,7 @@ in
       config.omarchy.login.autoLogin = "omar";
       script = ''
         import json
-        logged_in(m, user, "bin/[.]?Hyprland")
+        logged_in(m, user, "Hyprland")
         m.wait_for_unit("home-manager-omar.service")
         ${hyprland}
         hypr_ready()

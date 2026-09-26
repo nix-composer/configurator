@@ -1,0 +1,519 @@
+{
+  "$comment": "LXQt's default shortcuts on nixpkgs nixos-26.05: lxqt-globalkeysd's (its shipped commands and the ones LXQt's panel, runner and power manager register at login, read from a new user's ~/.config/lxqt/globalkeyshortcuts.conf in a VM), actions exec:<command> and path:<D-Bus path>; plus Openbox's, the window manager LXQt runs, as openbox:<action elements>. Regenerate with scripts/keybinds/extract-lxqt.py.",
+  "binds": [
+    {
+      "action": "path:/panel/fancymenu/show_hide",
+      "label": "Show/hide main menu",
+      "group": "Panel",
+      "accels": [
+        "<Alt>F1"
+      ]
+    },
+    {
+      "action": "path:/runner/show_hide_dialog",
+      "label": "Show/hide runner dialog",
+      "group": "Commands",
+      "accels": [
+        "<Alt>F2"
+      ]
+    },
+    {
+      "action": "path:/panel/showdesktop/show_hide",
+      "label": "Show desktop",
+      "group": "Panel",
+      "accels": [
+        "<Control><Alt>d"
+      ]
+    },
+    {
+      "action": "exec:pcmanfm-qt",
+      "label": "PCManFM-Qt",
+      "group": "Commands",
+      "accels": [
+        "<Control><Alt>e"
+      ]
+    },
+    {
+      "action": "exec:xdg-open, about:blank",
+      "label": "Web Browser",
+      "group": "Commands",
+      "accels": [
+        "<Control><Alt>i"
+      ]
+    },
+    {
+      "action": "exec:xdg-screensaver, lock",
+      "label": "Lockscreen",
+      "group": "Commands",
+      "accels": [
+        "<Control><Alt>l"
+      ]
+    },
+    {
+      "action": "exec:qterminal",
+      "label": "QTerminal",
+      "group": "Commands",
+      "accels": [
+        "<Control><Alt>t"
+      ]
+    },
+    {
+      "action": "path:/panel/desktopswitch/desktop_1",
+      "label": "Switch to desktop 1",
+      "group": "Panel",
+      "accels": [
+        "<Control>F1"
+      ]
+    },
+    {
+      "action": "path:/panel/desktopswitch/desktop_10",
+      "label": "Switch to desktop 10",
+      "group": "Panel",
+      "accels": [
+        "<Control>F10"
+      ]
+    },
+    {
+      "action": "path:/panel/desktopswitch/desktop_11",
+      "label": "Switch to desktop 11",
+      "group": "Panel",
+      "accels": [
+        "<Control>F11"
+      ]
+    },
+    {
+      "action": "path:/panel/desktopswitch/desktop_12",
+      "label": "Switch to desktop 12",
+      "group": "Panel",
+      "accels": [
+        "<Control>F12"
+      ]
+    },
+    {
+      "action": "path:/panel/desktopswitch/desktop_2",
+      "label": "Switch to desktop 2",
+      "group": "Panel",
+      "accels": [
+        "<Control>F2"
+      ]
+    },
+    {
+      "action": "path:/panel/desktopswitch/desktop_3",
+      "label": "Switch to desktop 3",
+      "group": "Panel",
+      "accels": [
+        "<Control>F3"
+      ]
+    },
+    {
+      "action": "path:/panel/desktopswitch/desktop_4",
+      "label": "Switch to desktop 4",
+      "group": "Panel",
+      "accels": [
+        "<Control>F4"
+      ]
+    },
+    {
+      "action": "path:/panel/desktopswitch/desktop_5",
+      "label": "Switch to desktop 5",
+      "group": "Panel",
+      "accels": [
+        "<Control>F5"
+      ]
+    },
+    {
+      "action": "path:/panel/desktopswitch/desktop_6",
+      "label": "Switch to desktop 6",
+      "group": "Panel",
+      "accels": [
+        "<Control>F6"
+      ]
+    },
+    {
+      "action": "path:/panel/desktopswitch/desktop_7",
+      "label": "Switch to desktop 7",
+      "group": "Panel",
+      "accels": [
+        "<Control>F7"
+      ]
+    },
+    {
+      "action": "path:/panel/desktopswitch/desktop_8",
+      "label": "Switch to desktop 8",
+      "group": "Panel",
+      "accels": [
+        "<Control>F8"
+      ]
+    },
+    {
+      "action": "path:/panel/desktopswitch/desktop_9",
+      "label": "Switch to desktop 9",
+      "group": "Panel",
+      "accels": [
+        "<Control>F9"
+      ]
+    },
+    {
+      "action": "path:/panel/taskbar/task_10",
+      "label": "Activate task 10",
+      "group": "Panel",
+      "accels": [
+        "<Super>0"
+      ]
+    },
+    {
+      "action": "path:/panel/taskbar/task_1",
+      "label": "Activate task 1",
+      "group": "Panel",
+      "accels": [
+        "<Super>1"
+      ]
+    },
+    {
+      "action": "path:/panel/taskbar/task_2",
+      "label": "Activate task 2",
+      "group": "Panel",
+      "accels": [
+        "<Super>2"
+      ]
+    },
+    {
+      "action": "path:/panel/taskbar/task_3",
+      "label": "Activate task 3",
+      "group": "Panel",
+      "accels": [
+        "<Super>3"
+      ]
+    },
+    {
+      "action": "path:/panel/taskbar/task_4",
+      "label": "Activate task 4",
+      "group": "Panel",
+      "accels": [
+        "<Super>4"
+      ]
+    },
+    {
+      "action": "path:/panel/taskbar/task_5",
+      "label": "Activate task 5",
+      "group": "Panel",
+      "accels": [
+        "<Super>5"
+      ]
+    },
+    {
+      "action": "path:/panel/taskbar/task_6",
+      "label": "Activate task 6",
+      "group": "Panel",
+      "accels": [
+        "<Super>6"
+      ]
+    },
+    {
+      "action": "path:/panel/taskbar/task_7",
+      "label": "Activate task 7",
+      "group": "Panel",
+      "accels": [
+        "<Super>7"
+      ]
+    },
+    {
+      "action": "path:/panel/taskbar/task_8",
+      "label": "Activate task 8",
+      "group": "Panel",
+      "accels": [
+        "<Super>8"
+      ]
+    },
+    {
+      "action": "path:/panel/taskbar/task_9",
+      "label": "Activate task 9",
+      "group": "Panel",
+      "accels": [
+        "<Super>9"
+      ]
+    },
+    {
+      "action": "exec:screengrab, -f",
+      "label": "Screenshot",
+      "group": "Commands",
+      "accels": [
+        "Print"
+      ]
+    },
+    {
+      "action": "exec:lxqt-config-brightness, -d",
+      "label": "☀ ↓",
+      "group": "Commands",
+      "accels": [
+        "<Control><Shift>F6",
+        "XF86MonBrightnessDown"
+      ]
+    },
+    {
+      "action": "exec:lxqt-config-brightness, -i",
+      "label": "☀ ↑",
+      "group": "Commands",
+      "accels": [
+        "<Control><Shift>F7",
+        "XF86MonBrightnessUp"
+      ]
+    },
+    {
+      "action": "path:/panel/volume/down",
+      "label": "Decrease sound volume",
+      "group": "Panel",
+      "accels": [
+        "XF86AudioLowerVolume"
+      ]
+    },
+    {
+      "action": "path:/panel/volume/mute",
+      "label": "Mute/unmute sound volume",
+      "group": "Panel",
+      "accels": [
+        "XF86AudioMute"
+      ]
+    },
+    {
+      "action": "path:/panel/volume/up",
+      "label": "Increase sound volume",
+      "group": "Panel",
+      "accels": [
+        "XF86AudioRaiseVolume"
+      ]
+    },
+    {
+      "action": "exec:lxqt-config-monitor",
+      "label": "Launch Monitor",
+      "group": "Commands",
+      "accels": [
+        "XF86Display"
+      ]
+    },
+    {
+      "action": "path:/panel/mount/eject",
+      "label": "Eject removable media",
+      "group": "Panel",
+      "accels": [
+        "XF86Eject"
+      ]
+    },
+    {
+      "action": "path:/powermanager/keypoweroff",
+      "label": "Power off key action",
+      "group": "Power",
+      "accels": [
+        "XF86PowerOff"
+      ]
+    },
+    {
+      "action": "path:/powermanager/keyhibernate",
+      "label": "Hibernate key action",
+      "group": "Power",
+      "accels": [
+        "XF86Sleep"
+      ]
+    },
+    {
+      "action": "path:/powermanager/keysuspend",
+      "label": "Suspend key action",
+      "group": "Power",
+      "accels": [
+        "XF86Suspend"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"GoToDesktop\"><to>left</to><wrap>no</wrap></action>",
+      "label": "Go to desktop left",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Control><Alt>Left"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"GoToDesktop\"><to>right</to><wrap>no</wrap></action>",
+      "label": "Go to desktop right",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Control><Alt>Right"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"GoToDesktop\"><to>up</to><wrap>no</wrap></action>",
+      "label": "Go to desktop up",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Control><Alt>Up"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"GoToDesktop\"><to>down</to><wrap>no</wrap></action>",
+      "label": "Go to desktop down",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Control><Alt>Down"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"SendToDesktop\"><to>left</to><wrap>no</wrap></action>",
+      "label": "Send window to desktop left",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Alt><Shift>Left"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"SendToDesktop\"><to>right</to><wrap>no</wrap></action>",
+      "label": "Send window to desktop right",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Alt><Shift>Right"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"SendToDesktop\"><to>up</to><wrap>no</wrap></action>",
+      "label": "Send window to desktop up",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Alt><Shift>Up"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"SendToDesktop\"><to>down</to><wrap>no</wrap></action>",
+      "label": "Send window to desktop down",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Alt><Shift>Down"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"GoToDesktop\"><to>1</to></action>",
+      "label": "Go to desktop 1",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Super>F1"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"GoToDesktop\"><to>2</to></action>",
+      "label": "Go to desktop 2",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Super>F2"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"GoToDesktop\"><to>3</to></action>",
+      "label": "Go to desktop 3",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Super>F3"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"GoToDesktop\"><to>4</to></action>",
+      "label": "Go to desktop 4",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Super>F4"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"ToggleShowDesktop\" />",
+      "label": "Show the desktop",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Super>d"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"Close\" />",
+      "label": "Close the window",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Alt>F4"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"Lower\" /><action name=\"FocusToBottom\" /><action name=\"Unfocus\" />",
+      "label": "Lower the window and unfocus it",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Alt>Escape"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"ShowMenu\"><menu>client-menu</menu></action>",
+      "label": "Window menu",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Alt>space"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"NextWindow\"><finalactions><action name=\"Focus\" /><action name=\"Raise\" /><action name=\"Unshade\" /></finalactions></action>",
+      "label": "Next window",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Alt>Tab"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"PreviousWindow\"><finalactions><action name=\"Focus\" /><action name=\"Raise\" /><action name=\"Unshade\" /></finalactions></action>",
+      "label": "Previous window",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Alt><Shift>Tab"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"NextWindow\"><panels>yes</panels><desktop>yes</desktop><finalactions><action name=\"Focus\" /><action name=\"Raise\" /><action name=\"Unshade\" /></finalactions></action>",
+      "label": "Next window (all desktops, panels too)",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Control><Alt>Tab"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"DirectionalCycleWindows\"><direction>right</direction></action>",
+      "label": "Focus the window to the right",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Super><Shift>Right"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"DirectionalCycleWindows\"><direction>left</direction></action>",
+      "label": "Focus the window to the left",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Super><Shift>Left"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"DirectionalCycleWindows\"><direction>up</direction></action>",
+      "label": "Focus the window above",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Super><Shift>Up"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"DirectionalCycleWindows\"><direction>down</direction></action>",
+      "label": "Focus the window below",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Super><Shift>Down"
+      ]
+    },
+    {
+      "action": "openbox:<action name=\"Execute\"><startupnotify><enabled>true</enabled><name>Konqueror</name></startupnotify><command>kfmclient openProfile filemanagement</command></action>",
+      "label": "Run kfmclient openProfile filemanagement",
+      "group": "Windows (Openbox)",
+      "accels": [
+        "<Super>e"
+      ]
+    }
+  ]
+}

@@ -55,6 +55,17 @@ impl Generator<'_> {
             "river" => self.river(&mut section, desktop)?,
             "wayfire" => self.wayfire(&mut section, desktop)?,
             "mangowc" => self.mango(&mut section, desktop)?,
+            "openbox" => self.openbox(&mut section, desktop)?,
+            "icewm" => self.icewm(&mut section, desktop)?,
+            "fluxbox" => self.fluxbox(&mut section, desktop)?,
+            "bspwm" => self.bspwm(&mut section, desktop)?,
+            "herbstluftwm" => self.herbstluftwm(&mut section, desktop)?,
+            "spectrwm" => self.spectrwm(&mut section, desktop)?,
+            "jwm" => self.jwm(&mut section, desktop)?,
+            "cwm" => self.cwm(&mut section, desktop)?,
+            "evilwm" => self.evilwm(&mut section, desktop)?,
+            "fvwm3" => self.fvwm3(&mut section, desktop)?,
+            "lxqt" => self.lxqt(&mut section, desktop)?,
             // Its shortcuts file is a package (keybind_packages, listed
             // with the apps).
             "cosmic" => {
