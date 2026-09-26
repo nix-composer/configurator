@@ -144,8 +144,7 @@
           # The app catalog, for `cargo run -p configurator-gtk`.
           CONFIGURATOR_CATALOG = self.packages.${pkgs.stdenv.hostPlatform.system}.catalog;
           # Flake desktops' catalogs, which the catalog crate builds in.
-          CONFIGURATOR_DESKTOP_CATALOGS =
-            self.packages.${pkgs.stdenv.hostPlatform.system}.desktop-catalogs;
+          CONFIGURATOR_DESKTOP_CATALOGS = self.packages.${pkgs.stdenv.hostPlatform.system}.desktop-catalogs;
         };
       });
 

@@ -1306,7 +1306,8 @@ mod tests {
     #[test]
     fn every_editable_desktop_renders_its_keybinds() {
         let catalog = Catalog::builtin().unwrap();
-        let base = Answers::from_json(include_str!("../../../examples/answers/gnome.json")).unwrap();
+        let base =
+            Answers::from_json(include_str!("../../../examples/answers/gnome.json")).unwrap();
         for desktop in &catalog.desktops {
             let (Some(keybinds), None) = (&desktop.keybinds, &desktop.unavailable) else {
                 continue;

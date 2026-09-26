@@ -309,7 +309,8 @@ in
         rebuilt =
           { lib, ... }:
           {
-            environment.etc."river/init".text = lib.mkAfter "riverctl map normal Super F7 spawn 'touch /tmp/kb-rebuilt'";
+            environment.etc."river/init".text =
+              lib.mkAfter "riverctl map normal Super F7 spawn 'touch /tmp/kb-rebuilt'";
           };
         script = ''
           logged_in(m, user, "river")
@@ -463,10 +464,11 @@ in
         # Removed: Alt+F2 (fbrun).
         not_pressed(m, "alt-f2", "pgrep -u kim fbrun")
         # The user's own bind, in their keys file.
-        run(f"echo 'Mod4 F8 :Exec touch /tmp/kb-user' >> {keys}")
-        # Fluxbox rereads its keys file when it changes.
-        m.diagnose = "pgrep -a -u kim; tail -5 /home/kim/.fluxbox/keys"
-        reload = lambda: m.sleep(1)
+        # (Super+F8 is a default already: the first line for a key wins.)
+        run(f"sed -i 's|^Mod4 F8 :.*|Mod4 F8 :Exec touch /tmp/kb-user|' {keys}")
+        m.diagnose = "pgrep -a -u kim; grep F8 /home/kim/.fluxbox/keys"
+        # SIGUSR2 makes Fluxbox reconfigure, keys included.
+        reload = lambda: m.succeed("pkill -USR2 -u kim -x fluxbox")
         reload()
         m.sleep(5)
         pressed(m, "meta_l-f8", "test -e /tmp/kb-user")

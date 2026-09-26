@@ -285,7 +285,10 @@ impl Generator<'_> {
             )];
             // IceWM's own actions only take Super while the Super key alone
             // isn't its menu key (VM-checked); Ctrl+Esc still opens it.
-            if prefs.values().any(|k| k.iter().any(|k| k.contains("Super"))) {
+            if prefs
+                .values()
+                .any(|k| k.iter().any(|k| k.contains("Super")))
+            {
                 pref_lines.push(Nix::str(
                     "# Super binds window actions, so the Super key alone doesn't open the menu (Ctrl+Esc does).",
                 ));
