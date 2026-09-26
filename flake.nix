@@ -112,6 +112,19 @@
             testScript = builtins.readFile ./nix/tests/omarchy.py;
           };
 
+      # Omarchy's keybinds on a logged-in desktop (nix/tests/keybinds.nix),
+      # given the Omarchy flake as above:
+      #   scripts/test-omarchy.sh --keybinds [path or flake ref]
+      lib.keybindsOmarchyTest =
+        {
+          omarchy,
+          system ? "x86_64-linux",
+        }:
+        (import ./nix/tests/keybinds-desktops.nix {
+          pkgs = nixpkgs.legacyPackages.${system};
+          inherit self inputs omarchy;
+        }).omarchy;
+
       # What the generated host flakes import from here: the first-boot
       # tasks the install leaves behind (TPM2 + PIN sealing, …).
       nixosModules.default = ./nix/modules/host;

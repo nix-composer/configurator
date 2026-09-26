@@ -7,6 +7,7 @@ use std::rc::Rc;
 
 use adw::prelude::*;
 use configurator_answers::{Combo, Keybind, Layer, Modifier};
+use configurator_catalog::keybinds::Abilities;
 use configurator_catalog::{DefaultBind, Desktop};
 use gtk::{gdk, glib};
 
@@ -112,55 +113,38 @@ fn same_combo(a: &str, b: &str) -> bool {
     }
 }
 
-/// What the generator can write for a desktop's keybind format.
-fn format(desktop: &Desktop) -> Option<&str> {
-    desktop.keybinds.as_ref().map(|k| k.format.as_str())
+/// What the generator writes for this desktop's keybinds (the catalog
+/// says, per renderer): nothing while they're read-only.
+fn abilities(desktop: &Desktop) -> Abilities {
+    desktop
+        .keybinds
+        .as_ref()
+        .map(|k| k.abilities())
+        .unwrap_or(Abilities {
+            change: false,
+            remove: false,
+            add: false,
+        })
 }
 
 /// Its own actions can move to new keys.
 fn can_move(desktop: &Desktop) -> bool {
-    desktop
-        .keybinds
-        .as_ref()
-        .is_some_and(|k| k.option.is_none())
-        && matches!(
-            format(desktop),
-            Some(
-                "gnome-dconf" | "budgie-dconf" | "cinnamon-dconf" | "mate-dconf" | "sway" | "niri"
-            )
-        )
+    abilities(desktop).change
+}
+
+/// This one of its actions can move (not Omarchy's Lua closures).
+fn can_move_bind(desktop: &Desktop, bind: &DefaultBind) -> bool {
+    desktop.keybinds.as_ref().is_some_and(|k| k.can_move(bind))
 }
 
 /// Its default binds can be removed.
 fn can_unbind(desktop: &Desktop) -> bool {
-    desktop
-        .keybinds
-        .as_ref()
-        .is_some_and(|k| k.option.is_some())
-        || matches!(
-            format(desktop),
-            Some("gnome-dconf" | "budgie-dconf" | "cinnamon-dconf" | "mate-dconf" | "sway")
-        )
+    abilities(desktop).remove
 }
 
 /// New shortcuts can be added (the generator has a renderer for them).
 fn can_add(desktop: &Desktop) -> bool {
-    desktop
-        .keybinds
-        .as_ref()
-        .is_some_and(|k| k.option.is_some())
-        || matches!(
-            format(desktop),
-            Some(
-                "gnome-dconf" | "budgie-dconf" | "cinnamon-dconf" | "mate-dconf" | "sway" | "niri"
-            )
-        )
-}
-
-/// Moving an action to new keys needs its old keys unbound explicitly
-/// (config files); the dconf ones replace the key's value.
-fn move_unbinds_old(desktop: &Desktop) -> bool {
-    format(desktop) == Some("sway")
+    abilities(desktop).add
 }
 
 /// Told about each combo captured.
@@ -520,10 +504,17 @@ pub fn page(ctx: &Ctx) -> Page {
                     "{}'s shortcuts can be removed here; moving them to other keys comes later.",
                     desktop.name
                 ))),
-                (false, false) => body.append(&note(&format!(
-                    "{}'s shortcuts, for reference: changing and adding them here comes later.",
-                    desktop.name
-                ))),
+                (false, false) => body.append(&note(&match desktop
+                    .keybinds
+                    .as_ref()
+                    .and_then(|k| k.unsupported.as_ref())
+                {
+                    Some(why) => format!("{}'s shortcuts, for reference: {why}", desktop.name),
+                    None => format!(
+                        "{}'s shortcuts, for reference: changing and adding them here comes later.",
+                        desktop.name
+                    ),
+                })),
                 (true, true) => {}
             }
             let mut groups: Vec<(String, Vec<&DefaultBind>)> = Vec::new();
@@ -571,14 +562,13 @@ pub fn page(ctx: &Ctx) -> Page {
                     unsupported.set_visible(true);
                     editor.set_visible(false);
                 }
-                Some(d)
-                    if d.keybinds.is_none()
-                        && !ctx.catalog.default_keybinds.contains_key(&d.id) =>
-                {
-                    unsupported.set_title(&format!("{}'s keybinds can't be set here yet", d.name));
-                    unsupported.set_description(Some(
-                        "Its defaults apply; change them in its own settings after the install.",
-                    ));
+                Some(d) if !can_add(&d) && !ctx.catalog.default_keybinds.contains_key(&d.id) => {
+                    let why = d.keybinds.as_ref().and_then(|k| k.unsupported.clone());
+                    unsupported.set_title(&format!("{}'s keybinds can't be set here", d.name));
+                    unsupported.set_description(Some(&why.unwrap_or_else(|| {
+                        "Its defaults apply; change them in its own settings after the install."
+                            .into()
+                    })));
                     unsupported.set_visible(true);
                     editor.set_visible(false);
                 }
@@ -662,18 +652,12 @@ fn default_row(
         .css_classes(["flat"])
         .build();
     {
-        let (ctx, desktop, d, old, redraw) = (
-            ctx.clone(),
-            desktop.clone(),
-            d.clone(),
-            old.clone(),
-            redraw.clone(),
-        );
+        let (ctx, desktop, d, redraw) = (ctx.clone(), desktop.clone(), d.clone(), redraw.clone());
         change.connect_clicked(move |b| {
-            change_dialog(&ctx, b.upcast_ref(), &desktop, &d, &old, redraw.clone());
+            change_dialog(&ctx, b.upcast_ref(), &desktop, &d, redraw.clone());
         });
     }
-    if can_move(desktop) {
+    if can_move_bind(desktop, d) {
         row.add_suffix(&change);
     }
     if can_unbind(desktop) && !current.is_empty() {
@@ -752,7 +736,6 @@ fn change_dialog(
     parent: &gtk::Widget,
     desktop: &Desktop,
     d: &DefaultBind,
-    old: &[String],
     redraw: Rc<dyn Fn()>,
 ) {
     let body = gtk::Box::builder()
@@ -808,30 +791,18 @@ fn change_dialog(
     }
     let dialog = dialog_frame("Change a shortcut", &body, &save);
     {
-        let (ctx, desktop, action, old, dialog) = (
-            ctx.clone(),
-            desktop.clone(),
-            d.action.clone(),
-            old.to_vec(),
-            dialog.clone(),
-        );
+        let (ctx, action, dialog) = (ctx.clone(), d.action.clone(), dialog.clone());
         save.connect_clicked(move |_| {
             let Some(combo) = capture.combo() else { return };
             let mut draft = ctx.draft.borrow_mut();
-            // One place for the action: its earlier move is replaced.
+            // One place for the action: its earlier move is replaced. The
+            // generator takes its old keys away (where the desktop can).
             draft
                 .keybinds
                 .retain(|_, b| !matches!(b, Keybind::Action(a) if *a == action));
             draft
                 .keybinds
-                .insert(combo.clone(), Keybind::Action(action.clone()));
-            if move_unbinds_old(&desktop) {
-                for o in &old {
-                    if !same_combo(o, &combo) {
-                        draft.keybinds.entry(o.clone()).or_insert(Keybind::Unbind);
-                    }
-                }
-            }
+                .insert(combo, Keybind::Action(action.clone()));
             drop(draft);
             dialog.close();
             redraw();

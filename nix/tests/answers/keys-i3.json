@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "en_US.UTF-8",
+    "keyboardLayout": "us",
+    "timezone": "UTC"
+  },
+  "desktop": {
+    "id": "i3"
+  },
+  "apps": {
+    "packages": [
+      "xterm",
+      "dmenu"
+    ]
+  },
+  "keybinds": {
+    "SUPER + F11": {
+      "action": "exec i3-sensible-terminal"
+    },
+    "SUPER + F10": {
+      "action": "kill"
+    },
+    "ALT + D": "unbind",
+    "SUPER + F9": {
+      "exec": "touch /tmp/kb-added"
+    }
+  },
+  "disk": {
+    "device": "/dev/vdb",
+    "filesystem": "ext4"
+  },
+  "users": [
+    {
+      "name": "kim",
+      "admin": true
+    }
+  ],
+  "hostname": "keys"
+}

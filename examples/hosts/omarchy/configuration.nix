@@ -90,6 +90,15 @@
 
   # Keybinds, on top of the desktop's defaults.
   home-manager.users.me.omarchy.keybinds = {
+    "SUPER + BACKSPACE" = {
+      description = "Close window";
+      lua = "hl.dsp.window.close()";
+    };
+    "SUPER + F12" = {
+      description = "Mute";
+      exec = "omarchy-audio-output-volume mute-toggle";
+      locked = true;
+    };
     "SUPER + SHIFT + K" = {
       exec = (lib.getExe pkgs.chromium + " --app=https://app.slack.com/client");
     };
@@ -101,6 +110,12 @@
     };
     "SUPER + SHIFT + W" = {
       exec = "wireshark";
+    };
+    "SUPER + W" = {
+      enable = false;
+    };
+    XF86AudioMute = {
+      enable = false;
     };
   };
 

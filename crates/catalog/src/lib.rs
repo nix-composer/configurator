@@ -4,6 +4,7 @@
 //! ([`apps`], built by `nix build .#catalog`).
 
 pub mod apps;
+pub mod keybinds;
 pub mod sizes;
 
 use std::collections::BTreeMap;
@@ -55,6 +56,10 @@ pub struct Keybinds {
     /// The option is a Home Manager one, set for every user.
     #[serde(default)]
     pub home: bool,
+    /// Why its binds can't be changed from the installer (they're compiled
+    /// in, …): the keybind layer lists them read-only with this.
+    #[serde(default)]
+    pub unsupported: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]

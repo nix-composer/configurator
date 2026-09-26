@@ -5,6 +5,7 @@
 //! The output is the product: plain, readable Nix the user owns. Desktop
 //! modules are imported from their flakes, never copied in.
 
+mod keybind_files;
 mod keybinds;
 pub mod nix;
 
@@ -623,6 +624,9 @@ impl Generator<'_> {
             .map(|attr| Nix::raw(format!("pkgs.{attr}")))
             .collect();
         packages.extend(launchers);
+        // What the keybinds need in the system profile (COSMIC's shortcuts
+        // file, KDE's launchers for new commands).
+        packages.extend(self.keybind_packages()?);
         if !packages.is_empty() {
             section.set("environment.systemPackages", Nix::List(packages));
         }

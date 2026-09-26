@@ -51,7 +51,9 @@ let
   hostDirs =
     prefix: dir:
     lib.mapAttrs' (name: _: lib.nameValuePair "${prefix}-${name}" (dir + "/${name}")) (
-      lib.filterAttrs (name: type: type == "directory" && name != "omarchy") (builtins.readDir dir)
+      lib.filterAttrs (name: type: type == "directory" && !(lib.hasSuffix "omarchy" name)) (
+        builtins.readDir dir
+      )
     );
   hosts = hostDirs "example" ../../examples/hosts // hostDirs "test-host" ../tests/hosts;
   hostChecks = lib.mapAttrs (
@@ -82,6 +84,8 @@ let
       inputs
       ;
   };
+
+  keybindsTests = import ../tests/keybinds-desktops.nix { inherit pkgs self inputs; };
 
   missing = builtins.filter (p: !lib.hasAttrByPath (lib.splitString "." p) options) registryPaths;
 
@@ -315,6 +319,12 @@ hostChecks
           target.screenshot("gnome-gdm")
     '';
   };
+
+  # Keybinds on logged-in desktops: moved, removed and added binds pressed,
+  # the user's own change surviving a rebuild (nix/tests/keybinds.nix).
+  keybinds-tiling = keybindsTests.tiling;
+  keybinds-wlroots = keybindsTests.wlroots;
+  keybinds-desktops = keybindsTests.desktops;
 
   # Secure Boot keys enrolled during install, TPM2 + PIN sealed on the
   # first boot (OVMF in setup mode, swtpm).

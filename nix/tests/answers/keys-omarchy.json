@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "en_US.UTF-8",
+    "keyboardLayout": "us",
+    "timezone": "UTC"
+  },
+  "desktop": {
+    "id": "omarchy"
+  },
+  "keybinds": {
+    "SUPER + F10": {
+      "action": "o.bind(\"SUPER + W\", \"Close window\", hl.dsp.window.close())"
+    },
+    "SUPER + F11": {
+      "action": "o.bind(\"SUPER + RETURN\", \"Terminal\", { omarchy = \"terminal\" })"
+    },
+    "SUPER + F12": {
+      "action": "o.bind(\"XF86AudioMute\", \"Mute\", \"omarchy-audio-output-volume mute-toggle\", { locked = true })"
+    },
+    "SUPER + SHIFT + N": "unbind",
+    "SUPER + F9": {
+      "exec": "touch /tmp/kb-added"
+    }
+  },
+  "disk": {
+    "device": "/dev/vdb",
+    "filesystem": "ext4"
+  },
+  "users": [
+    {
+      "name": "omar",
+      "admin": true
+    }
+  ],
+  "hostname": "keys"
+}

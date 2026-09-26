@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "en_US.UTF-8",
+    "keyboardLayout": "us",
+    "timezone": "UTC"
+  },
+  "desktop": {
+    "id": "cosmic"
+  },
+  "keybinds": {
+    "SUPER + F11": {
+      "action": "System(Terminal)"
+    },
+    "SUPER + F10": {
+      "action": "Close"
+    },
+    "SUPER + ESCAPE": "unbind",
+    "SUPER + F9": {
+      "exec": "touch /tmp/kb-added"
+    }
+  },
+  "disk": {
+    "device": "/dev/vdb",
+    "filesystem": "ext4"
+  },
+  "users": [
+    {
+      "name": "kim",
+      "admin": true
+    }
+  ],
+  "hostname": "keys"
+}

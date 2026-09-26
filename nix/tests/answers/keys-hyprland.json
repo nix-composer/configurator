@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "basics": {
+    "locale": "en_US.UTF-8",
+    "keyboardLayout": "us",
+    "timezone": "UTC"
+  },
+  "desktop": {
+    "id": "hyprland"
+  },
+  "apps": {
+    "packages": [
+      "kitty"
+    ]
+  },
+  "keybinds": {
+    "SUPER + F11": {
+      "action": "hl.dsp.exec_cmd(\"kitty\")"
+    },
+    "SUPER + F10": {
+      "action": "hl.dsp.window.close()"
+    },
+    "SUPER + E": "unbind",
+    "SUPER + F9": {
+      "exec": "touch /tmp/kb-added"
+    }
+  },
+  "disk": {
+    "device": "/dev/vdb",
+    "filesystem": "ext4"
+  },
+  "users": [
+    {
+      "name": "kim",
+      "admin": true
+    }
+  ],
+  "hostname": "keys"
+}

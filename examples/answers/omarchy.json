@@ -54,6 +54,12 @@
     "SUPER + SHIFT + N": "unbind",
     "SUPER + SHIFT + K": {
       "webapp": "slack"
+    },
+    "SUPER + BACKSPACE": {
+      "action": "o.bind(\"SUPER + W\", \"Close window\", hl.dsp.window.close())"
+    },
+    "SUPER + F12": {
+      "action": "o.bind(\"XF86AudioMute\", \"Mute\", \"omarchy-audio-output-volume mute-toggle\", { locked = true })"
     }
   },
   "hardware": {

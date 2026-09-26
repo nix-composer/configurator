@@ -47,13 +47,26 @@ impl Generator<'_> {
             "mate-dconf" => self.dconf_mate(&mut section, desktop)?,
             "sway" => self.sway(&mut section, desktop)?,
             "niri" => self.niri(&mut section, desktop)?,
+            "xfce-xfconf" => self.xfce(&mut section, desktop)?,
+            "hyprland-lua" => self.hyprland(&mut section, desktop)?,
+            "kde-kglobalshortcuts" => self.kde(&mut section, desktop)?,
+            "i3" => self.i3(&mut section, desktop)?,
+            "labwc" => self.labwc(&mut section, desktop)?,
+            "river" => self.river(&mut section, desktop)?,
+            "wayfire" => self.wayfire(&mut section, desktop)?,
+            "mangowc" => self.mango(&mut section, desktop)?,
+            // Its shortcuts file is a package (keybind_packages, listed
+            // with the apps).
+            "cosmic" => {
+                self.plan(desktop)?;
+            }
             _ => return Err(unsupported()),
         }
         Ok(section)
     }
 
     /// What a bind runs, as a Nix string expression; `None` for an unbind.
-    fn command(&self, bind: &Keybind) -> Result<Option<Nix>, Error> {
+    pub(crate) fn command(&self, bind: &Keybind) -> Result<Option<Nix>, Error> {
         Ok(match bind {
             Keybind::Launch(attr) => Some(Nix::raw(format!("lib.getExe pkgs.{attr}"))),
             Keybind::Exec(cmd) => Some(Nix::str(cmd)),
@@ -67,7 +80,7 @@ impl Generator<'_> {
         })
     }
 
-    fn describe(bind: &Keybind) -> String {
+    pub(crate) fn describe(bind: &Keybind) -> String {
         match bind {
             Keybind::Launch(attr) => format!("Launch {attr}"),
             Keybind::Webapp(id) => format!("Open {id}"),
@@ -189,27 +202,36 @@ impl Generator<'_> {
     }
 
     /// A desktop module's own keybind option (Omarchy's `omarchy.keybinds`),
-    /// keyed by the canonical combo.
+    /// keyed by combo: `enable = false` removes the bind on a combo, any
+    /// other entry replaces it. A default moved to new keys is its own
+    /// dispatcher (`lua`) on them, and its old combos are unbound.
     fn module_option(&self, section: &mut Section, option: &str, home: bool) -> Result<(), Error> {
-        let desktop_webapps = self
-            .desktop
-            .and_then(|d| d.module.webapps.as_ref())
-            .map(|w| &w.ids);
-        let defaults = self
-            .desktop
-            .and_then(|d| self.catalog.default_keybinds.get(&d.id));
-        let mut binds = Vec::new();
-        for (combo, bind) in &self.answers.keybinds {
-            // A default is keyed as the desktop writes it (Omarchy binds
-            // digits by keycode: `SUPER + code:10`), or unbinding misses it.
-            let parsed = Combo::parse(combo).map_err(Error::Unsupported)?;
-            let combo = defaults
-                .and_then(|d| {
-                    d.iter()
-                        .find(|b| b.accels.iter().any(|a| accel_matches(a, &parsed)))
-                })
+        let desktop = self.desktop.expect("keybinds need a desktop");
+        let desktop_webapps = desktop.module.webapps.as_ref().map(|w| &w.ids);
+        let defaults: &[configurator_catalog::DefaultBind] = self
+            .catalog
+            .default_keybinds
+            .get(&desktop.id)
+            .map(Vec::as_slice)
+            .unwrap_or_default();
+        // A default is keyed as the desktop writes it (Omarchy binds
+        // digits by keycode: `SUPER + code:10`), or unbinding misses it.
+        let holder = |combo: &Combo| {
+            defaults
+                .iter()
+                .find(|b| b.accels.iter().any(|a| accel_matches(a, combo)))
+        };
+        let key_of = |combo: &Combo| -> String {
+            holder(combo)
                 .and_then(|b| quoted_combo(&b.action))
-                .unwrap_or(combo);
+                .map(str::to_owned)
+                .unwrap_or_else(|| hyprland_combo(combo))
+        };
+        let mut binds: std::collections::BTreeMap<String, Nix> = Default::default();
+        let mut moved = Vec::new();
+        for (combo_text, bind) in &self.answers.keybinds {
+            let parsed = Combo::parse(combo_text).map_err(Error::Unsupported)?;
+            let combo = key_of(&parsed);
             let value = match bind {
                 Keybind::Launch(app) => Nix::attrs([("launch", Nix::str(app))]),
                 // Web apps the desktop ships by id; others by their command.
@@ -219,14 +241,53 @@ impl Generator<'_> {
                 Keybind::Webapp(id) => Nix::attrs([("exec", self.webapp_command(id)?)]),
                 Keybind::Exec(cmd) => Nix::attrs([("exec", Nix::str(cmd))]),
                 Keybind::Action(action) => {
-                    return Err(Error::Unsupported(format!(
-                        "the desktop's own action {action:?} on this desktop"
-                    )));
+                    let default =
+                        defaults
+                            .iter()
+                            .find(|d| d.action == *action)
+                            .ok_or_else(|| {
+                                Error::Keybind(format!(
+                                    "{combo_text}: {action:?} is not one of {}'s actions",
+                                    desktop.name
+                                ))
+                            })?;
+                    let lua = default.lua_bind().ok_or_else(|| {
+                        Error::Unsupported(format!(
+                            "moving {}'s {:?} to other keys (it's Lua code, not one dispatcher)",
+                            desktop.name, default.label
+                        ))
+                    })?;
+                    moved.push(lua.keys.clone());
+                    // As readable as the option allows: a command, an Omarchy
+                    // launcher, else the dispatcher as Lua.
+                    let action = if let Some(cmd) = lua.command() {
+                        ("exec", Nix::str(cmd))
+                    } else if let Some(name) = lua.omarchy_launcher() {
+                        ("omarchy", Nix::str(name))
+                    } else {
+                        ("lua", Nix::str(&lua.dispatcher))
+                    };
+                    let mut fields = vec![("description", Nix::str(&lua.description)), action];
+                    if lua.locked {
+                        fields.push(("locked", Nix::Bool(true)));
+                    }
+                    if lua.repeating {
+                        fields.push(("repeating", Nix::Bool(true)));
+                    }
+                    Nix::attrs(fields)
                 }
                 Keybind::Unbind => Nix::attrs([("enable", Nix::Bool(false))]),
             };
-            binds.push((Nix::attr(combo), value));
+            binds.insert(combo, value);
         }
+        // A moved default leaves its old keys, unless something new is
+        // bound there (which replaces it anyway).
+        for keys in moved {
+            binds
+                .entry(keys)
+                .or_insert_with(|| Nix::attrs([("enable", Nix::Bool(false))]));
+        }
+        let binds = binds.into_iter().map(|(k, v)| (Nix::attr(&k), v)).collect();
         self.desktop_option(section, option, home, Nix::Attrs(binds));
         Ok(())
     }
@@ -339,144 +400,6 @@ impl Generator<'_> {
         );
         Ok(())
     }
-
-    /// Sway's default config includes /etc/sway/config.d/*; later binds
-    /// override earlier ones, and unbindsym removes a default.
-    fn sway(&self, section: &mut Section, desktop: &Desktop) -> Result<(), Error> {
-        let defaults = self.catalog.default_keybinds.get(&desktop.id);
-        let mut lines = Vec::new();
-        for (combo_text, bind) in &self.answers.keybinds {
-            let combo = Combo::parse(combo_text).map_err(Error::Unsupported)?;
-            let mut keys: Vec<String> = combo
-                .modifiers
-                .iter()
-                .map(|m| {
-                    match m {
-                        Modifier::Super => "Mod4",
-                        Modifier::Ctrl => "Control",
-                        Modifier::Alt => "Mod1",
-                        Modifier::Shift => "Shift",
-                    }
-                    .to_string()
-                })
-                .collect();
-            keys.push(combo.keysym());
-            let mut keys = keys.join("+");
-            // Sway's media and brightness keys are `--locked` binds, and an
-            // unbind has to match a bind's flags.
-            if combo.key.starts_with("XF86") {
-                keys = format!("--locked {keys}");
-            }
-            // A default on these keys goes first, so the new bind replaces it.
-            let held = defaults.is_some_and(|d| {
-                d.iter()
-                    .any(|b| b.accels.iter().any(|a| accel_matches(a, &combo)))
-            });
-            if let Keybind::Action(action) = bind {
-                if !defaults.is_some_and(|d| d.iter().any(|b| b.action == *action)) {
-                    return Err(Error::Keybind(format!(
-                        "{combo_text}: {action:?} is not one of {}'s actions",
-                        desktop.name
-                    )));
-                }
-                if held {
-                    lines.push(Nix::str(format!("unbindsym {keys}")));
-                }
-                lines.push(Nix::str(format!("bindsym {keys} {action}")));
-                continue;
-            }
-            if held && !matches!(bind, Keybind::Unbind) {
-                lines.push(Nix::str(format!("unbindsym {keys}")));
-            }
-            lines.push(match self.command(bind)? {
-                Some(Nix::Str(cmd)) => Nix::str(format!("bindsym {keys} exec {cmd}")),
-                Some(Nix::Raw(expr)) => Nix::raw(format!(
-                    "({} + {expr})",
-                    crate::nix::string(&format!("bindsym {keys} exec "))
-                )),
-                Some(other) => unreachable!("commands are strings or expressions: {other:?}"),
-                None => Nix::str(format!("unbindsym {keys}")),
-            });
-        }
-        section.set(
-            Key(vec![
-                "environment".into(),
-                "etc".into(),
-                "sway/config.d/50-configurator-keybinds.conf".into(),
-                "text".into(),
-            ]),
-            Nix::raw(format!("lib.concatLines {}", Nix::List(lines).render(1))),
-        );
-        Ok(())
-    }
-
-    /// niri reads /etc/niri/config.kdl when the user has no config of
-    /// their own. It includes niri's default config, then our binds: a
-    /// later bind replaces the included one on the same keys. niri has no
-    /// unbind.
-    fn niri(&self, section: &mut Section, desktop: &Desktop) -> Result<(), Error> {
-        let mut lines = vec![
-            Nix::raw(
-                "(\"include \\\"\" + pkgs.runCommand \"niri-default-config.kdl\" { } \"cp ${pkgs.niri.src}/resources/default-config.kdl $out\" + \"\\\"\")",
-            ),
-            Nix::str("binds {"),
-        ];
-        let split = self.split(desktop, "<Super>")?;
-        if let Some((combo_text, _, _)) = split.taken.iter().find(|(_, _, unbind)| *unbind) {
-            return Err(Error::Unsupported(format!(
-                "removing niri's default binds ({combo_text}): niri can't unbind"
-            )));
-        }
-        let niri_keys = |combo: &Combo| {
-            let mut keys: Vec<String> = combo
-                .modifiers
-                .iter()
-                .map(|m| {
-                    match m {
-                        // niri's defaults spell Super `Mod`, and a bind only
-                        // replaces one written the same way.
-                        Modifier::Super => "Mod",
-                        Modifier::Ctrl => "Ctrl",
-                        Modifier::Alt => "Alt",
-                        Modifier::Shift => "Shift",
-                    }
-                    .to_string()
-                })
-                .collect();
-            keys.push(combo.keysym());
-            keys.join("+")
-        };
-        // niri's own actions, as its config writes them (`focus-column-left`,
-        // `spawn "alacritty"`), on their new keys.
-        for (combo_text, bind) in &self.answers.keybinds {
-            if let Keybind::Action(action) = bind {
-                let combo = Combo::parse(combo_text).map_err(Error::Unsupported)?;
-                lines.push(Nix::str(format!(
-                    "    {} {{ {action}; }}",
-                    niri_keys(&combo)
-                )));
-            }
-        }
-        for (combo, _, command) in split.commands {
-            // A KDL string: builtins.toJSON quotes and escapes it.
-            lines.push(Nix::raw(format!(
-                "({} + builtins.toJSON ({}) + \"; }}\")",
-                crate::nix::string(&format!("    {} {{ spawn-sh ", niri_keys(&combo))),
-                command.render(2),
-            )));
-        }
-        lines.push(Nix::str("}"));
-        section.set(
-            Key(vec![
-                "environment".into(),
-                "etc".into(),
-                "niri/config.kdl".into(),
-                "text".into(),
-            ]),
-            Nix::raw(format!("lib.concatLines {}", Nix::List(lines).render(1))),
-        );
-        Ok(())
-    }
 }
 
 /// The combo a desktop's own bind action names first: Omarchy's
@@ -485,6 +408,32 @@ fn quoted_combo(action: &str) -> Option<&str> {
     let start = action.find("bind(\"")? + "bind(\"".len();
     let len = action[start..].find('"')?;
     Some(&action[start..start + len])
+}
+
+/// A new combo as Hyprland reads it: modifiers as Omarchy writes them,
+/// letters upper case, other keys by their XKB name (`comma`, not
+/// `COMMA`, which xkbcommon doesn't know); the answers' own spelling for
+/// keys Omarchy writes that way (`RETURN`, `SPACE`, F-keys).
+fn hyprland_combo(combo: &Combo) -> String {
+    let upper = combo.key.to_ascii_uppercase();
+    let letter = combo.key.len() == 1 && combo.key.chars().all(|c| c.is_ascii_alphabetic());
+    let named = matches!(
+        upper.as_str(),
+        "RETURN" | "SPACE" | "TAB" | "ESCAPE" | "BACKSPACE" | "PRINT" | "DELETE" | "HOME" | "END"
+    );
+    let function = upper.starts_with('F') && upper[1..].parse::<u8>().is_ok();
+    let key = if letter || named || function {
+        upper
+    } else {
+        combo.keysym()
+    };
+    let mut parts: Vec<String> = combo
+        .modifiers
+        .iter()
+        .map(|m| format!("{m:?}").to_uppercase())
+        .collect();
+    parts.push(key);
+    parts.join(" + ")
 }
 
 /// Whether a GTK accelerator (`<Super><Shift>h`, `<Primary>q`) is this
@@ -511,7 +460,7 @@ fn accel_matches(accel: &str, combo: &Combo) -> bool {
 }
 
 /// A GTK accelerator: `<Super><Shift>b`. MATE's Marco spells Super `<Mod4>`.
-fn gtk_accel(combo: &Combo, super_name: &str) -> String {
+pub(crate) fn gtk_accel(combo: &Combo, super_name: &str) -> String {
     let mut accel = String::new();
     for m in &combo.modifiers {
         accel.push_str(match m {

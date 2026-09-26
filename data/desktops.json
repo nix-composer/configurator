@@ -243,7 +243,7 @@
       "description": "An Openbox-inspired stacking Wayland compositor",
       "module": { "config": { "programs.labwc.enable": true } },
       "loginManager": "ly",
-      "keybinds": null
+      "keybinds": { "format": "labwc" }
     },
     {
       "id": "river",
@@ -253,7 +253,7 @@
       "description": "A dynamic tiling Wayland compositor",
       "module": { "config": { "programs.river-classic.enable": true } },
       "loginManager": "ly",
-      "keybinds": null
+      "keybinds": { "format": "river" }
     },
     {
       "id": "wayfire",
@@ -263,7 +263,7 @@
       "description": "A 3D Wayland compositor with Compiz-style effects",
       "module": { "config": { "programs.wayfire.enable": true } },
       "loginManager": "ly",
-      "keybinds": null
+      "keybinds": { "format": "wayfire" }
     },
     {
       "id": "mangowc",
@@ -273,7 +273,7 @@
       "description": "A dwl-based Wayland compositor with animations",
       "module": { "config": { "programs.mangowc.enable": true } },
       "loginManager": "ly",
-      "keybinds": null
+      "keybinds": { "format": "mangowc" }
     }
     ,{
       "id": "i3",
