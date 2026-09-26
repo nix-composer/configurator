@@ -40,7 +40,7 @@
       "$ref": "#/$defs/Hardware",
       "default": {
         "firmware": "uefi",
-        "kernel": "default",
+        "kernel": "lts",
         "nonFreeFirmware": false,
         "nvidia": null
       }
@@ -284,8 +284,9 @@
           "default": "uefi"
         },
         "kernel": {
-          "$ref": "#/$defs/Kernel",
-          "default": "default"
+          "description": "The kernel, by id in the catalog's kernels (data/kernels.json);\n\"lts\" is NixOS's default.",
+          "type": "string",
+          "default": "lts"
         },
         "nonFreeFirmware": {
           "description": "Redistributable and non-free firmware (Broadcom Wi-Fi, …).",
@@ -306,20 +307,6 @@
         }
       },
       "additionalProperties": false
-    },
-    "Kernel": {
-      "oneOf": [
-        {
-          "description": "NixOS's default: the release's long-term-support kernel.",
-          "type": "string",
-          "const": "default"
-        },
-        {
-          "description": "The newest kernel in nixpkgs (newer hardware support).",
-          "type": "string",
-          "const": "latest"
-        }
-      ]
     },
     "Keybind": {
       "oneOf": [

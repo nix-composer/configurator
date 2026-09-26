@@ -5,8 +5,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use configurator_answers::{
-    Answers, Apps, Basics, Desktop, Development, Disk, Filesystem, Firmware, Hardware, Kernel,
-    Keybind, LoginManager, NvidiaDriver, Security, Shell, ShellKind, User, VERSION,
+    Answers, Apps, Basics, Desktop, Development, Disk, Filesystem, Firmware, Hardware, Keybind,
+    LoginManager, NvidiaDriver, Security, Shell, ShellKind, User, VERSION,
 };
 use configurator_catalog::Catalog;
 use configurator_engine::{Secrets, status};
@@ -63,7 +63,9 @@ pub struct Draft {
 
     pub nvidia: Option<NvidiaDriver>,
     pub non_free_firmware: bool,
-    pub kernel: Kernel,
+    /// A kernel id (data/kernels.json); the profile's until picked by hand.
+    pub kernel: String,
+    pub kernel_chosen: bool,
 
     pub secure_boot: bool,
     pub tpm_pin: bool,
@@ -105,7 +107,8 @@ impl Draft {
             keybinds: BTreeMap::new(),
             nvidia: None,
             non_free_firmware: false,
-            kernel: Kernel::Default,
+            kernel: "lts".into(),
+            kernel_chosen: false,
             secure_boot: false,
             tpm_pin: false,
             pin: String::new(),
@@ -142,6 +145,9 @@ impl Draft {
                     .entry(webapp.clone())
                     .or_default()
                     .insert(Source::Profile);
+            }
+            if !self.kernel_chosen {
+                self.kernel = profile.kernel.clone();
             }
         }
         self.profile = id.to_string();
@@ -311,7 +317,7 @@ impl Draft {
                 nvidia: self.nvidia,
                 non_free_firmware: self.non_free_firmware,
                 firmware: status::firmware(),
-                kernel: self.kernel,
+                kernel: self.kernel.clone(),
             },
             security: Security {
                 secure_boot: self.secure_boot,
@@ -421,6 +427,22 @@ mod tests {
         draft.set_desktop(&catalog, Some("plasma".into()));
         assert!(!draft.ecosystem);
         assert_eq!(draft.apps.len(), 1);
+    }
+
+    #[test]
+    fn profiles_pick_the_kernel_until_you_do() {
+        let catalog = Catalog::builtin().unwrap();
+        let mut draft = Draft::new(&catalog);
+        assert_eq!(draft.answers().hardware.kernel, "lts");
+        draft.set_profile(&catalog, "gaming");
+        assert_eq!(draft.answers().hardware.kernel, "zen");
+        draft.set_profile(&catalog, "office");
+        assert_eq!(draft.answers().hardware.kernel, "lts");
+        // Picked in the Hardware layer: profiles leave it alone.
+        draft.kernel = "latest".into();
+        draft.kernel_chosen = true;
+        draft.set_profile(&catalog, "gaming");
+        assert_eq!(draft.answers().hardware.kernel, "latest");
     }
 
     #[test]

@@ -31,6 +31,7 @@
           "omarchy/theme.json": { "theme": "tokyo-night" }
         },
         "ecosystem": "omarchy.ecosystem.enable",
+        "shell": { "option": "omarchy.shell", "values": ["zsh", "bash"] },
       "catalog": { "name": "omarchy", "home": true, "apps": "omarchy.apps", "cli": "omarchy.cli" },
         "agents": {
           "option": "omarchy.agents",

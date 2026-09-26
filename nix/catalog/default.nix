@@ -24,6 +24,17 @@ let
           | sed "s|${nixpkgs}/||g" > $out
       '';
 
+  # Each kernel choice's version in this nixpkgs, for the Hardware layer.
+  kernelVersions = pkgs.writeText "kernel-versions.json" (
+    builtins.toJSON (
+      lib.listToAttrs (
+        map (k: lib.nameValuePair k.attr pkgs.${k.attr}.kernel.version) (
+          lib.importJSON ../../data/kernels.json
+        ).kernels
+      )
+    )
+  );
+
   data = lib.fileset.toSource {
     root = ../../data;
     fileset = lib.fileset.unions [
@@ -51,4 +62,5 @@ pkgs.runCommand "configurator-catalog"
       --nixpkgs ${lib.escapeShellArg lib.version} \
       --nixpkgs-path ${nixpkgs} \
       --out $out
+    cp ${kernelVersions} $out/kernel-versions.json
   ''

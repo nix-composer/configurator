@@ -1,0 +1,12 @@
+{
+  "$comment": "The Hardware layer's kernel choices: `attr` is the nixpkgs kernel package set (boot.kernelPackages = pkgs.<attr>); the catalog build records each one's version (kernel-versions.json). The first is NixOS's default (nothing written). Profiles pick one by id; checks.kernels builds them all.",
+  "kernels": [
+    { "id": "lts", "name": "LTS", "channel": "Long-term support", "attr": "linuxPackages", "description": "NixOS's default: the long-term-support kernel, updated with fixes for years" },
+    { "id": "latest", "name": "Latest", "channel": "Stable", "attr": "linuxPackages_latest", "description": "The newest stable kernel: support for the newest hardware" },
+    { "id": "zen", "name": "Zen", "channel": "Stable, desktop-tuned", "attr": "linuxPackages_zen", "description": "The newest stable kernel tuned for desktops and gaming: responsiveness over throughput" },
+    { "id": "xanmod", "name": "XanMod LTS", "channel": "Long-term support, desktop-tuned", "attr": "linuxPackages_xanmod", "description": "The LTS kernel with XanMod's desktop and gaming patches" },
+    { "id": "xanmod-latest", "name": "XanMod", "channel": "Stable, desktop-tuned", "attr": "linuxPackages_xanmod_latest", "description": "The newest stable kernel with XanMod's desktop and gaming patches" },
+    { "id": "lts-previous", "name": "Previous LTS", "channel": "Long-term support, older", "attr": "linuxPackages_6_12", "description": "The previous long-term-support kernel, for hardware that works better with it" },
+    { "id": "testing", "name": "Testing", "channel": "Release candidate", "attr": "linuxPackages_testing", "description": "The next kernel's release candidate: newest features, least tested" }
+  ]
+}

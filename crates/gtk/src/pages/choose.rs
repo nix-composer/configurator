@@ -91,6 +91,23 @@ pub fn profile(ctx: &Ctx) -> Page {
                 });
                 rows.append(&row);
             }
+            if let Some(k) = ctx.catalog.kernel(&p.kernel) {
+                let version = ctx
+                    .apps
+                    .as_ref()
+                    .and_then(|a| a.kernel_versions.get(&k.attr).cloned());
+                let row = adw::ActionRow::builder()
+                    .title(escape(&format!("{} kernel", k.name)))
+                    .subtitle(escape(&match version {
+                        Some(v) => format!("{} · {v}", k.channel),
+                        None => k.channel.clone(),
+                    }))
+                    .build();
+                row.add_prefix(&gtk::Image::from_icon_name(
+                    "application-x-firmware-symbolic",
+                ));
+                rows.append(&row);
+            }
             for (option, value) in &p.config {
                 let row = adw::ActionRow::builder()
                     .title(escape(option))

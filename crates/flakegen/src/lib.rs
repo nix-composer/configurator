@@ -11,9 +11,9 @@ pub mod nix;
 use std::collections::BTreeMap;
 
 use configurator_answers::{
-    Answers, Filesystem, Firmware, Kernel, LoginManager, NvidiaDriver, ShellKind, User,
+    Answers, Filesystem, Firmware, LoginManager, NvidiaDriver, ShellKind, User,
 };
-use configurator_catalog::{Catalog, Desktop, Session};
+use configurator_catalog::{Catalog, Desktop, Session, ShellOption};
 use serde_json::Value;
 
 use nix::{Key, Nix};
@@ -104,7 +104,7 @@ pub fn generate(answers: &Answers, catalog: &Catalog, inputs: &Inputs) -> Result
         generator.hardware(
             inputs.facter_report.is_some(),
             inputs.platform.unwrap_or("x86_64-linux"),
-        ),
+        )?,
     );
     host.files.insert("disko.nix".into(), generator.disko());
     if let Some(report) = inputs.facter_report {
@@ -830,8 +830,30 @@ impl Generator<'_> {
         Ok(section)
     }
 
+    /// The chosen shell's name and package.
+    fn shell(&self) -> (&'static str, &'static str) {
+        match self.answers.shell.shell {
+            ShellKind::Bash => ("bash", "pkgs.bashInteractive"),
+            ShellKind::Zsh => ("zsh", "pkgs.zsh"),
+            ShellKind::Fish => ("fish", "pkgs.fish"),
+            ShellKind::Nushell => ("nushell", "pkgs.nushell"),
+        }
+    }
+
+    /// A desktop that sets users' shells itself (Omarchy): whether it has a
+    /// setup for the chosen shell (then it gets told which), else users get
+    /// the shell set directly, over the desktop's.
+    fn desktop_shell(&self) -> Option<(&ShellOption, bool)> {
+        let option = self.desktop?.module.shell.as_ref()?;
+        let (name, _) = self.shell();
+        Some((option, option.values.iter().any(|v| v == name)))
+    }
+
     fn shell_section(&self) -> Section {
         let mut section = Section::new("Shell.");
+        if let Some((option, true)) = self.desktop_shell() {
+            section.set(option.option.as_str(), Nix::str(self.shell().0));
+        }
         match self.answers.shell.shell {
             ShellKind::Bash => {}
             ShellKind::Zsh => {
@@ -907,7 +929,12 @@ impl Generator<'_> {
         for user in &self.answers.users {
             section.set(
                 Key(vec!["users".into(), "users".into(), user.name.clone()]),
-                user_config(user, docker),
+                user_config(
+                    user,
+                    docker,
+                    // Over a desktop that sets shells and has no setup for this one.
+                    matches!(self.desktop_shell(), Some((_, false))).then(|| self.shell().1),
+                ),
             );
         }
         if self.needs_home_manager() {
@@ -930,7 +957,7 @@ impl Generator<'_> {
         section
     }
 
-    fn hardware(&self, has_report: bool, platform: &str) -> String {
+    fn hardware(&self, has_report: bool, platform: &str) -> Result<String, Error> {
         let h = &self.answers.hardware;
         let mut detected =
             Section::new("What nixos-facter detected: kernel modules, firmware, CPU microcode, …");
@@ -963,8 +990,15 @@ impl Generator<'_> {
             // nouveau is the default.
             Some(NvidiaDriver::Nouveau) | None => {}
         }
-        if h.kernel == Kernel::Latest {
-            drivers.set("boot.kernelPackages", Nix::raw("pkgs.linuxPackages_latest"));
+        let kernel = self
+            .catalog
+            .kernel(&h.kernel)
+            .ok_or_else(|| Error::Unknown("kernel", h.kernel.clone()))?;
+        if !kernel.is_default() {
+            drivers.set(
+                "boot.kernelPackages",
+                Nix::raw(format!("pkgs.{}", kernel.attr)),
+            );
         }
         if h.non_free_firmware {
             drivers.set("hardware.enableAllFirmware", Nix::Bool(true));
@@ -979,12 +1013,12 @@ impl Generator<'_> {
              #   sudo nixos-facter -o facter.json\n\
              # here and set hardware.facter.reportPath = ./facter.json;\n"
         };
-        let args = if h.kernel == Kernel::Latest {
+        let args = if !kernel.is_default() {
             "{ lib, pkgs, ... }"
         } else {
             "{ lib, ... }"
         };
-        module(header, args, &[detected, drivers])
+        Ok(module(header, args, &[detected, drivers]))
     }
 
     fn disko(&self) -> String {
@@ -1147,7 +1181,7 @@ impl Generator<'_> {
     }
 }
 
-fn user_config(user: &User, docker: bool) -> Nix {
+fn user_config(user: &User, docker: bool, shell: Option<&str>) -> Nix {
     let mut groups = vec![Nix::str("networkmanager"), Nix::str("video")];
     if docker {
         groups.push(Nix::str("docker"));
@@ -1166,6 +1200,9 @@ fn user_config(user: &User, docker: bool) -> Nix {
             Nix::List(user.ssh_keys.iter().map(Nix::str).collect()),
         ));
     }
+    if let Some(shell) = shell {
+        entries.push((Key::from("shell"), Nix::raw(shell)));
+    }
     Nix::Attrs(entries)
 }
 
@@ -1178,6 +1215,23 @@ mod tests {
     /// Generated output for each answers file in `examples/answers` and
     /// `nix/tests/answers` is checked in next to it, under `hosts/<name>/`
     /// (the VM tests install those). Set `UPDATE_EXPECT=1` to regenerate.
+    #[test]
+    fn omarchy_gets_the_chosen_shell() {
+        let catalog = Catalog::builtin().unwrap();
+        let mut answers =
+            Answers::from_json(include_str!("../../../examples/answers/omarchy.json")).unwrap();
+        answers.shell.shell = ShellKind::Bash;
+        let host = generate(&answers, &catalog, &Default::default()).unwrap();
+        let config = &host.files["configuration.nix"];
+        assert!(config.contains(r#"omarchy.shell = "bash";"#), "{config}");
+        // A shell Omarchy has no setup for is set per user, over Omarchy's.
+        answers.shell.shell = ShellKind::Fish;
+        let host = generate(&answers, &catalog, &Default::default()).unwrap();
+        let config = &host.files["configuration.nix"];
+        assert!(!config.contains("omarchy.shell"), "{config}");
+        assert!(config.contains("shell = pkgs.fish;"), "{config}");
+    }
+
     #[test]
     fn examples_match_checked_in_output() {
         let catalog = Catalog::builtin().unwrap();

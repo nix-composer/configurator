@@ -4,7 +4,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use adw::prelude::*;
-use configurator_answers::{Filesystem, Kernel, Layer, NvidiaDriver};
+use configurator_answers::{Filesystem, Layer, NvidiaDriver};
 use configurator_engine::status::{self, SecureBoot};
 
 use super::Page;
@@ -159,27 +159,80 @@ pub fn hardware(ctx: &Ctx) -> Page {
         firmware.connect_active_notify(move |s| d.borrow_mut().non_free_firmware = s.is_active());
     }
     rows.append(&firmware);
-    {
-        let d = ctx.draft.clone();
-        let current = usize::from(ctx.draft.borrow().kernel == Kernel::Latest);
-        rows.append(&combo_row(
-            "Kernel",
-            "Latest supports the newest hardware; the default is NixOS's long-term-support kernel",
-            &["Default (long-term support)", "Latest"],
-            current,
-            move |i| {
-                d.borrow_mut().kernel = if i == 1 {
-                    Kernel::Latest
-                } else {
-                    Kernel::Default
-                };
-            },
-        ));
-    }
     drivers.add(&rows);
     content.append(&drivers);
 
-    Page::new(Layer::Hardware, widget)
+    // The kernel: the profile's preselection, changeable here.
+    let kernel_group = group(
+        "Kernel",
+        "Its release channel and version; your profile picked one.",
+    );
+    let kernel_rows = list();
+    let labels: Vec<String> = ctx
+        .catalog
+        .kernels
+        .iter()
+        .map(|k| {
+            let version = ctx
+                .apps
+                .as_ref()
+                .and_then(|a| a.kernel_versions.get(&k.attr).cloned());
+            match version {
+                Some(v) => format!("{} · {} · {v}", k.name, k.channel),
+                None => format!("{} · {}", k.name, k.channel),
+            }
+        })
+        .collect();
+    let names: Vec<&str> = labels.iter().map(String::as_str).collect();
+    let kernel_row = combo_row("Kernel", "", &names, 0, |_| {});
+    let describe = {
+        let (ctx, row) = (ctx.clone(), kernel_row.clone());
+        move |i: usize| {
+            if let Some(k) = ctx.catalog.kernels.get(i) {
+                row.set_subtitle(&k.description);
+            }
+        }
+    };
+    // Set while the layer shows the draft's kernel: not a choice.
+    let syncing = Rc::new(std::cell::Cell::new(false));
+    {
+        let (ctx, describe, syncing) = (ctx.clone(), describe.clone(), syncing.clone());
+        kernel_row.connect_selected_notify(move |row| {
+            let i = row.selected() as usize;
+            describe(i);
+            if syncing.get() {
+                return;
+            }
+            if let Some(k) = ctx.catalog.kernels.get(i) {
+                let mut d = ctx.draft.borrow_mut();
+                d.kernel = k.id.clone();
+                d.kernel_chosen = true;
+            }
+        });
+    }
+    kernel_rows.append(&kernel_row);
+    kernel_group.add(&kernel_rows);
+    content.append(&kernel_group);
+
+    // Shows the profile's kernel, or the one picked, on entering the layer.
+    let enter = {
+        let ctx = ctx.clone();
+        move || {
+            let id = ctx.draft.borrow().kernel.clone();
+            let i = ctx
+                .catalog
+                .kernels
+                .iter()
+                .position(|k| k.id == id)
+                .unwrap_or(0);
+            syncing.set(true);
+            kernel_row.set_selected(i as u32);
+            syncing.set(false);
+            describe(i);
+        }
+    };
+
+    Page::new(Layer::Hardware, widget).on_enter(enter)
 }
 
 pub fn security(ctx: &Ctx) -> Page {

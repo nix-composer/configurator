@@ -84,6 +84,7 @@
   };
 
   # Shell.
+  omarchy.shell = "zsh";
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
 

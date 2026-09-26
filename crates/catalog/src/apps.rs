@@ -101,6 +101,8 @@ pub struct AppCatalog {
     pub packages: Vec<Package>,
     /// Disk sizes (sizes.json), if measured.
     pub sizes: Option<crate::sizes::Sizes>,
+    /// Kernel versions by nixpkgs attribute (kernel-versions.json).
+    pub kernel_versions: HashMap<String, String>,
     by_attr: HashMap<String, usize>,
     /// Lowercased name, attribute and summary, for search.
     haystacks: Vec<(String, String, String)>,
@@ -148,6 +150,10 @@ impl AppCatalog {
         let json = std::fs::read(&path).map_err(|e| LoadError::Io(path.clone(), e))?;
         let mut catalog = AppCatalog::parse(dir, &json)?;
         catalog.sizes = crate::sizes::Sizes::load(dir);
+        catalog.kernel_versions = std::fs::read(dir.join("kernel-versions.json"))
+            .ok()
+            .and_then(|json| serde_json::from_slice(&json).ok())
+            .unwrap_or_default();
         Ok(catalog)
     }
 
@@ -184,6 +190,7 @@ impl AppCatalog {
             popular_cli: file.popular_cli,
             packages: file.packages,
             sizes: None,
+            kernel_versions: HashMap::new(),
             by_attr,
             haystacks,
         })

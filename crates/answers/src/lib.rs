@@ -393,7 +393,7 @@ impl Combo {
     }
 }
 
-#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Hardware {
     /// NVIDIA driver choice, when an NVIDIA GPU is detected.
@@ -405,18 +405,25 @@ pub struct Hardware {
     /// How the machine boots, as detected by the installer.
     #[serde(default)]
     pub firmware: Firmware,
-    #[serde(default)]
-    pub kernel: Kernel,
+    /// The kernel, by id in the catalog's kernels (data/kernels.json);
+    /// "lts" is NixOS's default.
+    #[serde(default = "default_kernel")]
+    pub kernel: String,
 }
 
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
-#[serde(rename_all = "lowercase")]
-pub enum Kernel {
-    /// NixOS's default: the release's long-term-support kernel.
-    #[default]
-    Default,
-    /// The newest kernel in nixpkgs (newer hardware support).
-    Latest,
+fn default_kernel() -> String {
+    "lts".into()
+}
+
+impl Default for Hardware {
+    fn default() -> Self {
+        Hardware {
+            nvidia: None,
+            non_free_firmware: false,
+            firmware: Firmware::default(),
+            kernel: default_kernel(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
@@ -557,6 +564,14 @@ impl Answers {
                 .all(|c| c.is_ascii_alphanumeric() || "/_+-".contains(c))
         {
             return invalid(format!("invalid time zone {tz:?}"));
+        }
+        if !self
+            .hardware
+            .kernel
+            .chars()
+            .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-')
+        {
+            return invalid(format!("invalid kernel id {:?}", self.hardware.kernel));
         }
         if !is_hostname(&self.hostname) {
             return invalid(format!("invalid hostname {:?}", self.hostname));

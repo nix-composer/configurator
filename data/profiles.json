@@ -1,5 +1,5 @@
 {
-  "$comment": "Profiles: a purpose's opinionated setup. `apps` and `webapps` are preselected in the app and web app stores (the answers carry what's kept; apps in programs.json get their NixOS module); `config` is written as the profile's own section. Special values as in desktops.json, plus {\"$context\": \"firstUser\"}.",
+  "$comment": "Profiles: a purpose's opinionated setup. `apps` and `webapps` are preselected in the app and web app stores (the answers carry what's kept; apps in programs.json get their NixOS module); `kernel` (data/kernels.json, else LTS) is preselected in the Hardware layer; `config` is written as the profile's own section. Special values as in desktops.json, plus {\"$context\": \"firstUser\"}.",
   "profiles": [
     {
       "id": "custom",
@@ -7,6 +7,7 @@
       "description": "Nothing preselected: choose everything yourself",
       "apps": [],
       "webapps": [],
+      "kernel": "lts",
       "config": {}
     },
     {
@@ -28,6 +29,7 @@
         "google-drive",
         "teams"
       ],
+      "kernel": "lts",
       "config": {
         "services.printing.enable": true,
         "services.avahi.enable": true,
@@ -53,6 +55,7 @@
         "twitch",
         "xbox-cloud-gaming"
       ],
+      "kernel": "zen",
       "config": {
         "hardware.graphics.enable": true,
         "hardware.graphics.enable32Bit": true
@@ -66,6 +69,7 @@
         "firefox"
       ],
       "webapps": [],
+      "kernel": "lts",
       "config": {
         "services.cage.enable": true,
         "services.cage.user": {
@@ -90,6 +94,7 @@
         "wget"
       ],
       "webapps": [],
+      "kernel": "lts",
       "config": {
         "services.openssh.enable": true
       }
@@ -100,6 +105,7 @@
       "description": "No desktop, reachable over SSH",
       "apps": [],
       "webapps": [],
+      "kernel": "lts",
       "config": {
         "services.openssh.enable": true
       }

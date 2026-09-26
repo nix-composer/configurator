@@ -19,6 +19,7 @@ const CONTAINERS_JSON: &str = include_str!("../../../data/containers.json");
 const DEV_TEMPLATES_JSON: &str = include_str!("../../../data/dev-templates.json");
 const ECOSYSTEMS_JSON: &str = include_str!("../../../data/ecosystems.json");
 const PROGRAMS_JSON: &str = include_str!("../../../data/programs.json");
+const KERNELS_JSON: &str = include_str!("../../../data/kernels.json");
 include!(concat!(env!("OUT_DIR"), "/icons.rs"));
 
 #[derive(Debug, Clone, Deserialize)]
@@ -98,6 +99,19 @@ pub struct Module {
     /// The desktop's own catalog and the options that take its picks.
     #[serde(default)]
     pub catalog: Option<CatalogOptions>,
+    /// The desktop's own login shell option (it sets users' shells itself).
+    #[serde(default)]
+    pub shell: Option<ShellOption>,
+}
+
+/// A desktop that sets users' login shells itself (Omarchy, with its shell
+/// setup): the option, and the shells it has a setup for.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct ShellOption {
+    pub option: String,
+    /// Shell names (`bash`, `zsh`, …) it takes.
+    pub values: Vec<String>,
 }
 
 /// A flake desktop's own catalog (its flake's `lib.catalog`, built in from
@@ -145,6 +159,10 @@ pub struct CatalogEntry {
 
 fn yes() -> bool {
     true
+}
+
+fn lts() -> String {
+    "lts".into()
 }
 
 impl DesktopCatalog {
@@ -200,6 +218,26 @@ pub struct EcosystemPick {
     pub category: String,
 }
 
+/// A kernel the Hardware layer offers (data/kernels.json).
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct Kernel {
+    pub id: String,
+    pub name: String,
+    /// Its release channel, for people: "Long-term support", "Stable, desktop-tuned".
+    pub channel: String,
+    /// The nixpkgs kernel package set.
+    pub attr: String,
+    pub description: String,
+}
+
+impl Kernel {
+    /// NixOS's default (nothing to write).
+    pub fn is_default(&self) -> bool {
+        self.attr == "linuxPackages"
+    }
+}
+
 /// An app NixOS sets up through its own module (data/programs.json).
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -224,6 +262,9 @@ pub struct Profile {
     /// Preselected in the web app store (ids).
     #[serde(default)]
     pub webapps: Vec<String>,
+    /// Preselected in the Hardware layer (a kernel id).
+    #[serde(default = "lts")]
+    pub kernel: String,
     /// NixOS options, with the same special values as desktop modules.
     pub config: BTreeMap<String, Value>,
 }
@@ -398,6 +439,7 @@ pub struct Catalog {
     pub dev_templates: Vec<DevTemplate>,
     pub ecosystems: Vec<Ecosystem>,
     pub programs: Vec<Program>,
+    pub kernels: Vec<Kernel>,
     /// Default keybinds by desktop id.
     pub default_keybinds: BTreeMap<String, Vec<DefaultBind>>,
     /// Flake desktops' catalogs by name.
@@ -438,6 +480,7 @@ impl Catalog {
             dev_templates: load(DEV_TEMPLATES_JSON, "templates", |t: &DevTemplate| &t.id)?,
             ecosystems: load(ECOSYSTEMS_JSON, "ecosystems", |e: &Ecosystem| &e.desktop)?,
             programs: load(PROGRAMS_JSON, "programs", |p: &Program| &p.attr)?,
+            kernels: load(KERNELS_JSON, "kernels", |k: &Kernel| &k.id)?,
             default_keybinds: DEFAULT_KEYBINDS
                 .iter()
                 .map(|(format, json)| {
@@ -565,6 +608,10 @@ impl Catalog {
             .map(|(_, png)| *png)
     }
 
+    pub fn kernel(&self, id: &str) -> Option<&Kernel> {
+        self.kernels.iter().find(|k| k.id == id)
+    }
+
     /// The module an app is set up through, if it has one.
     pub fn program(&self, attr: &str) -> Option<&Program> {
         self.programs.iter().find(|p| p.attr == attr)
@@ -628,6 +675,15 @@ mod tests {
                 assert!(catalog.webapp(id).is_some(), "{}: web app {id}", profile.id);
             }
         }
+        for profile in &catalog.profiles {
+            assert!(
+                catalog.kernel(&profile.kernel).is_some(),
+                "{}: kernel {}",
+                profile.id,
+                profile.kernel
+            );
+        }
+        assert!(catalog.kernels[0].is_default());
         // Steam comes through its NixOS module.
         let gaming = catalog.profile("gaming").unwrap();
         assert!(gaming.apps.iter().any(|a| a == "steam"));

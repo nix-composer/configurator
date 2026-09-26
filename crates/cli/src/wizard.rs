@@ -6,8 +6,8 @@ use std::collections::BTreeMap;
 
 use anyhow::{Result, bail};
 use configurator_answers::{
-    Answers, Apps, Basics, Desktop, Development, Disk, Filesystem, Hardware, Kernel, Layer,
-    LoginManager, NvidiaDriver, Security, Shell, ShellKind, User, VERSION, is_attr_path,
+    Answers, Apps, Basics, Desktop, Development, Disk, Filesystem, Hardware, Layer, LoginManager,
+    NvidiaDriver, Security, Shell, ShellKind, User, VERSION, is_attr_path,
 };
 use configurator_catalog::{Catalog, DesktopKind};
 use configurator_engine::{Secrets, status};
@@ -324,18 +324,23 @@ pub fn run(catalog: &Catalog) -> Result<(Answers, Secrets)> {
         .with_prompt("Non-free firmware (some Wi-Fi and Bluetooth chips)?")
         .default(false)
         .interact()?;
-    let kernel = match Select::with_theme(t)
+    let names: Vec<String> = catalog
+        .kernels
+        .iter()
+        .map(|k| format!("{:<14} {}: {}", k.name, k.channel, k.description))
+        .collect();
+    let preselected = catalog
+        .kernels
+        .iter()
+        .position(|k| k.id == profile.kernel)
+        .unwrap_or(0);
+    let kernel = catalog.kernels[Select::with_theme(t)
         .with_prompt("Kernel")
-        .items([
-            "NixOS's default (long-term support)",
-            "Latest (newest hardware support)",
-        ])
-        .default(0)
-        .interact()?
-    {
-        0 => Kernel::Default,
-        _ => Kernel::Latest,
-    };
+        .items(&names)
+        .default(preselected)
+        .interact()?]
+    .id
+    .clone();
 
     heading(Layer::Security);
     let sb = status::secure_boot();
