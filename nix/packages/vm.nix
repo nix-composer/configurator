@@ -31,6 +31,10 @@ writeShellApplication {
     socat
   ];
   text = ''
+    # The VM's state: ./.vm, or this directory when run from inside it.
+    if [ -z "''${CONFIGURATOR_VM_DIR:-}" ] && [ "$(basename "$PWD")" = .vm ] && [ -e "$PWD/live.qcow2" ]; then
+      CONFIGURATOR_VM_DIR=$PWD
+    fi
     state="''${CONFIGURATOR_VM_DIR:-$PWD/.vm}"
     mkdir -p "$state"
 
