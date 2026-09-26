@@ -39,6 +39,7 @@
     "hardware": {
       "$ref": "#/$defs/Hardware",
       "default": {
+        "firmware": "uefi",
         "nonFreeFirmware": false,
         "nvidia": null
       }
@@ -259,9 +260,28 @@
         }
       ]
     },
+    "Firmware": {
+      "oneOf": [
+        {
+          "description": "UEFI: systemd-boot (or lanzaboote with Secure Boot) on an EFI\nsystem partition.",
+          "type": "string",
+          "const": "uefi"
+        },
+        {
+          "description": "Legacy BIOS (SeaBIOS, Libreboot's GRUB payload, CSM): GRUB on a\nBIOS boot partition, no Secure Boot.",
+          "type": "string",
+          "const": "bios"
+        }
+      ]
+    },
     "Hardware": {
       "type": "object",
       "properties": {
+        "firmware": {
+          "description": "How the machine boots, as detected by the installer.",
+          "$ref": "#/$defs/Firmware",
+          "default": "uefi"
+        },
         "nonFreeFirmware": {
           "description": "Redistributable and non-free firmware (Broadcom Wi-Fi, …).",
           "type": "boolean",

@@ -49,7 +49,12 @@ pub fn install(
                         facter_report: Some(&report),
                         platform: Some(&platform),
                     };
-                    let host = configurator_flakegen::generate(answers, catalog, &inputs)?;
+                    // The disk by a name that stays the same on the next
+                    // boots (/dev/sda can be /dev/sdb without the USB
+                    // stick): GRUB installs to it on every rebuild.
+                    let mut answers = answers.clone();
+                    answers.disk.device = crate::status::stable_disk_path(&answers.disk.device);
+                    let host = configurator_flakegen::generate(&answers, catalog, &inputs)?;
                     for (file, content) in &host.files {
                         let target = std::path::Path::new(out).join(file);
                         let io = |e| Error::Io(target.display().to_string(), e);

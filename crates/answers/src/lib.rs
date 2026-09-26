@@ -397,6 +397,21 @@ pub struct Hardware {
     /// Redistributable and non-free firmware (Broadcom Wi-Fi, …).
     #[serde(default)]
     pub non_free_firmware: bool,
+    /// How the machine boots, as detected by the installer.
+    #[serde(default)]
+    pub firmware: Firmware,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "lowercase")]
+pub enum Firmware {
+    /// UEFI: systemd-boot (or lanzaboote with Secure Boot) on an EFI
+    /// system partition.
+    #[default]
+    Uefi,
+    /// Legacy BIOS (SeaBIOS, Libreboot's GRUB payload, CSM): GRUB on a
+    /// BIOS boot partition, no Secure Boot.
+    Bios,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
@@ -575,6 +590,9 @@ impl Answers {
         }
         if self.security.tpm_pin && !self.disk.encryption {
             return invalid("TPM + PIN unlock needs disk encryption".into());
+        }
+        if self.hardware.firmware == Firmware::Bios && self.security.secure_boot {
+            return invalid("Secure Boot needs UEFI firmware".into());
         }
         if self.security.tpm_pin && !self.security.secure_boot {
             return invalid("TPM + PIN unlock needs Secure Boot (it seals against PCR 7)".into());

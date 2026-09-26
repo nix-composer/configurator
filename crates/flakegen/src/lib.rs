@@ -10,7 +10,9 @@ pub mod nix;
 
 use std::collections::BTreeMap;
 
-use configurator_answers::{Answers, Filesystem, LoginManager, NvidiaDriver, ShellKind, User};
+use configurator_answers::{
+    Answers, Filesystem, Firmware, LoginManager, NvidiaDriver, ShellKind, User,
+};
 use configurator_catalog::{Catalog, Desktop, Session};
 use serde_json::Value;
 
@@ -734,7 +736,11 @@ impl Generator<'_> {
     fn boot_and_security_section(&self) -> Section {
         let s = &self.answers.security;
         let mut section = Section::new("Boot and security.");
-        if s.secure_boot {
+        if self.answers.hardware.firmware == Firmware::Bios {
+            // Legacy BIOS: GRUB on the disk's BIOS boot partition (disko
+            // points boot.loader.grub.devices at it), /boot unencrypted.
+            section.set("boot.loader.grub.enable", Nix::Bool(true));
+        } else if s.secure_boot {
             // lanzaboote replaces systemd-boot and signs the boot files with
             // the keys the installer created and enrolled. Turn Secure Boot
             // on in the firmware after the install.
@@ -748,7 +754,9 @@ impl Generator<'_> {
         } else {
             section.set("boot.loader.systemd-boot.enable", Nix::Bool(true));
         }
-        section.set("boot.loader.efi.canTouchEfiVariables", Nix::Bool(true));
+        if self.answers.hardware.firmware == Firmware::Uefi {
+            section.set("boot.loader.efi.canTouchEfiVariables", Nix::Bool(true));
+        }
         if s.tpm_pin {
             // Sealed to the TPM2 (PCR 7) with a PIN on the first boot with
             // Secure Boot on; see github:nix-composer/configurator.
@@ -916,22 +924,46 @@ impl Generator<'_> {
             root_fs
         };
 
-        let mut partitions = vec![(
-            Key::from("ESP"),
-            Nix::attrs([
-                ("size", Nix::str("1G")),
-                ("type", Nix::str("EF00")),
+        let mut partitions = match self.answers.hardware.firmware {
+            Firmware::Uefi => vec![(
+                Key::from("ESP"),
+                Nix::attrs([
+                    ("size", Nix::str("1G")),
+                    ("type", Nix::str("EF00")),
+                    (
+                        "content",
+                        Nix::attrs([
+                            ("type", Nix::str("filesystem")),
+                            ("format", Nix::str("vfat")),
+                            ("mountpoint", Nix::str("/boot")),
+                            ("mountOptions", Nix::List(vec![Nix::str("umask=0077")])),
+                        ]),
+                    ),
+                ]),
+            )],
+            // GRUB's core image goes in the BIOS boot partition; /boot
+            // stays unencrypted so any GRUB (Libreboot's too) reads it.
+            Firmware::Bios => vec![
                 (
-                    "content",
+                    Key::from("bios"),
+                    Nix::attrs([("size", Nix::str("1M")), ("type", Nix::str("EF02"))]),
+                ),
+                (
+                    Key::from("boot"),
                     Nix::attrs([
-                        ("type", Nix::str("filesystem")),
-                        ("format", Nix::str("vfat")),
-                        ("mountpoint", Nix::str("/boot")),
-                        ("mountOptions", Nix::List(vec![Nix::str("umask=0077")])),
+                        ("size", Nix::str("1G")),
+                        (
+                            "content",
+                            Nix::attrs([
+                                ("type", Nix::str("filesystem")),
+                                ("format", Nix::str("ext4")),
+                                ("mountpoint", Nix::str("/boot")),
+                            ]),
+                        ),
                     ]),
                 ),
-            ]),
-        )];
+            ],
+        };
         // btrfs keeps swap in a subvolume; the others get a partition,
         // encrypted with a random key on every boot when the disk is.
         if let (Some(size), false) = (&swap, d.filesystem == Filesystem::Btrfs) {
@@ -966,13 +998,18 @@ impl Generator<'_> {
             ),
         ]);
         let mut layout = Section::new(format!(
-            "Disk layout (disko): {}{}.",
+            "Disk layout (disko): {}{}{}.",
             match d.filesystem {
                 Filesystem::Btrfs => "btrfs with subvolumes",
                 Filesystem::Ext4 => "ext4",
                 Filesystem::Xfs => "XFS",
             },
-            if d.encryption { " on LUKS" } else { "" }
+            if d.encryption { " on LUKS" } else { "" },
+            if self.answers.hardware.firmware == Firmware::Bios {
+                ", legacy BIOS boot"
+            } else {
+                ""
+            }
         ));
         layout.set("disko.devices.disk.main", disk);
         module("", "{ ... }", &[layout])

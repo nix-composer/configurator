@@ -35,6 +35,42 @@ fn efi_flag(name: &str) -> Option<bool> {
     data.get(4).map(|b| *b == 1)
 }
 
+/// `device`'s name in /dev/disk/by-id (the model and serial number), or
+/// `device` itself when it has none (virtual disks without a serial).
+pub fn stable_disk_path(device: &str) -> String {
+    let Ok(real) = std::fs::canonicalize(device) else {
+        return device.to_string();
+    };
+    let Ok(entries) = std::fs::read_dir("/dev/disk/by-id") else {
+        return device.to_string();
+    };
+    let mut names: Vec<String> = entries
+        .flatten()
+        .filter(|e| std::fs::canonicalize(e.path()).is_ok_and(|p| p == real))
+        .filter_map(|e| e.file_name().into_string().ok())
+        .collect();
+    // The readable ones (ata-…, nvme-Samsung…, usb-…) before WWNs and EUIs.
+    names.sort_by_key(|n| {
+        (
+            n.starts_with("wwn-") || n.starts_with("nvme-eui."),
+            n.clone(),
+        )
+    });
+    match names.first() {
+        Some(name) => format!("/dev/disk/by-id/{name}"),
+        None => device.to_string(),
+    }
+}
+
+/// How this machine booted: UEFI, or legacy BIOS (no /sys/firmware/efi).
+pub fn firmware() -> configurator_answers::Firmware {
+    if Path::new("/sys/firmware/efi").exists() {
+        configurator_answers::Firmware::Uefi
+    } else {
+        configurator_answers::Firmware::Bios
+    }
+}
+
 pub fn secure_boot() -> SecureBoot {
     if !Path::new("/sys/firmware/efi").exists() {
         return SecureBoot::Unavailable;

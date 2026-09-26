@@ -132,6 +132,10 @@ hostChecks
   # End-to-end installs in VMs (see nix/tests/install.nix).
   install-minimal = installTest { name = "minimal"; };
 
+  # Legacy BIOS (SeaBIOS, Libreboot's GRUB payload): GRUB on a BIOS boot
+  # partition, btrfs on LUKS.
+  install-bios = installTest { name = "bios"; };
+
   install-btrfs-luks = installTest {
     name = "btrfs-luks";
     testScript = ''

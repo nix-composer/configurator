@@ -5,11 +5,11 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use configurator_answers::{
-    Answers, Apps, Basics, Desktop, Development, Disk, Filesystem, Hardware, Keybind, LoginManager,
-    NvidiaDriver, Security, Shell, ShellKind, User, VERSION,
+    Answers, Apps, Basics, Desktop, Development, Disk, Filesystem, Firmware, Hardware, Keybind,
+    LoginManager, NvidiaDriver, Security, Shell, ShellKind, User, VERSION,
 };
 use configurator_catalog::Catalog;
-use configurator_engine::Secrets;
+use configurator_engine::{Secrets, status};
 
 /// Why a package is selected. Changing the profile removes only what the
 /// profile added; hand picks stay.
@@ -210,7 +210,13 @@ impl Draft {
     /// The disk's partitions as the Disk layer draws them: (label, GiB);
     /// the root takes the rest (`None`).
     pub fn layout(&self) -> Vec<(&'static str, Option<u32>)> {
-        let mut parts = vec![("Boot (EFI)", Some(1))];
+        let mut parts = vec![(
+            match status::firmware() {
+                Firmware::Uefi => "Boot (EFI)",
+                Firmware::Bios => "Boot",
+            },
+            Some(1),
+        )];
         if self.swap_gib > 0 {
             parts.push(("Swap", Some(self.swap_gib)));
         }
@@ -261,6 +267,7 @@ impl Draft {
             hardware: Hardware {
                 nvidia: self.nvidia,
                 non_free_firmware: self.non_free_firmware,
+                firmware: status::firmware(),
             },
             security: Security {
                 secure_boot: self.secure_boot,

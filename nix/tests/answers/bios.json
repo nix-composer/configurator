@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "basics": { "locale": "en_US.UTF-8", "keyboardLayout": "us", "timezone": "UTC" },
+  "profile": "headless",
+  "hardware": { "firmware": "bios" },
+  "disk": { "device": "/dev/vdb", "filesystem": "btrfs", "encryption": true, "swapGib": 1 },
+  "users": [{ "name": "ada", "admin": true }],
+  "hostname": "thinkpad"
+}

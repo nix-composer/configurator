@@ -501,6 +501,7 @@ pub fn run(catalog: &Catalog) -> Result<(Answers, Secrets)> {
         hardware: Hardware {
             nvidia,
             non_free_firmware,
+            firmware: status::firmware(),
         },
         security: Security {
             secure_boot,

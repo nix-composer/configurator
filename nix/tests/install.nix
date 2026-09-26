@@ -1,6 +1,7 @@
 # End-to-end install test: a live system runs `configurator install` with
 # an answers file onto an empty virtual disk, then the disk boots on its
-# own (UEFI, its own store) and the result is checked.
+# own (UEFI, or SeaBIOS for legacy BIOS answers; its own store) and the
+# result is checked.
 #
 # The test has no network, so it can't `nixos-install --flake` (that
 # fetches the flake's inputs). The target system and its disko script are
@@ -38,6 +39,8 @@ let
   encrypted = answers.disk.encryption or false;
   secureBoot = answers.security.secureBoot or false;
   tpmPin = answers.security.tpmPin or false;
+  # Legacy BIOS: both machines boot SeaBIOS, QEMU's default.
+  bios = (answers.hardware.firmware or "uefi") == "bios";
   # OVMF with Secure Boot, in setup mode (no keys) until the engine enrolls.
   ovmf = if secureBoot then (pkgs.OVMF.override { secureBoot = true; }) else pkgs.OVMF;
 
@@ -102,7 +105,7 @@ pkgs.testers.runNixOSTest {
 
   nodes.installer = {
     virtualisation = {
-      useEFIBoot = true;
+      useEFIBoot = !bios;
       useSecureBoot = secureBoot;
       memorySize = memoryMiB;
       emptyDiskImages = [ diskSizeMiB ];
@@ -178,11 +181,15 @@ pkgs.testers.runNixOSTest {
         "-m", "${toString memoryMiB}",
         "-drive", f"file={installer.state_dir}/empty0.qcow2,id=drive1,if=none,index=1,werror=report",
         "-device", "virtio-blk-pci,drive=drive1",
-        "-drive", "if=pflash,format=raw,unit=0,readonly=on,file=${ovmf.firmware}",
-        "-drive", f"if=pflash,format=raw,unit=1,readonly=${
-          if secureBoot then "off" else "on"
-        },file={target_vars}",
     ]
+    ${lib.optionalString (!bios) ''
+      start_command += [
+          "-drive", "if=pflash,format=raw,unit=0,readonly=on,file=${ovmf.firmware}",
+          "-drive", f"if=pflash,format=raw,unit=1,readonly=${
+            if secureBoot then "off" else "on"
+          },file={target_vars}",
+      ]
+    ''}
     ${lib.optionalString secureBoot ''
       start_command += ["-machine", "q35,smm=on", "-global", "driver=cfi.pflash01,property=secure,value=on"]
     ''}
@@ -229,6 +236,12 @@ pkgs.testers.runNixOSTest {
         # chpasswd set a real password (not locked, not empty).
         target.succeed("getent shadow ${user} | cut -d: -f2 | grep -q '^\\$'")
 
+    ${lib.optionalString bios ''
+      with subtest("booted by GRUB from legacy BIOS, /boot unencrypted"):
+          target.fail("test -d /sys/firmware/efi")
+          target.succeed("findmnt -no FSTYPE /boot | grep -q ext4")
+          target.succeed("test -f /boot/grub/grub.cfg")
+    ''}
     ${lib.optionalString secureBoot ''
       with subtest("Secure Boot is on, with the enrolled keys"):
           # Enforcing: only the UKI lanzaboote signed with the enrolled keys boots.
