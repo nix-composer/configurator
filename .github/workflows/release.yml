@@ -33,6 +33,17 @@ jobs:
           sudo docker image prune --all --force
           df -h /
 
+      # The runner has 16 GB of memory; the screenshots' desktop systems
+      # and VMs build in parallel.
+      - name: Add swap
+        run: |
+          sudo swapoff -a
+          sudo fallocate -l 16G /swapfile-build
+          sudo chmod 600 /swapfile-build
+          sudo mkswap /swapfile-build
+          sudo swapon /swapfile-build
+          free -h
+
       # The desktop screenshots boot every desktop in a VM.
       - name: Enable KVM
         run: |
@@ -44,10 +55,11 @@ jobs:
         with:
           extra_nix_config: |
             system-features = nixos-test benchmark big-parallel kvm
+            max-jobs = 2
 
       - name: Build the ISO
         run: |
-          nix build .#iso -L --print-build-logs
+          nix build .#iso --print-build-logs
           iso=$(ls result/iso/*.iso)
           cp "$iso" .
           sha256sum "$(basename "$iso")" > "$(basename "$iso").sha256"
