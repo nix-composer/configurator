@@ -22,7 +22,8 @@
     ]
   },
   "hardware": {
-    "nvidia": "open"
+    "nvidia": "open",
+    "kernel": "latest"
   },
   "disk": {
     "device": "/dev/nvme0n1",

@@ -405,6 +405,18 @@ pub struct Hardware {
     /// How the machine boots, as detected by the installer.
     #[serde(default)]
     pub firmware: Firmware,
+    #[serde(default)]
+    pub kernel: Kernel,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "lowercase")]
+pub enum Kernel {
+    /// NixOS's default: the release's long-term-support kernel.
+    #[default]
+    Default,
+    /// The newest kernel in nixpkgs (newer hardware support).
+    Latest,
 }
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
@@ -534,6 +546,17 @@ impl Answers {
 
         if self.version != VERSION {
             return invalid(format!("version must be {VERSION}"));
+        }
+        let tz = &self.basics.timezone;
+        if tz.is_empty()
+            || tz
+                .split('/')
+                .any(|part| part.is_empty() || part == "." || part == "..")
+            || !tz
+                .chars()
+                .all(|c| c.is_ascii_alphanumeric() || "/_+-".contains(c))
+        {
+            return invalid(format!("invalid time zone {tz:?}"));
         }
         if !is_hostname(&self.hostname) {
             return invalid(format!("invalid hostname {:?}", self.hostname));

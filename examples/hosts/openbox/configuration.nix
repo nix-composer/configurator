@@ -4,11 +4,13 @@
 #   sudo nixos-rebuild switch --flake /home/pat/.config/nixos
 { lib, pkgs, ... }:
 {
-  # Basics: language, keyboard and time zone.
+  # Basics: language, keyboard and time zone. The time zone (Europe/London) was set
+  # during the install and is yours to change (your desktop's settings or
+  # `timedatectl set-timezone`); set time.timeZone to fix it here instead.
   i18n.defaultLocale = "en_GB.UTF-8";
   services.xserver.xkb.layout = "gb";
   console.useXkbConfig = true;
-  time.timeZone = "Europe/London";
+  time.timeZone = null;
 
   # Desktop: Openbox.
   services.xserver.enable = true;

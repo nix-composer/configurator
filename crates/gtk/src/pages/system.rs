@@ -4,7 +4,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use adw::prelude::*;
-use configurator_answers::{Filesystem, Layer, NvidiaDriver};
+use configurator_answers::{Filesystem, Kernel, Layer, NvidiaDriver};
 use configurator_engine::status::{self, SecureBoot};
 
 use super::Page;
@@ -159,6 +159,23 @@ pub fn hardware(ctx: &Ctx) -> Page {
         firmware.connect_active_notify(move |s| d.borrow_mut().non_free_firmware = s.is_active());
     }
     rows.append(&firmware);
+    {
+        let d = ctx.draft.clone();
+        let current = usize::from(ctx.draft.borrow().kernel == Kernel::Latest);
+        rows.append(&combo_row(
+            "Kernel",
+            "Latest supports the newest hardware; the default is NixOS's long-term-support kernel",
+            &["Default (long-term support)", "Latest"],
+            current,
+            move |i| {
+                d.borrow_mut().kernel = if i == 1 {
+                    Kernel::Latest
+                } else {
+                    Kernel::Default
+                };
+            },
+        ));
+    }
     drivers.add(&rows);
     content.append(&drivers);
 

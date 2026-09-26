@@ -2,13 +2,15 @@
 # This is your system now: edit it freely.
 # Your choices, one section per installer layer. Apply changes with:
 #   sudo nixos-rebuild switch --flake /home/me/.config/nixos
-{ lib, pkgs, ... }:
+{ inputs, lib, pkgs, ... }:
 {
-  # Basics: language, keyboard and time zone.
+  # Basics: language, keyboard and time zone. The time zone (Europe/Amsterdam) was set
+  # during the install and is yours to change (your desktop's settings or
+  # `timedatectl set-timezone`); set time.timeZone to fix it here instead.
   i18n.defaultLocale = "en_US.UTF-8";
   services.xserver.xkb.layout = "us";
   console.useXkbConfig = true;
-  time.timeZone = "Europe/Amsterdam";
+  time.timeZone = null;
 
   # Desktop: Omarchy.
   omarchy.configDir = "/home/me/.config/nixos";
@@ -34,6 +36,7 @@
       comment = "Team chat";
       exec = (lib.getExe pkgs.chromium + " --app=https://app.slack.com/client");
       categories = [ "Network" ];
+      icon = "${inputs.configurator}/data/webapps/slack.png";
     })
   ];
   programs.wireshark.enable = true;

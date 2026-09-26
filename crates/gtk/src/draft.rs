@@ -5,8 +5,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use configurator_answers::{
-    Answers, Apps, Basics, Desktop, Development, Disk, Filesystem, Firmware, Hardware, Keybind,
-    LoginManager, NvidiaDriver, Security, Shell, ShellKind, User, VERSION,
+    Answers, Apps, Basics, Desktop, Development, Disk, Filesystem, Firmware, Hardware, Kernel,
+    Keybind, LoginManager, NvidiaDriver, Security, Shell, ShellKind, User, VERSION,
 };
 use configurator_catalog::Catalog;
 use configurator_engine::{Secrets, status};
@@ -63,6 +63,7 @@ pub struct Draft {
 
     pub nvidia: Option<NvidiaDriver>,
     pub non_free_firmware: bool,
+    pub kernel: Kernel,
 
     pub secure_boot: bool,
     pub tpm_pin: bool,
@@ -104,6 +105,7 @@ impl Draft {
             keybinds: BTreeMap::new(),
             nvidia: None,
             non_free_firmware: false,
+            kernel: Kernel::Default,
             secure_boot: false,
             tpm_pin: false,
             pin: String::new(),
@@ -309,6 +311,7 @@ impl Draft {
                 nvidia: self.nvidia,
                 non_free_firmware: self.non_free_firmware,
                 firmware: status::firmware(),
+                kernel: self.kernel,
             },
             security: Security {
                 secure_boot: self.secure_boot,

@@ -59,7 +59,10 @@ let
   # hardware (virtio modules in the initrd).
   # No `system` here: the generated files have to set it, as in the flake.
   target = nixpkgs.lib.nixosSystem {
-    specialArgs = { inherit inputs; };
+    # As a generated host flake has it: this flake is its `configurator`.
+    specialArgs.inputs = inputs // {
+      configurator = self;
+    };
     modules = [
       inputs.disko.nixosModules.disko
     ]

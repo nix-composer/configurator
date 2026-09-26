@@ -4,11 +4,13 @@
 #   sudo nixos-rebuild switch --flake /home/sam/.config/nixos
 { lib, pkgs, ... }:
 {
-  # Basics: language, keyboard and time zone.
+  # Basics: language, keyboard and time zone. The time zone (UTC) was set
+  # during the install and is yours to change (your desktop's settings or
+  # `timedatectl set-timezone`); set time.timeZone to fix it here instead.
   i18n.defaultLocale = "en_US.UTF-8";
   services.xserver.xkb.layout = "us";
   console.useXkbConfig = true;
-  time.timeZone = "UTC";
+  time.timeZone = null;
 
   # Desktop: MATE.
   services.xserver.desktopManager.mate.enable = true;

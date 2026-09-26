@@ -14,7 +14,15 @@ let
   profiles = (lib.importJSON ../../data/profiles.json).profiles;
 
   # No `system`: generated hosts set it themselves, as in their flake.
-  nixos = modules: nixpkgs.lib.nixosSystem { inherit modules; };
+  nixos =
+    modules:
+    nixpkgs.lib.nixosSystem {
+      inherit modules;
+      # As a generated host flake has it: this flake is its `configurator`.
+      specialArgs.inputs = inputs // {
+        configurator = self;
+      };
+    };
 
   # Passes when `ok`, else fails evaluation with `message`.
   check =
@@ -205,10 +213,16 @@ hostChecks
           target.succeed(read.format(f"{base}/custom-keybindings/configurator0/binding") + " | grep -q '<Super>Return'")
           target.succeed(read.format(f"{base}/custom-keybindings/configurator1/command") + " | grep -q 'chromium --app=https://youtube.com/'")
           target.succeed("test -f /run/current-system/sw/share/applications/webapp-youtube.desktop")
+          # With its icon from the web app store.
+          target.succeed("test -s \"$(sed -n 's/^Icon=//p' /run/current-system/sw/share/applications/webapp-youtube.desktop)\"")
           # Close window moved to SUPER + Q (its ALT + F4 gone), the
           # overview to the right Super key.
           target.succeed(read.format("/org/gnome/desktop/wm/keybindings/close") + " | grep -qx \"\\['<Super>q'\\]\"")
           target.succeed(read.format("/org/gnome/mutter/overlay-key") + " | grep -qx \"'Super_R'\"")
+      with subtest("the time zone is the user's to change"):
+          target.succeed("readlink /etc/localtime | grep -q zoneinfo/${(lib.importJSON ../tests/answers/gnome.json).basics.timezone}")
+          target.succeed("timedatectl set-timezone Europe/Berlin")
+          target.succeed("readlink /etc/localtime | grep -q zoneinfo/Europe/Berlin")
       with subtest("GDM comes up"):
           target.wait_for_unit("display-manager.service")
           target.sleep(10)

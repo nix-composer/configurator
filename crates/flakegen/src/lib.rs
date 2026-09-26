@@ -11,7 +11,7 @@ pub mod nix;
 use std::collections::BTreeMap;
 
 use configurator_answers::{
-    Answers, Filesystem, Firmware, LoginManager, NvidiaDriver, ShellKind, User,
+    Answers, Filesystem, Firmware, Kernel, LoginManager, NvidiaDriver, ShellKind, User,
 };
 use configurator_catalog::{Catalog, Desktop, Session};
 use serde_json::Value;
@@ -289,7 +289,12 @@ impl Generator<'_> {
         let a = self.answers;
         let mut sections = Vec::new();
 
-        let mut basics = Section::new("Basics: language, keyboard and time zone.");
+        let mut basics = Section::new(format!(
+            "Basics: language, keyboard and time zone. The time zone ({}) was set\n\
+             during the install and is yours to change (your desktop's settings or\n\
+             `timedatectl set-timezone`); set time.timeZone to fix it here instead.",
+            a.basics.timezone
+        ));
         basics
             .set("i18n.defaultLocale", Nix::str(&a.basics.locale))
             .set(
@@ -304,7 +309,7 @@ impl Generator<'_> {
         }
         basics
             .set("console.useXkbConfig", Nix::Bool(true))
-            .set("time.timeZone", Nix::str(&a.basics.timezone));
+            .set("time.timeZone", Nix::raw("null"));
         sections.push(basics);
 
         sections.push(self.profile_section()?);
@@ -339,7 +344,13 @@ impl Generator<'_> {
              #   sudo nixos-rebuild switch --flake {}\n",
             self.config_dir
         );
-        Ok(module(&header, "{ lib, pkgs, ... }", &sections))
+        // Web app launchers take their icons from the configurator input.
+        let rendered = module(&header, "{ lib, pkgs, ... }", &sections);
+        Ok(if rendered.contains("${inputs.") {
+            module(&header, "{ inputs, lib, pkgs, ... }", &sections)
+        } else {
+            rendered
+        })
     }
 
     fn desktop_section(&self) -> Result<Section, Error> {
@@ -515,16 +526,26 @@ impl Generator<'_> {
             if webapps_option.is_some_and(|o| o.ids.contains(id)) {
                 desktop_webapps.push(Nix::str(id));
             } else {
+                let mut item = vec![
+                    ("name", Nix::str(format!("webapp-{}", webapp.id))),
+                    ("desktopName", Nix::str(&webapp.name)),
+                    ("comment", Nix::str(&webapp.description)),
+                    ("exec", self.webapp_command(id)?),
+                    ("categories", Nix::List(vec![Nix::str("Network")])),
+                ];
+                // Its icon from the web app store (the configurator input).
+                if self.catalog.webapp_icon(id).is_some() {
+                    item.push((
+                        "icon",
+                        Nix::raw(nix::string_interpolated(
+                            "inputs.configurator",
+                            &format!("/data/webapps/{id}.png"),
+                        )),
+                    ));
+                }
                 launchers.push(Nix::raw(format!(
                     "(pkgs.makeDesktopItem {})",
-                    Nix::attrs([
-                        ("name", Nix::str(format!("webapp-{}", webapp.id))),
-                        ("desktopName", Nix::str(&webapp.name)),
-                        ("comment", Nix::str(&webapp.description)),
-                        ("exec", self.webapp_command(id)?),
-                        ("categories", Nix::List(vec![Nix::str("Network")])),
-                    ])
-                    .render(2)
+                    Nix::attrs(item).render(2)
                 )));
             }
         }
@@ -933,6 +954,9 @@ impl Generator<'_> {
             // nouveau is the default.
             Some(NvidiaDriver::Nouveau) | None => {}
         }
+        if h.kernel == Kernel::Latest {
+            drivers.set("boot.kernelPackages", Nix::raw("pkgs.linuxPackages_latest"));
+        }
         if h.non_free_firmware {
             drivers.set("hardware.enableAllFirmware", Nix::Bool(true));
         } else {
@@ -946,7 +970,12 @@ impl Generator<'_> {
              #   sudo nixos-facter -o facter.json\n\
              # here and set hardware.facter.reportPath = ./facter.json;\n"
         };
-        module(header, "{ lib, ... }", &[detected, drivers])
+        let args = if h.kernel == Kernel::Latest {
+            "{ lib, pkgs, ... }"
+        } else {
+            "{ lib, ... }"
+        };
+        module(header, args, &[detected, drivers])
     }
 
     fn disko(&self) -> String {

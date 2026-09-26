@@ -2,14 +2,16 @@
 # This is your system now: edit it freely.
 # Your choices, one section per installer layer. Apply changes with:
 #   sudo nixos-rebuild switch --flake /home/alex/.config/nixos
-{ lib, pkgs, ... }:
+{ inputs, lib, pkgs, ... }:
 {
-  # Basics: language, keyboard and time zone.
+  # Basics: language, keyboard and time zone. The time zone (Europe/Amsterdam) was set
+  # during the install and is yours to change (your desktop's settings or
+  # `timedatectl set-timezone`); set time.timeZone to fix it here instead.
   i18n.defaultLocale = "nl_NL.UTF-8";
   services.xserver.xkb.layout = "us";
   services.xserver.xkb.variant = "intl";
   console.useXkbConfig = true;
-  time.timeZone = "Europe/Amsterdam";
+  time.timeZone = null;
 
   # Profile: Office.
   hardware.sane.enable = true;
@@ -34,6 +36,7 @@
       comment = "Email";
       exec = (lib.getExe pkgs.chromium + " --app=https://mail.google.com");
       categories = [ "Network" ];
+      icon = "${inputs.configurator}/data/webapps/gmail.png";
     })
     (pkgs.makeDesktopItem {
       name = "webapp-google-calendar";
@@ -41,6 +44,7 @@
       comment = "Calendar";
       exec = (lib.getExe pkgs.chromium + " --app=https://calendar.google.com");
       categories = [ "Network" ];
+      icon = "${inputs.configurator}/data/webapps/google-calendar.png";
     })
   ];
   nixpkgs.config.allowUnfree = true;

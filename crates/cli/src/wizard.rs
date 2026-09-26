@@ -6,8 +6,8 @@ use std::collections::BTreeMap;
 
 use anyhow::{Result, bail};
 use configurator_answers::{
-    Answers, Apps, Basics, Desktop, Development, Disk, Filesystem, Hardware, Layer, LoginManager,
-    NvidiaDriver, Security, Shell, ShellKind, User, VERSION, is_attr_path,
+    Answers, Apps, Basics, Desktop, Development, Disk, Filesystem, Hardware, Kernel, Layer,
+    LoginManager, NvidiaDriver, Security, Shell, ShellKind, User, VERSION, is_attr_path,
 };
 use configurator_catalog::{Catalog, DesktopKind};
 use configurator_engine::{Secrets, status};
@@ -314,6 +314,18 @@ pub fn run(catalog: &Catalog) -> Result<(Answers, Secrets)> {
         .with_prompt("Non-free firmware (some Wi-Fi and Bluetooth chips)?")
         .default(false)
         .interact()?;
+    let kernel = match Select::with_theme(t)
+        .with_prompt("Kernel")
+        .items([
+            "NixOS's default (long-term support)",
+            "Latest (newest hardware support)",
+        ])
+        .default(0)
+        .interact()?
+    {
+        0 => Kernel::Default,
+        _ => Kernel::Latest,
+    };
 
     heading(Layer::Security);
     let sb = status::secure_boot();
@@ -520,6 +532,7 @@ pub fn run(catalog: &Catalog) -> Result<(Answers, Secrets)> {
             nvidia,
             non_free_firmware,
             firmware: status::firmware(),
+            kernel,
         },
         security: Security {
             secure_boot,

@@ -152,6 +152,13 @@ pub fn string(s: &str) -> String {
     out
 }
 
+/// A Nix string starting with an interpolated expression (reviewed code,
+/// never user input), the rest escaped: `"${expr}rest"`.
+pub fn string_interpolated(expr: &str, rest: &str) -> String {
+    let escaped = string(rest);
+    format!("\"${{{expr}}}{}", &escaped[1..])
+}
+
 fn key_segment(s: &str) -> String {
     if is_identifier(s) {
         s.to_owned()

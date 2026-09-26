@@ -295,7 +295,8 @@ pub fn plan(answers: &Answers, catalog: &Catalog, options: &Options) -> Result<P
         partition.push(run(&["sh", "-c", r#"swapon "$1" || true"#, "swapon", swap]));
     }
     // And where memory and swap come to less than 24 GiB (older laptops),
-    // a swap file for the install only (up to 16 GiB), removed after it.
+    // a swap file for the install only (up to 16 GiB and a quarter of the
+    // disk's free space), removed after it.
     let install_swap = format!("{target}/.configurator-swap");
     let short_gib = crate::status::memory()
         .map(|b| b >> 30)
@@ -306,13 +307,18 @@ pub fn plan(answers: &Answers, catalog: &Catalog, options: &Options) -> Result<P
         })
         .unwrap_or(0);
     if short_gib > 0 {
-        let size = format!("{short_gib}G");
+        let size = short_gib.to_string();
         partition.push(match answers.disk.filesystem {
             // btrfs needs a file it won't copy on write or compress.
             Filesystem::Btrfs => run(&[
                 "sh",
                 "-c",
-                r#"btrfs filesystem mkswapfile --size "$2" "$1" && swapon "$1" || true"#,
+                // At most a quarter of the new disk's free space.
+                concat!(
+                    r#"free=$(df -BG --output=avail "$(dirname "$1")" | tail -1 | tr -dc 0-9); "#,
+                    r#"size=$(( $2 < free / 4 ? $2 : free / 4 )); [ "$size" -ge 1 ] || exit 0; "#,
+                    r#"btrfs filesystem mkswapfile --size "${size}G" "$1" && swapon "$1" || true"#
+                ),
                 "install-swap",
                 &install_swap,
                 &size,
@@ -320,7 +326,11 @@ pub fn plan(answers: &Answers, catalog: &Catalog, options: &Options) -> Result<P
             _ => run(&[
                 "sh",
                 "-c",
-                r#"fallocate -l "$2" "$1" && chmod 600 "$1" && mkswap "$1" && swapon "$1" || true"#,
+                concat!(
+                    r#"free=$(df -BG --output=avail "$(dirname "$1")" | tail -1 | tr -dc 0-9); "#,
+                    r#"size=$(( $2 < free / 4 ? $2 : free / 4 )); [ "$size" -ge 1 ] || exit 0; "#,
+                    r#"fallocate -l "${size}G" "$1" && chmod 600 "$1" && mkswap "$1" && swapon "$1" || true"#
+                ),
                 "install-swap",
                 &install_swap,
                 &size,
@@ -468,7 +478,7 @@ pub fn plan(answers: &Answers, catalog: &Catalog, options: &Options) -> Result<P
             system,
         ])
     };
-    let install = match &options.prebuilt {
+    let mut install = match &options.prebuilt {
         Some(prebuilt) => {
             // The toplevel itself: nix takes a symlink inside the bundle
             // for the bundle's store path.
@@ -511,8 +521,15 @@ pub fn plan(answers: &Answers, catalog: &Catalog, options: &Options) -> Result<P
             ]
         }
     };
+    // The time zone chosen, as the installed system's own setting (the
+    // configuration leaves it to the user: time.timeZone = null).
+    install.push(run(&[
+        "ln",
+        "-sfn",
+        &format!("/etc/zoneinfo/{}", answers.basics.timezone),
+        &format!("{target}/etc/localtime"),
+    ]));
     // Done with the build directory and the swap.
-    let mut install = install;
     install.push(run(&["rm", "-rf", &build_dir]));
     if let Some(swap) = &swap {
         install.push(run(&[
@@ -527,7 +544,7 @@ pub fn plan(answers: &Answers, catalog: &Catalog, options: &Options) -> Result<P
         install.push(run(&[
             "sh",
             "-c",
-            r#"swapoff "$1"; rm -f "$1""#,
+            r#"swapoff "$1" 2>/dev/null; rm -f "$1""#,
             "install-swap",
             &install_swap,
         ]));

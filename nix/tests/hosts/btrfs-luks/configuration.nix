@@ -4,11 +4,13 @@
 #   sudo nixos-rebuild switch --flake /home/bob/.config/nixos
 { lib, pkgs, ... }:
 {
-  # Basics: language, keyboard and time zone.
+  # Basics: language, keyboard and time zone. The time zone (Europe/Berlin) was set
+  # during the install and is yours to change (your desktop's settings or
+  # `timedatectl set-timezone`); set time.timeZone to fix it here instead.
   i18n.defaultLocale = "de_DE.UTF-8";
   services.xserver.xkb.layout = "de";
   console.useXkbConfig = true;
-  time.timeZone = "Europe/Berlin";
+  time.timeZone = null;
 
   # Profile: Headless.
   services.openssh.enable = true;

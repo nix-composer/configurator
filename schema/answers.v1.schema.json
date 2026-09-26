@@ -40,6 +40,7 @@
       "$ref": "#/$defs/Hardware",
       "default": {
         "firmware": "uefi",
+        "kernel": "default",
         "nonFreeFirmware": false,
         "nvidia": null
       }
@@ -282,6 +283,10 @@
           "$ref": "#/$defs/Firmware",
           "default": "uefi"
         },
+        "kernel": {
+          "$ref": "#/$defs/Kernel",
+          "default": "default"
+        },
         "nonFreeFirmware": {
           "description": "Redistributable and non-free firmware (Broadcom Wi-Fi, …).",
           "type": "boolean",
@@ -301,6 +306,20 @@
         }
       },
       "additionalProperties": false
+    },
+    "Kernel": {
+      "oneOf": [
+        {
+          "description": "NixOS's default: the release's long-term-support kernel.",
+          "type": "string",
+          "const": "default"
+        },
+        {
+          "description": "The newest kernel in nixpkgs (newer hardware support).",
+          "type": "string",
+          "const": "latest"
+        }
+      ]
     },
     "Keybind": {
       "oneOf": [
