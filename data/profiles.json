@@ -25,7 +25,8 @@
         "microsoft-365",
         "google-docs",
         "google-sheets",
-        "google-drive"
+        "google-drive",
+        "teams"
       ],
       "config": {
         "services.printing.enable": true,
