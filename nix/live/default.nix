@@ -97,6 +97,10 @@ in
 
   services.getty.autologinUser = lib.mkForce "root";
   networking.networkmanager.enable = true;
+  # The live system runs from memory: compressed swap in RAM gives an
+  # install on a small machine room to evaluate and build (the new disk's
+  # swap comes on too, once it's partitioned).
+  zramSwap.enable = true;
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"

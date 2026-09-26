@@ -2,13 +2,14 @@
 //! installer, the VM tests) drives it the same way: answers in, a staged
 //! plan out, progress events while it runs.
 
+mod nixlog;
 mod run;
 pub mod status;
 
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 
-use configurator_answers::Answers;
+use configurator_answers::{Answers, Filesystem};
 use configurator_catalog::Catalog;
 use configurator_flakegen::{LUKS_KEY_FILE, config_dir};
 use serde::{Deserialize, Serialize};
@@ -131,6 +132,10 @@ pub enum Action {
         argv: Vec<String>,
         stdin: Option<Input>,
     },
+    /// Run a Nix command (`--log-format internal-json`), its log shown as
+    /// text; with `counts`, it's the step's work and becomes `Progress`
+    /// events (how much there is to copy and build, and how much is done).
+    Nix { argv: Vec<String>, counts: bool },
     /// Write the host flake (in process).
     Generate { out: String, facter_report: String },
     /// Write a secret to a file, mode 0400.
@@ -161,6 +166,7 @@ impl std::fmt::Display for Action {
                 }
                 Ok(())
             }
+            Action::Nix { argv, .. } => write!(f, "$ {}", argv.join(" ")),
             Action::Generate { out, facter_report } => {
                 write!(
                     f,
@@ -194,6 +200,12 @@ pub enum Event {
     },
     Log {
         line: String,
+    },
+    /// Within a step: how far the whole install is, and what's happening
+    /// ("1.2 GB of 3.4 GB · 812 of 2,140 packages · about 6 minutes left").
+    Progress {
+        percent: u8,
+        detail: String,
     },
     Done,
     Failed {
@@ -272,6 +284,45 @@ pub fn plan(answers: &Answers, catalog: &Catalog, options: &Options) -> Result<P
             &format!("{host_dir}/disko.nix"),
         ]),
     });
+    // The new disk's swap, on during the install: the live system runs
+    // from memory, and evaluating and building a large desktop takes
+    // more than a small machine has.
+    let swap = (answers.disk.swap_gib > 0).then(|| match answers.disk.filesystem {
+        Filesystem::Btrfs => format!("{target}/.swapvol/swapfile"),
+        _ => "/dev/disk/by-partlabel/disk-main-swap".to_string(),
+    });
+    if let Some(swap) = &swap {
+        partition.push(run(&["sh", "-c", r#"swapon "$1" || true"#, "swapon", swap]));
+    }
+    // And where memory and swap come to less than 16 GiB (older laptops),
+    // a swap file for the install only, removed after it.
+    let install_swap = format!("{target}/.configurator-swap");
+    let short_gib = crate::status::memory()
+        .map(|b| b >> 30)
+        .map(|ram| 16u64.saturating_sub(ram + u64::from(answers.disk.swap_gib)))
+        .unwrap_or(0);
+    if short_gib > 0 {
+        let size = format!("{short_gib}G");
+        partition.push(match answers.disk.filesystem {
+            // btrfs needs a file it won't copy on write or compress.
+            Filesystem::Btrfs => run(&[
+                "sh",
+                "-c",
+                r#"btrfs filesystem mkswapfile --size "$2" "$1" && swapon "$1" || true"#,
+                "install-swap",
+                &install_swap,
+                &size,
+            ]),
+            _ => run(&[
+                "sh",
+                "-c",
+                r#"fallocate -l "$2" "$1" && chmod 600 "$1" && mkswap "$1" && swapon "$1" || true"#,
+                "install-swap",
+                &install_swap,
+                &size,
+            ]),
+        });
+    }
     partition.push(run(&["mkdir", "-p", &flake_dir]));
     partition.push(run(&["cp", "-a", &format!("{host_dir}/."), &flake_dir]));
     steps.push(Step {
@@ -309,12 +360,15 @@ pub fn plan(answers: &Answers, catalog: &Catalog, options: &Options) -> Result<P
         git(&["add", "--all"]),
     ];
     // Offline installs can't fetch the inputs to lock them; the first
-    // rebuild does.
+    // rebuild does. What locking fetches goes to the new disk's store, not
+    // the live system's (in memory).
     if options.prebuilt.is_none() {
         save.push(run(&[
             "nix",
             "--extra-experimental-features",
             "nix-command flakes",
+            "--store",
+            &target,
             "flake",
             "lock",
             &flake_dir,
@@ -358,35 +412,111 @@ pub fn plan(answers: &Answers, catalog: &Catalog, options: &Options) -> Result<P
         });
     }
 
-    let install = match &options.prebuilt {
-        Some(prebuilt) => run(&[
+    // The system goes into the new disk's store first, by Nix commands
+    // whose log becomes the progress bar; nixos-install then only sets
+    // the profile and boot loader. Online, evaluating comes first on its
+    // own: it copies the flake's sources into the new store, which isn't
+    // what the bar counts, and only then is it known what to download
+    // and build.
+    // Builds work in a directory on the new disk, not in the live
+    // system's memory, and fewer at once where memory is short.
+    let build_dir = format!("{target}/.configurator-build");
+    let parallel = match crate::status::memory().map(|b| b >> 30) {
+        Some(gib) if gib < 8 => "--max-jobs 1 --cores 2 ",
+        Some(gib) if gib < 16 => "--max-jobs 2 ",
+        _ => "",
+    };
+    let nix = |script: &str, args: &[&str], counts: bool| {
+        let mut argv = vec![
+            "sh".to_string(),
+            "-c".to_string(),
+            format!(
+                r#"export TMPDIR='{build_dir}' && mkdir -p "$TMPDIR" && exec nix --extra-experimental-features 'nix-command flakes' --log-format internal-json {parallel}{script}"#
+            ),
+            "nix".to_string(),
+        ];
+        argv.extend(args.iter().map(|a| a.to_string()));
+        Action::Nix { argv, counts }
+    };
+    let install_system = |system: &str| {
+        run(&[
+            "sh",
+            "-c",
+            r#"exec nixos-install --root "$1" --system "$(readlink -f "$2")" --no-root-passwd --no-channel-copy"#,
             "nixos-install",
-            "--root",
             &target,
-            "--system",
+            system,
+        ])
+    };
+    let install = match &options.prebuilt {
+        Some(prebuilt) => {
             // The toplevel itself: nix takes a symlink inside the bundle
             // for the bundle's store path.
-            &std::fs::canonicalize(prebuilt.join("system"))
+            let toplevel = std::fs::canonicalize(prebuilt.join("system"))
                 .map(|p| path(&p))
-                .unwrap_or_else(|_| format!("{}/system", path(prebuilt))),
-            "--no-root-passwd",
-            "--no-channel-copy",
-        ]),
-        None => run(&[
-            "nixos-install",
-            "--root",
-            &target,
-            "--flake",
-            &format!("{flake_dir}#{}", answers.hostname),
-            "--no-root-passwd",
-            "--no-channel-copy",
-        ]),
+                .unwrap_or_else(|_| format!("{}/system", path(prebuilt)));
+            vec![
+                nix(
+                    r#"copy --no-check-sigs --to "$1" "$2""#,
+                    &[&target, &toplevel],
+                    true,
+                ),
+                install_system(&toplevel),
+            ]
+        }
+        // What `nixos-install --flake` runs, in two parts; the live
+        // system's own store is a substituter too.
+        None => {
+            let drv = format!("{work}/system.drv");
+            let system = format!("{work}/system");
+            vec![
+                nix(
+                    r#"eval --store "$1" --raw "$2" > "$3""#,
+                    &[
+                        &target,
+                        &format!(
+                            "{flake_dir}#nixosConfigurations.{}.config.system.build.toplevel.drvPath",
+                            answers.hostname
+                        ),
+                        &drv,
+                    ],
+                    false,
+                ),
+                nix(
+                    r#"build --store "$1" --extra-substituters 'auto?trusted=1' --out-link "$2" "$(cat "$3")^*""#,
+                    &[&target, &system, &drv],
+                    true,
+                ),
+                install_system(&system),
+            ]
+        }
     };
+    // Done with the build directory and the swap.
+    let mut install = install;
+    install.push(run(&["rm", "-rf", &build_dir]));
+    if let Some(swap) = &swap {
+        install.push(run(&[
+            "sh",
+            "-c",
+            r#"swapoff "$1" || true"#,
+            "swapoff",
+            swap,
+        ]));
+    }
+    if short_gib > 0 {
+        install.push(run(&[
+            "sh",
+            "-c",
+            r#"swapoff "$1"; rm -f "$1""#,
+            "install-swap",
+            &install_swap,
+        ]));
+    }
     steps.push(Step {
         id: StepId::Install,
         title: "Installing your system".into(),
         weight: if security.secure_boot { 84 } else { 86 },
-        actions: vec![install],
+        actions: install,
     });
     steps.push(Step {
         id: StepId::Passwords,

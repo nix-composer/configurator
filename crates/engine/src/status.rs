@@ -62,6 +62,14 @@ pub fn stable_disk_path(device: &str) -> String {
     }
 }
 
+/// The machine's memory in bytes (MemTotal).
+pub fn memory() -> Option<u64> {
+    let info = std::fs::read_to_string("/proc/meminfo").ok()?;
+    let line = info.lines().find(|l| l.starts_with("MemTotal:"))?;
+    let kib: u64 = line.split_whitespace().nth(1)?.parse().ok()?;
+    Some(kib * 1024)
+}
+
 /// How this machine booted: UEFI, or legacy BIOS (no /sys/firmware/efi).
 pub fn firmware() -> configurator_answers::Firmware {
     if Path::new("/sys/firmware/efi").exists() {

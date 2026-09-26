@@ -125,9 +125,15 @@ fn main() -> Result<()> {
                 ..Default::default()
             };
             let plan = configurator_engine::plan(&answers, &catalog, &options)?;
+            let mut shown = 0;
             let mut progress = |event: Event| match &event {
                 Event::Step { title, percent, .. } => eprintln!("[{percent:>3}%] {title}"),
                 Event::Log { line } => eprintln!("       {line}"),
+                Event::Progress { percent, detail } if *percent != shown => {
+                    shown = *percent;
+                    eprintln!("[{percent:>3}%] {detail}");
+                }
+                Event::Progress { .. } => {}
                 Event::Done => eprintln!("[100%] Done"),
                 Event::Failed { message } => eprintln!("failed: {message}"),
             };
@@ -245,6 +251,7 @@ fn main() -> Result<()> {
                 &std::fs::read_to_string(&secrets)
                     .with_context(|| format!("reading {}", secrets.display()))?,
             )?;
+            let mut shown = 0;
             let mut progress = |event: Event| {
                 if json {
                     println!(
@@ -255,6 +262,11 @@ fn main() -> Result<()> {
                     match &event {
                         Event::Step { title, percent, .. } => eprintln!("[{percent:>3}%] {title}"),
                         Event::Log { line } => eprintln!("       {line}"),
+                        Event::Progress { percent, detail } if *percent != shown => {
+                            shown = *percent;
+                            eprintln!("[{percent:>3}%] {detail}");
+                        }
+                        Event::Progress { .. } => {}
                         Event::Done => eprintln!("[100%] Done"),
                         Event::Failed { message } => eprintln!("failed: {message}"),
                     }

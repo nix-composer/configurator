@@ -668,6 +668,20 @@ boot into it, and a VM test that drives it.
   of 67 templates and all 10 containers (data/dev-templates,
   data/containers).
 
+**Install progress and small machines (2026-09-26):** the Install step
+runs Nix itself with `--log-format internal-json` (crates/engine/src/nixlog.rs
+turns its activities into `Event::Progress`: bytes copied of the total Nix
+announces, builds, packages, time left; never backwards). Online it
+evaluates first (`nix eval --store /mnt …drvPath`: the flake's sources get
+copied, which isn't the install), then `nix build --store /mnt <drv>^*`
+counts, then `nixos-install --system` sets the profile and boot loader;
+offline, `nix copy --to /mnt` counts. For machines with little memory (a
+T500 with 4 GB failed an Omarchy install with exit 137): the live system
+has zram, the new disk's swap is on during the install, a temporary swap
+file tops memory + swap up to 16 GiB, builds work in /mnt/.configurator-build
+(not the live system's RAM), `nix flake lock` fetches into /mnt's store,
+and below 8 GB Nix builds one job on two cores (two jobs below 16 GB).
+
 **Decided (2026-09-26):** the generated host flake lives in the first
 admin's `~/.config/nixos` (was `~/nixos`, which collided with personal
 repos).

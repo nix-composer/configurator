@@ -33,6 +33,25 @@ fn monospace_view() -> (gtk::ScrolledWindow, gtk::TextBuffer) {
     (scroller, buffer)
 }
 
+/// Keeps a log scrolled to its newest line while it's at the bottom;
+/// scrolled up, it stays put, and back at the bottom it follows again.
+fn follow_end(scroller: &gtk::ScrolledWindow) {
+    let adj = scroller.vadjustment();
+    let following = std::rc::Rc::new(std::cell::Cell::new(true));
+    {
+        let following = following.clone();
+        adj.connect_value_changed(move |a| {
+            following.set(a.value() + a.page_size() >= a.upper() - 24.0);
+        });
+    }
+    // New lines make it taller.
+    adj.connect_changed(move |a| {
+        if following.get() {
+            a.set_value(a.upper() - a.page_size());
+        }
+    });
+}
+
 pub fn review(ctx: &Ctx) -> Page {
     let stack = gtk::Stack::builder()
         .transition_type(gtk::StackTransitionType::Crossfade)
@@ -96,8 +115,14 @@ pub fn review(ctx: &Ctx) -> Page {
         .css_classes(["dim-label", "title-4"])
         .build();
     let bar = gtk::ProgressBar::builder().show_text(true).build();
+    // What the current step is doing: sizes, packages, time left.
+    let progress_detail = gtk::Label::builder()
+        .css_classes(["dim-label", "caption"])
+        .wrap(true)
+        .build();
     let steps = list();
     let (log_view, log_buffer) = monospace_view();
+    follow_end(&log_view);
     let details = gtk::Expander::builder()
         .label("Details")
         .child(&log_view)
@@ -105,6 +130,7 @@ pub fn review(ctx: &Ctx) -> Page {
     progress_box.append(&progress_title);
     progress_box.append(&progress_step);
     progress_box.append(&bar);
+    progress_box.append(&progress_detail);
     progress_box.append(&steps);
     progress_box.append(&details);
     let plan_back = gtk::Button::builder()
@@ -246,6 +272,7 @@ pub fn review(ctx: &Ctx) -> Page {
             title: progress_title,
             step: progress_step,
             bar,
+            detail: progress_detail,
             steps,
             log: log_buffer,
             done,
@@ -439,6 +466,7 @@ struct ProgressUi {
     title: gtk::Label,
     step: gtk::Label,
     bar: gtk::ProgressBar,
+    detail: gtk::Label,
     steps: gtk::ListBox,
     log: gtk::TextBuffer,
     done: adw::StatusPage,
@@ -532,7 +560,13 @@ fn start(ctx: &Ctx, ui: &ProgressUi) {
                     ui.step.set_label(&title);
                     ui.bar.set_fraction(f64::from(percent) / 100.0);
                     ui.bar.set_text(Some(&format!("{percent}%")));
+                    ui.detail.set_label("");
                     ui.log(&format!("==> {title}"));
+                }
+                Ok(Event::Progress { percent, detail }) => {
+                    ui.bar.set_fraction(f64::from(percent) / 100.0);
+                    ui.bar.set_text(Some(&format!("{percent}%")));
+                    ui.detail.set_label(&detail);
                 }
                 Ok(Event::Log { line }) => ui.log(&line),
                 Ok(Event::Done) => {

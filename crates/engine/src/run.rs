@@ -5,6 +5,7 @@ use std::io::{BufRead, BufReader, Write};
 use std::os::unix::fs::OpenOptionsExt;
 use std::process::{Command, Stdio};
 use std::sync::mpsc;
+use std::time::{Duration, Instant};
 
 use configurator_answers::Answers;
 use configurator_catalog::Catalog;
@@ -40,6 +41,9 @@ pub fn install(
                 Action::Run { argv, stdin } => {
                     let input = stdin.map(|i| secret(answers, secrets, i));
                     run(argv, input.as_deref(), progress)?;
+                }
+                Action::Nix { argv, counts } => {
+                    run_nix(argv, *counts, percent, step.weight, progress)?
                 }
                 Action::Generate { out, facter_report } => {
                     let report = std::fs::read_to_string(facter_report)
@@ -100,6 +104,56 @@ fn secret(answers: &Answers, secrets: &Secrets, input: Input) -> String {
 }
 
 fn run(argv: &[String], stdin: Option<&str>, progress: &mut dyn FnMut(Event)) -> Result<(), Error> {
+    run_lines(argv, stdin, &mut |line| progress(Event::Log { line }))
+}
+
+/// A Nix command, its log as text. With `counts`, it's the step's work:
+/// its log becomes progress through most of the step (`weight` percent
+/// after `base`; the rest installs the boot loader), and the bar never
+/// goes back when Nix finds more to do. Without, it's the preparation.
+fn run_nix(
+    argv: &[String],
+    counts: bool,
+    base: u8,
+    weight: u8,
+    progress: &mut dyn FnMut(Event),
+) -> Result<(), Error> {
+    let mut tracker = crate::nixlog::Tracker::default();
+    let share = f64::from(weight) * 0.95;
+    let mut last = (base, "Working out what to install".to_string());
+    progress(Event::Progress {
+        percent: base,
+        detail: last.1.clone(),
+    });
+    let mut shown: Option<Instant> = None;
+    run_lines(argv, None, &mut |line| {
+        if let Some(line) = tracker.line(&line) {
+            progress(Event::Log { line });
+        }
+        if !counts || shown.is_some_and(|t| t.elapsed() < Duration::from_millis(250)) {
+            return;
+        }
+        if let Some(p) = tracker.progress() {
+            let percent = (base + (share * p.fraction) as u8).max(last.0);
+            if (percent, &p.detail) != (last.0, &last.1) {
+                shown = Some(Instant::now());
+                last = (percent, p.detail.clone());
+                progress(Event::Progress {
+                    percent,
+                    detail: p.detail,
+                });
+            }
+        }
+    })
+}
+
+/// Runs a command, handing each line of its output (stdout and stderr,
+/// merged as they come) to `on_line`.
+fn run_lines(
+    argv: &[String],
+    stdin: Option<&str>,
+    on_line: &mut dyn FnMut(String),
+) -> Result<(), Error> {
     let command = argv.join(" ");
     let mut child = Command::new(&argv[0])
         .args(&argv[1..])
@@ -135,7 +189,7 @@ fn run(argv: &[String], stdin: Option<&str>, progress: &mut dyn FnMut(Event)) ->
     });
     drop(tx);
     for line in rx {
-        progress(Event::Log { line });
+        on_line(line);
     }
     for reader in readers {
         let _ = reader.join();
