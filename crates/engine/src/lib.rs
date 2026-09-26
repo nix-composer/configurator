@@ -430,6 +430,9 @@ pub fn plan(answers: &Answers, catalog: &Catalog, options: &Options) -> Result<P
         Some(gib) if gib < 16 => "--max-jobs 2 ".to_string(),
         _ => String::new(),
     };
+    // When a download fails, build instead, and don't wait long on a
+    // cache that doesn't answer (Nix builds what a cache doesn't have).
+    parallel.push_str("--option fallback true --option connect-timeout 10 ");
     // A flake desktop's own packages come prebuilt from its binary cache.
     if let Some(cache) = answers
         .desktop

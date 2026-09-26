@@ -367,7 +367,11 @@ impl Generator<'_> {
                 .set(
                     "nix.settings.extra-trusted-public-keys",
                     Nix::List(vec![Nix::str(&cache.public_key)]),
-                );
+                )
+                // Built here when the cache can't give it (not there yet,
+                // a failed download) or doesn't answer quickly.
+                .set("nix.settings.fallback", Nix::Bool(true))
+                .set("nix.settings.connect-timeout", Nix::Int(10));
         }
         Ok(section)
     }

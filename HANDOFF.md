@@ -690,7 +690,8 @@ against the newest nixos-26.05 per channel, after pushes and every 6 hours,
 and pushes them there (secret CACHIX_AUTH_TOKEN). The installer's Nix
 commands trust the cache and the generated host sets it as
 `nix.settings.extra-substituters`, so installs and rebuilds download them
-instead of compiling (a T500 took ages on Herdr).
+instead of compiling (a T500 took ages on Herdr); `fallback = true` and a
+10 s connect timeout build it when the cache is missing it, stale or down.
 
 **Decided (2026-09-26):** the generated host flake lives in the first
 admin's `~/.config/nixos` (was `~/nixos`, which collided with personal

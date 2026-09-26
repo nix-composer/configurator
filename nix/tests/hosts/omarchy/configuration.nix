@@ -19,6 +19,8 @@
   nix.settings.extra-trusted-public-keys = [
     "nix-desktops.cachix.org-1:3nwBByDXptI8ugWCbaSjfrXmqa8+Fo9UUvwCZX5IPeA="
   ];
+  nix.settings.fallback = true;
+  nix.settings.connect-timeout = 10;
 
   # Apps, web apps, AI agents and command-line tools.
   nixpkgs.config.allowUnfree = true;
