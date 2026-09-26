@@ -1300,6 +1300,60 @@ mod tests {
         );
     }
 
+    /// Every desktop the keybind layer can edit renders what it offers:
+    /// its first movable default moved, its second removed, a command
+    /// added (where it can add).
+    #[test]
+    fn every_editable_desktop_renders_its_keybinds() {
+        let catalog = Catalog::builtin().unwrap();
+        let base = Answers::from_json(include_str!("../../../examples/answers/gnome.json")).unwrap();
+        for desktop in &catalog.desktops {
+            let (Some(keybinds), None) = (&desktop.keybinds, &desktop.unavailable) else {
+                continue;
+            };
+            let abilities = keybinds.abilities();
+            let Some(defaults) = catalog.default_keybinds.get(&desktop.id) else {
+                continue;
+            };
+            let mut answers = base.clone();
+            answers.desktop = Some(configurator_answers::Desktop {
+                id: desktop.id.clone(),
+                ecosystem: false,
+            });
+            answers.keybinds.clear();
+            if abilities.change
+                && let Some(d) = defaults.iter().find(|d| keybinds.can_move(d))
+            {
+                answers
+                    .keybinds
+                    .insert("SUPER + F10".into(), Keybind::Action(d.action.clone()));
+            }
+            if abilities.remove
+                && let Some(d) = defaults.iter().rev().find(|d| !d.accels.is_empty())
+            {
+                let combo = Combo::from_gtk_accel(&d.accels[0]).unwrap().canonical();
+                answers.keybinds.entry(combo).or_insert(Keybind::Unbind);
+            }
+            if abilities.add {
+                answers
+                    .keybinds
+                    .insert("SUPER + F9".into(), Keybind::Exec("touch /tmp/x".into()));
+            }
+            if answers.keybinds.is_empty() {
+                continue;
+            }
+            let host = generate(&answers, &catalog, &Inputs::default())
+                .unwrap_or_else(|e| panic!("{}: {e}", desktop.id));
+            let config = &host.files["configuration.nix"];
+            // COSMIC's are a package, listed with the apps.
+            assert!(
+                config.contains("# Keybinds") || config.contains("Shortcuts/v1/custom"),
+                "{}: no keybinds written",
+                desktop.id
+            );
+        }
+    }
+
     #[test]
     fn default_keybinds_are_desktops_and_parse() {
         let catalog = Catalog::builtin().unwrap();

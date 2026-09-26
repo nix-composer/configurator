@@ -269,6 +269,8 @@ hostChecks
 
   install-sway = installTest {
     name = "sway";
+    # Chromium (the web app) and the install's swap file don't fit 8 GiB.
+    diskSizeMiB = 12288;
     testScript = ''
       with subtest("keybinds are in Sway's config"):
           conf = "/etc/sway/config.d/50-configurator-keybinds.conf"

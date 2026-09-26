@@ -207,7 +207,7 @@
       "description": "The convergent desktop from Ubuntu Touch",
       "module": { "config": { "services.desktopManager.lomiri.enable": true } },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "lomiri", "unsupported": "Lomiri's shortcuts aren't listed here yet; change them in Lomiri's System Settings after the install." }
     },
     {
       "id": "lumina",
@@ -348,7 +348,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "awesome", "unsupported": "awesome's keybinds are Lua code in its rc.lua: copy /etc/xdg/awesome/rc.lua to ~/.config/awesome/rc.lua and change them there after the install." }
     }
     ,{
       "id": "bspwm",
@@ -438,7 +438,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "windowmaker", "unsupported": "Window Maker's keys are preferences its WPrefs app edits (~/GNUstep/Defaults/WindowMaker); the installer doesn't write them yet." }
     }
     ,{
       "id": "spectrwm",
@@ -468,7 +468,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "leftwm", "unsupported": "LeftWM keeps its whole config in ~/.config/leftwm/config.ron, written when it first starts; change the keybinds there after the install." }
     }
     ,{
       "id": "pekwm",
@@ -483,7 +483,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "pekwm", "unsupported": "pekwm copies its whole config into ~/.pekwm when it first starts; change the keys in ~/.pekwm/keys after the install." }
     }
     ,{
       "id": "ratpoison",
@@ -498,7 +498,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "ratpoison", "unsupported": "ratpoison's commands sit behind a prefix key (Ctrl+T, then a key), which the installer can't express yet; change them in ~/.ratpoisonrc after the install." }
     }
     ,{
       "id": "stumpwm",
@@ -513,7 +513,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "stumpwm", "unsupported": "StumpWM's commands sit behind a prefix key (Ctrl+T, then a key), which the installer can't express yet; change them in ~/.stumpwmrc after the install." }
     }
     ,{
       "id": "cwm",
@@ -559,7 +559,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "afterstep", "unsupported": "AfterStep's keys live in its feel files, built into its package; change them in ~/.afterstep after the install." }
     }
     ,{
       "id": "e16",
@@ -574,7 +574,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "e16", "unsupported": "e16's keys are ~/.e16/bindings.cfg (e16keyedit edits it); the installer doesn't write it yet." }
     }
     ,{
       "id": "sawfish",
@@ -589,7 +589,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "sawfish", "unsupported": "Sawfish's keymaps are Lisp; change them in ~/.sawfishrc or its configurator after the install." }
     }
     ,{
       "id": "notion",
@@ -604,7 +604,7 @@
         }
       },
       "loginManager": "lightdm",
-      "keybinds": null
+      "keybinds": { "format": "notion", "unsupported": "Notion's bindings are Lua, per window context and submap; change them in ~/.notion/cfg_notion.lua after the install." }
     }
     ,{
       "id": "exwm",

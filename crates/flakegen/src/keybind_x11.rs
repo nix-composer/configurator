@@ -8,14 +8,14 @@ use configurator_answers::{Combo, Modifier};
 use configurator_catalog::Desktop;
 
 use crate::keybind_files::{
-    Quote, Target, Text, etc, key_spellings, same, seed, seed_copy, seed_text, x11_keys,
-    xml,
+    Quote, Target, Text, etc, key_spellings, same, seed, seed_copy, seed_text, x11_keys, xml,
 };
 use crate::nix::{Key, Nix};
 use crate::{Error, Generator, Section};
 
 fn combo_of(accel: &str, wm: &str) -> Result<Combo, Error> {
-    Combo::from_gtk_accel(accel).ok_or_else(|| Error::Keybind(format!("{wm}: can't express {accel:?}")))
+    Combo::from_gtk_accel(accel)
+        .ok_or_else(|| Error::Keybind(format!("{wm}: can't express {accel:?}")))
 }
 
 impl Generator<'_> {
@@ -73,19 +73,24 @@ impl Generator<'_> {
                 }
             }
             let sym = c.keysym();
-            parts.push(if sym.len() == 1 { sym.to_uppercase() } else { sym });
+            parts.push(if sym.len() == 1 {
+                sym.to_uppercase()
+            } else {
+                sym
+            });
             parts.join("%2B")
         };
         let mut lines: Vec<Nix> = vec![Nix::str("[General]")];
         let mut n = 0;
-        let mut entry = |lines: &mut Vec<Nix>, combo: &Combo, label: &str, enabled: bool, value: Text| {
-            n += 1;
-            lines.push(Nix::str(""));
-            lines.push(Nix::str(format!("[{}.{n}]", keys(combo))));
-            lines.push(Nix::str(format!("Comment={label}")));
-            lines.push(Nix::str(format!("Enabled={enabled}")));
-            lines.push(value.nix());
-        };
+        let mut entry =
+            |lines: &mut Vec<Nix>, combo: &Combo, label: &str, enabled: bool, value: Text| {
+                n += 1;
+                lines.push(Nix::str(""));
+                lines.push(Nix::str(format!("[{}.{n}]", keys(combo))));
+                lines.push(Nix::str(format!("Comment={label}")));
+                lines.push(Nix::str(format!("Enabled={enabled}")));
+                lines.push(value.nix());
+            };
         let value = |action: &str| match action.strip_prefix("exec:") {
             Some(cmd) => Text::new().lit(&format!("Exec={cmd}")),
             None => Text::new().lit(&format!("path={}", action.trim_start_matches("path:"))),
@@ -97,11 +102,23 @@ impl Generator<'_> {
                 .iter()
                 .any(|(_, t)| matches!(t, Target::Action(a) if *a == d.action));
             for accel in &kept {
-                entry(&mut lines, &combo_of(accel, "LXQt")?, &d.label, true, value(&d.action));
+                entry(
+                    &mut lines,
+                    &combo_of(accel, "LXQt")?,
+                    &d.label,
+                    true,
+                    value(&d.action),
+                );
             }
             // A component's shortcut left with no keys stays, disabled.
             if kept.is_empty() && !moved && d.action.starts_with("path:") {
-                entry(&mut lines, &combo_of(&d.accels[0], "LXQt")?, &d.label, false, value(&d.action));
+                entry(
+                    &mut lines,
+                    &combo_of(&d.accels[0], "LXQt")?,
+                    &d.label,
+                    false,
+                    value(&d.action),
+                );
             }
         }
         for (i, (combo, target)) in plan.binds.iter().enumerate() {
@@ -132,7 +149,12 @@ impl Generator<'_> {
             "pkgs.writeText \"globalkeyshortcuts.conf\" (lib.concatLines {})",
             Nix::List(lines).render(1)
         );
-        seed_copy(section, ".config/lxqt/globalkeyshortcuts.conf", "0644", &file);
+        seed_copy(
+            section,
+            ".config/lxqt/globalkeyshortcuts.conf",
+            "0644",
+            &file,
+        );
         Ok(())
     }
 }
@@ -143,7 +165,6 @@ fn openbox_rc(
     section: &mut Section,
     removes: &[&str],
     binds: &[(&Combo, &Target)],
-
 ) -> Result<(), Error> {
     {
         let mut keys = Vec::new();
@@ -194,9 +215,7 @@ fn openbox_rc(
                 "openbox-rc.xml",
                 "pkgs.openbox",
                 "/etc/xdg/openbox/rc.xml",
-                &format!(
-                    "{script}sed -i \"/<\\/keyboard>/e cat $bindsPath\" $out\n"
-                ),
+                &format!("{script}sed -i \"/<\\/keyboard>/e cat $bindsPath\" $out\n"),
                 binds,
                 &["pkgs.perl"],
             ),
@@ -244,10 +263,7 @@ impl Generator<'_> {
         let mut lines = Vec::new();
         for (combo, target) in &plan.binds {
             match target {
-                Target::Action(a) if preference(a) => prefs
-                    .entry(a)
-                    .or_default()
-                    .push(keys(combo)),
+                Target::Action(a) if preference(a) => prefs.entry(a).or_default().push(keys(combo)),
                 Target::Action(a) => {
                     let (verb, command) = match a.strip_prefix("switchkey ") {
                         Some(rest) => ("switchkey", rest),
@@ -267,6 +283,14 @@ impl Generator<'_> {
             let mut pref_lines = vec![Nix::str(
                 "# Written by the Configurator from your NixOS configuration (keybinds there).",
             )];
+            // IceWM's own actions only take Super while the Super key alone
+            // isn't its menu key (VM-checked); Ctrl+Esc still opens it.
+            if prefs.values().any(|k| k.iter().any(|k| k.contains("Super"))) {
+                pref_lines.push(Nix::str(
+                    "# Super binds window actions, so the Super key alone doesn't open the menu (Ctrl+Esc does).",
+                ));
+                pref_lines.push(Nix::str("Win95Keys=0"));
+            }
             for (name, keys) in prefs {
                 // A preference holds one key.
                 pref_lines.push(Nix::str(format!(
@@ -358,12 +382,7 @@ impl Generator<'_> {
             lines,
             &[],
         );
-        seed_copy(
-            section,
-            ".fluxbox/keys",
-            "0644",
-            &file.render(1),
-        );
+        seed_copy(section, ".fluxbox/keys", "0644", &file.render(1));
         Ok(())
     }
 
@@ -723,7 +742,11 @@ impl Generator<'_> {
                     ))
                 }
                 Target::Command(command, _) => Text::new()
-                    .lit(&format!("Key {} A {} Exec exec ", combo.keysym(), mods(combo)))
+                    .lit(&format!(
+                        "Key {} A {} Exec exec ",
+                        combo.keysym(),
+                        mods(combo)
+                    ))
                     .cmd(command, Quote::None)
                     .nix(),
             });

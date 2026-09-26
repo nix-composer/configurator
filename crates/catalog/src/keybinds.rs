@@ -35,10 +35,7 @@ fn renderer(format: &str) -> Option<Abilities> {
         "openbox" | "icewm" | "fluxbox" | "bspwm" | "herbstluftwm" | "spectrwm" | "jwm" | "cwm"
         | "fvwm3" | "lxqt" => ALL,
         // evilwm binds only its own functions (its `spawn` is the terminal).
-        "evilwm" => Abilities {
-            add: false,
-            ..ALL
-        },
+        "evilwm" => Abilities { add: false, ..ALL },
         _ => return None,
     })
 }

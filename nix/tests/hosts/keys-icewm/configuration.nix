@@ -26,6 +26,8 @@
   # Keybinds, on top of the desktop's defaults.
   environment.etc."icewm/preferences".text = lib.concatLines [
     "# Written by the Configurator from your NixOS configuration (keybinds there)."
+    "# Super binds window actions, so the Super key alone doesn't open the menu (Ctrl+Esc does)."
+    "Win95Keys=0"
     "KeyWinClose=\"Super+F10\""
   ];
   environment.etc."icewm/keys".source = pkgs.runCommand "icewm-keys" {

@@ -499,7 +499,8 @@ crates/catalog             data/*.json: desktops, agents, web apps, profiles,
 crates/flakegen            answers → host flake (flake.nix, configuration.nix,
                            hardware.nix, disko.nix, desktop state files); nix.rs is
                            the Nix printer every value goes through (escaping,
-                           quoting); keybinds.rs the per-desktop keybind renderers
+                           quoting); keybinds.rs, keybind_files.rs and keybind_x11.rs the
+                           per-desktop keybind renderers
 crates/engine              the staged install plan and running it (commands,
                            in-process generation, secrets to files/stdin, progress);
                            status.rs reads Secure Boot/TPM state, disks, NVIDIA GPUs
@@ -536,7 +537,9 @@ nix/screenshots            every desktop booted in a VM and photographed, for th
                            Desktop layer (`nix build .#desktop-screenshots`)
 nix/modules/host           what host flakes import: TPM2 + PIN first-boot sealing
 nix/tests                  install.nix: the end-to-end VM install test; answers/ and
-                           hosts/ are its inputs (target disk /dev/vdb)
+                           hosts/ are its inputs (target disk /dev/vdb); keybinds.nix
+                           and keybinds-desktops.nix: keybinds on logged-in desktops
+                           (answers/keys-<id>.json)
 nix/checks                 registry options exist in nixpkgs; every generated host
                            but Omarchy evaluates; Omarchy parses; install-* VM tests;
                            live-mirror (the installer on two screens, headless cage)
@@ -595,8 +598,8 @@ UI's preselection), desktop (+ ecosystem), login manager, apps, web apps
 (Chromium app windows; Omarchy's own via `omarchy.webapps`), AI agents
 (packages; Omarchy's via `omarchy.agents`/`defaultAgent`), development
 (direnv + the `dev` template registry; containers as oci-containers,
-Omarchy's in its dbs.json), shell, keybinds (Omarchy, the dconf desktops,
-Sway; see docs/keybinds.md), hardware (NVIDIA, firmware), security (Secure
+Omarchy's in its dbs.json), shell, keybinds (27 desktops and window
+managers; see docs/keybinds.md), hardware (NVIDIA, firmware), security (Secure
 Boot via lanzaboote, TPM + PIN, FIDO2, fingerprint), disk (disko: ext4,
 XFS, btrfs subvolumes; LUKS; swap), users (+ SSH keys) and hostname.
 
@@ -606,11 +609,10 @@ Boot/TPM status, disks), writes answers.json, shows the generated
 configuration.nix and installs on confirmation; keybinds are still edited
 in the answers file.
 
-**Not done yet:** keybind renderers for KDE (needs plasma-manager), i3,
-labwc, Openbox, Xfce, COSMIC and Hyprland (mapped out in
-docs/keybinds.md); default-bind data for Cinnamon, MATE and Budgie (so
-they can unbind); an Omarchy VM test (needs its flake inputs in the
-test). The GUI (2026-09-25) covers every layer; since 2026-09-26 the
+**Not done yet:** keybind renderers for the window managers still listed
+read-only (see "Keybinds" below); an Omarchy *install* VM test with the
+desktop logged in (its keybinds are VM-tested logged in, given the flake).
+The GUI (2026-09-25) covers every layer; since 2026-09-26 the
 Apps and Shell layers are an app store over the catalog (category tiles,
 featured picks, search by name over every package, icon cards with +,
 details with screenshots fetched online), Web Apps and AI agents are icon
@@ -791,23 +793,47 @@ gained `{"action": …}`: one of the desktop's own actions on new keys.
 Default data exists for 39 desktops (extracted by scripts/keybinds/*
 and scripts/extract-gnome-keybinds.sh, checked by scripts/keybinds/check.py;
 how each desktop applies changes is researched in docs/keybinds/*.md).
-What the generator can write per desktop:
-- Change + Remove + Add: GNOME, Pantheon, Budgie, Cinnamon, MATE (dconf;
-  a moved action's key holds exactly its new keys), Sway (`unbindsym`,
-  `--locked` for media keys, then `bindsym`).
-- Change + Add (can't unbind): niri (binds written `Mod+…` like its
-  defaults, or they don't replace them).
-- Remove + Add: Omarchy (`omarchy.keybinds`, keyed by each default's own
-  combo string, e.g. `SUPER + code:10`); moving needs `lua` (researched).
-- Listed read-only until their renderers exist (the research says how):
-  KDE (seed ~/.config/kglobalshortcutsrc; /etc/xdg is ignored), COSMIC
-  (a system `custom` shortcuts file), Xfce (/etc/xdg xfconf defaults),
-  Hyprland (/etc/xdg/hypr/hyprland.lua with `hl.unbind`), i3 (a whole
-  config), labwc, river, Wayfire, mangowc and the 22 X11 window managers
-  (from easy system files to compiled-in dwm/xmonad).
-- No data yet: LXQt, Lomiri.
-The GNOME and Sway VM install tests move an action and check it on the
-installed system.
+What the generator writes per desktop (the full matrix, with where each
+writes and how it's tested, is docs/keybinds.md "Implemented"):
+- **Change + Remove + Add** (26): GNOME, Pantheon, Budgie, Cinnamon, MATE
+  (dconf), Omarchy (`omarchy.keybinds`; a move is the default's own
+  dispatcher on the new combo, its 6 Lua closures and merged binds can't
+  move), Hyprland, niri, Sway, i3, KDE Plasma, Xfce, COSMIC, LXQt, labwc,
+  river, Wayfire, mangowc, Openbox, IceWM, Fluxbox, bspwm, herbstluftwm,
+  spectrwm, JWM, cwm, FVWM3.
+- **Change + Remove** (evilwm: it binds only its own functions).
+- **Read-only with the reason shown** (`unsupported` in
+  data/desktops.json): xmonad, dwm (compiled in), awesome, ratpoison,
+  StumpWM, Notion, pekwm, LeftWM, Window Maker, AfterStep, e16, Sawfish,
+  Lomiri (no default data).
+One plan for every renderer (crates/flakegen/src/keybind_files.rs,
+keybind_x11.rs): an action bound to new keys is moved (its old keys go),
+an unbind removes the default holding the combo, any combo bound anew
+leaves the default that held it. The catalog says what each renderer can
+do (`configurator_catalog::keybinds`); the GUI offers exactly that. Where
+it goes follows docs/user-settings.md: system defaults the user
+overrides, or a user file seeded once (systemd user tmpfiles) that loads a
+managed system part; the flake never manages a file in the home.
+**VM-tested logged in** (`checks.keybinds-{tiling,wlroots,x11-a,x11-b,desktops}`,
+nix/tests/keybinds.nix; Omarchy via `scripts/test-omarchy.sh --keybinds`):
+each desktop boots its generated config, keys are pressed (moved, removed,
+added), the user changes a bind their desktop's way, a rebuilt generation
+is switched to, and the user's change and the flake's binds both still
+work. Found doing so: IceWM's own actions ignore Super while `Win95Keys`
+is on (the generator turns it off when one uses Super); a niri file holds
+one `binds` block; KDE's kglobalaccel runs inside KWin on Wayland.
+LXQt's defaults come from a VM (scripts/keybinds/extract-lxqt.py).
+
+**Omarchy, for nix-desktops/omarchy:** its `stable` branch (542e53a) pins
+an upstream Omarchy whose `default/hypr/helpers.lua` has no `o.rebind`,
+while its `omarchy.keybinds` renders `o.rebind(…)` for every enabled
+entry: any such keybind makes hyprland.lua fail to load ("attempt to call
+a nil value (field 'rebind')"), so the Configurator's Omarchy keybinds
+(and every generated host's, which follow `stable`) break the whole
+Hyprland config until `stable` moves to main's pin (93e8cd5, which has
+it). main (c6a59cc) passes the keybind test. Also in main the user's
+`hypr/*.lua` load before `omarchy.keybinds`, so a user bind on a combo the
+flake binds loses; the uncommitted tree loads them after.
 
 ## Prior art to reuse
 

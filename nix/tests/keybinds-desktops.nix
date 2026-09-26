@@ -352,7 +352,7 @@ in
           m.succeed(f"test -f {ini} && test ! -L {ini} && test $(stat -c %U {ini}) = {user}")
           m.diagnose = "pgrep -a -u kim foot"
           # Moved: closing a window, from Super+Q (and Alt+F4) to Super+F10.
-          windows = (procs "foot")
+          windows = ${builtins.toJSON (procs "foot")}
           m.succeed(as_user(m, user, "setsid -f foot >/dev/null 2>&1"))
           m.wait_until_succeeds(f"test $({windows}) -eq 1")
           m.sleep(2)
@@ -464,7 +464,9 @@ in
         not_pressed(m, "alt-f2", "pgrep -u kim fbrun")
         # The user's own bind, in their keys file.
         run(f"echo 'Mod4 F8 :Exec touch /tmp/kb-user' >> {keys}")
-        reload = lambda: m.succeed("pkill -HUP -u kim -f '(^|/)[.]?fluxbox( |$|-wrapped)'")
+        # Fluxbox rereads its keys file when it changes.
+        m.diagnose = "pgrep -a -u kim; tail -5 /home/kim/.fluxbox/keys"
+        reload = lambda: m.sleep(1)
         reload()
         m.sleep(5)
         pressed(m, "meta_l-f8", "test -e /tmp/kb-user")
@@ -553,7 +555,7 @@ in
         m.succeed("grep -q 'mask=\"A\" key=\"F1\">exec:true' /etc/jwm/jwmrc")
         # The user's own key, in their ~/.jwmrc after the include.
         run(f"sed -i 's|</JWM>|<Key mask=\"4\" key=\"F8\">exec:touch /tmp/kb-user</Key></JWM>|' {rc}")
-        reload = lambda: run("jwm -reload")
+        reload = lambda: run("jwm -restart")
         reload()
         m.sleep(3)
         pressed(m, "meta_l-f8", "test -e /tmp/kb-user")

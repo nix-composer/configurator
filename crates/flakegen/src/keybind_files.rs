@@ -1085,7 +1085,14 @@ pub(crate) fn key_spellings(
 }
 
 /// X11-style keys: modifiers by the given names, then the keysym.
-pub(crate) fn x11_keys(combo: &Combo, sup: &str, ctrl: &str, alt: &str, shift: &str, sep: &str) -> String {
+pub(crate) fn x11_keys(
+    combo: &Combo,
+    sup: &str,
+    ctrl: &str,
+    alt: &str,
+    shift: &str,
+    sep: &str,
+) -> String {
     let mut parts: Vec<String> = combo
         .modifiers
         .iter()

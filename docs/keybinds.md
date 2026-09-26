@@ -56,29 +56,66 @@ each renderer translates it to the desktop's own syntax.
 | awesome, qtile, xmonad, dwm | code (Lua, Python, Haskell, C) | | | |
 | Enlightenment | binary EET | not practical | | |
 
-## Implemented
+## Implemented (2026-09-26)
 
-- **Omarchy:** `omarchy.keybinds` (Home Manager, per user).
-- **dconf:** GNOME, Pantheon, Cinnamon, MATE, Budgie: launch and command
-  binds. **GNOME (and Pantheon, which shares its WM keys) can also unbind:**
-  `data/keybinds/gnome.json` holds GNOME's 138 default binds, extracted
-  from the GSettings schemas (`scripts/extract-gnome-keybinds.sh`); an
-  unbound combo, or one bound to something new, is taken out of the
-  default keys holding it. The other dconf desktops need the same data.
-- **Sway:** `/etc/sway/config.d/50-configurator-keybinds.conf`, including
-  unbinds.
-- **niri:** `/etc/niri/config.kdl` (used when the user has no config of
-  their own): `include` niri's default config, then a `binds` block with
-  `spawn-sh`; a later bind replaces the included one on the same keys
-  (verified in niri 26.04's source, and `niri validate` accepts the
-  output). niri has no unbind.
+Every desktop's answers go through one plan (`crates/flakegen/src/keybind_files.rs`):
+an unbind removes the default holding the combo; a desktop action bound to
+new keys (`{"action": …}`) is **moved**: its old keys go; any combo bound
+anew leaves the default that held it. Each renderer writes that plan where
+the desktop reads it, following `docs/user-settings.md` (system defaults
+the user overrides, or a user file seeded once that loads a managed system
+part; never a Home Manager link, never a file the rebuild rewrites in the
+home). What each renderer can do is `configurator_catalog::keybinds`
+(`Keybinds::abilities`, `can_move`); the GUI offers exactly that.
 
-Others are rejected as "not supported yet" when the answers have binds.
+| Desktop | Change | Remove | Add | Written as | Tested (logged in, keys pressed) |
+|---|---|---|---|---|---|
+| GNOME, Pantheon | yes | yes | yes | dconf system database (no locks) | `install-gnome` (dconf values) |
+| Budgie, Cinnamon, MATE | yes | yes | yes | dconf system database | generator tests only |
+| Omarchy | yes (not its 6 Lua closures or merged binds) | yes | yes | `omarchy.keybinds` (a move: `exec`/`omarchy`/`lua` on the new combo, `enable = false` on the old) | `lib.keybindsOmarchyTest` (`scripts/test-omarchy.sh --keybinds`) |
+| Hyprland | yes | yes | yes | `/etc/xdg/hypr/configurator.lua` (defaults, `hl.unbind`, `hl.bind`) + seeded `~/.config/hypr/hyprland.lua` that `dofile`s it | `checks.keybinds-tiling` |
+| niri | yes | yes | yes | `/etc/niri/config.kdl`: `include` of the default config with the removed/moved bind lines taken out (sed at build time), new `binds` + seeded `~/.config/niri/config.kdl` including it | `keybinds-tiling` |
+| Sway | yes | yes | yes | `/etc/sway/config.d/50-configurator-keybinds.conf` (`unbindsym`, `bindsym`), ending with `include $HOME/.config/sway/config.d/*` | `keybinds-tiling`, `install-sway` |
+| i3 | yes | yes | yes | `/etc/xdg/i3/config`: `include` of the default config without the wizard and the removed/moved lines, new binds, `include ~/.config/i3/config.d/*` | `keybinds-tiling` |
+| KDE Plasma | yes | yes | yes | seeded `~/.config/kglobalshortcutsrc` (changed actions only); new commands are launchers (`.desktop` in the system profile) bound as services | `keybinds-desktops` |
+| Xfce | yes | yes | yes | `/etc/xdg/xfce4/xfconf/…/xfce4-keyboard-shortcuts.xml` (`default` branches) | `keybinds-desktops` |
+| COSMIC | yes | yes | yes | system `share/cosmic/…/Shortcuts/v1/custom` (`Disable`, actions, `Spawn`) in `environment.systemPackages` | `keybinds-desktops` |
+| LXQt | yes | yes | yes | seeded `~/.config/lxqt/globalkeyshortcuts.conf` (removed component shortcuts kept `Enabled=false`) + Openbox's rc.xml for window actions | `keybinds-x11-b` |
+| labwc | yes | yes | yes | `/etc/xdg/labwc/rc.xml` (`<default/>`, `None`, new keybinds); labwc wrapped with `--merge-config` so a user rc.xml adds to it | `keybinds-wlroots` |
+| river | yes | yes | yes | `/etc/river/init` (example init, `unmap`, `map`) + seeded `~/.config/river/init` sourcing it | `keybinds-wlroots` |
+| Wayfire | yes | yes | yes | `/etc/wayfire/defaults.ini` (moved/removed options); new commands seeded into `~/.config/wayfire.ini` `[command]` | `keybinds-wlroots` |
+| mangowc | yes | yes | yes | `/etc/mango/config.conf` (`source=` of the filtered default, new binds) + seeded `~/.config/mango/config.conf` sourcing it | `keybinds-wlroots` |
+| Openbox | yes | yes | yes | `/etc/xdg/openbox/rc.xml` (the package's, keybinds taken out with perl, new ones added) | `keybinds-x11-a` |
+| IceWM | yes | yes | yes | `/etc/icewm/preferences` (`Key*` actions; `Win95Keys=0` when one uses Super) + `/etc/icewm/keys` (launchers, filtered + new) | `keybinds-x11-a` |
+| Fluxbox | yes | yes | yes | seeded `~/.fluxbox/keys` (the package's, filtered, plus new) | `keybinds-x11-a` |
+| bspwm (sxhkd) | yes | yes | yes | seeded `~/.config/sxhkd/sxhkdrc` (all binds after the changes) and `~/.config/bspwm/bspwmrc` (example) | `keybinds-x11-a` |
+| herbstluftwm | yes | yes | yes | `/etc/herbstluftwm/autostart` (stock autostart, `keyunbind`, `keybind`) + seeded `~/.config/herbstluftwm/autostart` running it | `keybinds-x11-a` |
+| spectrwm | yes | yes | yes | `/etc/xdg/spectrwm/spectrwm.conf` (`bind[]`, `bind[action]`, `program[…]`) | `keybinds-x11-b` |
+| JWM | yes | yes | yes | `/etc/jwm/jwmrc` (Include of the stock one, later Keys win, removed ones `exec:true`) + seeded `~/.jwmrc` including it | `keybinds-x11-b` |
+| cwm | yes | yes | yes | seeded `~/.cwmrc` (`unbind-key`, `bind-key`) | `keybinds-x11-b` |
+| evilwm | yes | yes | no (binds only its own functions) | seeded `~/.evilwmrc` (`bind`) | `keybinds-x11-b` |
+| FVWM3 | yes | yes | yes | `/etc/fvwm3/config` (Read the default, `Key … -`, new Keys) + seeded `~/.fvwm/config` reading it | `keybinds-x11-b` |
 
-## Status (2026-09-26)
+Read-only (listed with the reason, `unsupported` in `data/desktops.json`):
+xmonad and dwm (compiled in), awesome (Lua code), ratpoison and StumpWM
+(prefix-key sequences), Notion (per-context Lua), pekwm and LeftWM (their
+whole config copied into the home on first start), Window Maker (WPrefs
+preferences), AfterStep and e16 (not written yet), Sawfish (Lisp), Lomiri
+(no default data). Enlightenment, Lumina, EXWM and Qtile are unavailable on
+nixpkgs 26.05.
 
-Default shortcuts for 39 desktops are data in `data/keybinds/`, and the
-keybind layer lists them. Per-desktop research on applying changes is in
-`docs/keybinds/` (dconf desktops, compositors, KDE/COSMIC/Xfce/Omarchy, X11
-window managers); see HANDOFF.md ("Keybinds") for which renderers write
-changes today and which lists are read-only.
+Seeded once means: the user's file is theirs from the first login; later
+changes in the flake reach users through the managed file it loads
+(Hyprland, niri, river, mangowc, herbstluftwm, JWM, FVWM3) or, where the
+desktop reads only the user's file (KDE, LXQt, Fluxbox, bspwm, cwm,
+evilwm, Wayfire's commands), only new users. Xfce copies its defaults into
+the user's settings on first login too.
+
+The VM tests (`nix/tests/keybinds.nix`, groups in
+`nix/tests/keybinds-desktops.nix`) boot each desktop from the generated
+configuration (`nix/tests/answers/keys-<id>.json`), log in, and press
+keys: a moved action works on its new keys and not its old ones, a removed
+default is gone, an added command runs; then the user changes a bind the
+desktop's own way, the system switches to a rebuilt generation (for
+Hyprland, niri, Sway, i3, river and mango one whose managed file gained a
+bind), and the user's file is unchanged and every bind still works.
