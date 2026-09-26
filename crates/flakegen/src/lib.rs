@@ -548,18 +548,40 @@ impl Generator<'_> {
             }
         }
 
+        // Apps NixOS sets up through their own module (Steam, Wireshark, …)
+        // get that module instead of a bare package.
+        let programs: Vec<_> = a
+            .all_packages()
+            .chain(agent_packages.iter().copied())
+            .filter(|attr| !installed_by_desktop.contains(attr.as_str()))
+            .filter_map(|attr| self.catalog.program(attr))
+            .collect();
+
         let mut section = Section::new("Apps, web apps, AI agents and command-line tools.");
         let mut seen = std::collections::BTreeSet::new();
         let mut packages: Vec<Nix> = a
             .all_packages()
             .chain(agent_packages)
             .filter(|attr| !installed_by_desktop.contains(attr.as_str()))
+            .filter(|attr| {
+                self.catalog
+                    .program(attr)
+                    .is_none_or(|program| program.package)
+            })
             .filter(|attr| seen.insert(attr.as_str()))
             .map(|attr| Nix::raw(format!("pkgs.{attr}")))
             .collect();
         packages.extend(launchers);
         if !packages.is_empty() {
             section.set("environment.systemPackages", Nix::List(packages));
+        }
+        let mut configured = std::collections::BTreeSet::new();
+        for program in programs {
+            if configured.insert(&program.attr) {
+                for (path, value) in &program.config {
+                    section.set(path.as_str(), self.resolve(&program.attr, value)?);
+                }
+            }
         }
         // The app store marks unfree apps; accepting them is part of picking one.
         section.set("nixpkgs.config.allowUnfree", Nix::Bool(true));

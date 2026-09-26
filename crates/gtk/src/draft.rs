@@ -126,14 +126,18 @@ impl Draft {
     /// Picks a profile: its apps replace the previous profile's; hand
     /// picks stay.
     pub fn set_profile(&mut self, catalog: &Catalog, id: &str) {
-        for sources in self.apps.values_mut() {
-            sources.remove(&Source::Profile);
-        }
-        self.apps.retain(|_, sources| !sources.is_empty());
+        remove_source(&mut self.apps, Source::Profile);
+        remove_source(&mut self.webapps, Source::Profile);
         if let Some(profile) = catalog.profile(id) {
             for app in &profile.apps {
                 self.apps
                     .entry(app.clone())
+                    .or_default()
+                    .insert(Source::Profile);
+            }
+            for webapp in &profile.webapps {
+                self.webapps
+                    .entry(webapp.clone())
                     .or_default()
                     .insert(Source::Profile);
             }

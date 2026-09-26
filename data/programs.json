@@ -1,0 +1,23 @@
+{
+  "$comment": "Apps NixOS sets up through their own module rather than a bare package: picking `attr` (in a profile, the app store or the shell layer) writes `config` instead of listing the package (both when `package` is true). Special values as in desktops.json. Every option must exist in nixpkgs (checks.desktops).",
+  "programs": [
+    { "attr": "steam", "config": { "programs.steam.enable": true } },
+    { "attr": "gamescope", "config": { "programs.gamescope.enable": true } },
+    { "attr": "gamemode", "config": { "programs.gamemode.enable": true } },
+    { "attr": "wireshark", "config": { "programs.wireshark.enable": true, "programs.wireshark.package": { "$expr": "pkgs.wireshark" } } },
+    { "attr": "obs-studio", "config": { "programs.obs-studio.enable": true } },
+    { "attr": "virt-manager", "config": { "programs.virt-manager.enable": true, "virtualisation.libvirtd.enable": true } },
+    { "attr": "kdePackages.kdeconnect-kde", "config": { "programs.kdeconnect.enable": true } },
+    { "attr": "localsend", "config": { "programs.localsend.enable": true } },
+    { "attr": "_1password-gui", "config": { "programs._1password-gui.enable": true } },
+    { "attr": "_1password-cli", "config": { "programs._1password.enable": true } },
+    { "attr": "kdePackages.partitionmanager", "config": { "programs.partition-manager.enable": true } },
+    { "attr": "coolercontrol.coolercontrol-gui", "config": { "programs.coolercontrol.enable": true } },
+    { "attr": "corectrl", "config": { "programs.corectrl.enable": true } },
+    { "attr": "noisetorch", "config": { "programs.noisetorch.enable": true } },
+    { "attr": "droidcam", "config": { "programs.droidcam.enable": true } },
+    { "attr": "alvr", "config": { "programs.alvr.enable": true } },
+    { "attr": "sniffnet", "config": { "programs.sniffnet.enable": true } },
+    { "attr": "gpu-screen-recorder", "config": { "programs.gpu-screen-recorder.enable": true } }
+  ]
+}

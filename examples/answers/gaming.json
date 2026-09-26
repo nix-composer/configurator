@@ -11,11 +11,14 @@
   },
   "apps": {
     "packages": [
+      "steam",
       "lutris",
       "heroic",
       "mangohud",
       "protonup-qt",
-      "discord"
+      "discord",
+      "gamemode",
+      "gamescope"
     ]
   },
   "hardware": {

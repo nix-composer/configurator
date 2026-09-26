@@ -53,7 +53,7 @@ pub fn profile(ctx: &Ctx) -> Page {
             };
             let installs = group(&format!("{} installs", p.name), &p.description);
             let rows = list();
-            if p.apps.is_empty() && p.config.is_empty() {
+            if p.apps.is_empty() && p.webapps.is_empty() && p.config.is_empty() {
                 rows.append(
                     &adw::ActionRow::builder()
                         .title("Nothing preselected: you choose everything")
@@ -74,6 +74,20 @@ pub fn profile(ctx: &Ctx) -> Page {
                     None => {
                         gtk::Image::from_icon_name("application-x-executable-symbolic").upcast()
                     }
+                });
+                rows.append(&row);
+            }
+            for id in &p.webapps {
+                let Some(w) = ctx.catalog.webapp(id) else {
+                    continue;
+                };
+                let row = adw::ActionRow::builder()
+                    .title(escape(&w.name))
+                    .subtitle(escape(&format!("Web app: {}", w.description)))
+                    .build();
+                row.add_prefix(&match ctx.catalog.webapp_icon(id) {
+                    Some(png) => store::png_icon(png, 32),
+                    None => store::letter_tile(&w.name, 32, false),
                 });
                 rows.append(&row);
             }

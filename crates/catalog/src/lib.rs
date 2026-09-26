@@ -18,6 +18,7 @@ const PROFILES_JSON: &str = include_str!("../../../data/profiles.json");
 const CONTAINERS_JSON: &str = include_str!("../../../data/containers.json");
 const DEV_TEMPLATES_JSON: &str = include_str!("../../../data/dev-templates.json");
 const ECOSYSTEMS_JSON: &str = include_str!("../../../data/ecosystems.json");
+const PROGRAMS_JSON: &str = include_str!("../../../data/programs.json");
 include!(concat!(env!("OUT_DIR"), "/icons.rs"));
 
 #[derive(Debug, Clone, Deserialize)]
@@ -199,6 +200,19 @@ pub struct EcosystemPick {
     pub category: String,
 }
 
+/// An app NixOS sets up through its own module (data/programs.json).
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct Program {
+    /// The nixpkgs attribute it's picked by.
+    pub attr: String,
+    /// Written instead of listing the package.
+    pub config: BTreeMap<String, Value>,
+    /// List the package as well.
+    #[serde(default)]
+    pub package: bool,
+}
+
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Profile {
@@ -207,6 +221,9 @@ pub struct Profile {
     pub description: String,
     /// Preselected in the app store.
     pub apps: Vec<String>,
+    /// Preselected in the web app store (ids).
+    #[serde(default)]
+    pub webapps: Vec<String>,
     /// NixOS options, with the same special values as desktop modules.
     pub config: BTreeMap<String, Value>,
 }
@@ -348,6 +365,7 @@ pub struct Catalog {
     pub containers: Vec<Container>,
     pub dev_templates: Vec<DevTemplate>,
     pub ecosystems: Vec<Ecosystem>,
+    pub programs: Vec<Program>,
     /// Default keybinds by desktop id.
     pub default_keybinds: BTreeMap<String, Vec<DefaultBind>>,
     /// Flake desktops' catalogs by name.
@@ -387,6 +405,7 @@ impl Catalog {
             containers: load(CONTAINERS_JSON, "containers", |c: &Container| &c.id)?,
             dev_templates: load(DEV_TEMPLATES_JSON, "templates", |t: &DevTemplate| &t.id)?,
             ecosystems: load(ECOSYSTEMS_JSON, "ecosystems", |e: &Ecosystem| &e.desktop)?,
+            programs: load(PROGRAMS_JSON, "programs", |p: &Program| &p.attr)?,
             default_keybinds: DEFAULT_KEYBINDS
                 .iter()
                 .map(|(format, json)| {
@@ -514,6 +533,11 @@ impl Catalog {
             .map(|(_, png)| *png)
     }
 
+    /// The module an app is set up through, if it has one.
+    pub fn program(&self, attr: &str) -> Option<&Program> {
+        self.programs.iter().find(|p| p.attr == attr)
+    }
+
     pub fn profile(&self, id: &str) -> Option<&Profile> {
         self.profiles.iter().find(|p| p.id == id)
     }
@@ -562,6 +586,24 @@ mod tests {
         assert!(catalog.desktop("omarchy").unwrap().module.flake.is_some());
         assert!(catalog.desktop("gnome").unwrap().module.flake.is_none());
         assert!(catalog.desktop("openbox").is_some());
+    }
+
+    #[test]
+    fn profiles_pick_what_exists() {
+        let catalog = Catalog::builtin().unwrap();
+        for profile in &catalog.profiles {
+            for id in &profile.webapps {
+                assert!(catalog.webapp(id).is_some(), "{}: web app {id}", profile.id);
+            }
+        }
+        // Steam comes through its NixOS module.
+        let gaming = catalog.profile("gaming").unwrap();
+        assert!(gaming.apps.iter().any(|a| a == "steam"));
+        assert!(catalog.program("steam").is_some());
+        // Omarchy's ecosystem, from its flake's catalog.
+        let omarchy = catalog.ecosystem("omarchy").unwrap();
+        assert!(omarchy.apps.iter().any(|p| p.attr == "obsidian"));
+        assert!(omarchy.webapps.iter().any(|id| id == "hey"));
     }
 
     #[test]

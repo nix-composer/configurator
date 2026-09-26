@@ -10,6 +10,8 @@ let
   inherit (pkgs) lib;
   system = pkgs.stdenv.hostPlatform.system;
   registry = lib.importJSON ../../data/desktops.json;
+  programs = (lib.importJSON ../../data/programs.json).programs;
+  profiles = (lib.importJSON ../../data/profiles.json).profiles;
 
   # No `system`: generated hosts set it themselves, as in their flake.
   nixos = modules: nixpkgs.lib.nixosSystem { inherit modules; };
@@ -56,11 +58,14 @@ let
     ]
   ) hosts;
 
-  # Every nixpkgs option the desktop registry sets exists.
+  # Every nixpkgs option the desktop registry, the programs and the
+  # profiles set exists.
   options = (nixos [ { nixpkgs.hostPlatform = system; } ]).options;
-  registryPaths = lib.concatMap (
-    d: lib.optionals (!(d.module ? flake)) (builtins.attrNames d.module.config)
-  ) registry.desktops;
+  registryPaths =
+    lib.concatMap (
+      d: lib.optionals (!(d.module ? flake)) (builtins.attrNames d.module.config)
+    ) registry.desktops
+    ++ lib.concatMap (p: builtins.attrNames p.config) (programs ++ profiles);
   installTest = import ../tests/install.nix {
     inherit
       pkgs

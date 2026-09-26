@@ -19,7 +19,6 @@
 
   # Apps, web apps, AI agents and command-line tools.
   environment.systemPackages = [
-    pkgs.wireshark
     pkgs.spotify
     pkgs.gh
     pkgs.gemini-cli
@@ -31,6 +30,8 @@
       categories = [ "Network" ];
     })
   ];
+  programs.wireshark.enable = true;
+  programs.wireshark.package = (pkgs.wireshark);
   nixpkgs.config.allowUnfree = true;
   home-manager.users.me.omarchy.agents = [ "claude" ];
   home-manager.users.me.omarchy.defaultAgent = "claude";

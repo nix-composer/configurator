@@ -13,8 +13,6 @@
   # Profile: Gaming.
   hardware.graphics.enable = true;
   hardware.graphics.enable32Bit = true;
-  programs.gamemode.enable = true;
-  programs.steam.enable = true;
 
   # Desktop: KDE Plasma.
   services.desktopManager.plasma6.enable = true;
@@ -30,6 +28,9 @@
     pkgs.protonup-qt
     pkgs.discord
   ];
+  programs.steam.enable = true;
+  programs.gamemode.enable = true;
+  programs.gamescope.enable = true;
   nixpkgs.config.allowUnfree = true;
 
   # Boot and security.

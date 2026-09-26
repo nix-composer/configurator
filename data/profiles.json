@@ -1,11 +1,12 @@
 {
-  "$comment": "Profiles: a purpose's opinionated setup. `apps` are preselected in the app store (the answers carry what's kept); `config` is written as the profile's own section. Special values as in desktops.json, plus {\"$context\": \"firstUser\"}.",
+  "$comment": "Profiles: a purpose's opinionated setup. `apps` and `webapps` are preselected in the app and web app stores (the answers carry what's kept; apps in programs.json get their NixOS module); `config` is written as the profile's own section. Special values as in desktops.json, plus {\"$context\": \"firstUser\"}.",
   "profiles": [
     {
       "id": "custom",
       "name": "Everything Custom",
       "description": "Nothing preselected: choose everything yourself",
       "apps": [],
+      "webapps": [],
       "config": {}
     },
     {
@@ -17,7 +18,14 @@
         "thunderbird",
         "firefox",
         "evince",
+        "xournalpp",
         "simple-scan"
+      ],
+      "webapps": [
+        "microsoft-365",
+        "google-docs",
+        "google-sheets",
+        "google-drive"
       ],
       "config": {
         "services.printing.enable": true,
@@ -31,15 +39,20 @@
       "name": "Gaming",
       "description": "Steam, launchers for other stores, and performance tools",
       "apps": [
-        "lutris",
+        "steam",
         "heroic",
-        "mangohud",
+        "lutris",
         "protonup-qt",
+        "mangohud",
+        "gamescope",
+        "gamemode",
         "discord"
       ],
+      "webapps": [
+        "twitch",
+        "xbox-cloud-gaming"
+      ],
       "config": {
-        "programs.steam.enable": true,
-        "programs.gamemode.enable": true,
         "hardware.graphics.enable": true,
         "hardware.graphics.enable32Bit": true
       }
@@ -51,6 +64,7 @@
       "apps": [
         "firefox"
       ],
+      "webapps": [],
       "config": {
         "services.cage.enable": true,
         "services.cage.user": {
@@ -67,9 +81,14 @@
       "description": "Remote access over SSH and server tools",
       "apps": [
         "htop",
+        "btop",
         "tmux",
-        "git"
+        "git",
+        "rsync",
+        "curl",
+        "wget"
       ],
+      "webapps": [],
       "config": {
         "services.openssh.enable": true
       }
@@ -79,6 +98,7 @@
       "name": "Headless",
       "description": "No desktop, reachable over SSH",
       "apps": [],
+      "webapps": [],
       "config": {
         "services.openssh.enable": true
       }

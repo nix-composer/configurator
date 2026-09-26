@@ -211,7 +211,9 @@ pub fn run(catalog: &Catalog) -> Result<(Answers, Secrets)> {
         let picked: Vec<bool> = catalog
             .webapps
             .iter()
-            .map(|w| eco.is_some_and(|e| e.webapps.contains(&w.id)))
+            .map(|w| {
+                profile.webapps.contains(&w.id) || eco.is_some_and(|e| e.webapps.contains(&w.id))
+            })
             .collect();
         MultiSelect::with_theme(t)
             .with_prompt("Web apps")
