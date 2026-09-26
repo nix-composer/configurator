@@ -3,7 +3,7 @@
 # No hardware report yet. On the machine, run
 #   sudo nixos-facter -o facter.json
 # here and set hardware.facter.reportPath = ./facter.json;
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   # What nixos-facter detected: kernel modules, firmware, CPU microcode, …
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
@@ -12,5 +12,6 @@
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia.open = true;
   hardware.graphics.enable = true;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   hardware.enableRedistributableFirmware = true;
 }
