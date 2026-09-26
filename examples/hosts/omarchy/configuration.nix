@@ -22,15 +22,6 @@
     pkgs.wireshark
     pkgs.spotify
     pkgs.gh
-    pkgs.bat
-    pkgs.eza
-    pkgs.fd
-    pkgs.fzf
-    pkgs.ripgrep
-    pkgs.zoxide
-    pkgs.starship
-    pkgs.tmux
-    pkgs.lazygit
     pkgs.gemini-cli
     (pkgs.makeDesktopItem {
       name = "webapp-slack";
@@ -43,6 +34,19 @@
   nixpkgs.config.allowUnfree = true;
   home-manager.users.me.omarchy.agents = [ "claude" ];
   home-manager.users.me.omarchy.defaultAgent = "claude";
+  home-manager.users.me.omarchy.apps = {
+    enable = true;
+    picks = [
+      "aether"
+      "herdr"
+      "omacalc"
+      "omacut"
+      "omawrite"
+      "spotify"
+      "tobi-try"
+    ];
+  };
+  home-manager.users.me.omarchy.cli.inxi.enable = false;
   home-manager.users.me.omarchy.webapps = {
     enable = true;
     picks = [ "youtube" "hey" ];

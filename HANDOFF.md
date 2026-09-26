@@ -382,6 +382,21 @@ from a copy of its own.
 
 Unchecking the ecosystem removes only what it added; hand picks stay.
 
+**Built (2026-09-26):** the flake input `omarchy` (source only,
+`github:nix-desktops/omarchy/stable`) gives `lib/catalog.nix`;
+`nix/desktop-catalogs.nix` writes it as `omarchy.json` and the catalog
+crate builds it in (`CONFIGURATOR_DESKTOP_CATALOGS`, set by the dev shell
+and the packages). Omarchy's registry entry names it (`module.catalog`),
+and from it the catalog makes Omarchy's ecosystem: its apps (by nixpkgs
+attribute) and web apps, preselected like GNOME's when the box is ticked.
+Its CLI setup is preselected in the shell layer whenever Omarchy is the
+desktop (`Source::Desktop`). The generator writes the apps kept as
+`omarchy.apps = { enable; picks; }` (its own tools, not in nixpkgs, come
+with the ecosystem), tools dropped as `omarchy.cli.<id>.enable = false`
+(answers `shell.without`, so older answers keep the whole setup), and
+doesn't list again what Omarchy installs itself; apps it installs on
+first use (Spotify, Signal, 1Password) are installed when kept.
+
 ## Desktops as modules
 
 Every desktop entry is a NixOS (+ Home Manager) module with a common shape

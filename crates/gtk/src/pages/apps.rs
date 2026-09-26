@@ -21,24 +21,28 @@ fn ecosystem_note(ctx: &Ctx, what: &str) -> Option<String> {
     if !draft.ecosystem {
         return None;
     }
-    if desktop.module.ecosystem.is_some() {
-        return Some(format!(
-            "{}'s entire ecosystem is on: its {what} come with it.",
-            desktop.name
-        ));
+    let count = ctx
+        .catalog
+        .ecosystem(&desktop.id)
+        .map_or(0, |eco| match what {
+            "tools" => eco.cli.len(),
+            "apps" => eco.apps.len(),
+            "web apps" => eco.webapps.len(),
+            _ => 0,
+        });
+    if count == 0 {
+        return None;
     }
-    let eco = ctx.catalog.ecosystem(&desktop.id)?;
-    let count = match what {
-        "tools" => eco.cli.len(),
-        "apps" => eco.apps.len(),
-        _ => 0,
+    // Web app cards have no tags.
+    let tagged = if what == "web apps" {
+        String::new()
+    } else {
+        format!(", tagged {}", desktop.name)
     };
-    (count > 0).then(|| {
-        format!(
-            "{}'s entire ecosystem is on: its {count} {what} are selected, tagged {}. Remove any you don't want.",
-            desktop.name, desktop.name
-        )
-    })
+    Some(format!(
+        "{}'s entire ecosystem is on: its {count} {what} are selected{tagged}. Remove any you don't want.",
+        desktop.name
+    ))
 }
 
 fn note_label() -> gtk::Label {
@@ -148,13 +152,13 @@ pub fn apps(ctx: &Ctx) -> Page {
 }
 
 /// Why something is picked, as store tags: the profile, or the desktop's
-/// ecosystem (tagged with the desktop's name).
+/// ecosystem or own setup (tagged with the desktop's name).
 fn reasons(ctx: &Ctx, draft: &crate::draft::Draft, sources: &BTreeSet<Source>) -> Vec<store::Tag> {
     let mut tags = Vec::new();
     if sources.contains(&Source::Profile) {
         tags.push(("Profile".to_string(), "tag-profile"));
     }
-    if sources.contains(&Source::Ecosystem) {
+    if sources.contains(&Source::Ecosystem) || sources.contains(&Source::Desktop) {
         let name = draft
             .desktop
             .as_deref()
@@ -462,12 +466,12 @@ pub fn webapps(ctx: &Ctx) -> Page {
                         None => store::letter_tile(&w.name, 48, false),
                     };
                     let (ctx, id) = (ctx.clone(), w.id.clone());
-                    let button = store::pick_button(picked.contains(&w.id), move |on| {
+                    let button = store::pick_button(picked.contains_key(&w.id), move |on| {
                         let mut d = ctx.draft.borrow_mut();
                         if on {
-                            d.webapps.insert(id.clone());
+                            d.add_webapp(&id);
                         } else {
-                            d.webapps.remove(&id);
+                            d.remove_webapp(&id);
                         }
                     });
                     let host = w
@@ -762,19 +766,24 @@ pub fn shell(ctx: &Ctx) -> Page {
         move || {
             let d = ctx.draft.borrow();
             let i = SHELLS.iter().position(|(k, _)| *k == d.shell).unwrap_or(0);
-            let omarchy = d.desktop.as_deref() == Some("omarchy");
+            let own = d
+                .desktop
+                .as_deref()
+                .filter(|id| !ctx.catalog.desktop_cli(id).is_empty())
+                .and_then(|id| ctx.catalog.desktop(id))
+                .map(|desktop| desktop.name.clone());
             drop(d);
             shell_row.set_selected(i as u32);
-            match (omarchy, ecosystem_note(&ctx, "tools")) {
-                (true, _) => {
-                    note.set_label("Omarchy brings its own command-line setup with zsh: starship, eza, bat, fzf, zoxide, lazygit, tmux and more, with its configs.");
+            match (own, ecosystem_note(&ctx, "tools")) {
+                (Some(name), _) => {
+                    note.set_label(&format!("{name} comes with its own command-line setup, with its configs: its tools are selected below, tagged {name}. Remove any you don't want."));
                     note.set_visible(true);
                 }
-                (false, Some(n)) => {
+                (None, Some(n)) => {
                     note.set_label(&n);
                     note.set_visible(true);
                 }
-                (false, None) => note.set_visible(false),
+                (None, None) => note.set_visible(false),
             }
             refresh();
         }

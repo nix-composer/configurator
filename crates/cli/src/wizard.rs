@@ -207,9 +207,16 @@ pub fn run(catalog: &Catalog) -> Result<(Answers, Secrets)> {
             .iter()
             .map(|w| format!("{:<18} {}", w.name, w.description))
             .collect();
+        // The ecosystem's web apps start out picked.
+        let picked: Vec<bool> = catalog
+            .webapps
+            .iter()
+            .map(|w| eco.is_some_and(|e| e.webapps.contains(&w.id)))
+            .collect();
         MultiSelect::with_theme(t)
             .with_prompt("Web apps")
             .items(&names)
+            .defaults(&picked)
             .interact()?
             .into_iter()
             .map(|i| catalog.webapps[i].id.clone())
@@ -262,10 +269,18 @@ pub fn run(catalog: &Catalog) -> Result<(Answers, Secrets)> {
         .items(["bash", "zsh", "fish", "nushell"])
         .default(default_shell)
         .interact()?];
+    // What the desktop installs itself (Omarchy's CLI setup) starts out in
+    // the list, to keep or drop.
+    let own: Vec<String> = desktop
+        .map(|d| catalog.desktop_cli(&d.id))
+        .unwrap_or_default()
+        .into_iter()
+        .map(String::from)
+        .collect();
     let cli = attrs(
         t,
         "Command-line tools (e.g. bat eza fd fzf ripgrep zoxide)",
-        &with_eco(&[], eco.map(|e| e.cli.as_slice())),
+        &with_eco(&own, eco.map(|e| e.cli.as_slice())),
     )?;
 
     heading(Layer::Keybinds);
@@ -495,6 +510,7 @@ pub fn run(catalog: &Catalog) -> Result<(Answers, Secrets)> {
         },
         shell: Shell {
             shell,
+            without: own.into_iter().filter(|a| !cli.contains(a)).collect(),
             packages: cli,
         },
         keybinds: BTreeMap::new(),

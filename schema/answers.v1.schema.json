@@ -440,6 +440,13 @@
         },
         "shell": {
           "$ref": "#/$defs/ShellKind"
+        },
+        "without": {
+          "description": "Tools the desktop installs itself (Omarchy's CLI setup) to leave\nout, as nixpkgs attributes; the others stay.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false,

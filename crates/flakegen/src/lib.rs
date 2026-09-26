@@ -513,11 +513,47 @@ impl Generator<'_> {
             }
         }
 
+        // A flake desktop's own apps and tools (Omarchy's) go through its
+        // options: the apps kept as picks, the tools dropped as opt-outs.
+        // What it installs itself (with its configs and keybinds) isn't
+        // listed again; what it would install only on first use is.
+        let ecosystem = a.desktop.as_ref().is_some_and(|d| d.ecosystem);
+        let own = self.desktop.and_then(|d| self.catalog.desktop_catalog(d));
+        let mut installed_by_desktop = std::collections::BTreeSet::new();
+        let mut app_picks = Vec::new();
+        let mut cli_off = Vec::new();
+        if let Some((options, cat)) = own {
+            for (id, entry) in cat.group("apps").filter(|(_, e)| e.packaged) {
+                match cat.store_attr(&options.name, entry) {
+                    Some(attr) if a.apps.packages.iter().any(|p| p == attr) => {
+                        app_picks.push(Nix::str(id));
+                        if entry.preinstalled {
+                            installed_by_desktop.insert(attr);
+                        }
+                    }
+                    Some(_) => {}
+                    // Its own tools aren't in the app store: they come
+                    // with the ecosystem.
+                    None if ecosystem => app_picks.push(Nix::str(id)),
+                    None => {}
+                }
+            }
+            for (id, entry) in cat.group("cli") {
+                if let Some(attr) = cat.store_attr(&options.name, entry) {
+                    installed_by_desktop.insert(attr);
+                    if a.shell.without.iter().any(|p| p == attr) {
+                        cli_off.push(id);
+                    }
+                }
+            }
+        }
+
         let mut section = Section::new("Apps, web apps, AI agents and command-line tools.");
         let mut seen = std::collections::BTreeSet::new();
         let mut packages: Vec<Nix> = a
             .all_packages()
             .chain(agent_packages)
+            .filter(|attr| !installed_by_desktop.contains(attr.as_str()))
             .filter(|attr| seen.insert(attr.as_str()))
             .map(|attr| Nix::raw(format!("pkgs.{attr}")))
             .collect();
@@ -546,7 +582,26 @@ impl Generator<'_> {
                 );
             }
         }
-        let ecosystem = a.desktop.as_ref().is_some_and(|d| d.ecosystem);
+        if let Some((options, _)) = own {
+            if ecosystem || !app_picks.is_empty() {
+                // With the ecosystem on, the picks narrow its apps down to
+                // the ones kept in the app store.
+                let value = Nix::attrs([
+                    ("enable", Nix::Bool(!app_picks.is_empty())),
+                    ("picks", Nix::List(app_picks)),
+                ]);
+                self.desktop_option(&mut section, &options.apps, options.home, value);
+            }
+            // Its command-line setup, less the tools dropped in the shell layer.
+            for id in cli_off {
+                self.desktop_option(
+                    &mut section,
+                    &format!("{}.{id}.enable", options.cli),
+                    options.home,
+                    Nix::Bool(false),
+                );
+            }
+        }
         if let Some(option) = webapps_option
             && (ecosystem || !desktop_webapps.is_empty())
         {

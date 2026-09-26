@@ -94,6 +94,72 @@ pub struct Module {
     /// The desktop's own state file for development containers.
     #[serde(default)]
     pub containers: Option<ContainersState>,
+    /// The desktop's own catalog and the options that take its picks.
+    #[serde(default)]
+    pub catalog: Option<CatalogOptions>,
+}
+
+/// A flake desktop's own catalog (its flake's `lib.catalog`, built in from
+/// nix/desktop-catalogs.nix) and where the kept picks go.
+#[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct CatalogOptions {
+    /// `<name>.json` in the built-in desktop catalogs.
+    pub name: String,
+    /// Home Manager options, set per user.
+    #[serde(default)]
+    pub home: bool,
+    /// Takes `{ enable; picks; }`: the ecosystem's apps kept (ids).
+    pub apps: String,
+    /// `<option>.<id>.enable` per command-line tool the desktop installs.
+    pub cli: String,
+}
+
+/// A flake desktop's catalog: what each group installs, by id.
+#[derive(Debug, Clone, Deserialize)]
+pub struct DesktopCatalog {
+    /// Who turns a group on: `default` (with the desktop, per-entry
+    /// opt-outs), `ecosystem` (its switch) or `picked`.
+    pub layers: BTreeMap<String, String>,
+    #[serde(flatten)]
+    pub groups: BTreeMap<String, BTreeMap<String, CatalogEntry>>,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct CatalogEntry {
+    pub name: String,
+    #[serde(default)]
+    pub description: String,
+    /// nixpkgs attributes it installs; `unstable.<attr>` and `<desktop>.<attr>`
+    /// come from elsewhere.
+    #[serde(default)]
+    pub attrs: Vec<String>,
+    /// False while it isn't packaged yet (the desktop skips it).
+    #[serde(default = "yes")]
+    pub packaged: bool,
+    /// False when the desktop installs it on first use (of its keybind).
+    #[serde(default = "yes")]
+    pub preinstalled: bool,
+}
+
+fn yes() -> bool {
+    true
+}
+
+impl DesktopCatalog {
+    /// A group's entries: `(id, entry)`.
+    pub fn group(&self, group: &str) -> impl Iterator<Item = (&String, &CatalogEntry)> {
+        self.groups.get(group).into_iter().flatten()
+    }
+
+    /// The nixpkgs attribute an entry is picked by in the app store and
+    /// shell layer, if it has one there (not the desktop's own packages or
+    /// nixos-unstable's).
+    pub fn store_attr<'a>(&self, name: &str, entry: &'a CatalogEntry) -> Option<&'a str> {
+        let attr = entry.attrs.first()?;
+        let own = attr.starts_with(&format!("{name}.")) || attr.starts_with("unstable.");
+        (entry.packaged && !own).then_some(attr.as_str())
+    }
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -119,6 +185,9 @@ pub struct Ecosystem {
     pub apps: Vec<EcosystemPick>,
     /// Preselected in the shell layer.
     pub cli: Vec<EcosystemPick>,
+    /// Preselected in the web app store (ids).
+    #[serde(default)]
+    pub webapps: Vec<String>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -281,6 +350,8 @@ pub struct Catalog {
     pub ecosystems: Vec<Ecosystem>,
     /// Default keybinds by desktop id.
     pub default_keybinds: BTreeMap<String, Vec<DefaultBind>>,
+    /// Flake desktops' catalogs by name.
+    pub desktop_catalogs: BTreeMap<String, DesktopCatalog>,
 }
 
 /// One data file: `{ "$comment": …, "<field>": [ … ] }`, ids unique.
@@ -308,7 +379,7 @@ fn load<T: serde::de::DeserializeOwned>(
 impl Catalog {
     /// The catalog built into this binary.
     pub fn builtin() -> Result<Catalog, Error> {
-        Ok(Catalog {
+        let mut catalog = Catalog {
             desktops: load(DESKTOPS_JSON, "desktops", |d: &Desktop| &d.id)?,
             agents: load(AGENTS_JSON, "agents", |a: &Agent| &a.id)?,
             webapps: load(WEBAPPS_JSON, "webapps", |w: &Webapp| &w.id)?,
@@ -324,7 +395,83 @@ impl Catalog {
                     Ok((format.to_string(), binds))
                 })
                 .collect::<Result<_, Error>>()?,
-        })
+            desktop_catalogs: DESKTOP_CATALOGS
+                .iter()
+                .map(|(name, json)| Ok((name.to_string(), serde_json::from_str(json)?)))
+                .collect::<Result<_, Error>>()?,
+        };
+        catalog.flake_ecosystems();
+        Ok(catalog)
+    }
+
+    /// A flake desktop's ecosystem, from its own catalog: the groups its
+    /// ecosystem switch turns on, as picks the app and web app stores
+    /// preselect (Omarchy's apps and web apps).
+    fn flake_ecosystems(&mut self) {
+        for desktop in &self.desktops {
+            let Some(options) = &desktop.module.catalog else {
+                continue;
+            };
+            let Some(cat) = self.desktop_catalogs.get(&options.name) else {
+                continue;
+            };
+            let on = |group: &str| cat.layers.get(group).is_some_and(|l| l == "ecosystem");
+            let apps = if on("apps") {
+                cat.group("apps")
+                    .filter_map(|(_, e)| cat.store_attr(&options.name, e))
+                    .map(|attr| EcosystemPick {
+                        attr: attr.to_string(),
+                        category: String::new(),
+                    })
+                    .collect()
+            } else {
+                Vec::new()
+            };
+            let webapps = if on("webapps") {
+                cat.group("webapps")
+                    .filter(|(id, e)| e.packaged && self.webapps.iter().any(|w| &w.id == *id))
+                    .map(|(id, _)| id.clone())
+                    .collect()
+            } else {
+                Vec::new()
+            };
+            self.ecosystems.push(Ecosystem {
+                desktop: desktop.id.clone(),
+                description: format!(
+                    "{}'s opinionated apps and web apps, with the keybinds that launch them",
+                    desktop.name
+                ),
+                essentials: Vec::new(),
+                apps,
+                cli: Vec::new(),
+                webapps,
+            });
+        }
+    }
+
+    /// A flake desktop's catalog with the options that take its picks.
+    pub fn desktop_catalog<'a>(
+        &'a self,
+        desktop: &'a Desktop,
+    ) -> Option<(&'a CatalogOptions, &'a DesktopCatalog)> {
+        let options = desktop.module.catalog.as_ref()?;
+        Some((options, self.desktop_catalogs.get(&options.name)?))
+    }
+
+    /// The command-line tools a desktop installs itself (Omarchy's CLI
+    /// setup), preselected in the shell layer to keep or drop: nixpkgs
+    /// attributes.
+    pub fn desktop_cli(&self, desktop: &str) -> Vec<&str> {
+        let Some((options, cat)) = self.desktop(desktop).and_then(|d| self.desktop_catalog(d))
+        else {
+            return Vec::new();
+        };
+        if cat.layers.get("cli").is_none_or(|l| l != "default") {
+            return Vec::new();
+        }
+        cat.group("cli")
+            .filter_map(|(_, e)| cat.store_attr(&options.name, e))
+            .collect()
     }
 
     pub fn agent(&self, id: &str) -> Option<&Agent> {
@@ -383,8 +530,8 @@ impl Catalog {
         self.desktops.iter().find(|d| d.id == id)
     }
 
-    /// A desktop's ecosystem from data/ecosystems.json (Omarchy's is its
-    /// module's own `ecosystem` option instead).
+    /// A desktop's ecosystem: from data/ecosystems.json, or a flake
+    /// desktop's own catalog (Omarchy's).
     pub fn ecosystem(&self, desktop: &str) -> Option<&Ecosystem> {
         self.ecosystems.iter().find(|e| e.desktop == desktop)
     }

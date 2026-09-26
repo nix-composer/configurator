@@ -16,6 +16,8 @@ use configurator_engine::{Secrets, status};
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Source {
     Profile,
+    /// What the desktop installs itself, to keep or drop (Omarchy's CLI setup).
+    Desktop,
     /// The desktop's ecosystem ("Install the entire ecosystem").
     Ecosystem,
     Hand,
@@ -44,7 +46,8 @@ pub struct Draft {
     pub apps: BTreeMap<String, BTreeSet<Source>>,
     pub agents: BTreeSet<String>,
     pub default_agent: Option<String>,
-    pub webapps: BTreeSet<String>,
+    /// Web app id → why it's selected.
+    pub webapps: BTreeMap<String, BTreeSet<Source>>,
     pub templates: BTreeSet<String>,
     pub containers: BTreeSet<String>,
 
@@ -53,6 +56,8 @@ pub struct Draft {
     pub shell_chosen: bool,
     /// nixpkgs attribute → why it's selected.
     pub cli: BTreeMap<String, BTreeSet<Source>>,
+    /// The tools the desktop installs itself (Omarchy's CLI setup).
+    desktop_cli: Vec<String>,
 
     pub keybinds: BTreeMap<String, Keybind>,
 
@@ -89,12 +94,13 @@ impl Draft {
             apps: BTreeMap::new(),
             agents: BTreeSet::new(),
             default_agent: None,
-            webapps: BTreeSet::new(),
+            webapps: BTreeMap::new(),
             templates: BTreeSet::new(),
             containers: BTreeSet::new(),
             shell: ShellKind::Bash,
             shell_chosen: false,
             cli: BTreeMap::new(),
+            desktop_cli: Vec::new(),
             keybinds: BTreeMap::new(),
             nvidia: None,
             non_free_firmware: false,
@@ -113,7 +119,7 @@ impl Draft {
             login_manager: None,
         };
         // A graphical desktop by default: the first one in the registry.
-        draft.set_desktop(catalog.desktops.first().map(|d| d.id.clone()));
+        draft.set_desktop(catalog, catalog.desktops.first().map(|d| d.id.clone()));
         draft
     }
 
@@ -135,10 +141,26 @@ impl Draft {
         self.profile = id.to_string();
     }
 
-    pub fn set_desktop(&mut self, id: Option<String>) {
+    /// Picks a desktop: the previous one's ecosystem and own tools go, the
+    /// new one's own tools (Omarchy's CLI setup) come preselected.
+    pub fn set_desktop(&mut self, catalog: &Catalog, id: Option<String>) {
         if self.desktop != id {
             self.clear_ecosystem();
             self.default_agent = None;
+            remove_source(&mut self.cli, Source::Desktop);
+            self.desktop_cli = id
+                .as_deref()
+                .map(|d| catalog.desktop_cli(d))
+                .unwrap_or_default()
+                .into_iter()
+                .map(String::from)
+                .collect();
+            for attr in &self.desktop_cli {
+                self.cli
+                    .entry(attr.clone())
+                    .or_default()
+                    .insert(Source::Desktop);
+            }
         }
         self.desktop = id;
         if !self.shell_chosen {
@@ -172,17 +194,31 @@ impl Draft {
                     .or_default()
                     .insert(Source::Ecosystem);
             }
+            for id in &eco.webapps {
+                self.webapps
+                    .entry(id.clone())
+                    .or_default()
+                    .insert(Source::Ecosystem);
+            }
         }
     }
 
     fn clear_ecosystem(&mut self) {
         self.ecosystem = false;
-        for picks in [&mut self.apps, &mut self.cli] {
-            for sources in picks.values_mut() {
-                sources.remove(&Source::Ecosystem);
-            }
-            picks.retain(|_, sources| !sources.is_empty());
+        for picks in [&mut self.apps, &mut self.cli, &mut self.webapps] {
+            remove_source(picks, Source::Ecosystem);
         }
+    }
+
+    pub fn add_webapp(&mut self, id: &str) {
+        self.webapps
+            .entry(id.to_string())
+            .or_default()
+            .insert(Source::Hand);
+    }
+
+    pub fn remove_webapp(&mut self, id: &str) {
+        self.webapps.remove(id);
     }
 
     pub fn add_cli(&mut self, attr: &str) {
@@ -247,7 +283,7 @@ impl Draft {
                     .filter(|a| self.agents.contains(a)),
             },
             webapps: if self.desktop.is_some() {
-                self.webapps.iter().cloned().collect()
+                self.webapps.keys().cloned().collect()
             } else {
                 Vec::new()
             },
@@ -258,6 +294,7 @@ impl Draft {
             shell: Shell {
                 shell: self.shell,
                 packages: self.cli.keys().cloned().collect(),
+                without: self.dropped_desktop_cli(),
             },
             keybinds: if self.desktop.is_some() {
                 self.keybinds.clone()
@@ -300,6 +337,15 @@ impl Draft {
         }
     }
 
+    /// The desktop's own command-line tools taken out in the shell layer.
+    fn dropped_desktop_cli(&self) -> Vec<String> {
+        self.desktop_cli
+            .iter()
+            .filter(|attr| !self.cli.contains_key(*attr))
+            .cloned()
+            .collect()
+    }
+
     pub fn secrets(&self) -> Secrets {
         let answers = self.answers();
         Secrets {
@@ -312,6 +358,14 @@ impl Draft {
             tpm_pin: answers.security.tpm_pin.then(|| self.pin.clone()),
         }
     }
+}
+
+/// Drops one reason from every pick, and the picks left without one.
+fn remove_source(picks: &mut BTreeMap<String, BTreeSet<Source>>, source: Source) {
+    for sources in picks.values_mut() {
+        sources.remove(&source);
+    }
+    picks.retain(|_, sources| !sources.is_empty());
 }
 
 fn current_timezone() -> String {
@@ -345,7 +399,7 @@ mod tests {
     fn ecosystem_adds_and_removes_only_its_own() {
         let catalog = Catalog::builtin().unwrap();
         let mut draft = Draft::new(&catalog);
-        draft.set_desktop(Some("gnome".into()));
+        draft.set_desktop(&catalog, Some("gnome".into()));
         let eco = catalog.ecosystem("gnome").unwrap();
         let (kept, other) = (&eco.apps[0].attr, &eco.apps[1].attr);
         draft.add_app(kept);
@@ -357,8 +411,34 @@ mod tests {
         assert_eq!(left, [kept]);
         // Another desktop drops the ecosystem's picks too.
         draft.set_ecosystem(&catalog, true);
-        draft.set_desktop(Some("plasma".into()));
+        draft.set_desktop(&catalog, Some("plasma".into()));
         assert!(!draft.ecosystem);
         assert_eq!(draft.apps.len(), 1);
+    }
+
+    #[test]
+    fn omarchy_preselects_its_own_picks() {
+        let catalog = Catalog::builtin().unwrap();
+        let mut draft = Draft::new(&catalog);
+        draft.set_desktop(&catalog, Some("omarchy".into()));
+        // Its CLI setup comes with the desktop, ecosystem or not.
+        let own = catalog.desktop_cli("omarchy");
+        assert!(own.contains(&"bat") && own.contains(&"lazygit"), "{own:?}");
+        assert!(own.iter().all(|a| draft.cli.contains_key(*a)));
+        // Dropping one is written as an opt-out.
+        draft.remove_cli("bat");
+        assert_eq!(draft.answers().shell.without, ["bat"]);
+        // The ecosystem preselects its apps and web apps, and takes them back.
+        draft.set_ecosystem(&catalog, true);
+        assert!(draft.apps.contains_key("obsidian"));
+        assert!(draft.webapps.contains_key("hey"));
+        draft.add_webapp("youtube");
+        draft.set_ecosystem(&catalog, false);
+        assert!(draft.apps.is_empty());
+        assert_eq!(draft.webapps.keys().collect::<Vec<_>>(), ["youtube"]);
+        // Another desktop takes its tools back too.
+        draft.set_desktop(&catalog, Some("gnome".into()));
+        assert!(draft.cli.is_empty());
+        assert!(draft.answers().shell.without.is_empty());
     }
 }

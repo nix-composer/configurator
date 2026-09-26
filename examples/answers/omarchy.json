@@ -39,6 +39,9 @@
       "starship",
       "tmux",
       "lazygit"
+    ],
+    "without": [
+      "inxi"
     ]
   },
   "keybinds": {

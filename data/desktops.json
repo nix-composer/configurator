@@ -27,6 +27,7 @@
           "omarchy/theme.json": { "theme": "tokyo-night" }
         },
         "ecosystem": "omarchy.ecosystem.enable",
+      "catalog": { "name": "omarchy", "home": true, "apps": "omarchy.apps", "cli": "omarchy.cli" },
         "agents": {
           "option": "omarchy.agents",
           "defaultOption": "omarchy.defaultAgent",

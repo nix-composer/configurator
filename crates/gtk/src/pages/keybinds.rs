@@ -895,7 +895,7 @@ fn add_dialog(ctx: &Ctx, parent: &gtk::Widget, redraw: Rc<dyn Fn()>) {
     apps.dedup();
     let webapps: Vec<(String, String)> = draft
         .webapps
-        .iter()
+        .keys()
         .map(|id| {
             (
                 ctx.catalog

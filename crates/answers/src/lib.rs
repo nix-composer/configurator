@@ -170,6 +170,10 @@ pub struct Shell {
     /// Command-line utilities, as nixpkgs attributes.
     #[serde(default)]
     pub packages: Vec<String>,
+    /// Tools the desktop installs itself (Omarchy's CLI setup) to leave
+    /// out, as nixpkgs attributes; the others stay.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub without: Vec<String>,
 }
 
 impl Default for Shell {
@@ -177,6 +181,7 @@ impl Default for Shell {
         Shell {
             shell: ShellKind::Bash,
             packages: Vec::new(),
+            without: Vec::new(),
         }
     }
 }

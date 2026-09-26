@@ -10,6 +10,8 @@
   curl,
   # The app catalog (nix/catalog): apps.json and icons.
   catalog,
+  # Flake desktops' catalogs (nix/desktop-catalogs.nix), built into the crates.
+  desktop-catalogs,
   # The desktops' screenshots (nix/screenshots), or null for artwork. Off
   # by default: they take a VM per desktop to build.
   screenshots ? null,
@@ -19,6 +21,7 @@ rustPlatform.buildRustPackage {
   version = (lib.importTOML ../../Cargo.toml).workspace.package.version;
   src = import ./src.nix { inherit lib; };
   cargoLock.lockFile = ../../Cargo.lock;
+  env.CONFIGURATOR_DESKTOP_CATALOGS = desktop-catalogs;
 
   cargoBuildFlags = [
     "--package"

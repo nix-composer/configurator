@@ -20,6 +20,14 @@
       url = "github:snowfallorg/nixos-appstream-data";
       flake = false;
     };
+
+    # Omarchy's catalog (lib/catalog.nix): what each of its layers
+    # installs, for the installer to preselect and write back as picks.
+    # Only the source: generated hosts import the flake itself.
+    omarchy = {
+      url = "github:nix-desktops/omarchy/stable";
+      flake = false;
+    };
   };
 
   outputs =
@@ -37,10 +45,17 @@
         {
           default = self.packages.${pkgs.stdenv.hostPlatform.system}.configurator;
           # The engine and its CLI: `configurator install --answers answers.json`.
-          configurator = pkgs.callPackage ./nix/packages/configurator.nix { };
+          configurator = pkgs.callPackage ./nix/packages/configurator.nix {
+            inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) desktop-catalogs;
+          };
           # The graphical installer (GTK4 + libadwaita).
           configurator-gtk = pkgs.callPackage ./nix/packages/configurator-gtk.nix {
-            inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) catalog;
+            inherit (self.packages.${pkgs.stdenv.hostPlatform.system}) catalog desktop-catalogs;
+          };
+          # Flake desktops' own catalogs (`lib.catalog`), built into the crates.
+          desktop-catalogs = import ./nix/desktop-catalogs.nix {
+            inherit pkgs;
+            inherit (inputs) omarchy;
           };
           # The app catalog: `apps.json` and icons (scripts/build-catalog.py).
           catalog = import ./nix/catalog {
@@ -115,6 +130,9 @@
           RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
           # The app catalog, for `cargo run -p configurator-gtk`.
           CONFIGURATOR_CATALOG = self.packages.${pkgs.stdenv.hostPlatform.system}.catalog;
+          # Flake desktops' catalogs, which the catalog crate builds in.
+          CONFIGURATOR_DESKTOP_CATALOGS =
+            self.packages.${pkgs.stdenv.hostPlatform.system}.desktop-catalogs;
         };
       });
 

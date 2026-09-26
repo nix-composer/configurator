@@ -1,9 +1,15 @@
-{ lib, rustPlatform }:
+{
+  lib,
+  rustPlatform,
+  # Flake desktops' catalogs (nix/desktop-catalogs.nix), built into the crates.
+  desktop-catalogs,
+}:
 rustPlatform.buildRustPackage {
   pname = "configurator";
   version = (lib.importTOML ../../Cargo.toml).workspace.package.version;
   src = import ./src.nix { inherit lib; };
   cargoLock.lockFile = ../../Cargo.lock;
+  env.CONFIGURATOR_DESKTOP_CATALOGS = desktop-catalogs;
 
   # Everything but the GUI, which has its own package.
   cargoBuildFlags = [

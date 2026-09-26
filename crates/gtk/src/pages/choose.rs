@@ -138,10 +138,10 @@ pub fn profile(ctx: &Ctx) -> Page {
             draft.set_profile(&ctx.catalog, &id);
             // Servers and headless machines usually have no desktop.
             if matches!(id.as_str(), "server" | "headless") {
-                draft.set_desktop(None);
+                draft.set_desktop(&ctx.catalog, None);
             } else if draft.desktop.is_none() {
                 let first = ctx.catalog.desktops.first().map(|d| d.id.clone());
-                draft.set_desktop(first);
+                draft.set_desktop(&ctx.catalog, first);
             }
             drop(draft);
             show_details(&id);
@@ -599,7 +599,7 @@ pub fn desktop(ctx: &Ctx) -> Page {
                     if c.is_active() {
                         let changed = ctx.draft.borrow().desktop != id;
                         if changed {
-                            ctx.draft.borrow_mut().set_desktop(id.clone());
+                            ctx.draft.borrow_mut().set_desktop(&ctx.catalog, id.clone());
                         }
                         show_preview();
                     }

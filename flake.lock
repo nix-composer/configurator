@@ -129,6 +129,23 @@
         "type": "github"
       }
     },
+    "omarchy": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790369036,
+        "narHash": "sha256-SzFPoP7nyYD5AatHmpMN/zMrLZDjO5O4FpcTT8M3E4k=",
+        "owner": "nix-desktops",
+        "repo": "omarchy",
+        "rev": "542e53a0a6cf312402d8ab8cd4aa5ae3a742c618",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-desktops",
+        "ref": "stable",
+        "repo": "omarchy",
+        "type": "github"
+      }
+    },
     "pre-commit": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -157,7 +174,8 @@
         "appstream-data": "appstream-data",
         "disko": "disko",
         "lanzaboote": "lanzaboote",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "omarchy": "omarchy"
       }
     },
     "rust-overlay": {
