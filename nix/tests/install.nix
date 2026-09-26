@@ -1,7 +1,7 @@
 # End-to-end install test: a live system runs `configurator install` with
 # an answers file onto an empty virtual disk, then the disk boots on its
-# own (UEFI, or SeaBIOS for legacy BIOS answers; its own store) and the
-# result is checked.
+# own (UEFI, or SeaBIOS for legacy BIOS answers, or Libreboot's GRUB
+# payload; its own store) and the result is checked.
 #
 # The test has no network, so it can't `nixos-install --flake` (that
 # fetches the flake's inputs). The target system and its disko script are
@@ -19,6 +19,11 @@
 {
   # nix/tests/answers/<name>.json and nix/tests/hosts/<name>.
   name,
+  # The test's name, when one answers file is tested twice.
+  testName ? name,
+  # Legacy BIOS answers only: boot the installed disk with Libreboot's
+  # GRUB payload (coreboot, the disk on AHCI) instead of SeaBIOS.
+  libreboot ? false,
   # Python run on the booted system (`target`).
   testScript ? "",
   # Extra NixOS config for the installed system, test-only.
@@ -41,6 +46,7 @@ let
   tpmPin = answers.security.tpmPin or false;
   # Legacy BIOS: both machines boot SeaBIOS, QEMU's default.
   bios = (answers.hardware.firmware or "uefi") == "bios";
+  librebootRom = pkgs.callPackage ./libreboot.nix { };
   # OVMF with Secure Boot, in setup mode (no keys) until the engine enrolls.
   ovmf = if secureBoot then (pkgs.OVMF.override { secureBoot = true; }) else pkgs.OVMF;
 
@@ -104,7 +110,9 @@ let
   };
 in
 pkgs.testers.runNixOSTest {
-  name = "install-${name}";
+  name = "install-${testName}";
+  # Libreboot: what's on the screen is what's tested.
+  enableOCR = libreboot;
 
   nodes.installer = {
     virtualisation = {
@@ -183,8 +191,22 @@ pkgs.testers.runNixOSTest {
     start_command = shlex.split("${qemu-common.qemuBinary pkgs.qemu_test}") + [
         "-m", "${toString memoryMiB}",
         "-drive", f"file={installer.state_dir}/empty0.qcow2,id=drive1,if=none,index=1,werror=report",
-        "-device", "virtio-blk-pci,drive=drive1",
     ]
+    ${
+      if libreboot then
+        ''
+          # As on a ThinkPad T500: coreboot, Libreboot's GRUB, a SATA disk.
+          start_command += [
+              "-bios", "${librebootRom}",
+              "-device", "ahci,id=ahci",
+              "-device", "ide-hd,drive=drive1,bus=ahci.0",
+          ]
+        ''
+      else
+        ''
+          start_command += ["-device", "virtio-blk-pci,drive=drive1"]
+        ''
+    }
     ${lib.optionalString (!bios) ''
       start_command += [
           "-drive", "if=pflash,format=raw,unit=0,readonly=on,file=${ovmf.firmware}",
@@ -222,6 +244,19 @@ pkgs.testers.runNixOSTest {
     driver.machines_qemu.append(target)
     target.start()
 
+    ${lib.optionalString libreboot ''
+      with subtest("Libreboot's GRUB loads the installed grub.cfg"):
+          # Its first entry ("Load Operating System") runs after its timeout
+          # and finds /grub/grub.cfg on the /boot partition.
+          target.wait_for_console_text("Linux version")
+    ''}
+    ${lib.optionalString (libreboot && encrypted) ''
+      with subtest("the LUKS prompt is on the screen, not only on the serial console"):
+          # With GRUB's gfxpayload=text the kernel had no console it could
+          # show on coreboot's framebuffer: the screen kept GRUB's picture.
+          target.wait_for_text("passphrase")
+          target.screenshot("libreboot-luks-prompt")
+    ''}
     ${lib.optionalString encrypted ''
       with subtest("unlock the disk"):
           target.wait_for_console_text("assphrase")
@@ -244,6 +279,13 @@ pkgs.testers.runNixOSTest {
           target.fail("test -d /sys/firmware/efi")
           target.succeed("findmnt -no FSTYPE /boot | grep -q ext4")
           target.succeed("test -f /boot/grub/grub.cfg")
+          # The kernel keeps GRUB's framebuffer (Libreboot has no text mode).
+          target.succeed("journalctl -k -b | grep -q 'Initialized simpledrm'")
+    ''}
+    ${lib.optionalString libreboot ''
+      with subtest("the console is on the screen"):
+          target.wait_for_text("login")
+          target.screenshot("libreboot-login")
     ''}
     ${lib.optionalString secureBoot ''
       with subtest("Secure Boot is on, with the enrolled keys"):

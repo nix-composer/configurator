@@ -903,7 +903,13 @@ impl Generator<'_> {
         if self.answers.hardware.firmware == Firmware::Bios {
             // Legacy BIOS: GRUB on the disk's BIOS boot partition (disko
             // points boot.loader.grub.devices at it), /boot unencrypted.
-            section.set("boot.loader.grub.enable", Nix::Bool(true));
+            // The kernel keeps GRUB's framebuffer: coreboot (Libreboot's
+            // GRUB payload) has no VGA text mode to go back to, so with
+            // NixOS's default ("text") the screen stays on GRUB's last
+            // picture until a graphics driver loads, past the LUKS prompt.
+            section
+                .set("boot.loader.grub.enable", Nix::Bool(true))
+                .set("boot.loader.grub.gfxpayloadBios", Nix::str("keep"));
         } else if s.secure_boot {
             // lanzaboote replaces systemd-boot and signs the boot files with
             // the keys the installer created and enrolled. Turn Secure Boot

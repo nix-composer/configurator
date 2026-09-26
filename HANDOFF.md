@@ -761,6 +761,21 @@ the wheel. CONFIGURATOR_DEMO_INSTALL plays a made-up install anywhere, to
 try the progress screen (the example's plan if the choices aren't
 complete); tested in the live VM through QMP.
 
+**Libreboot (2026-09-26):** a BIOS install on a ThinkPad T500 with
+Libreboot's GRUB payload showed GRUB's picture and nothing else, with
+LUKS or without. Libreboot's GRUB (i386-coreboot) finds and runs the
+installed `/boot/grub/grub.cfg` fine, but NixOS's `gfxpayloadBios`
+default, `text`, hands the kernel a VGA text console that coreboot's
+framebuffer doesn't have: the screen keeps GRUB's last image while the
+kernel boots (and waits for the LUKS passphrase) unseen, until a graphics
+driver loads in stage 2. BIOS hosts now set
+`boot.loader.grub.gfxpayloadBios = "keep"` (the kernel keeps the
+framebuffer: simpledrm, then the real driver). `checks.install-libreboot`
+(LUKS) and `install-libreboot-ext4` boot the installed disk with
+Libreboot's own QEMU ROM (`nix/tests/libreboot.nix`, 26.01rev1 seagrub
+corebootfb, disk on AHCI) and read the LUKS prompt and the login prompt
+off the screen (OCR). Not tested: the real T500's i915 handover.
+
 **Decided (2026-09-26):** the generated host flake lives in the first
 admin's `~/.config/nixos` (was `~/nixos`, which collided with personal
 repos).

@@ -129,7 +129,9 @@ hostChecks
 
   desktops = check "desktops" (missing == [ ]) "options missing in nixpkgs: ${toString missing}";
 
-  essentials = check "essentials" (essentialsProblems == [ ]) (lib.concatStringsSep "; " essentialsProblems);
+  essentials = check "essentials" (essentialsProblems == [ ]) (
+    lib.concatStringsSep "; " essentialsProblems
+  );
 
   # Every symbolic icon the installer names exists in the icon theme it
   # ships with (a missing one shows as a broken-image icon).
@@ -216,9 +218,22 @@ hostChecks
   # End-to-end installs in VMs (see nix/tests/install.nix).
   install-minimal = installTest { name = "minimal"; };
 
-  # Legacy BIOS (SeaBIOS, Libreboot's GRUB payload): GRUB on a BIOS boot
+  # Legacy BIOS (SeaBIOS): GRUB on a BIOS boot
   # partition, btrfs on LUKS.
   install-bios = installTest { name = "bios"; };
+
+  # The same, booted by Libreboot's GRUB payload (coreboot, as on a ThinkPad
+  # T500): with LUKS, and plain ext4.
+  install-libreboot = installTest {
+    name = "bios";
+    testName = "libreboot";
+    libreboot = true;
+  };
+  install-libreboot-ext4 = installTest {
+    name = "bios-ext4";
+    testName = "libreboot-ext4";
+    libreboot = true;
+  };
 
   install-btrfs-luks = installTest {
     name = "btrfs-luks";
