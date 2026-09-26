@@ -255,9 +255,9 @@ choices, smooth animated transitions. Concretely:
   is unsigned for Secure Boot, so booting it already needs Secure Boot off,
   which the Security layer expects anyway. The installer runs fullscreen in the
   **[cage](https://github.com/cage-kiosk/cage) kiosk compositor**
-  (`services.cage`, auto-login, `-s -m last`), a desktop that does nothing but
-  show the installer, and stays independent of whichever desktop the user
-  picks. The installer must provide what cage doesn't: a Wi-Fi step
+  (`services.cage`, auto-login, `-s -m extend`, every screen mirrored; see
+  "Every screen" below), a desktop that does nothing but show the
+  installer, and stays independent of whichever desktop the user picks. The installer must provide what cage doesn't: a Wi-Fi step
   (NetworkManager), keyboard layout, HiDPI scaling, a hidden terminal escape
   hatch, a Reboot button, restart-on-crash. Ship a prebuilt default system in
   the ISO store (`isoImage.storeContents`) for fast, offline installs.
@@ -527,7 +527,8 @@ docs/keybinds.md           how each desktop's keybinds can be set (researched), 
 examples/answers, hosts    example answers and their generated output (a test keeps
                            hosts current: UPDATE_EXPECT=1 cargo test)
 nix/live                   the live system: the GUI fullscreen in cage (root, restarts on
-                           crash, terminal/restart/power off in its menu) and a
+                           crash, terminal/restart/power off in its menu, every screen
+                           mirrored by mirror-screens.sh) and a
                            "Configurator (text mode)" boot entry (specialisation) with
                            `configurator wizard`; `nix build .#iso`, `nix run .#vm`
 nix/catalog                the app catalog derivation (scripts/build-catalog.py)
@@ -537,7 +538,8 @@ nix/modules/host           what host flakes import: TPM2 + PIN first-boot sealin
 nix/tests                  install.nix: the end-to-end VM install test; answers/ and
                            hosts/ are its inputs (target disk /dev/vdb)
 nix/checks                 registry options exist in nixpkgs; every generated host
-                           but Omarchy evaluates; Omarchy parses; install-* VM tests
+                           but Omarchy evaluates; Omarchy parses; install-* VM tests;
+                           live-mirror (the installer on two screens, headless cage)
 ```
 
 `scripts/retest.sh` runs every test there is (fmt, clippy with warnings
@@ -684,6 +686,40 @@ pgAdmin, Grafana and Prometheus run with `--network=host`, listening on
 apps) at localhost. LocalStack is left out: its image needs an account's
 auth token since 2026 (Moto emulates AWS instead). The images were
 checked to exist, not run: `examples/hosts/gnome` evaluates a few.
+
+**Every screen (2026-09-26):** on a laptop with an HDMI monitor the
+installer showed only on the monitor (cage's `-m last`: only the last
+connected output). Now cage runs with `-m extend` (every output in its
+layout) and `nix/live/mirror-screens.sh`, started beside the GUI
+(`configurator-session`), mirrors them through cage's
+wlr-output-management support (`wlr-randr`): it lays every output on top
+of the others, centred, and scales each so its logical size covers the
+smallest screen's (in pixels at scale 1; scales are multiples of 1/256,
+picked so wlroots' truncated logical size still covers every pixel, or the
+last row/column shows stale frames). Cage maximises the installer to the
+whole layout, so where screens differ in shape the larger one shows a
+little more on two sides: the GUI (`crates/gtk/src/screens.rs`) keeps its
+content inside the part every screen shows (the intersection of the GDK
+monitors' geometries), with plain background beside it; the menu opens
+leftwards and the terminal gets that padding (`foot -o pad=…`), since cage
+keeps popups inside the larger screen and maximises the terminal too. It
+polls every second, so screens plugged in or out while it runs are
+mirrored again (one screen: scale 1 at 0,0, as before). Limits: screens of
+different shapes get bars (letterboxing) on the ones that don't match the
+smallest; a much larger screen is scaled up (a 4K monitor next to a 1366x768
+panel runs at ~2.8), a much smaller one scaled down; the helper owns every
+output's position and scale, so HiDPI scaling (still to do) has to go
+through it; wlroots can't drive a second GPU when rendering in software
+(two virtual cards in QEMU: the second stays off), which real hybrid
+laptops don't hit. Tested: `checks.live-mirror` (cage's headless backend
+with two outputs: same size pixel-identical, 1920x1080 + 1280x800 the same
+picture and the installer inside the panel's part, one switched off), and
+the live VM with two outputs (`CONFIGURATOR_VM_SCREENS=2`: one virtio-vga
+card, two heads): both screens at boot, a click on one moves both,
+unplugging and replugging the second (QEMU's D-Bus display,
+`org.qemu.Display1.Console.SetUIInfo` with 0x0 / 1280x800; QEMU's GTK
+window should plug it in once its tab is shown, going by QEMU's source,
+not tried). Not tried on real hardware yet.
 
 **Install progress and small machines (2026-09-26):** the Install step
 runs Nix itself with `--log-format internal-json` (crates/engine/src/nixlog.rs

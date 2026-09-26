@@ -156,6 +156,37 @@ hostChecks
         [ $missing = 0 ] && touch $out
       '';
 
+  # The live session on two screens (nix/live/mirror-screens.sh): cage with
+  # two virtual outputs (wlroots' headless backend, software rendering),
+  # the installer and the mirroring; screens of the same and of different
+  # shapes, one switched off and on again. The screenshots are the output.
+  # (The live VM with two real outputs: CONFIGURATOR_VM_SCREENS=2, see
+  # nix/packages/vm.nix.)
+  live-mirror =
+    pkgs.runCommand "check-live-mirror"
+      {
+        nativeBuildInputs = [
+          pkgs.cage
+          pkgs.wlr-randr
+          pkgs.jq
+          pkgs.grim
+          pkgs.imagemagick
+          pkgs.dbus
+          (pkgs.callPackage ../live/mirror-screens.nix { })
+          self.packages.${system}.configurator-gtk
+        ];
+        FONTCONFIG_FILE = pkgs.makeFontsConf { fontDirectories = [ pkgs.dejavu_fonts ]; };
+      }
+      ''
+        export HOME=$TMPDIR XDG_RUNTIME_DIR=$TMPDIR/run
+        mkdir -m 0700 $XDG_RUNTIME_DIR
+        export WLR_BACKENDS=headless WLR_HEADLESS_OUTPUTS=2 WLR_RENDERER=pixman
+        export GSK_RENDERER=cairo LIBGL_ALWAYS_SOFTWARE=1
+        mkdir $out
+        dbus-run-session --config-file=${pkgs.dbus}/share/dbus-1/session.conf -- timeout 300 cage -m extend -- bash ${./mirror-screens.sh} $out
+        test -e $out/ok
+      '';
+
   # The Omarchy host needs its flake inputs (the desktop, lanzaboote), so
   # it's only parsed here; the others evaluate against nixpkgs.
   host-omarchy-parses =

@@ -16,6 +16,15 @@ let
   gui = self.packages.${system}.configurator-gtk.override {
     screenshots = self.packages.${system}.desktop-screenshots;
   };
+  # Every screen shows the installer, mirrored (cage's own `-m extend`
+  # would lay them side by side); see mirror-screens.sh.
+  mirror-screens = pkgs.callPackage ./mirror-screens.nix { };
+  # What cage runs: the installer, with the screens kept mirrored beside
+  # it (it ends with cage).
+  session = pkgs.writeShellScript "configurator-session" ''
+    ${lib.getExe mirror-screens} &
+    exec ${lib.getExe gui}
+  '';
 in
 {
   # nixpkgs' own installer image (stock NixOS boot menu and branding);
@@ -122,15 +131,16 @@ in
 
   # The graphical installer, fullscreen, as root (it partitions and
   # installs), back up if it ever crashes. `-s` keeps Ctrl+Alt+F2 to a
-  # console working.
+  # console working. `-m extend` gives every screen (a laptop's own panel
+  # and an HDMI monitor, …) to the session, which mirrors them.
   services.cage = {
     enable = true;
     user = "root";
-    program = lib.getExe gui;
+    program = session;
     extraArguments = [
       "-s"
       "-m"
-      "last"
+      "extend"
     ];
   };
   systemd.services."cage-tty1".serviceConfig = {

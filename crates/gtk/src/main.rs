@@ -9,6 +9,7 @@
 mod draft;
 mod install;
 mod pages;
+mod screens;
 mod sizes;
 mod store;
 mod widgets;
@@ -264,8 +265,12 @@ fn build_window(app: &adw::Application) {
         .default_height(820)
         .content(&view)
         .build();
-    if live {
+    // Fullscreen as on the live system (CONFIGURATOR_FULLSCREEN: anywhere,
+    // e.g. in a cage to try it), and on mirrored screens of different
+    // shapes inside what each of them shows.
+    if live || std::env::var_os("CONFIGURATOR_FULLSCREEN").is_some() {
         window.fullscreen();
+        screens::fit_every_screen(&view);
     }
     window.present();
 }
@@ -352,7 +357,16 @@ fn system_menu(live: bool) -> gtk::MenuButton {
         let popover = popover.clone();
         button.connect_clicked(move |_| {
             popover.popdown();
-            if let Err(e) = std::process::Command::new(argv[0]).args(&argv[1..]).spawn() {
+            let mut command = std::process::Command::new(argv[0]);
+            command.args(&argv[1..]);
+            // The terminal fills the whole layout too: kept inside what
+            // every mirrored screen shows.
+            if argv[0] == "foot"
+                && let Some((x, y)) = screens::padding()
+            {
+                command.arg(format!("--override=pad={x}x{y}"));
+            }
+            if let Err(e) = command.spawn() {
                 eprintln!("configurator: {}: {e}", argv[0]);
             }
         });
@@ -362,6 +376,15 @@ fn system_menu(live: bool) -> gtk::MenuButton {
     list.append(&item("Restart", &["systemctl", "reboot"], true));
     list.append(&item("Power Off", &["systemctl", "poweroff"], true));
     popover.set_child(Some(&list));
+    // Opens leftwards from the button at the window's right edge. The
+    // compositor keeps menus on screen, but with mirrored screens of
+    // different shapes it does so for the wider one, so a menu centred
+    // under the button would run off the narrower screen.
+    popover.connect_show(|popover| {
+        let (_, width, _, _) = popover.measure(gtk::Orientation::Horizontal, -1);
+        popover.set_offset(-(width / 2) + 24, 0);
+    });
+    popover.set_has_arrow(false);
     gtk::MenuButton::builder()
         .icon_name("open-menu-symbolic")
         .popover(&popover)

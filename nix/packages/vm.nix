@@ -13,6 +13,13 @@
 # only boots again after that reset, as on a real machine.
 # `nix run .#vm -- shot [FILE]` saves the running VM's screen as a PNG
 # (default ~/Pictures/configurator-<time>.png).
+# CONFIGURATOR_VM_SCREENS=2 gives the machine a second screen, like a
+# laptop with a monitor: a graphics card (`gpu`) with two outputs, which
+# QEMU's window shows as tabs; the second is plugged in once its tab is
+# shown (QEMU tells the guest the size it's shown at). Headless, with
+# `-display dbus`, org.qemu.Display1.Console.SetUIInfo on Console_1 plugs
+# it in (a size) and out (0x0). The live session mirrors them. `shot FILE
+# 1` saves the second one.
 # State lives in ./.vm (or $CONFIGURATOR_VM_DIR). Headless:
 # QEMU_OPTS=-nographic for the live system, CONFIGURATOR_VM_DISPLAY=none
 # for the target.
@@ -42,6 +49,20 @@ writeShellApplication {
     fi
     state="''${CONFIGURATOR_VM_DIR:-$PWD/.vm}"
     extra="''${QEMU_OPTS:-}"
+    # The machine's screens: one (QEMU's default graphics), or a graphics
+    # card with two outputs, for trying the live session's mirroring. (Two
+    # cards don't work here: wlroots can't drive a second GPU with only
+    # software rendering.)
+    case "''${CONFIGURATOR_VM_SCREENS:-1}" in
+      1) screens="" ;;
+      2)
+        screens="-vga none -device virtio-vga,id=gpu,max_outputs=2,xres=1920,yres=1080"
+        ;;
+      *)
+        echo "CONFIGURATOR_VM_SCREENS: 1 or 2" >&2
+        exit 1
+        ;;
+    esac
     mkdir -p "$state"
 
     # The machine's firmware variables and TPM, shared by live and target.
@@ -59,8 +80,13 @@ writeShellApplication {
       [ -S "$qmp" ] || { echo "no VM running from $state" >&2; exit 1; }
       file=$(realpath -m "''${2:-$HOME/Pictures/configurator-$(date +%Y-%m-%d_%H-%M-%S).png}")
       mkdir -p "$(dirname "$file")"
+      # Which screen, with two (0 or 1): the first by default.
+      device=""
+      if [ -n "''${3:-}" ]; then
+        device=",\"device\":\"gpu\",\"head\":$3"
+      fi
       printf '%s\n' '{"execute":"qmp_capabilities"}' \
-        "{\"execute\":\"screendump\",\"arguments\":{\"filename\":\"$file\",\"format\":\"png\"}}" \
+        "{\"execute\":\"screendump\",\"arguments\":{\"filename\":\"$file\",\"format\":\"png\"$device}}" \
         | socat - "UNIX-CONNECT:$qmp" > /dev/null
       sleep 0.5
       if [ ! -s "$file" ]; then
@@ -98,7 +124,7 @@ writeShellApplication {
       export NIX_EFI_VARS="$vars"
       export NIX_SWTPM_DIR="$tpm"
       events="$state/events"
-      export QEMU_OPTS="-drive file=$state/target.qcow2,if=virtio,format=qcow2 -qmp unix:$qmp,server,nowait -qmp unix:$events,server,nowait -no-reboot $extra"
+      export QEMU_OPTS="-drive file=$state/target.qcow2,if=virtio,format=qcow2 -qmp unix:$qmp,server,nowait -qmp unix:$events,server,nowait -no-reboot $screens $extra"
       while true; do
         rm -f "$events" "$events.log"
         (
@@ -148,7 +174,7 @@ writeShellApplication {
         -device tpm-tis,tpmdev=tpm0 \
         -drive file="$state/target.qcow2",if=virtio,format=qcow2 \
         -nic user,model=virtio-net-pci \
-        -device virtio-vga -display "''${CONFIGURATOR_VM_DISPLAY:-gtk}" \
+        ''${screens:--device virtio-vga} -display "''${CONFIGURATOR_VM_DISPLAY:-gtk}" \
         -qmp "unix:$qmp,server,nowait" \
         $extra
     }
@@ -177,7 +203,7 @@ writeShellApplication {
         echo "removed $state"
         ;;
       *)
-        echo "usage: configurator-vm [live|target|shot [FILE]|disk [SIZE]|firmware|reset]" >&2
+        echo "usage: configurator-vm [live|target|shot [FILE [0|1]]|disk [SIZE]|firmware|reset]" >&2
         exit 1
         ;;
     esac
