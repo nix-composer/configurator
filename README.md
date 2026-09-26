@@ -26,8 +26,10 @@ configurator wizard
 # or an example answers file:
 configurator install --answers /etc/configurator/examples/minimal.json \
   --secrets /etc/configurator/examples-secrets.json --yes-wipe /dev/vdb
-poweroff
-nix run .#vm -- target    # boot what was installed
+reboot                    # boots the installed system, like pulling out the USB stick
+nix run .#vm              # once installed: the installed system
+nix run .#vm -- live      # the installer again
+nix run .#vm -- target    # the installed system
 nix run .#vm -- disk 60G  # a fresh, empty target disk (default 120G)
 nix run .#vm -- shot      # save the VM's screen: ~/Pictures/configurator-<time>.png
 nix run .#vm -- firmware  # Secure Boot back in setup mode, an empty TPM
@@ -37,7 +39,10 @@ nix run .#vm -- reset     # start over (removes ./.vm)
 The VM is a machine ready for the Security layer: TianoCore (OVMF) with
 Secure Boot in setup mode and a TPM 2.0 (swtpm). `live` and `target` share
 its firmware variables and TPM, so the keys the install enrolls and the disk
-key it seals are there when the installed system boots.
+key it seals are there when the installed system boots. The live system isn't
+signed: once an install enrolled Secure Boot keys, `live` only boots again
+after `nix run .#vm -- firmware`, as a real machine needs Secure Boot off
+to boot the installer.
 
 Re-test everything (formatting, clippy, Rust tests, every flake check with
 the VM install tests, the live VM): `scripts/retest.sh`, or

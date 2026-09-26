@@ -545,7 +545,14 @@ live VM build); `--quick` skips building the VM tests.
 - `nix run .#vm`: the live environment with a persistent 120 GB target disk (sparse)
   (./.vm); `configurator install … --yes-wipe /dev/vdb` installs **online**
   (the disko CLI, `nix flake lock`, `nixos-install --flake` from the binary
-  cache), then `nix run .#vm -- target` boots it. Verified headless. Since 2026-09-26 it runs TianoCore
+  cache), then `nix run .#vm -- target` boots it. Verified headless.
+  Once the target disk has a partition table, a plain `nix run .#vm` boots
+  it, and rebooting the live VM (`-no-reboot`, QEMU's `guest-reset` event)
+  boots it too, like pulling out the USB stick: after an install enrolled
+  Secure Boot keys the unsigned live kernel can't boot (emergency mode,
+  "Failed to start Find NixOS closure"). Checked 2026-09-26: GNOME online
+  install (btrfs + LUKS + swap, Secure Boot, TPM + PIN), reboot, unlock,
+  GDM. Since 2026-09-26 it runs TianoCore
   (OVMF) with Secure Boot in setup mode and a swtpm TPM 2.0, shared
   between `live` and `target` (./.vm/efi-vars.fd, ./.vm/tpm; `nix run .#vm
   -- firmware` resets them), so Secure Boot enrollment and TPM + PIN can be

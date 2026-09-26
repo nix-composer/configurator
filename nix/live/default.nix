@@ -62,7 +62,7 @@ in
         --secrets /etc/configurator/examples-secrets.json --yes-wipe /dev/vdb
 
     Passwords in the examples: "test"; disk passphrase: "disk-passphrase".
-    Then power off and boot the installed disk: nix run .#vm -- target
+    Then reboot: nix run .#vm boots the installed disk from then on.
 
   '';
 
