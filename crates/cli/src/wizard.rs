@@ -169,11 +169,22 @@ pub fn run(catalog: &Catalog) -> Result<(Answers, Secrets)> {
     };
 
     heading(Layer::Apps);
-    let packages = attrs(
-        t,
-        "Apps (nixpkgs attributes, space-separated)",
-        &with_eco(&profile.apps, eco.map(|e| e.apps.as_slice())),
-    )?;
+    // The desktop's own apps start out in the list too, to keep or drop.
+    let essentials: Vec<String> = desktop
+        .and_then(|d| catalog.ecosystem(&d.id))
+        .map(|e| e.removable().into_iter().map(String::from).collect())
+        .unwrap_or_default();
+    let mut suggested = essentials.clone();
+    for app in with_eco(&profile.apps, eco.map(|e| e.apps.as_slice())) {
+        if !suggested.contains(&app) {
+            suggested.push(app);
+        }
+    }
+    let packages = attrs(t, "Apps (nixpkgs attributes, space-separated)", &suggested)?;
+    let apps_without: Vec<String> = essentials
+        .into_iter()
+        .filter(|a| !packages.contains(a))
+        .collect();
     let names: Vec<String> = catalog
         .agents
         .iter()
@@ -528,6 +539,7 @@ pub fn run(catalog: &Catalog) -> Result<(Answers, Secrets)> {
             ecosystem,
         }),
         apps: Apps {
+            without: apps_without,
             packages,
             agents,
             default_agent,

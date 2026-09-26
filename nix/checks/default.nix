@@ -84,12 +84,52 @@ let
   };
 
   missing = builtins.filter (p: !lib.hasAttrByPath (lib.splitString "." p) options) registryPaths;
+
+  # Every essential the installer offers to take out really goes with its
+  # desktop's exclude option, and every core one really stays.
+  ecosystems = (lib.importJSON ../../data/ecosystems.json).ecosystems;
+  essentialsProblems = lib.concatMap (
+    eco:
+    let
+      desktop = lib.findFirst (d: d.id == eco.desktop) null registry.desktops;
+      removable = lib.subtractLists (eco.core or [ ]) eco.essentials;
+      attr = pkgs: a: lib.attrByPath (lib.splitString "." a) null pkgs;
+      machine = nixos [
+        stubMachine
+        (
+          { pkgs, ... }:
+          lib.foldl' lib.recursiveUpdate
+            {
+              nixpkgs.hostPlatform = system;
+              system.stateVersion = "26.05";
+            }
+            (
+              # The desktop's own switches (its registry config's plain values).
+              lib.mapAttrsToList (path: value: lib.setAttrByPath (lib.splitString "." path) value) (
+                lib.filterAttrs (_: v: builtins.isBool v || builtins.isString v) desktop.module.config
+              )
+              ++ [ (lib.setAttrByPath (lib.splitString "." eco.exclude) (map (attr pkgs) removable)) ]
+            )
+        )
+      ];
+      installed = map (p: p.name or "") machine.config.environment.systemPackages;
+      isInstalled = a: lib.elem ((attr machine.pkgs a).name or "") installed;
+    in
+    lib.optionals (eco ? exclude && desktop != null && !(desktop.module ? flake)) (
+      map (a: "${eco.desktop}: ${a} stays when excluded") (lib.filter isInstalled removable)
+      ++ map (a: "${eco.desktop}: core ${a} isn't installed") (
+        lib.filter (a: !isInstalled a) (eco.core or [ ])
+      )
+    )
+  ) ecosystems;
 in
 hostChecks
 // {
   inherit (self.packages.${system}) configurator configurator-gtk;
 
   desktops = check "desktops" (missing == [ ]) "options missing in nixpkgs: ${toString missing}";
+
+  essentials = check "essentials" (essentialsProblems == [ ]) (lib.concatStringsSep "; " essentialsProblems);
 
   # Every symbolic icon the installer names exists in the icon theme it
   # ships with (a missing one shows as a broken-image icon).

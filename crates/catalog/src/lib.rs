@@ -114,6 +114,21 @@ pub struct ShellOption {
     pub values: Vec<String>,
 }
 
+impl Ecosystem {
+    /// The essentials the installer offers to remove: shown selected, and
+    /// written to `exclude` when taken out.
+    pub fn removable(&self) -> Vec<&str> {
+        if self.exclude.is_none() {
+            return Vec::new();
+        }
+        self.essentials
+            .iter()
+            .filter(|a| !self.core.contains(a))
+            .map(String::as_str)
+            .collect()
+    }
+}
+
 /// A flake desktop's own catalog (its flake's `lib.catalog`, built in from
 /// nix/desktop-catalogs.nix) and where the kept picks go.
 #[derive(Debug, Clone, Deserialize)]
@@ -200,6 +215,12 @@ pub struct Ecosystem {
     pub description: String,
     /// What the desktop's NixOS module installs anyway (nixpkgs attributes).
     pub essentials: Vec<String>,
+    /// The NixOS option that removes an essential (a package list).
+    #[serde(default)]
+    pub exclude: Option<String>,
+    /// Essentials the desktop can't do without (not removable).
+    #[serde(default)]
+    pub core: Vec<String>,
     /// Preselected in the app store.
     pub apps: Vec<EcosystemPick>,
     /// Preselected in the shell layer.
@@ -536,6 +557,8 @@ impl Catalog {
                     desktop.name
                 ),
                 essentials: Vec::new(),
+                exclude: None,
+                core: Vec::new(),
                 apps,
                 cli: Vec::new(),
                 webapps,

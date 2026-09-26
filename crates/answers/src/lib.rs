@@ -150,6 +150,10 @@ pub struct Apps {
     /// Which of `agents` the desktop launches by default, where it has one.
     #[serde(default)]
     pub default_agent: Option<String>,
+    /// Apps the desktop installs itself (its essentials) to leave out, as
+    /// nixpkgs attributes; the others stay.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub without: Vec<String>,
 }
 
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize, JsonSchema)]

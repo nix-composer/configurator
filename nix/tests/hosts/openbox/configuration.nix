@@ -20,7 +20,6 @@
   services.xserver.displayManager.lightdm.enable = true;
 
   # Apps, web apps, AI agents and command-line tools.
-  environment.systemPackages = [ pkgs.xterm ];
   nixpkgs.config.allowUnfree = true;
 
   # Boot and security.

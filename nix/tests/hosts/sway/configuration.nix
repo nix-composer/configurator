@@ -20,7 +20,6 @@
 
   # Apps, web apps, AI agents and command-line tools.
   environment.systemPackages = [
-    pkgs.foot
     (pkgs.makeDesktopItem {
       name = "webapp-github";
       desktopName = "GitHub";

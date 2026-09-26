@@ -145,6 +145,13 @@
           "items": {
             "type": "string"
           }
+        },
+        "without": {
+          "description": "Apps the desktop installs itself (its essentials) to leave out, as\nnixpkgs attributes; the others stay.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false

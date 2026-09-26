@@ -585,6 +585,20 @@ impl Generator<'_> {
             }
         }
 
+        // The desktop's essentials come with its module; the ones taken
+        // out in the app store go to its exclude option.
+        let essentials = self.desktop.and_then(|d| self.catalog.ecosystem(&d.id));
+        let mut excluded = Vec::new();
+        if let Some(eco) = essentials {
+            installed_by_desktop.extend(eco.essentials.iter().map(String::as_str));
+            let removable = eco.removable();
+            for attr in &a.apps.without {
+                if removable.contains(&attr.as_str()) {
+                    excluded.push(Nix::raw(format!("pkgs.{attr}")));
+                }
+            }
+        }
+
         // Apps NixOS sets up through their own module (Steam, Wireshark, …)
         // get that module instead of a bare package.
         let programs: Vec<_> = a
@@ -611,6 +625,11 @@ impl Generator<'_> {
         packages.extend(launchers);
         if !packages.is_empty() {
             section.set("environment.systemPackages", Nix::List(packages));
+        }
+        if let Some(option) = essentials.and_then(|e| e.exclude.as_ref())
+            && !excluded.is_empty()
+        {
+            section.set(option.as_str(), Nix::List(excluded));
         }
         let mut configured = std::collections::BTreeSet::new();
         for program in programs {

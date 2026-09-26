@@ -58,6 +58,8 @@ pub struct Draft {
     pub cli: BTreeMap<String, BTreeSet<Source>>,
     /// The tools the desktop installs itself (Omarchy's CLI setup).
     desktop_cli: Vec<String>,
+    /// The apps it installs itself that can be taken out (its essentials).
+    desktop_apps: Vec<String>,
 
     pub keybinds: BTreeMap<String, Keybind>,
 
@@ -104,6 +106,7 @@ impl Draft {
             shell_chosen: false,
             cli: BTreeMap::new(),
             desktop_cli: Vec::new(),
+            desktop_apps: Vec::new(),
             keybinds: BTreeMap::new(),
             nvidia: None,
             non_free_firmware: false,
@@ -153,13 +156,26 @@ impl Draft {
         self.profile = id.to_string();
     }
 
-    /// Picks a desktop: the previous one's ecosystem and own tools go, the
-    /// new one's own tools (Omarchy's CLI setup) come preselected.
+    /// Picks a desktop: the previous one's ecosystem and own apps and tools
+    /// go, the new one's (its essentials, Omarchy's CLI setup) come
+    /// preselected, to keep or take out.
     pub fn set_desktop(&mut self, catalog: &Catalog, id: Option<String>) {
         if self.desktop != id {
             self.clear_ecosystem();
             self.default_agent = None;
             remove_source(&mut self.cli, Source::Desktop);
+            remove_source(&mut self.apps, Source::Desktop);
+            self.desktop_apps = id
+                .as_deref()
+                .and_then(|d| catalog.ecosystem(d))
+                .map(|e| e.removable().into_iter().map(String::from).collect())
+                .unwrap_or_default();
+            for attr in &self.desktop_apps {
+                self.apps
+                    .entry(attr.clone())
+                    .or_default()
+                    .insert(Source::Desktop);
+            }
             self.desktop_cli = id
                 .as_deref()
                 .map(|d| catalog.desktop_cli(d))
@@ -289,6 +305,12 @@ impl Draft {
             apps: Apps {
                 packages: self.apps.keys().cloned().collect(),
                 agents: self.agents.iter().cloned().collect(),
+                without: self
+                    .desktop_apps
+                    .iter()
+                    .filter(|a| !self.apps.contains_key(*a))
+                    .cloned()
+                    .collect(),
                 default_agent: self
                     .default_agent
                     .clone()
@@ -414,19 +436,49 @@ mod tests {
         let mut draft = Draft::new(&catalog);
         draft.set_desktop(&catalog, Some("gnome".into()));
         let eco = catalog.ecosystem("gnome").unwrap();
+        // Only its own (removable) essentials to begin with.
+        let essentials: BTreeSet<&str> = eco.removable().into_iter().collect();
+        let picked = |d: &Draft| -> BTreeSet<String> { d.apps.keys().cloned().collect() };
+        let only = |extra: &[&str]| -> BTreeSet<String> {
+            essentials
+                .iter()
+                .chain(extra)
+                .map(|s| s.to_string())
+                .collect()
+        };
+        assert_eq!(picked(&draft), only(&[]));
         let (kept, other) = (&eco.apps[0].attr, &eco.apps[1].attr);
         draft.add_app(kept);
         draft.set_ecosystem(&catalog, true);
         assert!(draft.apps.contains_key(other));
-        assert_eq!(draft.apps.len(), eco.apps.len());
         draft.set_ecosystem(&catalog, false);
-        let left: Vec<&String> = draft.apps.keys().collect();
-        assert_eq!(left, [kept]);
-        // Another desktop drops the ecosystem's picks too.
+        assert_eq!(picked(&draft), only(&[kept]));
+        // Another desktop drops the ecosystem's picks and GNOME's own apps.
         draft.set_ecosystem(&catalog, true);
         draft.set_desktop(&catalog, Some("plasma".into()));
         assert!(!draft.ecosystem);
-        assert_eq!(draft.apps.len(), 1);
+        let plasma: BTreeSet<String> = catalog
+            .ecosystem("plasma")
+            .unwrap()
+            .removable()
+            .into_iter()
+            .map(String::from)
+            .chain([kept.clone()])
+            .collect();
+        assert_eq!(picked(&draft), plasma);
+    }
+
+    #[test]
+    fn essentials_taken_out_are_excluded() {
+        let catalog = Catalog::builtin().unwrap();
+        let mut draft = Draft::new(&catalog);
+        draft.set_desktop(&catalog, Some("gnome".into()));
+        draft.remove_app("epiphany");
+        assert_eq!(draft.answers().apps.without, ["epiphany"]);
+        // Plasma's core apps aren't offered for removal.
+        draft.set_desktop(&catalog, Some("plasma".into()));
+        assert!(!draft.apps.contains_key("kdePackages.systemsettings"));
+        assert!(draft.answers().apps.without.is_empty());
     }
 
     #[test]

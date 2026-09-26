@@ -26,7 +26,6 @@
 
   # Apps, web apps, AI agents and command-line tools.
   environment.systemPackages = [
-    pkgs.gnome-console
     (pkgs.makeDesktopItem {
       name = "webapp-youtube";
       desktopName = "YouTube";
