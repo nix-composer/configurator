@@ -25,6 +25,14 @@ pub enum Error {
     Generate(#[from] configurator_flakegen::Error),
     #[error("unknown desktop {0:?}")]
     UnknownDesktop(String),
+    #[error(
+        "{0} is in use (the running system is on it, or it's mounted); install to another disk"
+    )]
+    DiskInUse(String),
+    #[error(
+        "the firmware isn't in Secure Boot setup mode: other keys are enrolled (from an earlier install attempt, or the machine's own). Clear the Secure Boot keys in the firmware settings (in the test VM: nix run .#vm -- firmware), then install again"
+    )]
+    NotInSetupMode,
     #[error("secrets: {0}")]
     Secrets(String),
     #[error("`{command}` failed ({status})")]
@@ -127,6 +135,11 @@ pub enum Action {
     Generate { out: String, facter_report: String },
     /// Write a secret to a file, mode 0400.
     WriteSecret { path: String, secret: Input },
+    /// Enroll this session's Secure Boot keys (`sbctl enroll-keys
+    /// --microsoft`) while the firmware is in setup mode; skipped when an
+    /// earlier attempt already enrolled them, refused (with how to reset)
+    /// when someone else's keys are enrolled.
+    EnrollKeys,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
@@ -155,6 +168,10 @@ impl std::fmt::Display for Action {
                 )
             }
             Action::WriteSecret { path, secret } => write!(f, "write {secret:?} to {path}"),
+            Action::EnrollKeys => write!(
+                f,
+                "$ sbctl enroll-keys --microsoft (unless an earlier attempt already enrolled these keys)"
+            ),
         }
     }
 }
@@ -328,8 +345,8 @@ pub fn plan(answers: &Answers, catalog: &Catalog, options: &Options) -> Result<P
             weight: 2,
             actions: vec![
                 run(&["sbctl", "create-keys"]),
-                // Keep Microsoft's keys: GPU and NIC option ROMs need them.
-                run(&["sbctl", "enroll-keys", "--microsoft"]),
+                // Keeps Microsoft's keys: GPU and NIC option ROMs need them.
+                Action::EnrollKeys,
                 run(&["mkdir", "-p", &format!("{target}/var/lib/sbctl")]),
                 run(&[
                     "cp",
@@ -389,16 +406,31 @@ pub fn plan(answers: &Answers, catalog: &Catalog, options: &Options) -> Result<P
         .split('/')
         .next()
         .unwrap_or("root");
-    let mut first_boot = vec![run(&[
-        "nixos-enter",
-        "--root",
-        &target,
-        "--",
-        "chown",
-        "-R",
-        &format!("{owner}:users"),
-        &config_dir,
-    ])];
+    // So does the ~/.config it created (as root) on the way.
+    let parent = config_dir
+        .rsplit_once('/')
+        .map_or(config_dir.as_str(), |(p, _)| p);
+    let mut first_boot = vec![
+        run(&[
+            "nixos-enter",
+            "--root",
+            &target,
+            "--",
+            "chown",
+            "-R",
+            &format!("{owner}:users"),
+            &config_dir,
+        ]),
+        run(&[
+            "nixos-enter",
+            "--root",
+            &target,
+            "--",
+            "chown",
+            &format!("{owner}:users"),
+            parent,
+        ]),
+    ];
     if security.tpm_pin {
         // What the first-boot service (nix/modules/host/tpm-pin.nix) needs
         // to seal the disk key once Secure Boot is on: the PIN, and a

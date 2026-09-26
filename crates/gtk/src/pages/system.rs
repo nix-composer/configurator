@@ -306,7 +306,7 @@ pub fn disk(ctx: &Ctx) -> Page {
         "Disk setup",
         "The disk you pick is wiped and set up for NixOS.",
     );
-    let disks = status::disks();
+    let disks = crate::sizes::disks();
 
     let bar = gtk::Box::builder()
         .css_classes(["disk-bar"])
@@ -324,7 +324,11 @@ pub fn disk(ctx: &Ctx) -> Page {
     {
         let mut d = ctx.draft.borrow_mut();
         if d.disk.is_empty()
-            && let Some(disk) = disks.iter().find(|d| !d.removable).or(disks.first())
+            && let Some(disk) = disks
+                .iter()
+                .find(|d| !d.removable && !d.in_use)
+                .or_else(|| disks.iter().find(|d| !d.in_use))
+                .or(disks.first())
         {
             d.disk = disk.path.clone();
         }
@@ -356,10 +360,15 @@ pub fn disk(ctx: &Ctx) -> Page {
         let row = adw::ActionRow::builder()
             .title(escape(&format!("{model}  ·  {gib:.0} GB")))
             .subtitle(escape(&format!(
-                "{}{}",
+                "{}{}{}",
                 disk.path,
                 if disk.removable {
                     "  ·  removable"
+                } else {
+                    ""
+                },
+                if disk.in_use {
+                    "  ·  in use: the running system is on it"
                 } else {
                     ""
                 }
@@ -367,6 +376,11 @@ pub fn disk(ctx: &Ctx) -> Page {
             .activatable_widget(&check)
             .build();
         row.add_prefix(&check);
+        // The installer can't wipe what it runs from (a dry run elsewhere
+        // may still pick it: nothing is written).
+        if disk.in_use && ctx.live {
+            row.set_sensitive(false);
+        }
         row.add_suffix(&gtk::Image::from_icon_name(if disk.removable {
             "drive-removable-media-symbolic"
         } else {

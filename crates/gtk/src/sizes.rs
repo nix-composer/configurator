@@ -43,11 +43,14 @@ impl Report {
     /// One line for the UI, and the CSS level (`good`, `warn`, `bad`).
     pub fn line(&self) -> (String, &'static str) {
         let size = human(self.estimate.bytes);
-        let unknown = match self.estimate.unknown.len() {
+        let mut unknown = match self.estimate.unknown.len() {
             0 => String::new(),
             1 => " (plus 1 package of unknown size)".into(),
             n => format!(" (plus {n} packages of unknown size)"),
         };
+        if self.estimate.desktop_unknown {
+            unknown += ", not counting the desktop itself (its size isn't measured)";
+        }
         match (self.room, self.fit) {
             (None, _) => (format!("Installs about {size}{unknown}."), "good"),
             (Some(room), Fit::Fine) => (
@@ -99,7 +102,8 @@ pub fn target(draft: &Draft) -> Option<Disk> {
     disks
         .iter()
         .find(|d| d.path == draft.disk)
-        .or_else(|| disks.iter().find(|d| !d.removable))
+        .or_else(|| disks.iter().find(|d| !d.removable && !d.in_use))
+        .or_else(|| disks.iter().find(|d| !d.in_use))
         .or(disks.first())
         .cloned()
 }

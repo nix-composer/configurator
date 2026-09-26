@@ -78,6 +78,31 @@ hostChecks
 
   desktops = check "desktops" (missing == [ ]) "options missing in nixpkgs: ${toString missing}";
 
+  # Every symbolic icon the installer names exists in the icon theme it
+  # ships with (a missing one shows as a broken-image icon).
+  icons =
+    pkgs.runCommand "check-icons"
+      {
+        src = lib.fileset.toSource {
+          root = ../..;
+          fileset = lib.fileset.unions [
+            ../../crates/gtk/src
+            ../../crates/gtk/icons
+            ../../data/app-categories.json
+          ];
+        };
+      }
+      ''
+        missing=0
+        for icon in $(grep -rhoE '"[a-z0-9.-]+-symbolic"' $src | tr -d '"' | sort -u); do
+          if ! find ${pkgs.adwaita-icon-theme}/share/icons $src/crates/gtk/icons -name "$icon.svg" | grep -q .; then
+            echo "not in adwaita-icon-theme: $icon"
+            missing=1
+          fi
+        done
+        [ $missing = 0 ] && touch $out
+      '';
+
   # The Omarchy host needs its flake inputs (the desktop, lanzaboote), so
   # it's only parsed here; the others evaluate against nixpkgs.
   host-omarchy-parses =

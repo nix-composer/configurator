@@ -335,11 +335,21 @@ pub fn run(catalog: &Catalog) -> Result<(Answers, Secrets)> {
     if disks.is_empty() {
         bail!("no disk to install to");
     }
-    let names: Vec<String> = disks.iter().map(|d| d.describe()).collect();
+    let names: Vec<String> = disks
+        .iter()
+        .map(|d| {
+            if d.in_use {
+                format!("{}  (in use: the running system)", d.describe())
+            } else {
+                d.describe()
+            }
+        })
+        .collect();
+    let free = disks.iter().position(|d| !d.in_use && !d.removable);
     let device = disks[Select::with_theme(t)
         .with_prompt("Install to (it will be wiped)")
         .items(&names)
-        .default(0)
+        .default(free.unwrap_or(0))
         .interact()?]
     .path
     .clone();

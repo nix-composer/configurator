@@ -29,6 +29,7 @@ configurator install --answers /etc/configurator/examples/minimal.json \
 poweroff
 nix run .#vm -- target    # boot what was installed
 nix run .#vm -- disk 60G  # a fresh, empty target disk (default 120G)
+nix run .#vm -- shot      # save the VM's screen: ~/Pictures/configurator-<time>.png
 nix run .#vm -- firmware  # Secure Boot back in setup mode, an empty TPM
 nix run .#vm -- reset     # start over (removes ./.vm)
 ```

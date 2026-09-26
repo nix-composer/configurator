@@ -143,14 +143,14 @@ pkgs.testers.runNixOSTest {
     with subtest("the installed flake is the generated one"):
         # hardware.nix differs: the engine had a hardware report.
         installer.succeed(
-            "diff -r -x .git -x hardware.nix -x facter.json ${host} /mnt/home/${user}/nixos >&2"
+            "diff -r -x .git -x hardware.nix -x facter.json ${host} /mnt/home/${user}/.config/nixos >&2"
         )
         # The repository is the user's by now; root reads it as a safe one.
-        git = "git -c safe.directory='*' -C /mnt/home/${user}/nixos"
+        git = "git -c safe.directory='*' -C /mnt/home/${user}/.config/nixos"
         installer.succeed(f"{git} log --oneline | grep -q 'Configuration from the Configurator'")
         installer.succeed(f"test -z \"$({git} status --porcelain)\"")
-        installer.succeed("test -s /mnt/home/${user}/nixos/facter.json")
-        installer.succeed("grep -q 'reportPath = ./facter.json' /mnt/home/${user}/nixos/hardware.nix")
+        installer.succeed("test -s /mnt/home/${user}/.config/nixos/facter.json")
+        installer.succeed("grep -q 'reportPath = ./facter.json' /mnt/home/${user}/.config/nixos/hardware.nix")
 
     installer.succeed("sync")
     installer.shutdown()
@@ -221,9 +221,11 @@ pkgs.testers.runNixOSTest {
     with subtest("the installed system boots"):
         target.wait_for_unit("multi-user.target")
         target.succeed("test \"$(hostname)\" = ${answers.hostname}")
-        target.succeed("test -f /home/${user}/nixos/flake.nix")
-        target.succeed("test \"$(stat -c %U /home/${user}/nixos/flake.nix)\" = ${user}")
-        target.succeed("test \"$(stat -c %U /home/${user}/nixos/.git)\" = ${user}")
+        target.succeed("test -f /home/${user}/.config/nixos/flake.nix")
+        target.succeed("test \"$(stat -c %U /home/${user}/.config/nixos/flake.nix)\" = ${user}")
+        target.succeed("test \"$(stat -c %U /home/${user}/.config/nixos/.git)\" = ${user}")
+        # ~/.config itself too: it was created on the way, as root.
+        target.succeed("test \"$(stat -c %U /home/${user}/.config)\" = ${user}")
         # chpasswd set a real password (not locked, not empty).
         target.succeed("getent shadow ${user} | cut -d: -f2 | grep -q '^\\$'")
 

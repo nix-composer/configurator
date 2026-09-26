@@ -73,6 +73,8 @@ pub struct Disk {
     pub model: Option<String>,
     /// Removable (USB sticks, the live medium).
     pub removable: bool,
+    /// Something on it is mounted or swapped to: the running system.
+    pub in_use: bool,
 }
 
 impl Disk {
@@ -86,38 +88,78 @@ impl Disk {
 
 /// Whole disks, from lsblk; empty if it can't be run.
 pub fn disks() -> Vec<Disk> {
-    #[derive(Deserialize)]
-    struct Lsblk {
-        blockdevices: Vec<Device>,
-    }
-    #[derive(Deserialize)]
-    struct Device {
-        path: String,
-        size: u64,
-        model: Option<String>,
-        #[serde(rename = "type")]
-        kind: String,
-        rm: bool,
-        ro: bool,
-    }
     let Ok(output) = std::process::Command::new("lsblk")
         .args([
             "--json",
+            "--list",
             "--bytes",
-            "--nodeps",
             "--output",
-            "PATH,SIZE,MODEL,TYPE,RM,RO",
+            "KNAME,PKNAME,PATH,SIZE,MODEL,TYPE,RM,RO,MOUNTPOINTS",
         ])
         .output()
     else {
         return Vec::new();
     };
-    let Ok(lsblk) = serde_json::from_slice::<Lsblk>(&output.stdout) else {
+    parse_lsblk(&output.stdout)
+}
+
+#[derive(Deserialize)]
+struct Lsblk {
+    blockdevices: Vec<Device>,
+}
+
+/// One row of `lsblk --list`: disks, partitions, LUKS mappings, … each
+/// naming its parent.
+#[derive(Deserialize)]
+struct Device {
+    kname: String,
+    pkname: Option<String>,
+    path: String,
+    size: u64,
+    model: Option<String>,
+    #[serde(rename = "type")]
+    kind: String,
+    rm: bool,
+    ro: bool,
+    #[serde(default)]
+    mountpoints: Vec<Option<String>>,
+}
+
+impl Device {
+    /// Mounted or swapped to; not counting /mnt, where an install mounts
+    /// its target (a retry after a failed install wipes it again).
+    fn mounted(&self) -> bool {
+        self.mountpoints
+            .iter()
+            .flatten()
+            .any(|m| m != "/mnt" && !m.starts_with("/mnt/"))
+    }
+}
+
+fn parse_lsblk(json: &[u8]) -> Vec<Disk> {
+    let Ok(lsblk) = serde_json::from_slice::<Lsblk>(json) else {
         return Vec::new();
     };
-    lsblk
-        .blockdevices
-        .into_iter()
+    let devices = &lsblk.blockdevices;
+    let parent = |kname: &str| {
+        devices
+            .iter()
+            .find(|d| d.kname == kname)
+            .and_then(|d| d.pkname.clone())
+    };
+    // The disks under whatever is mounted: a partition's disk, a LUKS
+    // mapping's partition's disk, …
+    let mut in_use = std::collections::BTreeSet::new();
+    for d in devices.iter().filter(|d| d.mounted()) {
+        let mut kname = Some(d.kname.clone());
+        for _ in 0..8 {
+            let Some(k) = kname else { break };
+            in_use.insert(k.clone());
+            kname = parent(&k);
+        }
+    }
+    devices
+        .iter()
         // zram, loop and ram devices report as disks too.
         .filter(|d| d.kind == "disk" && !d.ro && d.size > 0)
         .filter(|d| {
@@ -126,12 +168,22 @@ pub fn disks() -> Vec<Disk> {
                 .any(|p| d.path.starts_with(p))
         })
         .map(|d| Disk {
-            path: d.path,
+            in_use: in_use.contains(&d.kname),
+            path: d.path.clone(),
             size: d.size,
-            model: d.model,
+            model: d.model.clone(),
             removable: d.rm,
         })
         .collect()
+}
+
+/// A disk the install mustn't wipe: the running system is on it (the live
+/// VM's own disk, a live USB stick), or it's mounted or swapped to.
+pub fn disk_in_use(device: &str) -> bool {
+    let device = std::fs::canonicalize(device)
+        .map(|p| p.to_string_lossy().into_owned())
+        .unwrap_or_else(|_| device.to_string());
+    disks().iter().any(|d| d.path == device && d.in_use)
 }
 
 /// Whether an NVIDIA GPU is present (PCI vendor 0x10de, display class).
@@ -143,4 +195,40 @@ pub fn has_nvidia_gpu() -> bool {
         let read = |f: &str| std::fs::read_to_string(d.path().join(f)).unwrap_or_default();
         read("vendor").trim() == "0x10de" && read("class").trim().starts_with("0x03")
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn the_running_system_s_disk_is_in_use() {
+        // The live VM (its own disk has /) beside an empty target with a
+        // failed install's /mnt, and a host with / on LUKS.
+        let row = |kname: &str, pkname: Option<&str>, kind: &str, mounts: &[&str]| {
+            serde_json::json!({
+                "kname": kname, "pkname": pkname, "path": format!("/dev/{kname}"),
+                "size": 1u64 << 34, "model": null, "type": kind, "rm": false, "ro": false,
+                "mountpoints": if mounts.is_empty() { vec![serde_json::Value::Null] }
+                    else { mounts.iter().map(|m| serde_json::json!(m)).collect() },
+            })
+        };
+        let json = serde_json::json!({ "blockdevices": [
+            row("vda", None, "disk", &[]),
+            row("vda1", Some("vda"), "part", &["/nix/.rw-store", "/"]),
+            row("vdb", None, "disk", &[]),
+            row("vdb2", Some("vdb"), "part", &["/mnt/boot"]),
+            row("sdc", None, "disk", &[]),
+            row("sdc2", Some("sdc"), "part", &[]),
+            row("dm-0", Some("sdc2"), "crypt", &["/", "/nix"]),
+            row("zram0", None, "disk", &["[SWAP]"]),
+        ]});
+        let disks = parse_lsblk(json.to_string().as_bytes());
+        let summary: Vec<(&str, bool)> =
+            disks.iter().map(|d| (d.path.as_str(), d.in_use)).collect();
+        assert_eq!(
+            summary,
+            [("/dev/vda", true), ("/dev/vdb", false), ("/dev/sdc", true)]
+        );
+    }
 }

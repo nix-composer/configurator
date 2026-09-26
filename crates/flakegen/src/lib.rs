@@ -58,14 +58,15 @@ pub fn current_platform() -> String {
 }
 
 /// Where the host flake lives on the installed system: the first admin's
-/// `~/nixos`, so the user owns it and desktop menus can edit and rebuild it.
+/// `~/.config/nixos`, so the user owns it and desktop menus can edit and
+/// rebuild it.
 pub fn config_dir(answers: &Answers) -> String {
     let admin = answers
         .users
         .iter()
         .find(|u| u.admin)
         .unwrap_or(&answers.users[0]);
-    format!("/home/{}/nixos", admin.name)
+    format!("/home/{}/.config/nixos", admin.name)
 }
 
 pub fn generate(answers: &Answers, catalog: &Catalog, inputs: &Inputs) -> Result<Host, Error> {

@@ -861,6 +861,7 @@ impl Inner {
             .propagate_natural_height(true)
             .child(&adw::Clamp::builder().maximum_size(760).child(&body).build())
             .build();
+        crate::widgets::instant_wheel(&scroller);
         let view = adw::ToolbarView::new();
         view.add_top_bar(&adw::HeaderBar::new());
         view.set_content(Some(&scroller));

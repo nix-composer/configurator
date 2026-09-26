@@ -29,6 +29,7 @@ fn monospace_view() -> (gtk::ScrolledWindow, gtk::TextBuffer) {
         .min_content_height(320)
         .css_classes(["card", "code"])
         .build();
+    crate::widgets::instant_wheel(&scroller);
     (scroller, buffer)
 }
 
@@ -39,7 +40,7 @@ pub fn review(ctx: &Ctx) -> Page {
 
     // ------------------------------------------------------------ review
     let (review_page, content) = page_frame(
-        "emblem-ok-symbolic",
+        "checkbox-checked-symbolic",
         "Ready to install",
         "Here's everything you chose, and the configuration it becomes. It's yours: plain Nix, in your home folder.",
     );
@@ -122,6 +123,7 @@ pub fn review(ctx: &Ctx) -> Page {
                 .build(),
         )
         .build();
+    crate::widgets::instant_wheel(&progress_page);
     stack.add_named(&progress_page, Some("progress"));
 
     // -------------------------------------------------------------- done
@@ -457,7 +459,7 @@ impl ProgressUi {
 fn step_icon(state: &str) -> &'static str {
     match state {
         "running" => "content-loading-symbolic",
-        "done" => "emblem-ok-symbolic",
+        "done" => "checkbox-checked-symbolic",
         "failed" => "dialog-error-symbolic",
         _ => "radio-symbolic",
     }
@@ -585,7 +587,7 @@ fn finish(ctx: &Ctx, ui: &ProgressUi, plan: &Plan, failure: Option<String>) {
     ui.after.remove_all();
     match failure {
         None => {
-            ui.done.set_icon_name(Some("emblem-ok-symbolic"));
+            ui.done.set_icon_name(Some("checkbox-checked-symbolic"));
             ui.done.set_title("NixOS is installed");
             ui.done.set_description(Some(
                 "Your configuration is in your home folder, in nixos. Restart to start using it.",

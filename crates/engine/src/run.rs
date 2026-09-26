@@ -21,6 +21,10 @@ pub fn install(
     progress: &mut dyn FnMut(Event),
 ) -> Result<(), Error> {
     secrets.check(answers)?;
+    // Never wipe the disk the installer itself runs from.
+    if crate::status::disk_in_use(&answers.disk.device) {
+        return Err(Error::DiskInUse(answers.disk.device.clone()));
+    }
     let mut percent = 0u8;
     for step in &plan.steps {
         progress(Event::Step {
@@ -53,6 +57,7 @@ pub fn install(
                         std::fs::write(&target, content).map_err(io)?;
                     }
                 }
+                Action::EnrollKeys => enroll_keys(progress)?,
                 Action::WriteSecret {
                     path,
                     secret: which,
@@ -135,8 +140,92 @@ fn run(argv: &[String], stdin: Option<&str>, progress: &mut dyn FnMut(Event)) ->
     if !status.success() {
         return Err(Error::CommandFailed {
             command,
-            status: status.to_string(),
+            status: describe(status),
         });
     }
     Ok(())
+}
+
+/// An exit status, saying what a kill by the kernel's out-of-memory
+/// killer means (SIGKILL, or 137 from a script whose child got it).
+fn describe(status: std::process::ExitStatus) -> String {
+    use std::os::unix::process::ExitStatusExt;
+    if status.signal() == Some(9) || status.code() == Some(137) {
+        format!(
+            "{status}: killed, most likely out of memory; this install needs more RAM (8 GB or more for a large desktop)"
+        )
+    } else {
+        status.to_string()
+    }
+}
+
+/// The firmware's platform key (PK) variable.
+const PK_VAR: &str = "/sys/firmware/efi/efivars/PK-8be4df61-93ca-11d2-aa0d-00e098032b8c";
+
+/// Enrolls sbctl's keys in setup mode; an install retried after a failure
+/// finds its own keys enrolled already (the PK's owner is sbctl's GUID)
+/// and goes on; anyone else's keys stop it before anything is signed.
+fn enroll_keys(progress: &mut dyn FnMut(Event)) -> Result<(), Error> {
+    #[derive(serde::Deserialize)]
+    struct Status {
+        guid: String,
+        setup_mode: bool,
+    }
+    let output = Command::new("sbctl")
+        .args(["status", "--json"])
+        .output()
+        .map_err(|e| Error::Io("sbctl status".into(), e))?;
+    let status: Status = serde_json::from_slice(&output.stdout)
+        .map_err(|e| Error::Io("sbctl status".into(), std::io::Error::other(e)))?;
+    if status.setup_mode {
+        return run(
+            &["sbctl".into(), "enroll-keys".into(), "--microsoft".into()],
+            None,
+            progress,
+        );
+    }
+    let pk = std::fs::read(PK_VAR).unwrap_or_default();
+    match guid_bytes(&status.guid) {
+        Some(owner) if pk.windows(16).any(|w| w == owner) => {
+            progress(Event::Log {
+                line: "These Secure Boot keys are enrolled already (an earlier attempt): going on."
+                    .into(),
+            });
+            Ok(())
+        }
+        _ => Err(Error::NotInSetupMode),
+    }
+}
+
+/// A GUID as EFI stores it: the first three fields little-endian.
+fn guid_bytes(guid: &str) -> Option<[u8; 16]> {
+    let hex: String = guid.chars().filter(|c| *c != '-').collect();
+    if hex.len() != 32 {
+        return None;
+    }
+    let mut b = [0u8; 16];
+    for (i, byte) in b.iter_mut().enumerate() {
+        *byte = u8::from_str_radix(&hex[2 * i..2 * i + 2], 16).ok()?;
+    }
+    b[0..4].reverse();
+    b[4..6].reverse();
+    b[6..8].reverse();
+    Some(b)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn guids_as_efi_stores_them() {
+        assert_eq!(
+            guid_bytes("8be4df61-93ca-11d2-aa0d-00e098032b8c").unwrap(),
+            [
+                0x61, 0xdf, 0xe4, 0x8b, 0xca, 0x93, 0xd2, 0x11, 0xaa, 0x0d, 0x00, 0xe0, 0x98, 0x03,
+                0x2b, 0x8c
+            ]
+        );
+        assert!(guid_bytes("nope").is_none());
+    }
 }

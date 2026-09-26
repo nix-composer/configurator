@@ -115,8 +115,10 @@ in
     # variables and TPM, as the installed system would on real hardware.
     useSecureBoot = true;
     tpm.enable = true;
-    memorySize = 4096;
-    cores = 4;
+    # An online install evaluates and installs the whole system (Omarchy
+    # with Home Manager, KDE's ecosystem): 4 GB runs out of memory.
+    memorySize = 12288;
+    cores = 8;
     diskSize = 16384;
     # Downloads for the target go to the target disk; the live store's
     # own writes (flake inputs) go to its disk image, not RAM.

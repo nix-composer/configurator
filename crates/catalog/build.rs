@@ -1,5 +1,5 @@
-//! Builds the web app and AI agent icons (data/webapps/<id>.png,
-//! data/agents/<id>.png) into the crate.
+//! Builds the icons of web apps, AI agents, dev templates and containers
+//! (data/{webapps,agents,dev-templates,containers}/<id>.png) into the crate.
 
 use std::fmt::Write;
 
@@ -31,6 +31,8 @@ fn main() {
     let mut out = String::from("/// Icons by id (PNG).\n");
     table(&mut out, "WEBAPP_ICONS", "webapps");
     table(&mut out, "AGENT_ICONS", "agents");
+    table(&mut out, "DEV_TEMPLATE_ICONS", "dev-templates");
+    table(&mut out, "CONTAINER_ICONS", "containers");
     let dest = std::path::Path::new(&std::env::var("OUT_DIR").unwrap()).join("icons.rs");
     std::fs::write(dest, out).unwrap();
 }

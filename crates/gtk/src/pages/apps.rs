@@ -12,7 +12,7 @@ use super::Page;
 use crate::Ctx;
 use crate::draft::Source;
 use crate::store::{self, ExtraTile, Store, StoreSpec};
-use crate::widgets::{AttrList, check_row, combo_row, group, list, page_frame, wide_page_frame};
+use crate::widgets::{AttrList, combo_row, group, list, wide_page_frame};
 
 /// A note about what the chosen desktop's ecosystem brings to this layer.
 fn ecosystem_note(ctx: &Ctx, what: &str) -> Option<String> {
@@ -517,61 +517,119 @@ fn category_title(id: &str) -> String {
 }
 
 pub fn development(ctx: &Ctx) -> Page {
-    let (widget, content) = page_frame(
-        "applications-engineering-symbolic",
+    let (widget, content) = wide_page_frame(
+        "configurator-code-symbolic",
         "Development",
-        "Per-project development environments for your languages, and services like databases in containers.",
+        "Development environments for your languages, and services like databases in containers.",
     );
-    let draft = ctx.draft.borrow();
+    let search = gtk::SearchEntry::builder()
+        .placeholder_text("Search languages and services")
+        .css_classes(["store-search"])
+        .build();
+    content.append(&search);
+    // Every card, with its searchable text and its section's grid.
+    let cards: Rc<RefCell<Vec<(String, gtk::Widget, gtk::FlowBox)>>> = Default::default();
 
-    let templates = group(
+    let section = |title: &str, note: &str| {
+        let heading = gtk::Label::builder()
+            .label(title)
+            .xalign(0.0)
+            .css_classes(["title-3", "store-heading"])
+            .build();
+        let caption = gtk::Label::builder()
+            .label(note)
+            .xalign(0.0)
+            .wrap(true)
+            .css_classes(["dim-label"])
+            .build();
+        content.append(&heading);
+        content.append(&caption);
+        let grid = store::grid(|_| {});
+        content.append(&grid);
+        grid
+    };
+
+    let templates = section(
         "Development environments",
-        "Templates for `nix flake new -t`: a toolchain, language server, linters and formatters per project.",
+        "Per project, with `nix flake new -t`: the toolchain, language server, linters, formatters and security scanning.",
     );
-    let l = list();
     for t in &ctx.catalog.dev_templates {
-        let (ctx, id) = (ctx.clone(), t.id.clone());
-        l.append(&check_row(
+        // "C/C++ development environment with …" → "C/C++".
+        let name = t
+            .description
+            .split(" development environment")
+            .next()
+            .unwrap_or(&t.id)
+            .to_string();
+        let icon = match ctx.catalog.dev_template_icon(&t.id) {
+            Some(png) => store::png_icon(png, 48),
+            None => store::letter_tile(&name, 48, false),
+        };
+        let (ctx2, id) = (ctx.clone(), t.id.clone());
+        let button = store::pick_button(ctx.draft.borrow().templates.contains(&t.id), move |on| {
+            let mut d = ctx2.draft.borrow_mut();
+            if on {
+                d.templates.insert(id.clone());
+            } else {
+                d.templates.remove(&id);
+            }
+        });
+        let card = store::card(
             &t.id,
-            &t.description,
-            draft.templates.contains(&t.id),
-            move |on| {
-                let mut d = ctx.draft.borrow_mut();
-                if on {
-                    d.templates.insert(id.clone());
-                } else {
-                    d.templates.remove(&id);
-                }
-            },
-        ));
+            icon,
+            &name,
+            &format!("Template “{}”", t.id),
+            &[],
+            &button,
+        );
+        templates.append(&card);
+        let hay = format!("{name} {} {}", t.id, t.description).to_lowercase();
+        cards
+            .borrow_mut()
+            .push((hay, card.upcast(), templates.clone()));
     }
-    templates.add(&l);
-    content.append(&templates);
 
-    let containers = group(
+    let containers = section(
         "Services in containers",
-        "Run with Docker, bound to this machine only.",
+        "Databases and other services, run with Docker and bound to this machine only.",
     );
-    let l = list();
     for c in &ctx.catalog.containers {
-        let (ctx, id) = (ctx.clone(), c.id.clone());
-        l.append(&check_row(
+        let icon = match ctx.catalog.container_icon(&c.id) {
+            Some(png) => store::png_icon(png, 48),
+            None => store::letter_tile(&c.name, 48, false),
+        };
+        let (ctx2, id) = (ctx.clone(), c.id.clone());
+        let button = store::pick_button(ctx.draft.borrow().containers.contains(&c.id), move |on| {
+            let mut d = ctx2.draft.borrow_mut();
+            if on {
+                d.containers.insert(id.clone());
+            } else {
+                d.containers.remove(&id);
+            }
+        });
+        let card = store::card(
+            &c.id,
+            icon,
             &c.name,
-            &format!("{} · {}", c.description, c.image),
-            draft.containers.contains(&c.id),
-            move |on| {
-                let mut d = ctx.draft.borrow_mut();
-                if on {
-                    d.containers.insert(id.clone());
-                } else {
-                    d.containers.remove(&id);
-                }
-            },
-        ));
+            &format!("{}\n{}", c.description, c.image),
+            &[],
+            &button,
+        );
+        containers.append(&card);
+        let hay = format!("{} {} {}", c.name, c.description, c.image).to_lowercase();
+        cards
+            .borrow_mut()
+            .push((hay, card.upcast(), containers.clone()));
     }
-    containers.add(&l);
-    content.append(&containers);
-    drop(draft);
+
+    search.connect_search_changed(move |s| {
+        let q = s.text().to_lowercase();
+        for (hay, card, _) in cards.borrow().iter() {
+            if let Some(cell) = card.parent() {
+                cell.set_visible(q.is_empty() || hay.contains(&q));
+            }
+        }
+    });
 
     Page::new(Layer::Development, widget)
 }

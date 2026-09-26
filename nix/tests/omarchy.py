@@ -9,7 +9,7 @@ with subtest("Home Manager set up Omarchy for the user"):
     target.succeed(f"test -f {home}/.config/omarchy/extensions/omarchy-menu.jsonc")
 
 with subtest("the configurator's choices reached Omarchy"):
-    target.succeed(f"test -f {home}/nixos/omarchy/apps.json")
+    target.succeed(f"test -f {home}/.config/nixos/omarchy/apps.json")
     target.succeed("command -v claude")
     target.succeed(f"grep -rq youtube {home}/.local/share/applications/ || ls /etc/profiles/per-user/omar/share/applications | grep -qi youtube")
 

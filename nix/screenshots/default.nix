@@ -214,9 +214,15 @@ let
       )
     ) desktops
   );
+
+  # Pictures of desktops no VM here can boot (data/screenshots).
+  static = lib.fileset.toSource {
+    root = ../../data/screenshots;
+    fileset = lib.fileset.fileFilter (f: f.hasExt "jpg") ../../data/screenshots;
+  };
 in
 pkgs.symlinkJoin {
   name = "desktop-screenshots";
-  paths = builtins.attrValues (removeAttrs perDesktop broken);
+  paths = builtins.attrValues (removeAttrs perDesktop broken) ++ [ static ];
   passthru = { inherit perDesktop; };
 }

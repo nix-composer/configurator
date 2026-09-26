@@ -325,6 +325,22 @@ impl Catalog {
             .map(|(_, png)| *png)
     }
 
+    /// A dev template's language logo (PNG, 128×128), if it has one.
+    pub fn dev_template_icon(&self, id: &str) -> Option<&'static [u8]> {
+        DEV_TEMPLATE_ICONS
+            .iter()
+            .find(|(i, _)| *i == id)
+            .map(|(_, png)| *png)
+    }
+
+    /// A container's logo (PNG, 128×128), if it has one.
+    pub fn container_icon(&self, id: &str) -> Option<&'static [u8]> {
+        CONTAINER_ICONS
+            .iter()
+            .find(|(i, _)| *i == id)
+            .map(|(_, png)| *png)
+    }
+
     /// An AI agent's icon (PNG, 128×128), from data/agents, if it has one.
     pub fn agent_icon(&self, id: &str) -> Option<&'static [u8]> {
         AGENT_ICONS
@@ -423,6 +439,18 @@ mod tests {
                 );
                 assert!(seen.insert(attr), "{}: {attr} twice", eco.desktop);
             }
+        }
+        for (id, _) in DEV_TEMPLATE_ICONS {
+            assert!(
+                catalog.dev_template(id).is_some(),
+                "data/dev-templates/{id}.png: no such template"
+            );
+        }
+        for (id, _) in CONTAINER_ICONS {
+            assert!(
+                catalog.container(id).is_some(),
+                "data/containers/{id}.png: no such container"
+            );
         }
         for (id, _) in AGENT_ICONS {
             assert!(

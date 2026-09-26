@@ -9,6 +9,54 @@ use adw::prelude::*;
 /// list it's in), so it's set after it's built.
 pub type SelfRef = Rc<RefCell<Option<Rc<dyn Fn()>>>>;
 
+/// Mouse wheel steps move `scroller` at once, by GTK's own step size.
+/// GTK animates each step and starts the next one from wherever the
+/// animation got to, so a quick spin of the wheel loses most of its steps
+/// and the page stutters (measured in the live VM: 10 fast steps moved
+/// 110 px instead of 770). Touchpads keep GTK's smooth, kinetic scrolling;
+/// a scroller inside this one (a code view) still scrolls itself.
+pub fn instant_wheel(scroller: &gtk::ScrolledWindow) {
+    let wheel = gtk::EventControllerScroll::new(gtk::EventControllerScrollFlags::VERTICAL);
+    wheel.set_propagation_phase(gtk::PropagationPhase::Capture);
+    let weak = scroller.downgrade();
+    wheel.connect_scroll(move |c, _, dy| {
+        let Some(sw) = weak.upgrade() else {
+            return gtk::glib::Propagation::Proceed;
+        };
+        if c.unit() != gtk::gdk::ScrollUnit::Wheel || innermost_elsewhere(c, &sw) {
+            return gtk::glib::Propagation::Proceed;
+        }
+        let adj = sw.vadjustment();
+        let step = adj.page_size().powf(2.0 / 3.0);
+        let top = (adj.upper() - adj.page_size()).max(adj.lower());
+        adj.set_value((adj.value() + dy * step).clamp(adj.lower(), top));
+        gtk::glib::Propagation::Stop
+    });
+    scroller.add_controller(wheel);
+}
+
+/// Whether the pointer is over another scroller inside `sw`, which should
+/// get the wheel instead.
+fn innermost_elsewhere(c: &gtk::EventControllerScroll, sw: &gtk::ScrolledWindow) -> bool {
+    let (Some(event), Some(native)) = (c.current_event(), sw.native()) else {
+        return false;
+    };
+    let Some((x, y)) = event.position() else {
+        return false;
+    };
+    // Surface coordinates, less the window's shadow, into the scroller's.
+    let (sx, sy) = native.surface_transform();
+    let Some(point) = native.upcast_ref::<gtk::Widget>().compute_point(
+        sw,
+        &gtk::graphene::Point::new((x - sx) as f32, (y - sy) as f32),
+    ) else {
+        return false;
+    };
+    sw.pick(point.x() as f64, point.y() as f64, gtk::PickFlags::DEFAULT)
+        .and_then(|w| w.ancestor(gtk::ScrolledWindow::static_type()))
+        .is_some_and(|inner| inner != *sw.upcast_ref::<gtk::Widget>())
+}
+
 /// A layer's page: a large icon, title and one line of text over its
 /// content, centered and scrollable. Returns the page and the box to fill.
 pub fn page_frame(icon: &str, title: &str, subtitle: &str) -> (gtk::Widget, gtk::Box) {
@@ -89,6 +137,7 @@ fn sized_page_frame(
         .child(&clamp)
         .vexpand(true)
         .build();
+    instant_wheel(&scroller);
     (scroller.upcast(), content)
 }
 
@@ -106,29 +155,6 @@ pub fn list() -> gtk::ListBox {
         .selection_mode(gtk::SelectionMode::None)
         .css_classes(["boxed-list"])
         .build()
-}
-
-/// A row with a check box at the start.
-pub fn check_row(
-    title: &str,
-    subtitle: &str,
-    active: bool,
-    on_toggle: impl Fn(bool) + 'static,
-) -> adw::ActionRow {
-    let check = gtk::CheckButton::builder()
-        .active(active)
-        .valign(gtk::Align::Center)
-        .build();
-    check.connect_toggled(move |c| on_toggle(c.is_active()));
-    let row = adw::ActionRow::builder()
-        .title(escape(title))
-        .activatable_widget(&check)
-        .build();
-    if !subtitle.is_empty() {
-        row.set_subtitle(&escape(subtitle));
-    }
-    row.add_prefix(&check);
-    row
 }
 
 /// Rows show markup; catalog text is plain.

@@ -32,6 +32,9 @@ pub struct Estimate {
     /// Picks whose size isn't known (not measured, or not in the binary
     /// cache): the estimate is short by those.
     pub unknown: Vec<String>,
+    /// The desktop itself isn't measured (one from its own flake, like
+    /// Omarchy): only the base system counts.
+    pub desktop_unknown: bool,
 }
 
 impl Sizes {
@@ -66,11 +69,9 @@ impl Sizes {
                 }
             }
         };
-        let system = self
-            .file
-            .systems
-            .get(desktop.unwrap_or("none"))
-            .or_else(|| self.file.systems.get("none"));
+        let measured = self.file.systems.get(desktop.unwrap_or("none"));
+        let desktop_unknown = measured.is_none();
+        let system = measured.or_else(|| self.file.systems.get("none"));
         if let Some(ids) = system {
             add(ids);
         }
@@ -84,6 +85,7 @@ impl Sizes {
         Estimate {
             bytes: kib * 1024,
             unknown,
+            desktop_unknown,
         }
     }
 
@@ -124,6 +126,8 @@ mod tests {
         assert_eq!(kib(sizes.estimate(Some("gnome"), ["b"])), 13000);
         let e = sizes.estimate(Some("gnome"), ["c"]);
         assert_eq!(e.unknown, ["c"]);
+        assert!(!e.desktop_unknown);
+        assert!(sizes.estimate(Some("omarchy"), []).desktop_unknown);
         assert_eq!(human(6_123_000_000), "6.1 GB");
         assert_eq!(human(812_000_000), "812 MB");
         assert_eq!(human(48_400_000_000), "48 GB");

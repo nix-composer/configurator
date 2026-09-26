@@ -557,7 +557,8 @@ live VM build); `--quick` skips building the VM tests.
 
 Engine notes: `install` needs `--secrets` (passwords, LUKS passphrase, TPM
 PIN; never on a command line) and `--yes-wipe <the answers' disk>`. The
-host flake is written to the first admin's `~/nixos`, made a git repo,
+host flake is written to the first admin's `~/.config/nixos` (decided
+2026-09-26; `~/.config` is handed to the user too), made a git repo,
 locked and committed ("Configuration from the Configurator") before
 `nixos-install`: a plain directory flake breaks when its lock file is
 written during evaluation. `hardware.nix` always sets
@@ -606,6 +607,48 @@ debug `cargo run`. Missing: ecosystem screenshots, and some window
 managers are just a terminal on black.
 It still lacks: profile illustrations, keyboard layout applied live in cage, SSH keys per user, Plymouth quiet
 boot into it, and a VM test that drives it.
+
+**Found testing in the live VM (2026-09-26), fixed:**
+- **The Disk layer offered the disk the installer runs from.** In the VM
+  that's the live system's own 16 GB disk (7.5 GB system partition after
+  boot and swap), so it looked "already installed" and too small.
+  `status::disks()` now marks disks with anything mounted or swapped to
+  (through partitions and LUKS, from `lsblk --list` parent links; `/mnt`,
+  the install's own target, doesn't count) as `in_use`; the GUI and the
+  wizard never default to one, the live GUI can't pick one, and the
+  engine refuses to wipe one.
+- **Wheel scrolling stuttered and lost steps.** GTK animates each wheel
+  step and restarts from mid-animation, so a quick spin moved a fraction
+  of the way (measured through QMP in the live VM: frames stopped moving
+  after the sixth of ten steps). `widgets::instant_wheel` moves the page
+  a whole step per wheel click (GTK's step size); touchpads keep GTK's
+  kinetic scrolling; nested scrollers scroll themselves.
+- **nixos-install killed (exit 137):** out of memory evaluating and
+  installing Omarchy online with 4 GB. The live VM has 12 GB and 8 cores
+  now (the target 8 GB), and the engine says "killed, most likely out of
+  memory" instead of a bare status. The installer doesn't check RAM up
+  front yet.
+- **Missing icons** (the review's "Ready to install", a shell category):
+  names Adwaita doesn't have. `checks.icons` fails on any such name now.
+- **Omarchy's picture** was artwork: it's Omarchy's own Tokyo Night
+  screenshot now (data/screenshots, merged into `desktop-screenshots`),
+  and the size estimate says the desktop itself isn't measured.
+- **`sbctl enroll-keys` failed on a retry:** an attempt that failed after
+  enrolling left the firmware in user mode. The engine's `EnrollKeys`
+  step now enrolls only in setup mode, goes on when the enrolled PK is
+  this session's (sbctl's owner GUID in the PK variable), and otherwise
+  stops with how to reset (firmware settings; `nix run .#vm -- firmware`).
+- **Light/dark:** the header has a moon/sun toggle (the live system has
+  no desktop preference to follow, so it starts light). The installer
+  ships icons the theme lacks in crates/gtk/icons (the `</>` code icon of
+  the Development layer and tiles), registered at startup.
+- The Development layer is a searchable icon grid: language logos for 59
+  of 67 templates and all 10 containers (data/dev-templates,
+  data/containers).
+
+**Decided (2026-09-26):** the generated host flake lives in the first
+admin's `~/.config/nixos` (was `~/nixos`, which collided with personal
+repos).
 
 ## Prior art to reuse
 

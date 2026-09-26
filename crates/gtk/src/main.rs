@@ -62,14 +62,33 @@ fn main() -> gtk::glib::ExitCode {
     app.run()
 }
 
+/// Icons the icon theme doesn't have (crates/gtk/icons), built in.
+const ICONS: &[(&str, &str)] = &[(
+    "configurator-code-symbolic.svg",
+    include_str!("../icons/configurator-code-symbolic.svg"),
+)];
+
 fn load_css() {
+    let display = gtk::gdk::Display::default().expect("a display");
     let provider = gtk::CssProvider::new();
     provider.load_from_string(include_str!("style.css"));
     gtk::style_context_add_provider_for_display(
-        &gtk::gdk::Display::default().expect("a display"),
+        &display,
         &provider,
         gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
     );
+    // The icon theme finds loose icons in a search path; symbolic ones are
+    // recolored like the theme's own.
+    let dir = std::env::var_os("XDG_RUNTIME_DIR")
+        .map(std::path::PathBuf::from)
+        .unwrap_or_else(std::env::temp_dir)
+        .join("configurator-icons");
+    if std::fs::create_dir_all(&dir).is_ok() {
+        for (name, svg) in ICONS {
+            let _ = std::fs::write(dir.join(name), svg);
+        }
+        gtk::IconTheme::for_display(&display).add_search_path(&dir);
+    }
 }
 
 fn build_window(app: &adw::Application) {
@@ -143,6 +162,7 @@ fn build_window(app: &adw::Application) {
         .show_end_title_buttons(!live)
         .build();
     header.pack_end(&system_menu(live));
+    header.pack_end(&theme_toggle());
     if !live {
         header.pack_start(
             &gtk::Label::builder()
@@ -281,6 +301,35 @@ fn screenshots_dir() -> Option<std::path::PathBuf> {
             (cfg!(debug_assertions) && dev.exists()).then(|| dev.to_path_buf())
         })
         .filter(|d| d.is_dir())
+}
+
+/// Light or dark. The installer starts with the system's preference (on
+/// the live system there is none: light); the moon button switches.
+fn theme_toggle() -> gtk::ToggleButton {
+    let style = adw::StyleManager::default();
+    let button = gtk::ToggleButton::builder()
+        .active(style.is_dark())
+        .valign(gtk::Align::Center)
+        .build();
+    let look = |b: &gtk::ToggleButton| {
+        if b.is_active() {
+            b.set_icon_name("weather-clear-symbolic");
+            b.set_tooltip_text(Some("Light mode"));
+        } else {
+            b.set_icon_name("weather-clear-night-symbolic");
+            b.set_tooltip_text(Some("Dark mode"));
+        }
+    };
+    look(&button);
+    button.connect_toggled(move |b| {
+        style.set_color_scheme(if b.is_active() {
+            adw::ColorScheme::ForceDark
+        } else {
+            adw::ColorScheme::ForceLight
+        });
+        look(b);
+    });
+    button
 }
 
 /// The escape hatches an installer needs: a terminal, restart, power off.
