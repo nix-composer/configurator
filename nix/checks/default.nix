@@ -195,6 +195,59 @@ hostChecks
         test -e $out/ok
       '';
 
+  # Which desktops the graphics run (status::graphics, the Desktop and
+  # Hardware layers): Mesa's llvmpipe as is (everything allowed, in
+  # software), and made to look like a ThinkPad T500's GMA 4500MHD (OpenGL
+  # 2.1, OpenGL ES 2.0: Hyprland and Omarchy greyed out with the reason).
+  # The command line's verdicts, then the installer's pages in a headless
+  # cage, read back by OCR; the screenshots are the output.
+  live-graphics =
+    let
+      mesa = pkgs.mesa;
+    in
+    pkgs.runCommand "check-live-graphics"
+      {
+        nativeBuildInputs = [
+          pkgs.cage
+          pkgs.wlr-randr
+          pkgs.jq
+          pkgs.grim
+          pkgs.imagemagick
+          pkgs.tesseract
+          pkgs.procps
+          pkgs.dbus
+          self.packages.${system}.configurator
+          self.packages.${system}.configurator-gtk
+        ];
+        FONTCONFIG_FILE = pkgs.makeFontsConf { fontDirectories = [ pkgs.dejavu_fonts ]; };
+        # No /run/opengl-driver in the sandbox: Mesa itself, on the CPU.
+        __EGL_VENDOR_LIBRARY_DIRS = "${mesa}/share/glvnd/egl_vendor.d";
+        VK_DRIVER_FILES = "${mesa}/share/vulkan/icd.d/lvp_icd.x86_64.json";
+        LIBGL_ALWAYS_SOFTWARE = "1";
+      }
+      ''
+        export HOME=$TMPDIR XDG_RUNTIME_DIR=$TMPDIR/run
+        mkdir -m 0700 $XDG_RUNTIME_DIR
+        mkdir $out
+
+        configurator graphics --json | tee $out/llvmpipe.json | jq -e '
+          (.graphics.egl.renderer | startswith("llvmpipe"))
+          and .graphics.vulkan.kind == "software"
+          and ([.desktops[] | objects] == [])
+          and .desktops.hyprland == "software" and .desktops.i3 == "runs"'
+        MESA_GL_VERSION_OVERRIDE=2.1 MESA_GLES_VERSION_OVERRIDE=2.0 configurator graphics --json \
+          | tee $out/gm45.json | jq -e '
+          .graphics.egl.gl == "2.1" and .graphics.egl.gles == "2.0"
+          and (.desktops.hyprland.cannot | startswith("Needs OpenGL ES 3.0; this computer'"'"'s graphics support OpenGL ES 2.0 and OpenGL 2.1"))
+          and .desktops.omarchy.cannot != null
+          and ([.desktops | to_entries[] | select(.value | type == "object") | .key] | sort) == ["hyprland", "omarchy"]
+          and .desktops.xfce == "runs" and .desktops.mate == "runs" and .desktops.i3 == "runs"'
+
+        export WLR_BACKENDS=headless WLR_HEADLESS_OUTPUTS=1 WLR_RENDERER=pixman
+        dbus-run-session --config-file=${pkgs.dbus}/share/dbus-1/session.conf -- timeout 300 cage -- bash ${./live-graphics.sh} $out
+        test -e $out/ok
+      '';
+
   # The Omarchy host needs its flake inputs (the desktop, lanzaboote), so
   # it's only parsed here; the others evaluate against nixpkgs.
   host-omarchy-parses =

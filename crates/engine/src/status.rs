@@ -1,8 +1,10 @@
-//! What the running machine says about itself, for the hardware, security
-//! and disk layers: Secure Boot and TPM state, and the disks to install to.
+//! What the running machine says about itself, for the desktop, hardware,
+//! security and disk layers: its graphics, Secure Boot and TPM state, and
+//! the disks to install to.
 
 use std::path::Path;
 
+use configurator_catalog::graphics::{Egl, GlVersion, Graphics, Vulkan};
 use serde::{Deserialize, Serialize};
 
 /// The EFI global variable GUID.
@@ -241,6 +243,138 @@ pub fn has_nvidia_gpu() -> bool {
     })
 }
 
+/// What the machine's graphics support: OpenGL and OpenGL ES from the
+/// driver through EGL (`eglinfo`, mesa-demos), Vulkan from the loader
+/// (`vulkaninfo`, vulkan-tools). Either is unknown when its tool is
+/// missing or finds nothing, and then every desktop is allowed.
+///
+/// EGL is asked on the GPU itself (its GBM platform, which needs no
+/// display: the text-mode installer on a console works too), else without
+/// a surface, else through the running Wayland compositor (cage). The
+/// driver's environment applies: `MESA_GL_VERSION_OVERRIDE=2.1
+/// MESA_GLES_VERSION_OVERRIDE=2.0` makes any Mesa GPU look like a GMA
+/// 4500MHD, for testing.
+pub fn graphics() -> Graphics {
+    let vulkan = std::thread::spawn(|| {
+        run_probe("vulkaninfo", &["--summary"])
+            .map(|out| parse_vulkaninfo(&out))
+            .unwrap_or(Vulkan::Unknown)
+    });
+    let egl = ["gbm", "surfaceless", "wayland"]
+        .iter()
+        .find_map(|platform| {
+            let out = run_probe("eglinfo", &["-B", "-p", platform])?;
+            parse_eglinfo(&out)
+        });
+    Graphics {
+        egl,
+        vulkan: vulkan.join().unwrap_or(Vulkan::Unknown),
+    }
+}
+
+/// A probe's standard output (also when it fails: vulkaninfo without a
+/// device still says so); `None` when it can't be run or hangs.
+fn run_probe(program: &str, args: &[&str]) -> Option<String> {
+    use std::io::Read;
+    use std::process::{Command, Stdio};
+    let mut child = Command::new(program)
+        .args(args)
+        .stdin(Stdio::null())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::null())
+        .spawn()
+        .ok()?;
+    let mut stdout = child.stdout.take()?;
+    let reader = std::thread::spawn(move || {
+        let mut out = String::new();
+        stdout.read_to_string(&mut out).ok().map(|_| out)
+    });
+    // A driver that hangs mustn't hang the installer.
+    let deadline = std::time::Instant::now() + std::time::Duration::from_secs(15);
+    loop {
+        match child.try_wait() {
+            Ok(Some(_)) => break,
+            Ok(None) if std::time::Instant::now() < deadline => {
+                std::thread::sleep(std::time::Duration::from_millis(20));
+            }
+            _ => {
+                let _ = child.kill();
+                let _ = child.wait();
+                return None;
+            }
+        }
+    }
+    reader.join().ok().flatten()
+}
+
+/// `eglinfo -B -p <platform>`: the profiles' renderers and versions. A
+/// profile the driver can't create (core profile on OpenGL 2.1) is left
+/// out; `None` when there are none (EGL didn't initialize).
+fn parse_eglinfo(out: &str) -> Option<Egl> {
+    let mut egl = Egl::default();
+    let mut any = false;
+    for line in out.lines() {
+        let Some((key, value)) = line.split_once(": ") else {
+            continue;
+        };
+        let value = value.trim();
+        match key.trim() {
+            "OpenGL core profile version" | "OpenGL compatibility profile version" => {
+                if let Some(v) = GlVersion::parse_driver(value) {
+                    egl.gl = egl.gl.max(Some(v));
+                    any = true;
+                }
+            }
+            "OpenGL ES profile version" => {
+                if let Some(v) = GlVersion::parse_driver(value) {
+                    egl.gles = egl.gles.max(Some(v));
+                    any = true;
+                }
+            }
+            "OpenGL ES profile renderer"
+            | "OpenGL core profile renderer"
+            | "OpenGL compatibility profile renderer" => {
+                egl.renderer.get_or_insert_with(|| value.to_string());
+            }
+            _ => {}
+        }
+    }
+    any.then_some(egl)
+}
+
+/// `vulkaninfo --summary`: a GPU with a Vulkan driver, or only lavapipe
+/// (the CPU), or none of them.
+fn parse_vulkaninfo(out: &str) -> Vulkan {
+    let Some((_, devices)) = out.split_once("Devices:") else {
+        // No instance (no driver at all, or the loader failed): can't tell.
+        return Vulkan::Unknown;
+    };
+    let mut software = false;
+    for device in devices.split("\nGPU").skip(1) {
+        let field = |name: &str| {
+            device.lines().find_map(|l| {
+                let (k, v) = l.split_once('=')?;
+                (k.trim() == name).then(|| v.trim().to_string())
+            })
+        };
+        match field("deviceType").as_deref() {
+            Some("PHYSICAL_DEVICE_TYPE_CPU") => software = true,
+            Some(_) => {
+                return Vulkan::Hardware {
+                    device: field("deviceName").unwrap_or_default(),
+                    version: field("apiVersion").unwrap_or_default(),
+                };
+            }
+            None => {}
+        }
+    }
+    if software {
+        Vulkan::Software
+    } else {
+        Vulkan::None
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -273,6 +407,91 @@ mod tests {
         assert_eq!(
             summary,
             [("/dev/vda", true), ("/dev/vdb", false), ("/dev/sdc", true)]
+        );
+    }
+
+    #[test]
+    fn eglinfo_on_a_gma_4500() {
+        // llvmpipe with MESA_GL_VERSION_OVERRIDE=2.1
+        // MESA_GLES_VERSION_OVERRIDE=2.0: no core profile.
+        let out = "Surfaceless platform:
+EGL API version: 1.5
+EGL vendor string: Mesa Project
+EGL client APIs: OpenGL OpenGL_ES
+OpenGL compatibility profile vendor: Mesa
+OpenGL compatibility profile renderer: llvmpipe (LLVM 21.1.8, 256 bits)
+OpenGL compatibility profile version: 2.1 Mesa 26.1.2
+OpenGL compatibility profile shading language version: 4.60
+OpenGL ES profile vendor: Mesa
+OpenGL ES profile renderer: llvmpipe (LLVM 21.1.8, 256 bits)
+OpenGL ES profile version: OpenGL ES 2.0 Mesa 26.1.2
+OpenGL ES profile shading language version: OpenGL ES GLSL ES 1.0.16
+";
+        let egl = parse_eglinfo(out).unwrap();
+        assert_eq!(egl.gl, Some(GlVersion::new(2, 1)));
+        assert_eq!(egl.gles, Some(GlVersion::new(2, 0)));
+        assert!(egl.software());
+        assert_eq!(
+            egl.renderer.as_deref(),
+            Some("llvmpipe (LLVM 21.1.8, 256 bits)")
+        );
+        assert_eq!(
+            parse_eglinfo("GBM platform:\neglinfo: eglInitialize failed\n"),
+            None
+        );
+    }
+
+    #[test]
+    fn eglinfo_on_a_gpu() {
+        let out = "GBM platform:
+OpenGL core profile renderer: NVIDIA GeForce RTX 4070 SUPER/PCIe/SSE2
+OpenGL core profile version: 4.6.0 NVIDIA 595.71.05
+OpenGL compatibility profile version: 4.6.0 NVIDIA 595.71.05
+OpenGL ES profile renderer: NVIDIA GeForce RTX 4070 SUPER/PCIe/SSE2
+OpenGL ES profile version: OpenGL ES 3.2 NVIDIA 595.71.05
+";
+        let egl = parse_eglinfo(out).unwrap();
+        assert_eq!(
+            (egl.gl, egl.gles),
+            (Some(GlVersion::new(4, 6)), Some(GlVersion::new(3, 2)))
+        );
+        assert!(!egl.software());
+    }
+
+    #[test]
+    fn vulkaninfo_devices() {
+        let gpu = "==========
+VULKANINFO
+==========
+Devices:
+========
+GPU0:
+	apiVersion         = 1.4.329
+	deviceType         = PHYSICAL_DEVICE_TYPE_DISCRETE_GPU
+	deviceName         = NVIDIA GeForce RTX 4070 SUPER
+GPU1:
+	apiVersion         = 1.4.348
+	deviceType         = PHYSICAL_DEVICE_TYPE_CPU
+	deviceName         = llvmpipe (LLVM 21.1.8, 256 bits)
+";
+        assert_eq!(
+            parse_vulkaninfo(gpu),
+            Vulkan::Hardware {
+                device: "NVIDIA GeForce RTX 4070 SUPER".into(),
+                version: "1.4.329".into()
+            }
+        );
+        let lavapipe = "Devices:
+========
+GPU0:
+	apiVersion         = 1.4.348
+	deviceType         = PHYSICAL_DEVICE_TYPE_CPU
+	deviceName         = llvmpipe (LLVM 21.1.8, 256 bits)
+";
+        assert_eq!(parse_vulkaninfo(lavapipe), Vulkan::Software);
+        assert_eq!(
+            parse_vulkaninfo("ERROR: [Loader Message] vkCreateInstance failed"),
+            Vulkan::Unknown
         );
     }
 }

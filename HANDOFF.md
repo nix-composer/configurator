@@ -503,8 +503,9 @@ crates/flakegen            answers → host flake (flake.nix, configuration.nix,
                            per-desktop keybind renderers
 crates/engine              the staged install plan and running it (commands,
                            in-process generation, secrets to files/stdin, progress);
-                           status.rs reads Secure Boot/TPM state, disks, NVIDIA GPUs
-crates/cli                 `configurator wizard|schema|desktops|validate|generate|install`;
+                           status.rs reads Secure Boot/TPM state, disks, NVIDIA GPUs,
+                           graphics (OpenGL/ES and Vulkan, via eglinfo/vulkaninfo)
+crates/cli                 `configurator wizard|schema|desktops|graphics|validate|generate|install`;
                            wizard.rs is the text-mode front end (roadmap step 2)
 crates/gtk                 the graphical installer: a page per layer over one Draft
                            (draft.rs, tracks why each app is picked), pages/, the review,
@@ -525,6 +526,8 @@ data/webapps, data/agents  their icons, <id>.png (sources in the READMEs)
 data/keybinds/gnome.json   GNOME's 138 default binds (scripts/extract-gnome-keybinds.sh)
 docs/keybinds.md           how each desktop's keybinds can be set (researched), and
                            which renderers exist
+docs/graphics.md           each desktop's graphics requirement (researched, sourced)
+                           and how the installer detects the machine's
 examples/answers, hosts    example answers and their generated output (a test keeps
                            hosts current: UPDATE_EXPECT=1 cargo test)
 nix/live                   the live system: the GUI fullscreen in cage (root, restarts on
@@ -802,6 +805,35 @@ don't matter: disko's destroy runs `wipefs --all` on the old partitions
 and the disk, and that GRUB has no LUKS2 anyway. Libreboot's
 `libreboot_grub.cfg` isn't needed: 20160907 tries it only after
 `grub/grub.cfg` in the same directory, and lbmk no longer looks for it.
+
+**Graphics (2026-09-27):** a Libreboot T500 (GMA 4500MHD: crocus,
+OpenGL 2.1 / OpenGL ES 2.0, no Vulkan) installed Omarchy and got a
+blinking cursor: Hyprland needs OpenGL ES 3.0. Every desktop in
+data/desktops.json now has `graphics` (`gl` / `gles` minimum versions,
+either will do; `vulkan`; `software: false` for niri, which refuses
+llvmpipe; `{}` for none; a `source`), researched from the pinned sources
+(docs/graphics.md has the table and sources). Only Hyprland and Omarchy
+need ES 3.0; COSMIC, niri, the wlroots family, Budgie (labwc) and Lomiri
+need ES 2.0; GNOME and Pantheon GL 3.1 or ES 2.0; Cinnamon GL 2.1; KDE
+Plasma, Xfce, MATE, LXQt and the X11 window managers nothing.
+`status::graphics()` asks the driver: `eglinfo -B -p gbm|surfaceless|wayland`
+(mesa-demos) and `vulkaninfo --summary` (vulkan-tools), both on the
+packages' PATH; anything it can't tell is unknown and allows everything.
+The Desktop layer greys out what can't start (tag "Not for this GPU", the
+reason on the card: "Needs OpenGL ES 3.0; this computer's graphics
+support OpenGL ES 2.0 and OpenGL 2.1"), with no override (the user's
+call); the default desktop, and a profile's fallback, is the first that
+runs. Software rendering (llvmpipe: VMs without 3D, a GPU the live
+system has no driver for) allows everything with a warning tag, since the
+installed system may have the driver. The Hardware layer's Graphics card
+shows renderer and versions (amber in software); the wizard hides what
+can't run and says why; `configurator graphics [--json]` prints it all.
+Tested: unit tests, `checks.live-graphics` (the CLI's verdicts and the
+GUI in a headless cage, as llvmpipe and as a GMA 4500 through
+`MESA_GL_VERSION_OVERRIDE=2.1 MESA_GLES_VERSION_OVERRIDE=2.0`, read back
+by OCR), and the live VM (llvmpipe: everything offered, in software).
+Not tested on the real T500. Noticed: Budgie's registry entry says
+`sessions: ["x11"]`, but its 26.05 module runs labwc (Wayland).
 
 **Decided (2026-09-26):** the generated host flake lives in the first
 admin's `~/.config/nixos` (was `~/nixos`, which collided with personal

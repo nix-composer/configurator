@@ -5,6 +5,7 @@ use std::rc::Rc;
 
 use adw::prelude::*;
 use configurator_answers::Layer;
+use configurator_catalog::graphics::Fit;
 use configurator_catalog::{Desktop, DesktopKind, Session};
 
 use super::Page;
@@ -171,7 +172,11 @@ pub fn profile(ctx: &Ctx) -> Page {
             if matches!(id.as_str(), "server" | "headless") {
                 draft.set_desktop(&ctx.catalog, None);
             } else if draft.desktop.is_none() {
-                let first = ctx.catalog.desktops.first().map(|d| d.id.clone());
+                // The first desktop this machine runs.
+                let first = ctx
+                    .catalog
+                    .default_desktop(&ctx.graphics)
+                    .map(|d| d.id.clone());
                 draft.set_desktop(&ctx.catalog, first);
             }
             drop(draft);
@@ -275,7 +280,7 @@ fn desktop_art(ctx: &Ctx, d: Option<&Desktop>, width: i32, height: i32) -> gtk::
     art_box.upcast()
 }
 
-fn desktop_tags(d: Option<&Desktop>) -> Vec<Tag> {
+fn desktop_tags(ctx: &Ctx, d: Option<&Desktop>) -> Vec<Tag> {
     let Some(d) = d else {
         return vec![("Console".into(), "tag-session")];
     };
@@ -293,10 +298,44 @@ fn desktop_tags(d: Option<&Desktop>) -> Vec<Tag> {
     if d.unavailable.is_some() {
         return vec![("Unavailable".into(), "tag-error")];
     }
+    match d.fit(&ctx.graphics) {
+        Fit::Cannot(_) => return vec![("Not for this GPU".into(), "tag-error")],
+        Fit::Slow if !d.graphics.software => tags.push(("Needs a GPU driver".into(), "tag-unfree")),
+        Fit::Slow => tags.push(("Software rendering".into(), "tag-unfree")),
+        Fit::Runs => {}
+    }
     if d.module.flake.is_some() {
         tags.push(("Flake".into(), "tag-session"));
     }
     tags
+}
+
+/// What the Desktop layer says about a desktop on this machine's graphics:
+/// why it can't run here, or that it runs only in software.
+fn graphics_note(ctx: &Ctx, d: &Desktop) -> Option<String> {
+    match d.fit(&ctx.graphics) {
+        Fit::Runs => None,
+        Fit::Cannot(why) => Some(format!("{why}, so it can't be picked.")),
+        Fit::Slow if !d.graphics.software => Some(format!(
+            "{} doesn't start on software rendering ({}), all the graphics this computer has here: it needs a GPU driver the live system doesn't have (a virtual machine without 3D has none).",
+            d.name,
+            renderer(ctx),
+        )),
+        Fit::Slow => Some(format!(
+            "Graphics are drawn in software here ({}), without a GPU driver: {} runs, but may be slow.",
+            renderer(ctx),
+            d.name,
+        )),
+    }
+}
+
+/// The OpenGL renderer: "llvmpipe (LLVM 21.1.8, 256 bits)", …
+fn renderer(ctx: &Ctx) -> &str {
+    ctx.graphics
+        .egl
+        .as_ref()
+        .and_then(|e| e.renderer.as_deref())
+        .unwrap_or("llvmpipe")
 }
 
 fn tag_row(tags: &[Tag]) -> gtk::Box {
@@ -318,9 +357,10 @@ fn desktop_card(ctx: &Ctx, d: Option<&Desktop>) -> gtk::ToggleButton {
     let (name, description) = match d {
         Some(d) => (
             d.name.clone(),
-            match &d.unavailable {
-                Some(why) => format!("Unavailable: {why}"),
-                None => d.description.clone(),
+            match (&d.unavailable, d.blocked(&ctx.graphics)) {
+                (Some(why), _) => format!("Unavailable: {why}"),
+                (None, Some(why)) => why,
+                (None, None) => d.description.clone(),
             },
         ),
         None => (
@@ -360,7 +400,7 @@ fn desktop_card(ctx: &Ctx, d: Option<&Desktop>) -> gtk::ToggleButton {
             .css_classes(["title-4"])
             .build(),
     );
-    title.append(&tag_row(&desktop_tags(d)));
+    title.append(&tag_row(&desktop_tags(ctx, d)));
     text.append(&title);
     text.append(
         &gtk::Label::builder()
@@ -381,10 +421,13 @@ fn desktop_card(ctx: &Ctx, d: Option<&Desktop>) -> gtk::ToggleButton {
     let button = gtk::ToggleButton::builder()
         .child(&content)
         .css_classes(["desktop-card"])
-        .tooltip_text(&name)
+        .tooltip_text(match d.and_then(|d| d.blocked(&ctx.graphics)) {
+            Some(why) => format!("{name}: {why}"),
+            None => name.clone(),
+        })
         .build();
     button.connect_active_notify(move |b| check.set_visible(b.is_active()));
-    if d.is_some_and(|d| d.unavailable.is_some()) {
+    if d.is_some_and(|d| d.blocked(&ctx.graphics).is_some()) {
         button.set_sensitive(false);
         button.add_css_class("unavailable");
     }
@@ -425,6 +468,13 @@ pub fn desktop(ctx: &Ctx) -> Page {
         .css_classes(["dim-label"])
         .build();
     let preview_tags = gtk::Box::builder().build();
+    // Why it can't run on this machine's graphics, or runs only slowly.
+    let preview_graphics = gtk::Label::builder()
+        .xalign(0.0)
+        .wrap(true)
+        .css_classes(["caption", "graphics-note"])
+        .visible(false)
+        .build();
     let preview_login = gtk::Label::builder()
         .xalign(0.0)
         .wrap(true)
@@ -441,6 +491,7 @@ pub fn desktop(ctx: &Ctx) -> Page {
     info.append(&preview_name);
     info.append(&preview_desc);
     info.append(&preview_tags);
+    info.append(&preview_graphics);
     info.append(&preview_login);
     info.append(&comes_with);
     info.append(&eco_list);
@@ -467,11 +518,14 @@ pub fn desktop(ctx: &Ctx) -> Page {
             while let Some(c) = preview_tags.first_child() {
                 preview_tags.remove(&c);
             }
-            preview_tags.append(&tag_row(&desktop_tags(d)));
+            preview_tags.append(&tag_row(&desktop_tags(&ctx, d)));
             match d {
                 Some(d) => {
                     preview_name.set_label(&d.name);
                     preview_desc.set_label(&d.description);
+                    let note = graphics_note(&ctx, d);
+                    preview_graphics.set_label(note.as_deref().unwrap_or(""));
+                    preview_graphics.set_visible(note.is_some());
                     preview_login.set_label(&match d.login_manager.as_str() {
                         "builtin" => "Brings its own login screen.".to_string(),
                         lm => format!(
@@ -482,6 +536,7 @@ pub fn desktop(ctx: &Ctx) -> Page {
                     preview_login.set_visible(true);
                 }
                 None => {
+                    preview_graphics.set_visible(false);
                     preview_name.set_label("No graphical desktop");
                     preview_desc.set_label("A console system: servers and headless machines. Web apps and keybinds are skipped.");
                     preview_login.set_visible(false);
@@ -601,8 +656,8 @@ pub fn desktop(ctx: &Ctx) -> Page {
     ];
     let mut headings = Vec::new();
     for (title, mut desktops) in sections {
-        // What can't be installed goes last.
-        desktops.sort_by_key(|d| d.is_some_and(|d| d.unavailable.is_some()));
+        // What can't be installed or run here goes last.
+        desktops.sort_by_key(|d| d.is_some_and(|d| d.blocked(&ctx.graphics).is_some()));
         let heading = gtk::Label::builder()
             .label(format!("{title} · {}", desktops.len()))
             .xalign(0.0)

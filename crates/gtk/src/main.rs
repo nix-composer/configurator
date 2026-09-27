@@ -21,6 +21,7 @@ use adw::prelude::*;
 use configurator_answers::Layer;
 use configurator_catalog::Catalog;
 use configurator_catalog::apps::AppCatalog;
+use configurator_catalog::graphics::Graphics;
 
 use crate::draft::Draft;
 use crate::pages::Page;
@@ -40,6 +41,9 @@ pub struct Ctx {
     pub screenshots: Option<std::path::PathBuf>,
     /// Installing for real (on the live system) or a dry run.
     pub live: bool,
+    /// What this machine's graphics support (detected at start): the
+    /// Desktop layer offers only what runs on them.
+    pub graphics: Rc<Graphics>,
     toasts: adw::ToastOverlay,
     /// The Back/Next bar, hidden while installing.
     nav: gtk::CenterBox,
@@ -120,9 +124,11 @@ fn build_window(app: &adw::Application) {
     nav.set_start_widget(Some(&back));
     nav.set_end_widget(Some(&next));
 
+    let graphics = Rc::new(configurator_engine::status::graphics());
     let toasts = adw::ToastOverlay::new();
     let ctx = Ctx {
-        draft: Rc::new(RefCell::new(Draft::new(&catalog))),
+        draft: Rc::new(RefCell::new(Draft::new(&catalog, &graphics))),
+        graphics,
         catalog,
         apps: load_apps(),
         screenshots: screenshots_dir(),

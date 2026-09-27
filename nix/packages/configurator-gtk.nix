@@ -8,6 +8,8 @@
   adwaita-icon-theme,
   hicolor-icon-theme,
   curl,
+  mesa-demos,
+  vulkan-tools,
   # The app catalog (nix/catalog): apps.json and icons.
   catalog,
   # Flake desktops' catalogs (nix/desktop-catalogs.nix), built into the crates.
@@ -42,12 +44,19 @@ rustPlatform.buildRustPackage {
   ];
 
   # Its icons, wherever it runs (the live system's cage session has no
-  # desktop to provide them); the app catalog; curl for app screenshots.
+  # desktop to provide them); the app catalog; curl for app screenshots;
+  # eglinfo and vulkaninfo to tell which desktops the graphics run.
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${adwaita-icon-theme}/share:${hicolor-icon-theme}/share"
       --set-default CONFIGURATOR_CATALOG ${catalog}
-      --prefix PATH : ${lib.makeBinPath [ curl ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          curl
+          mesa-demos
+          vulkan-tools
+        ]
+      }
       ${lib.optionalString (
         screenshots != null
       ) "--set-default CONFIGURATOR_SCREENSHOTS ${screenshots}"}

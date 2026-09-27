@@ -155,6 +155,10 @@ in
     services.cage.enable = lib.mkForce false;
   };
 
+  # Mesa's drivers, in text mode too (cage turns them on for itself): the
+  # installers ask them which desktops the GPU can run.
+  hardware.graphics.enable = true;
+
   services.getty.autologinUser = lib.mkForce "root";
   networking.networkmanager.enable = true;
   # The live system runs from memory: compressed swap in RAM gives an

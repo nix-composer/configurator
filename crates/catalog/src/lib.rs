@@ -4,6 +4,7 @@
 //! ([`apps`], built by `nix build .#catalog`).
 
 pub mod apps;
+pub mod graphics;
 pub mod keybinds;
 pub mod sizes;
 
@@ -30,6 +31,9 @@ pub struct Desktop {
     pub name: String,
     pub kind: DesktopKind,
     pub sessions: Vec<Session>,
+    /// The graphics it needs to start (`{}`: none); the Desktop layer
+    /// greys out what this machine's can't run.
+    pub graphics: graphics::GraphicsNeeds,
     pub description: String,
     /// Why it can't be installed with this nixpkgs (it doesn't evaluate or
     /// build); shown, but not offered.
@@ -41,6 +45,25 @@ pub struct Desktop {
     pub login_manager: String,
     /// `None` while the keybind layer can't edit this desktop's binds yet.
     pub keybinds: Option<Keybinds>,
+}
+
+impl Desktop {
+    /// Whether it starts on a machine with these graphics.
+    pub fn fit(&self, graphics: &graphics::Graphics) -> graphics::Fit {
+        self.graphics.fit(graphics)
+    }
+
+    /// Why it can't be picked on this machine: it can't be installed with
+    /// this nixpkgs, or its graphics can't run it. `None`: it can.
+    pub fn blocked(&self, graphics: &graphics::Graphics) -> Option<String> {
+        if let Some(why) = &self.unavailable {
+            return Some(why.clone());
+        }
+        match self.fit(graphics) {
+            graphics::Fit::Cannot(why) => Some(why),
+            _ => None,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Deserialize)]
@@ -661,6 +684,12 @@ impl Catalog {
         self.desktops.iter().find(|d| d.id == id)
     }
 
+    /// The desktop picked by default: the first in the registry this
+    /// machine can install and run.
+    pub fn default_desktop(&self, graphics: &graphics::Graphics) -> Option<&Desktop> {
+        self.desktops.iter().find(|d| d.blocked(graphics).is_none())
+    }
+
     /// A desktop's ecosystem: from data/ecosystems.json, or a flake
     /// desktop's own catalog (Omarchy's).
     pub fn ecosystem(&self, desktop: &str) -> Option<&Ecosystem> {
@@ -685,6 +714,85 @@ mod tests {
                     .chars()
                     .all(|c| c.is_ascii_alphanumeric() || "-_'".contains(c))
         })
+    }
+
+    #[test]
+    fn graphics_requirements_are_sound() {
+        use graphics::{Egl, GlVersion, Graphics, Vulkan};
+        let catalog = Catalog::builtin().unwrap();
+        for d in &catalog.desktops {
+            let g = &d.graphics;
+            // Versions that exist: OpenGL 1.0-4.6, OpenGL ES 2.0-3.2.
+            if let Some(v) = g.gl {
+                assert!(
+                    v >= GlVersion::new(1, 0) && v <= GlVersion::new(4, 6),
+                    "{}: OpenGL {v}",
+                    d.id
+                );
+            }
+            if let Some(v) = g.gles {
+                assert!(
+                    v >= GlVersion::new(2, 0) && v <= GlVersion::new(3, 2),
+                    "{}: OpenGL ES {v}",
+                    d.id
+                );
+            }
+            assert!(
+                !g.any() || g.source.is_some(),
+                "{}: a requirement says where it comes from",
+                d.id
+            );
+            assert!(
+                g.software || g.any(),
+                "{}: refuses software rendering of nothing",
+                d.id
+            );
+            // X11 window managers draw without a GPU.
+            if d.kind == DesktopKind::WindowManager && d.sessions == [Session::X11] {
+                assert!(!g.any(), "{}: an X11 window manager needing a GPU", d.id);
+            }
+        }
+        // A ThinkPad T500's GMA 4500MHD: no Hyprland, but a desktop by
+        // default all the same, and Xfce, MATE and i3.
+        let gm45 = Graphics {
+            egl: Some(Egl {
+                renderer: Some("Mesa Intel(R) GM45 Express Chipset".into()),
+                gl: Some(GlVersion::new(2, 1)),
+                gles: Some(GlVersion::new(2, 0)),
+            }),
+            vulkan: Vulkan::None,
+        };
+        for id in ["omarchy", "hyprland"] {
+            let why = catalog.desktop(id).unwrap().blocked(&gm45);
+            assert!(
+                why.as_deref()
+                    .is_some_and(|w| w.starts_with("Needs OpenGL ES 3.0")),
+                "{id}: {why:?}"
+            );
+        }
+        for id in ["xfce", "mate", "i3", "sway", "cosmic", "plasma", "gnome"] {
+            assert_eq!(catalog.desktop(id).unwrap().blocked(&gm45), None, "{id}");
+        }
+        let default = catalog.default_desktop(&gm45).unwrap();
+        assert!(default.blocked(&gm45).is_none());
+        // Unknown graphics, or llvmpipe: everything installable is allowed.
+        let llvmpipe = Graphics {
+            egl: Some(Egl {
+                renderer: Some("llvmpipe (LLVM 21.1.8, 256 bits)".into()),
+                gl: Some(GlVersion::new(4, 5)),
+                gles: Some(GlVersion::new(3, 2)),
+            }),
+            vulkan: Vulkan::Software,
+        };
+        for g in [Graphics::unknown(), llvmpipe] {
+            for d in &catalog.desktops {
+                assert_eq!(d.blocked(&g), d.unavailable, "{}", d.id);
+            }
+            assert_eq!(
+                catalog.default_desktop(&g).map(|d| d.id.as_str()),
+                catalog.desktops.first().map(|d| d.id.as_str())
+            );
+        }
     }
 
     #[test]

@@ -5,6 +5,7 @@ use std::rc::Rc;
 
 use adw::prelude::*;
 use configurator_answers::{Filesystem, Layer, NvidiaDriver};
+use configurator_catalog::graphics::{Graphics, Vulkan};
 use configurator_engine::status::{self, SecureBoot};
 
 use super::Page;
@@ -34,6 +35,48 @@ fn gpus() -> Vec<String> {
             })
         })
         .collect()
+}
+
+/// The graphics card: the GPUs, the driver's renderer and what it supports
+/// (the Desktop layer offers what runs on it), and its level: amber when
+/// it renders in software.
+fn graphics_state(gpus: &[String], graphics: &Graphics) -> (String, &'static str) {
+    let mut lines = vec![if gpus.is_empty() {
+        "None found".to_string()
+    } else {
+        gpus.join(", ")
+    }];
+    let mut level = "neutral";
+    match &graphics.egl {
+        Some(egl) => {
+            if let Some(r) = &egl.renderer {
+                lines.push(r.clone());
+            }
+            let mut apis = Vec::new();
+            if let Some(v) = egl.gles {
+                apis.push(format!("OpenGL ES {v}"));
+            }
+            if let Some(v) = egl.gl {
+                apis.push(format!("OpenGL {v}"));
+            }
+            match &graphics.vulkan {
+                Vulkan::Hardware { version, .. } => {
+                    let short: Vec<&str> = version.split('.').take(2).collect();
+                    apis.push(format!("Vulkan {}", short.join(".")));
+                }
+                Vulkan::Software => apis.push("Vulkan in software".into()),
+                Vulkan::None => apis.push("no Vulkan".into()),
+                Vulkan::Unknown => {}
+            }
+            lines.push(apis.join(" · "));
+            if egl.software() {
+                lines.push("Software rendering: no driver for this GPU here, or a virtual machine without 3D".into());
+                level = "warn";
+            }
+        }
+        None => lines.push("Its OpenGL support couldn't be tested".into()),
+    }
+    (lines.join("\n"), level)
 }
 
 fn cpu() -> String {
@@ -80,15 +123,12 @@ pub fn hardware(ctx: &Ctx) -> Page {
         &cpu(),
         "neutral",
     ));
+    let (graphics, level) = graphics_state(&gpus, &ctx.graphics);
     cards.append(&status_card(
         "video-display-symbolic",
         "Graphics",
-        &if gpus.is_empty() {
-            "None found".into()
-        } else {
-            gpus.join(", ")
-        },
-        "neutral",
+        &graphics,
+        level,
     ));
     cards.append(&status_card(
         "network-wireless-symbolic",

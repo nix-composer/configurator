@@ -9,6 +9,7 @@ use configurator_answers::{
     LoginManager, NvidiaDriver, Security, Shell, ShellKind, User, VERSION,
 };
 use configurator_catalog::Catalog;
+use configurator_catalog::graphics::Graphics;
 use configurator_engine::{Secrets, status};
 
 /// Why a package is selected. Changing the profile removes only what the
@@ -87,7 +88,8 @@ pub struct Draft {
 }
 
 impl Draft {
-    pub fn new(catalog: &Catalog) -> Draft {
+    /// A new draft; its desktop is the first one these graphics run.
+    pub fn new(catalog: &Catalog, graphics: &Graphics) -> Draft {
         let mut draft = Draft {
             locale: "en_US.UTF-8".into(),
             keyboard_layout: "us".into(),
@@ -126,8 +128,12 @@ impl Draft {
             hostname: "nixos".into(),
             login_manager: None,
         };
-        // A graphical desktop by default: the first one in the registry.
-        draft.set_desktop(catalog, catalog.desktops.first().map(|d| d.id.clone()));
+        // A graphical desktop by default: the first one in the registry
+        // this machine can run.
+        draft.set_desktop(
+            catalog,
+            catalog.default_desktop(graphics).map(|d| d.id.clone()),
+        );
         draft
     }
 
@@ -417,7 +423,7 @@ mod tests {
     #[test]
     fn profile_change_keeps_hand_picks() {
         let catalog = Catalog::builtin().unwrap();
-        let mut draft = Draft::new(&catalog);
+        let mut draft = Draft::new(&catalog, &Graphics::unknown());
         let office = catalog.profile("office").unwrap().apps.clone();
         draft.set_profile(&catalog, "office");
         // Picked by hand as well as by the profile, and only by hand.
@@ -433,7 +439,7 @@ mod tests {
     #[test]
     fn ecosystem_adds_and_removes_only_its_own() {
         let catalog = Catalog::builtin().unwrap();
-        let mut draft = Draft::new(&catalog);
+        let mut draft = Draft::new(&catalog, &Graphics::unknown());
         draft.set_desktop(&catalog, Some("gnome".into()));
         let eco = catalog.ecosystem("gnome").unwrap();
         // Only its own (removable) essentials to begin with.
@@ -471,7 +477,7 @@ mod tests {
     #[test]
     fn essentials_taken_out_are_excluded() {
         let catalog = Catalog::builtin().unwrap();
-        let mut draft = Draft::new(&catalog);
+        let mut draft = Draft::new(&catalog, &Graphics::unknown());
         draft.set_desktop(&catalog, Some("gnome".into()));
         draft.remove_app("epiphany");
         assert_eq!(draft.answers().apps.without, ["epiphany"]);
@@ -484,7 +490,7 @@ mod tests {
     #[test]
     fn profiles_pick_the_kernel_until_you_do() {
         let catalog = Catalog::builtin().unwrap();
-        let mut draft = Draft::new(&catalog);
+        let mut draft = Draft::new(&catalog, &Graphics::unknown());
         assert_eq!(draft.answers().hardware.kernel, "lts");
         draft.set_profile(&catalog, "gaming");
         assert_eq!(draft.answers().hardware.kernel, "zen");
@@ -500,7 +506,7 @@ mod tests {
     #[test]
     fn omarchy_preselects_its_own_picks() {
         let catalog = Catalog::builtin().unwrap();
-        let mut draft = Draft::new(&catalog);
+        let mut draft = Draft::new(&catalog, &Graphics::unknown());
         draft.set_desktop(&catalog, Some("omarchy".into()));
         // Its CLI setup comes with the desktop, ecosystem or not.
         let own = catalog.desktop_cli("omarchy");

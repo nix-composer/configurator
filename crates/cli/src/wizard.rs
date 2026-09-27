@@ -9,6 +9,7 @@ use configurator_answers::{
     Answers, Apps, Basics, Desktop, Development, Disk, Filesystem, Hardware, Layer, LoginManager,
     NvidiaDriver, Security, Shell, ShellKind, User, VERSION, is_attr_path,
 };
+use configurator_catalog::graphics::{Fit, Graphics, Vulkan};
 use configurator_catalog::{Catalog, DesktopKind};
 use configurator_engine::{Secrets, status};
 use dialoguer::{Confirm, Input, MultiSelect, Password, Select, theme::ColorfulTheme};
@@ -106,35 +107,46 @@ pub fn run(catalog: &Catalog) -> Result<(Answers, Secrets)> {
     }
 
     heading(Layer::Desktop);
-    let mut names = vec!["None (no graphical desktop)".to_string()];
-    for kind in [DesktopKind::Desktop, DesktopKind::WindowManager] {
-        for d in catalog
-            .desktops
-            .iter()
-            .filter(|d| d.kind == kind && d.unavailable.is_none())
-        {
-            let kind = if kind == DesktopKind::Desktop {
-                ""
-            } else {
-                "  (window manager)"
-            };
-            names.push(format!("{:<14} {}{kind}", d.name, d.description));
-        }
-    }
+    // Only what this machine's graphics run.
+    let graphics = &status::graphics();
+    eprintln!("  {}", describe_graphics(graphics));
     let ordered: Vec<_> = [DesktopKind::Desktop, DesktopKind::WindowManager]
         .iter()
         .flat_map(|k| {
             catalog
                 .desktops
                 .iter()
-                .filter(move |d| d.kind == *k && d.unavailable.is_none())
+                .filter(move |d| d.kind == *k && d.blocked(graphics).is_none())
         })
         .collect();
+    let mut names = vec!["None (no graphical desktop)".to_string()];
+    for d in &ordered {
+        let kind = if d.kind == DesktopKind::Desktop {
+            ""
+        } else {
+            "  (window manager)"
+        };
+        let slow = match d.fit(graphics) {
+            Fit::Slow if !d.graphics.software => "  [needs a GPU driver]",
+            Fit::Slow => "  [software rendering]",
+            _ => "",
+        };
+        names.push(format!("{:<14} {}{kind}{slow}", d.name, d.description));
+    }
+    for d in catalog.desktops.iter().filter(|d| d.unavailable.is_none()) {
+        if let Fit::Cannot(why) = d.fit(graphics) {
+            eprintln!("  Not offered: {}. {why}.", d.name);
+        }
+    }
     let headless = matches!(profile.id.as_str(), "server" | "headless");
+    let first = catalog
+        .default_desktop(graphics)
+        .and_then(|first| ordered.iter().position(|d| d.id == first.id))
+        .map_or(0, |i| i + 1);
     let pick = Select::with_theme(t)
         .with_prompt("Desktop")
         .items(&names)
-        .default(if headless { 0 } else { 1 })
+        .default(if headless { 0 } else { first })
         .interact()?;
     let desktop = (pick > 0).then(|| ordered[pick - 1]);
     let ecosystem = match desktop {
@@ -583,4 +595,34 @@ pub fn run(catalog: &Catalog) -> Result<(Answers, Secrets)> {
         tpm_pin: pin,
     };
     Ok((answers, secrets))
+}
+
+/// "Graphics: Mesa Intel(R) GM45 Express Chipset: OpenGL ES 2.0, OpenGL
+/// 2.1, no Vulkan", with a note on software rendering.
+pub fn describe_graphics(graphics: &Graphics) -> String {
+    let Some(egl) = &graphics.egl else {
+        return "Graphics: couldn't be tested; every desktop is offered".into();
+    };
+    let mut apis = Vec::new();
+    if let Some(v) = egl.gles {
+        apis.push(format!("OpenGL ES {v}"));
+    }
+    if let Some(v) = egl.gl {
+        apis.push(format!("OpenGL {v}"));
+    }
+    match &graphics.vulkan {
+        Vulkan::Hardware { version, .. } => apis.push(format!("Vulkan {version}")),
+        Vulkan::Software => apis.push("Vulkan in software (lavapipe)".into()),
+        Vulkan::None => apis.push("no Vulkan".into()),
+        Vulkan::Unknown => {}
+    }
+    let mut line = format!(
+        "Graphics: {}: {}",
+        egl.renderer.as_deref().unwrap_or("unknown renderer"),
+        apis.join(", ")
+    );
+    if egl.software() {
+        line.push_str(" (software rendering: desktops run, but may be slow)");
+    }
+    line
 }

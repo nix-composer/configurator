@@ -11,6 +11,7 @@ use std::path::{Path, PathBuf};
 use anyhow::{Context, Result, bail};
 use clap::{Parser, Subcommand};
 use configurator_answers::Answers;
+use configurator_catalog::graphics::Fit;
 use configurator_catalog::{Catalog, DesktopKind};
 use configurator_engine::Event;
 
@@ -40,6 +41,12 @@ enum Command {
     Schema,
     /// List the desktops and window managers on offer.
     Desktops {
+        #[arg(long)]
+        json: bool,
+    },
+    /// What this machine's graphics support (OpenGL, OpenGL ES, Vulkan)
+    /// and which desktops run on them.
+    Graphics {
         #[arg(long)]
         json: bool,
     },
@@ -154,6 +161,7 @@ fn main() -> Result<()> {
                             "name": d.name,
                             "description": d.description,
                             "unavailable": d.unavailable,
+                            "graphics": d.graphics.describe(),
                         })
                     );
                 } else {
@@ -169,6 +177,41 @@ fn main() -> Result<()> {
                             "{:<14} {:<16} {:<15} unavailable: {why}",
                             d.id, d.name, kind
                         ),
+                    }
+                }
+            }
+        }
+        Command::Graphics { json } => {
+            let graphics = configurator_engine::status::graphics();
+            let fits: Vec<_> = catalog
+                .desktops
+                .iter()
+                .filter(|d| d.unavailable.is_none())
+                .map(|d| (d, d.fit(&graphics)))
+                .collect();
+            if json {
+                let verdict = |f: &Fit| match f {
+                    Fit::Runs => serde_json::json!("runs"),
+                    Fit::Slow => serde_json::json!("software"),
+                    Fit::Cannot(why) => serde_json::json!({ "cannot": why }),
+                };
+                println!(
+                    "{}",
+                    serde_json::json!({
+                        "graphics": graphics,
+                        "desktops": fits
+                            .iter()
+                            .map(|(d, f)| (d.id.clone(), verdict(f)))
+                            .collect::<serde_json::Map<_, _>>(),
+                    })
+                );
+            } else {
+                println!("{}", wizard::describe_graphics(&graphics));
+                for (d, fit) in &fits {
+                    match fit {
+                        Fit::Runs => println!("  {:<14} runs", d.id),
+                        Fit::Slow => println!("  {:<14} runs, in software", d.id),
+                        Fit::Cannot(why) => println!("  {:<14} can't: {why}", d.id),
                     }
                 }
             }

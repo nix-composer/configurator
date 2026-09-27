@@ -1,11 +1,12 @@
 {
-  "$comment": "Every desktop and window manager the configurator offers. The generator writes `module.config` into the host's configuration.nix, so adding one is a data change. Special values: {\"$path\": \"./x\"} is a path in the host flake, {\"$context\": \"users\"} the users' names, {\"$context\": \"configDir\"} where the host flake lives. `checks.desktops` verifies every nixpkgs option path here exists. `unavailable` marks one that can't be installed with this nixpkgs (it doesn't evaluate or build; nix/screenshots finds out) and says why: it's shown but can't be picked.",
+  "$comment": "Every desktop and window manager the configurator offers. The generator writes `module.config` into the host's configuration.nix, so adding one is a data change. Special values: {\"$path\": \"./x\"} is a path in the host flake, {\"$context\": \"users\"} the users' names, {\"$context\": \"configDir\"} where the host flake lives. `checks.desktops` verifies every nixpkgs option path here exists. `unavailable` marks one that can't be installed with this nixpkgs (it doesn't evaluate or build; nix/screenshots finds out) and says why: it's shown but can't be picked. `graphics` is what it needs to start: `gl` and/or `gles` (minimum OpenGL / OpenGL ES versions, either will do) and `vulkan` (true: needed too), with its `source`; `{}` needs no GPU. The installer detects the machine's (engine status::graphics) and greys out what can't start there (docs/graphics.md).",
   "desktops": [
     {
       "id": "omarchy",
       "name": "Omarchy",
       "kind": "desktop",
       "sessions": ["wayland"],
+      "graphics": { "gles": "3.0", "source": "Hyprland's: src/render/OpenGL.cpp creates a GLES 3.2 or 3.0 context or aborts (0.55.4); Quickshell (Qt Quick) needs only GL/GLES 2.0" },
       "description": "Basecamp's Hyprland setup: its shell, bar, menu, themes, commands and keybinds",
       "module": {
         "flake": {
@@ -58,6 +59,7 @@
       "name": "GNOME",
       "kind": "desktop",
       "sessions": ["wayland"],
+      "graphics": { "gles": "2.0", "gl": "3.1", "source": "mutter 50.4 cogl: driver/gl/gl3/cogl-driver-gl3.c:487 (OpenGL 3.1 + ARB_texture_swizzle), else driver/gl/gles2/cogl-driver-gles2.c:678 (OpenGL ES 2.0)" },
       "description": "A focused, modern desktop with a curated set of core apps",
       "module": { "config": { "services.desktopManager.gnome.enable": true } },
       "loginManager": "gdm",
@@ -68,6 +70,7 @@
       "name": "KDE Plasma",
       "kind": "desktop",
       "sessions": ["wayland", "x11"],
+      "graphics": { "source": "KWin 6.6.6 composites with OpenGL 2.0 / OpenGL ES 2.0 and falls back to its QPainter (CPU) renderer (src/compositor.cpp:175-192); plasmashell restarts on Qt Quick's software backend (plasma-workspace shell/main.cpp:172-195)" },
       "description": "A flexible, highly configurable desktop with the KDE apps",
       "module": { "config": { "services.desktopManager.plasma6.enable": true } },
       "loginManager": "sddm",
@@ -78,6 +81,7 @@
       "name": "COSMIC",
       "kind": "desktop",
       "sessions": ["wayland"],
+      "graphics": { "gles": "2.0", "source": "cosmic-comp 1.2.0 on smithay's GlesRenderer (gles/mod.rs:658-666: GLES 2.0 + EXT_texture_format_BGRA8888, EXT_unpack_subimage), #version 100 shaders; falls back to llvmpipe itself (src/backend/kms/mod.rs:479-490); apps draw with iced's tiny-skia without wgpu" },
       "description": "System76's Rust desktop with built-in tiling",
       "module": { "config": { "services.desktopManager.cosmic.enable": true } },
       "loginManager": "cosmic-greeter",
@@ -88,6 +92,7 @@
       "name": "Hyprland",
       "kind": "window-manager",
       "sessions": ["wayland"],
+      "graphics": { "gles": "3.0", "source": "Hyprland 0.55.4 src/render/OpenGL.cpp:198-219 (a GLES 3.2 or 3.0 context, else RASSERT), #version 300 es shaders; aquamarine 0.11.0 src/backend/drm/Renderer.cpp:86-116" },
       "description": "A dynamic tiling Wayland compositor with smooth animations",
       "module": { "config": { "programs.hyprland.enable": true } },
       "loginManager": "sddm",
@@ -98,6 +103,7 @@
       "name": "niri",
       "kind": "window-manager",
       "sessions": ["wayland"],
+      "graphics": { "gles": "2.0", "software": false, "source": "niri 26.04 on smithay's GlesRenderer (GLES 2.0 + BGRA8888, unpack_subimage), #version 100 shaders; src/backend/tty.rs:783-789 skips software EGL devices (llvmpipe)" },
       "description": "A scrollable-tiling Wayland compositor",
       "module": { "config": { "programs.niri.enable": true } },
       "loginManager": "ly",
@@ -108,6 +114,7 @@
       "name": "Xfce",
       "kind": "desktop",
       "sessions": ["x11"],
+      "graphics": { "source": "xfwm4 4.20.0 composites with XRender (configure.ac:272; src/compositor.c uses GLX only for optional vsync)" },
       "description": "A lightweight, traditional desktop",
       "module": {
         "config": {
@@ -123,6 +130,7 @@
       "name": "Cinnamon",
       "kind": "desktop",
       "sessions": ["x11"],
+      "graphics": { "gl": "2.1", "source": "muffin 6.6.3 cogl/cogl/driver/gl/gl/cogl-driver-gl.c:383 (OpenGL 2.1), then gl3, then gles2 (cogl-renderer.c:87-125); a Cinnamon (Software Rendering) session exists too" },
       "description": "Linux Mint's familiar, traditional desktop",
       "module": {
         "config": {
@@ -138,6 +146,7 @@
       "name": "LXQt",
       "kind": "desktop",
       "sessions": ["x11"],
+      "graphics": { "source": "an X11 session with Openbox and Qt widgets: no OpenGL" },
       "description": "A lightweight Qt desktop",
       "module": {
         "config": {
@@ -153,6 +162,7 @@
       "name": "MATE",
       "kind": "desktop",
       "sessions": ["x11"],
+      "graphics": { "source": "marco 1.28.2 composites with XRender: no OpenGL" },
       "description": "The continuation of GNOME 2",
       "module": {
         "config": {
@@ -168,6 +178,7 @@
       "name": "Budgie",
       "kind": "desktop",
       "sessions": ["x11"],
+      "graphics": { "gles": "2.0", "source": "Budgie 10.10.2 runs labwc on Wayland (nixos/modules/services/desktop-managers/budgie.nix:160): wlroots' GLES 2.0 renderer" },
       "description": "A simple, elegant desktop from the Buddies of Budgie",
       "module": { "config": { "services.desktopManager.budgie.enable": true } },
       "loginManager": "lightdm",
@@ -178,6 +189,7 @@
       "name": "Pantheon",
       "kind": "desktop",
       "sessions": ["x11"],
+      "graphics": { "gles": "2.0", "gl": "3.1", "source": "Gala 8.5.1 on mutter 48.7 (pkgs/desktops/pantheon/default.nix:48): cogl's gl3 driver (OpenGL 3.1 + ARB_texture_swizzle), else gles2 (OpenGL ES 2.0)" },
       "description": "elementary OS's polished desktop",
       "module": { "config": { "services.desktopManager.pantheon.enable": true } },
       "loginManager": "lightdm",
@@ -188,6 +200,7 @@
       "name": "Enlightenment",
       "kind": "desktop",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A lean, eye-candy desktop built on the EFL",
       "unavailable": "python-efl doesn't support Python 3.13 in nixpkgs 26.05, so it doesn't evaluate",
       "module": {
@@ -204,6 +217,7 @@
       "name": "Lomiri",
       "kind": "desktop",
       "sessions": ["wayland"],
+      "graphics": { "gles": "2.0", "source": "Mir 2.26 src/platforms/atomic-kms/server/kms/egl_helper.cpp:113-169 (EGL_CONTEXT_CLIENT_VERSION 2); the Qt 5 Quick shell needs GLES 2.0 (medium confidence)" },
       "description": "The convergent desktop from Ubuntu Touch",
       "module": { "config": { "services.desktopManager.lomiri.enable": true } },
       "loginManager": "lightdm",
@@ -214,6 +228,7 @@
       "name": "Lumina",
       "kind": "desktop",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A lightweight desktop from TrueOS",
       "unavailable": "it needs kwindowsystem, gone from nixpkgs 26.05's Qt 5 packages, so it doesn't evaluate",
       "module": {
@@ -230,6 +245,7 @@
       "name": "Sway",
       "kind": "window-manager",
       "sessions": ["wayland"],
+      "graphics": { "gles": "2.0", "source": "wlroots 0.20.0 render/gles2/renderer.c:545-556 (GLES 2.0 + EXT_texture_format_BGRA8888, EXT_unpack_subimage); pixman only without a render node or with WLR_RENDERER=pixman (render/wlr_renderer.c:222-273)" },
       "description": "An i3-compatible tiling Wayland compositor",
       "module": { "config": { "programs.sway.enable": true } },
       "loginManager": "ly",
@@ -240,6 +256,7 @@
       "name": "labwc",
       "kind": "window-manager",
       "sessions": ["wayland"],
+      "graphics": { "gles": "2.0", "source": "wlroots' GLES2 renderer (labwc 0.9.7 uses wlr_renderer_autocreate): GLES 2.0 + BGRA8888, unpack_subimage" },
       "description": "An Openbox-inspired stacking Wayland compositor",
       "module": { "config": { "programs.labwc.enable": true } },
       "loginManager": "ly",
@@ -250,6 +267,7 @@
       "name": "river",
       "kind": "window-manager",
       "sessions": ["wayland"],
+      "graphics": { "gles": "2.0", "source": "wlroots 0.20 (river-classic 0.3.17, zig-wlroots 0.20.1): GLES 2.0 + BGRA8888, unpack_subimage" },
       "description": "A dynamic tiling Wayland compositor",
       "module": { "config": { "programs.river-classic.enable": true } },
       "loginManager": "ly",
@@ -260,6 +278,7 @@
       "name": "Wayfire",
       "kind": "window-manager",
       "sessions": ["wayland"],
+      "graphics": { "gles": "2.0", "source": "wayfire 0.10.1 src/main.cpp:450 (wlroots' renderer autocreate): GLES 2.0; some effect plugins need GLES 3.1/3.2 and switch themselves off" },
       "description": "A 3D Wayland compositor with Compiz-style effects",
       "module": { "config": { "programs.wayfire.enable": true } },
       "loginManager": "ly",
@@ -270,6 +289,7 @@
       "name": "MangoWC",
       "kind": "window-manager",
       "sessions": ["wayland"],
+      "graphics": { "gles": "2.0", "source": "mangowc 0.12.8 on scenefx 0.4.1 (render/fx_renderer/fx_renderer.c:273-298): GLES 3, else GLES 2.0 + BGRA8888, unpack_subimage; no pixman" },
       "description": "A dwl-based Wayland compositor with animations",
       "module": { "config": { "programs.mangowc.enable": true } },
       "loginManager": "ly",
@@ -280,6 +300,7 @@
       "name": "i3",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A manual tiling window manager",
       "module": {
         "config": {
@@ -295,6 +316,7 @@
       "name": "Openbox",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A minimal, highly configurable stacking window manager",
       "module": {
         "config": {
@@ -310,6 +332,7 @@
       "name": "IceWM",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A fast, Windows-like window manager with a taskbar",
       "module": {
         "config": {
@@ -325,6 +348,7 @@
       "name": "Fluxbox",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A lightweight stacking window manager from the Blackbox family",
       "module": {
         "config": {
@@ -340,6 +364,7 @@
       "name": "awesome",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A tiling window manager configured in Lua",
       "module": {
         "config": {
@@ -355,6 +380,7 @@
       "name": "bspwm",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A binary space partitioning tiling window manager",
       "module": {
         "config": {
@@ -370,6 +396,7 @@
       "name": "xmonad",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A tiling window manager configured in Haskell",
       "module": {
         "config": {
@@ -385,6 +412,7 @@
       "name": "herbstluftwm",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A manual tiling window manager driven by a CLI",
       "module": {
         "config": {
@@ -400,6 +428,7 @@
       "name": "FVWM3",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A classic, endlessly configurable window manager",
       "module": {
         "config": {
@@ -415,6 +444,7 @@
       "name": "JWM",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "Joe's Window Manager: small, with a panel",
       "module": {
         "config": {
@@ -430,6 +460,7 @@
       "name": "Window Maker",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A NeXTSTEP-like window manager",
       "module": {
         "config": {
@@ -445,6 +476,7 @@
       "name": "spectrwm",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A small dynamic tiling window manager",
       "module": {
         "config": {
@@ -460,6 +492,7 @@
       "name": "LeftWM",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A tiling window manager written in Rust",
       "module": {
         "config": {
@@ -475,6 +508,7 @@
       "name": "PekWM",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A small window manager with window grouping",
       "module": {
         "config": {
@@ -490,6 +524,7 @@
       "name": "ratpoison",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A keyboard-only window manager with no decorations",
       "module": {
         "config": {
@@ -505,6 +540,7 @@
       "name": "StumpWM",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A tiling window manager written in Common Lisp",
       "module": {
         "config": {
@@ -520,6 +556,7 @@
       "name": "cwm",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "OpenBSD's minimal stacking window manager",
       "module": {
         "config": {
@@ -535,6 +572,7 @@
       "name": "evilwm",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A minimalist window manager",
       "module": {
         "config": {
@@ -551,6 +589,7 @@
       "name": "AfterStep",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A NeXTSTEP-inspired window manager",
       "module": {
         "config": {
@@ -566,6 +605,7 @@
       "name": "E16",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "Enlightenment's classic DR16 window manager",
       "module": {
         "config": {
@@ -581,6 +621,7 @@
       "name": "Sawfish",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "An extensible window manager scripted in Lisp",
       "module": {
         "config": {
@@ -596,6 +637,7 @@
       "name": "Notion",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A tabbed, tiling window manager",
       "module": {
         "config": {
@@ -611,6 +653,7 @@
       "name": "EXWM",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "Emacs as your window manager",
       "unavailable": "its source tarball can no longer be downloaded (nixpkgs 26.05)",
       "module": {
@@ -627,6 +670,7 @@
       "name": "Qtile",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "A tiling window manager configured in Python",
       "unavailable": "it doesn't build against nixpkgs 26.05's wlroots",
       "module": {
@@ -643,6 +687,7 @@
       "name": "dwm",
       "kind": "window-manager",
       "sessions": ["x11"],
+      "graphics": {},
       "description": "suckless' dynamic window manager, configured in C",
       "module": {
         "config": {

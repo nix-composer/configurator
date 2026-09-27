@@ -139,6 +139,9 @@
             rustfmt
             rust-analyzer
             nixfmt
+            # What status::graphics asks, as on the live system.
+            mesa-demos
+            vulkan-tools
           ];
           RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
           # The app catalog, for `cargo run -p configurator-gtk`.
