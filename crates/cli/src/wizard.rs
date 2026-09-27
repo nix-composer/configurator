@@ -129,6 +129,7 @@ pub fn run(catalog: &Catalog) -> Result<(Answers, Secrets)> {
         let slow = match d.fit(graphics) {
             Fit::Slow if !d.graphics.software => "  [needs a GPU driver]",
             Fit::Slow => "  [software rendering]",
+            Fit::OnCpu(_) => "  [slow on this GPU]",
             _ => "",
         };
         names.push(format!("{:<14} {}{kind}{slow}", d.name, d.description));
@@ -136,6 +137,9 @@ pub fn run(catalog: &Catalog) -> Result<(Answers, Secrets)> {
     for d in catalog.desktops.iter().filter(|d| d.unavailable.is_none()) {
         if let Fit::Cannot(why) = d.fit(graphics) {
             eprintln!("  Not offered: {}. {why}.", d.name);
+        }
+        if let Some(warning) = d.on_cpu_warning(graphics) {
+            eprintln!("  Note: {warning}.");
         }
     }
     let headless = matches!(profile.id.as_str(), "server" | "headless");

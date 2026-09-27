@@ -197,13 +197,27 @@ hostChecks
 
   # Which desktops the graphics run (status::graphics, the Desktop and
   # Hardware layers): Mesa's llvmpipe as is (everything allowed, in
-  # software), and made to look like a ThinkPad T500's GMA 4500MHD (OpenGL
-  # 2.1, OpenGL ES 2.0: Hyprland and Omarchy greyed out with the reason).
+  # software), and made to look like real chips: eglinfo reports Mesa's
+  # versions under its overrides with a GPU's renderer name, vulkaninfo
+  # lavapipe only (as NixOS has on them).
+  # - a ThinkPad T500's GMA 4500MHD (OpenGL 2.1, OpenGL ES 2.0): Hyprland,
+  #   Omarchy and COSMIC greyed out with the reason, GNOME's and Pantheon's
+  #   apps on the CPU;
+  # - Sandy Bridge (OpenGL 3.3, OpenGL ES 3.0): COSMIC's apps on the CPU.
   # The command line's verdicts, then the installer's pages in a headless
   # cage, read back by OCR; the screenshots are the output.
   live-graphics =
     let
       mesa = pkgs.mesa;
+      # eglinfo as a GPU with these versions would print it.
+      chip =
+        gl: gles: renderer:
+        pkgs.writeShellScriptBin "eglinfo" ''
+          MESA_GL_VERSION_OVERRIDE=${gl} MESA_GLES_VERSION_OVERRIDE=${gles} \
+            ${pkgs.mesa-demos}/bin/eglinfo "$@" | sed 's/llvmpipe ([^)]*)/${renderer}/'
+        '';
+      gm45 = chip "2.1" "2.0" "Mesa Intel(R) GM45 Express Chipset";
+      snb = chip "3.3" "3.0" "Mesa Intel(R) HD Graphics 3000 (SNB GT2)";
     in
     pkgs.runCommand "check-live-graphics"
       {
@@ -235,15 +249,26 @@ hostChecks
           and .graphics.vulkan.kind == "software"
           and ([.desktops[] | objects] == [])
           and .desktops.hyprland == "software" and .desktops.i3 == "runs"'
-        MESA_GL_VERSION_OVERRIDE=2.1 MESA_GLES_VERSION_OVERRIDE=2.0 configurator graphics --json \
-          | tee $out/gm45.json | jq -e '
+        PATH=${gm45}/bin:$PATH configurator graphics --json | tee $out/gm45.json | jq -e '
           .graphics.egl.gl == "2.1" and .graphics.egl.gles == "2.0"
+          and .graphics.egl.renderer == "Mesa Intel(R) GM45 Express Chipset"
           and (.desktops.hyprland.cannot | startswith("Needs OpenGL ES 3.0; this computer'"'"'s graphics support OpenGL ES 2.0 and OpenGL 2.1"))
-          and .desktops.omarchy.cannot != null
-          and ([.desktops | to_entries[] | select(.value | type == "object") | .key] | sort) == ["hyprland", "omarchy"]
+          and (.desktops.cosmic.cannot | startswith("Needs OpenGL ES 3.0 or OpenGL 3.3 (its apps crash without it)"))
+          and ([.desktops | to_entries[] | select(.value | type == "object" and has("cannot")) | .key] | sort)
+            == ["cosmic", "hyprland", "omarchy"]
+          and ([.desktops | to_entries[] | select(.value | type == "object" and has("onCpu")) | .key] | sort)
+            == ["gnome", "pantheon"]
+          and .desktops.gnome.onCpu == "apps"
+          and .desktops.plasma == "runs" and .desktops.niri == "runs"
           and .desktops.xfce == "runs" and .desktops.mate == "runs" and .desktops.i3 == "runs"'
+        PATH=${snb}/bin:$PATH configurator graphics --json | tee $out/snb.json | jq -e '
+          .graphics.egl.gl == "3.3" and .graphics.egl.gles == "3.0"
+          and ([.desktops[] | objects] == [{ "onCpu": "apps" }])
+          and .desktops.cosmic.onCpu == "apps"
+          and .desktops.hyprland == "runs" and .desktops.gnome == "runs"'
 
         export WLR_BACKENDS=headless WLR_HEADLESS_OUTPUTS=1 WLR_RENDERER=pixman
+        export GM45_BIN=${gm45}/bin
         dbus-run-session --config-file=${pkgs.dbus}/share/dbus-1/session.conf -- timeout 300 cage -- bash ${./live-graphics.sh} $out
         test -e $out/ok
       '';

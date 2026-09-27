@@ -1,7 +1,7 @@
-//! What graphics a desktop needs to start (`graphics` in
-//! data/desktops.json), what a machine's graphics support (detected by
-//! `configurator_engine::status::graphics`), and whether the one runs on
-//! the other.
+//! What graphics a desktop needs to start, and to draw all of its session
+//! on the GPU (`graphics` in data/desktops.json), what a machine's
+//! graphics support (detected by `configurator_engine::status::graphics`),
+//! and whether the one runs on the other.
 
 use std::fmt;
 use std::str::FromStr;
@@ -70,10 +70,15 @@ impl Serialize for GlVersion {
     }
 }
 
-/// What a desktop needs to start. `gl` and `gles` are alternatives (it
-/// renders with either, whichever the driver has); `vulkan` is needed on
-/// top. Nothing set: it needs no GPU acceleration (X11 window managers,
-/// software compositing).
+/// What a desktop needs from the graphics, for its whole session (the
+/// compositor, its shell, and the apps it comes with):
+///
+/// - to start at all: `gl` and `gles` are alternatives (it renders with
+///   either, whichever the driver has); `vulkan` is needed on top. Nothing
+///   set: it needs no GPU acceleration (X11 window managers, software
+///   compositing).
+/// - to draw everything on the GPU: `full`. Below it, the part `onCpu`
+///   names falls back to drawing on the CPU by itself: it runs, slowly.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GraphicsNeeds {
@@ -86,6 +91,18 @@ pub struct GraphicsNeeds {
     /// A Vulkan driver.
     #[serde(default)]
     pub vulkan: bool,
+    /// What it needs to draw everything on the GPU, when that's more than
+    /// it needs to start; `None`: what starts it draws all of it.
+    #[serde(default)]
+    pub full: Option<FullGpu>,
+    /// What draws on the CPU below `full`: "its apps", "its dock, settings
+    /// and apps".
+    #[serde(default)]
+    pub on_cpu: Option<String>,
+    /// Why it needs what it needs to start, when that isn't plain (shown
+    /// with the reason it can't be picked): "its apps crash without it".
+    #[serde(default)]
+    pub why: Option<String>,
     /// Whether it starts on software rendering (llvmpipe) too; niri
     /// refuses to. Only a warning either way: the live system may lack a
     /// driver the installed one has.
@@ -95,6 +112,19 @@ pub struct GraphicsNeeds {
     /// report); docs/graphics.md has the details.
     #[serde(default)]
     pub source: Option<String>,
+}
+
+/// What draws everything on the GPU: any one of these (a Vulkan driver for
+/// the GPU itself, not lavapipe, or OpenGL / OpenGL ES of this version).
+#[derive(Debug, Clone, Default, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct FullGpu {
+    #[serde(default)]
+    pub gl: Option<GlVersion>,
+    #[serde(default)]
+    pub gles: Option<GlVersion>,
+    #[serde(default)]
+    pub vulkan: bool,
 }
 
 fn yes() -> bool {
@@ -107,10 +137,31 @@ impl Default for GraphicsNeeds {
             gl: None,
             gles: None,
             vulkan: false,
+            full: None,
+            on_cpu: None,
+            why: None,
             software: true,
             source: None,
         }
     }
+}
+
+/// Whether the driver has one of these versions.
+fn has(egl: &Egl, gl: Option<GlVersion>, gles: Option<GlVersion>) -> bool {
+    gl.is_some_and(|n| egl.gl.is_some_and(|v| v >= n))
+        || gles.is_some_and(|n| egl.gles.is_some_and(|v| v >= n))
+}
+
+/// "OpenGL ES 3.0 or OpenGL 3.3".
+fn describe_gl(gl: Option<GlVersion>, gles: Option<GlVersion>) -> String {
+    let mut apis: Vec<String> = Vec::new();
+    if let Some(v) = gles {
+        apis.push(format!("OpenGL ES {v}"));
+    }
+    if let Some(v) = gl {
+        apis.push(format!("OpenGL {v}"));
+    }
+    apis.join(" or ")
 }
 
 impl GraphicsNeeds {
@@ -121,14 +172,7 @@ impl GraphicsNeeds {
 
     /// "OpenGL ES 3.0 or OpenGL 3.1", "Vulkan", …
     pub fn describe(&self) -> String {
-        let mut apis: Vec<String> = Vec::new();
-        if let Some(v) = self.gles {
-            apis.push(format!("OpenGL ES {v}"));
-        }
-        if let Some(v) = self.gl {
-            apis.push(format!("OpenGL {v}"));
-        }
-        let gl = apis.join(" or ");
+        let gl = describe_gl(self.gl, self.gles);
         match (gl.is_empty(), self.vulkan) {
             (true, false) => "no graphics acceleration".into(),
             (true, true) => "Vulkan".into(),
@@ -139,23 +183,18 @@ impl GraphicsNeeds {
 
     /// Whether a machine with these graphics runs it.
     pub fn fit(&self, graphics: &Graphics) -> Fit {
-        if !self.any() {
-            return Fit::Runs;
-        }
         let mut software = false;
         if (self.gl.is_some() || self.gles.is_some())
             && let Some(egl) = &graphics.egl
         {
-            let gl_ok = self.gl.is_some_and(|n| egl.gl.is_some_and(|v| v >= n));
-            let gles_ok = self.gles.is_some_and(|n| egl.gles.is_some_and(|v| v >= n));
-            if !gl_ok && !gles_ok {
+            if !has(egl, self.gl, self.gles) {
+                let why = self
+                    .why
+                    .as_deref()
+                    .map_or(String::new(), |w| format!(" ({w})"));
                 return Fit::Cannot(format!(
-                    "Needs {}; this computer's graphics support {}",
-                    GraphicsNeeds {
-                        vulkan: false,
-                        ..self.clone()
-                    }
-                    .describe(),
+                    "Needs {}{why}; this computer's graphics support {}",
+                    describe_gl(self.gl, self.gles),
                     egl.describe()
                 ));
             }
@@ -172,7 +211,19 @@ impl GraphicsNeeds {
                 Vulkan::Unknown | Vulkan::Hardware { .. } => {}
             }
         }
-        if software { Fit::Slow } else { Fit::Runs }
+        if software {
+            return Fit::Slow;
+        }
+        // Everything on the GPU, or part of it on the CPU? Unknown
+        // graphics give no warning.
+        if let (Some(full), Some(egl)) = (&self.full, &graphics.egl) {
+            let vulkan =
+                full.vulkan && matches!(graphics.vulkan, Vulkan::Hardware { .. } | Vulkan::Unknown);
+            if !vulkan && !has(egl, full.gl, full.gles) {
+                return Fit::OnCpu(self.on_cpu.clone().unwrap_or_else(|| "part of it".into()));
+            }
+        }
+        Fit::Runs
     }
 }
 
@@ -181,13 +232,18 @@ impl GraphicsNeeds {
 pub enum Fit {
     /// Its graphics support what it needs (or couldn't be detected).
     Runs,
+    /// It runs, but these graphics can't draw all of it: this part ("its
+    /// apps") falls back to drawing on the CPU, and is slow. Allowed, with
+    /// a warning.
+    OnCpu(String),
     /// Only through software rendering (llvmpipe: a VM without 3D, or a GPU
     /// without a driver in the live system): it starts, but may be slow
     /// (or, when it refuses software rendering, only with the installed
     /// system's driver). Allowed, with a warning.
     Slow,
-    /// It can't start here, and why: "Needs OpenGL ES 3.0; this
-    /// computer's graphics support OpenGL ES 2.0 and OpenGL 2.1".
+    /// It can't start here, or its core UI can't draw, and why: "Needs
+    /// OpenGL ES 3.0; this computer's graphics support OpenGL ES 2.0 and
+    /// OpenGL 2.1".
     Cannot(String),
 }
 
@@ -407,5 +463,67 @@ mod tests {
     fn unknown_fields_are_refused() {
         assert!(serde_json::from_str::<GraphicsNeeds>(r#"{ "opengl": "3.0" }"#).is_err());
         assert!(serde_json::from_str::<GraphicsNeeds>(r#"{ "gles": 3 }"#).is_err());
+        assert!(
+            serde_json::from_str::<GraphicsNeeds>(r#"{ "full": { "gles": "3.0", "x": 1 } }"#)
+                .is_err()
+        );
+    }
+
+    /// Sandy Bridge: OpenGL 3.3, OpenGL ES 3.0, only lavapipe for Vulkan.
+    fn sandy_bridge() -> Graphics {
+        Graphics {
+            egl: Some(Egl {
+                renderer: Some("Mesa Intel(R) HD Graphics 3000 (SNB GT2)".into()),
+                gl: Some(GlVersion::new(3, 3)),
+                gles: Some(GlVersion::new(3, 0)),
+            }),
+            vulkan: Vulkan::Software,
+        }
+    }
+
+    #[test]
+    fn below_full_part_of_it_draws_on_the_cpu() {
+        // GNOME's shape: starts on OpenGL ES 2.0, its GTK 4 apps want
+        // OpenGL ES 3.0 / OpenGL 3.3 or a Vulkan GPU.
+        let gnome = needs(
+            r#"{ "gles": "2.0", "gl": "3.1",
+                 "full": { "gles": "3.0", "gl": "3.3", "vulkan": true }, "onCpu": "apps" }"#,
+        );
+        assert_eq!(gnome.fit(&gm45()), Fit::OnCpu("apps".into()));
+        assert_eq!(gnome.fit(&sandy_bridge()), Fit::Runs);
+        assert_eq!(gnome.fit(&modern()), Fit::Runs);
+        // llvmpipe is all software anyway; unknown graphics warn of nothing.
+        assert_eq!(gnome.fit(&llvmpipe()), Fit::Slow);
+        assert_eq!(gnome.fit(&Graphics::unknown()), Fit::Runs);
+        // A Vulkan GPU is enough on its own; lavapipe isn't; unknown Vulkan
+        // gives the benefit of the doubt.
+        let vulkan_only = needs(r#"{ "gles": "2.0", "full": { "vulkan": true } }"#);
+        let mut ivy = sandy_bridge();
+        ivy.vulkan = Vulkan::Hardware {
+            device: "Intel(R) HD Graphics 4000 (IVB GT2)".into(),
+            version: "1.2.0".into(),
+        };
+        assert_eq!(vulkan_only.fit(&ivy), Fit::Runs);
+        assert_eq!(
+            vulkan_only.fit(&sandy_bridge()),
+            Fit::OnCpu("part of it".into())
+        );
+        let mut unknown_vulkan = sandy_bridge();
+        unknown_vulkan.vulkan = Vulkan::Unknown;
+        assert_eq!(vulkan_only.fit(&unknown_vulkan), Fit::Runs);
+        // What it needs to start still comes first, with why.
+        let cosmic = needs(
+            r#"{ "gles": "3.0", "gl": "3.3", "why": "its apps crash without it",
+                 "full": { "gles": "3.1", "gl": "4.3", "vulkan": true }, "onCpu": "apps" }"#,
+        );
+        assert_eq!(
+            cosmic.fit(&gm45()),
+            Fit::Cannot(
+                "Needs OpenGL ES 3.0 or OpenGL 3.3 (its apps crash without it); this computer's graphics support OpenGL ES 2.0 and OpenGL 2.1"
+                    .into()
+            )
+        );
+        assert_eq!(cosmic.fit(&sandy_bridge()), Fit::OnCpu("apps".into()));
+        assert_eq!(cosmic.fit(&ivy), Fit::Runs);
     }
 }

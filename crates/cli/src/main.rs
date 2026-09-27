@@ -193,6 +193,7 @@ fn main() -> Result<()> {
                 let verdict = |f: &Fit| match f {
                     Fit::Runs => serde_json::json!("runs"),
                     Fit::Slow => serde_json::json!("software"),
+                    Fit::OnCpu(parts) => serde_json::json!({ "onCpu": parts }),
                     Fit::Cannot(why) => serde_json::json!({ "cannot": why }),
                 };
                 println!(
@@ -211,6 +212,9 @@ fn main() -> Result<()> {
                     match fit {
                         Fit::Runs => println!("  {:<14} runs", d.id),
                         Fit::Slow => println!("  {:<14} runs, in software", d.id),
+                        Fit::OnCpu(parts) => {
+                            println!("  {:<14} runs, its {parts} on the CPU (slow)", d.id)
+                        }
                         Fit::Cannot(why) => println!("  {:<14} can't: {why}", d.id),
                     }
                 }

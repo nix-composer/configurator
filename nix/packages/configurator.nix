@@ -27,11 +27,12 @@ rustPlatform.buildRustPackage {
   ];
 
   # eglinfo and vulkaninfo: which desktops this machine's graphics run
-  # (`configurator graphics`, the wizard's Desktop layer).
+  # (`configurator graphics`, the wizard's Desktop layer). Last on PATH, so
+  # checks.live-graphics can stand in for them.
   nativeBuildInputs = [ makeWrapper ];
   postInstall = ''
     wrapProgram $out/bin/configurator \
-      --prefix PATH : ${
+      --suffix PATH : ${
         lib.makeBinPath [
           mesa-demos
           vulkan-tools

@@ -31,8 +31,9 @@ pub struct Desktop {
     pub name: String,
     pub kind: DesktopKind,
     pub sessions: Vec<Session>,
-    /// The graphics it needs to start (`{}`: none); the Desktop layer
-    /// greys out what this machine's can't run.
+    /// The graphics it needs to start (`{}`: none), and to draw its whole
+    /// session on the GPU; the Desktop layer greys out what this machine's
+    /// can't run and warns where part of it would draw on the CPU.
     pub graphics: graphics::GraphicsNeeds,
     pub description: String,
     /// Why it can't be installed with this nixpkgs (it doesn't evaluate or
@@ -51,6 +52,19 @@ impl Desktop {
     /// Whether it starts on a machine with these graphics.
     pub fn fit(&self, graphics: &graphics::Graphics) -> graphics::Fit {
         self.graphics.fit(graphics)
+    }
+
+    /// The warning for a desktop that runs here with part of it drawn on
+    /// the CPU: "COSMIC's apps would draw on the CPU on this graphics chip;
+    /// expect them to be slow". `None`: it doesn't.
+    pub fn on_cpu_warning(&self, graphics: &graphics::Graphics) -> Option<String> {
+        match self.fit(graphics) {
+            graphics::Fit::OnCpu(parts) => Some(format!(
+                "{}'s {parts} would draw on the CPU on this graphics chip; expect them to be slow",
+                self.name
+            )),
+            _ => None,
+        }
     }
 
     /// Why it can't be picked on this machine: it can't be installed with
@@ -685,9 +699,18 @@ impl Catalog {
     }
 
     /// The desktop picked by default: the first in the registry this
-    /// machine can install and run.
+    /// machine can install and run with everything on the GPU, else the
+    /// first it can run at all.
     pub fn default_desktop(&self, graphics: &graphics::Graphics) -> Option<&Desktop> {
-        self.desktops.iter().find(|d| d.blocked(graphics).is_none())
+        // One these graphics draw all of, else one they run.
+        let usable = || {
+            self.desktops
+                .iter()
+                .filter(|d| d.blocked(graphics).is_none())
+        };
+        usable()
+            .find(|d| !matches!(d.fit(graphics), graphics::Fit::OnCpu(_)))
+            .or_else(|| usable().next())
     }
 
     /// A desktop's ecosystem: from data/ecosystems.json, or a flake
@@ -751,30 +774,35 @@ mod tests {
             if d.kind == DesktopKind::WindowManager && d.sessions == [Session::X11] {
                 assert!(!g.any(), "{}: an X11 window manager needing a GPU", d.id);
             }
+            // `full` asks for more than starting does, and says what falls
+            // back to the CPU below it.
+            if let Some(full) = &g.full {
+                assert!(g.on_cpu.is_some(), "{}: full without onCpu", d.id);
+                assert!(
+                    full.gl.is_some() || full.gles.is_some() || full.vulkan,
+                    "{}: an empty full",
+                    d.id
+                );
+                for (start, more) in [(g.gl, full.gl), (g.gles, full.gles)] {
+                    if let (Some(start), Some(more)) = (start, more) {
+                        assert!(more > start, "{}: full isn't more than starting", d.id);
+                    }
+                }
+            } else {
+                assert!(g.on_cpu.is_none(), "{}: onCpu without full", d.id);
+            }
         }
-        // A ThinkPad T500's GMA 4500MHD: no Hyprland, but a desktop by
-        // default all the same, and Xfce, MATE and i3.
-        let gm45 = Graphics {
-            egl: Some(Egl {
-                renderer: Some("Mesa Intel(R) GM45 Express Chipset".into()),
-                gl: Some(GlVersion::new(2, 1)),
-                gles: Some(GlVersion::new(2, 0)),
-            }),
-            vulkan: Vulkan::None,
-        };
-        for id in ["omarchy", "hyprland"] {
-            let why = catalog.desktop(id).unwrap().blocked(&gm45);
-            assert!(
-                why.as_deref()
-                    .is_some_and(|w| w.starts_with("Needs OpenGL ES 3.0")),
-                "{id}: {why:?}"
-            );
-        }
-        for id in ["xfce", "mate", "i3", "sway", "cosmic", "plasma", "gnome"] {
-            assert_eq!(catalog.desktop(id).unwrap().blocked(&gm45), None, "{id}");
-        }
+        // A ThinkPad T500's GMA 4500MHD still gets a desktop by default,
+        // one it draws all of.
+        let gm45 = generation(
+            2,
+            1,
+            Some((2, 0)),
+            "Mesa Intel(R) GM45 Express Chipset",
+            false,
+        );
         let default = catalog.default_desktop(&gm45).unwrap();
-        assert!(default.blocked(&gm45).is_none());
+        assert_eq!(default.fit(&gm45), graphics::Fit::Runs, "{}", default.id);
         // Unknown graphics, or llvmpipe: everything installable is allowed.
         let llvmpipe = Graphics {
             egl: Some(Egl {
@@ -792,6 +820,194 @@ mod tests {
                 catalog.default_desktop(&g).map(|d| d.id.as_str()),
                 catalog.desktops.first().map(|d| d.id.as_str())
             );
+        }
+    }
+
+    /// A GPU generation's graphics as Mesa reports them: OpenGL, OpenGL ES
+    /// (`None`: none), the renderer, and whether Vulkan has a driver for
+    /// the GPU (else only lavapipe, which NixOS's Mesa always has).
+    fn generation(
+        gl_major: u32,
+        gl_minor: u32,
+        gles: Option<(u32, u32)>,
+        renderer: &str,
+        vulkan: bool,
+    ) -> graphics::Graphics {
+        use graphics::{Egl, GlVersion, Graphics, Vulkan};
+        Graphics {
+            egl: Some(Egl {
+                renderer: Some(renderer.into()),
+                gl: Some(GlVersion::new(gl_major, gl_minor)),
+                gles: gles.map(|(a, b)| GlVersion::new(a, b)),
+            }),
+            vulkan: if vulkan {
+                Vulkan::Hardware {
+                    device: renderer.into(),
+                    version: "1.3".into(),
+                }
+            } else {
+                Vulkan::Software
+            },
+        }
+    }
+
+    /// Each GPU generation's verdict for the desktops (docs/graphics.md has
+    /// the matrix and its sources): R runs, C part of it on the CPU, S
+    /// software rendering, X can't.
+    #[test]
+    fn gpu_generations() {
+        use graphics::Fit;
+        let catalog = Catalog::builtin().unwrap();
+        let generations = [
+            // Intel GMA 950/3100 (i915), GMA X3100/4500, Ironlake (crocus
+            // Gen4/5); ATI r300-r500; nouveau nv40.
+            (
+                "gma950",
+                generation(2, 1, Some((2, 0)), "i915 (chipset: 945GM)", false),
+            ),
+            (
+                "gm45",
+                generation(
+                    2,
+                    1,
+                    Some((2, 0)),
+                    "Mesa Intel(R) GM45 Express Chipset",
+                    false,
+                ),
+            ),
+            ("r500", generation(2, 1, Some((2, 0)), "ATI RV515", false)),
+            ("nv40", generation(2, 1, Some((2, 0)), "NV4B", false)),
+            // nouveau nv30 (GeForce FX): OpenGL 1.5, no OpenGL ES 2.0.
+            ("nv30", generation(1, 5, None, "NV34", false)),
+            // Sandy Bridge (crocus Gen6), r600/r700, nouveau Tesla: no
+            // Vulkan driver.
+            (
+                "sandybridge",
+                generation(
+                    3,
+                    3,
+                    Some((3, 0)),
+                    "Mesa Intel(R) HD Graphics 3000 (SNB GT2)",
+                    false,
+                ),
+            ),
+            ("r600", generation(3, 3, Some((3, 0)), "AMD RV770", false)),
+            ("tesla", generation(3, 3, Some((3, 1)), "NVA8", false)),
+            // Ivy Bridge (hasvk), Haswell.
+            (
+                "ivybridge",
+                generation(
+                    4,
+                    2,
+                    Some((3, 0)),
+                    "Mesa Intel(R) HD Graphics 4000 (IVB GT2)",
+                    true,
+                ),
+            ),
+            (
+                "haswell",
+                generation(
+                    4,
+                    6,
+                    Some((3, 2)),
+                    "Mesa Intel(R) HD Graphics 4600 (HSW GT2)",
+                    true,
+                ),
+            ),
+            // Evergreen/Northern Islands, Fermi, GCN 1/2 on the radeon
+            // kernel driver: new OpenGL, no Vulkan driver.
+            (
+                "evergreen",
+                generation(4, 6, Some((3, 1)), "AMD CEDAR", false),
+            ),
+            ("fermi", generation(4, 3, Some((3, 1)), "NVC1", false)),
+            (
+                "gcn1-radeon",
+                generation(
+                    4,
+                    6,
+                    Some((3, 2)),
+                    "AMD PITCAIRN (radeonsi, LLVM 21.1.8)",
+                    false,
+                ),
+            ),
+            // Broadwell and newer, GCN on amdgpu, Kepler and newer on NVK.
+            (
+                "modern",
+                generation(
+                    4,
+                    6,
+                    Some((3, 2)),
+                    "Mesa Intel(R) UHD Graphics 620 (KBL GT2)",
+                    true,
+                ),
+            ),
+            // A VM: llvmpipe; virgl.
+            (
+                "llvmpipe",
+                generation(
+                    4,
+                    5,
+                    Some((3, 2)),
+                    "llvmpipe (LLVM 21.1.8, 256 bits)",
+                    false,
+                ),
+            ),
+            (
+                "virgl",
+                generation(4, 3, Some((3, 2)), "virgl (AMD Radeon 780M)", false),
+            ),
+        ];
+        let expected: &[(&str, &str)] = &[
+            // One letter per generation above: gma950 gm45 r500 nv40 nv30, snb r600
+            // tesla, ivybridge haswell, evergreen fermi gcn1-radeon, modern,
+            // llvmpipe virgl.
+            ("omarchy", "XXXXXRRRRRRRRRSR"),
+            ("hyprland", "XXXXXRRRRRRRRRSR"),
+            ("cosmic", "XXXXXCCCRRRRRRSR"),
+            ("gnome", "CCCCXRRRRRRRRRSR"),
+            ("pantheon", "CCCCXRRRRRRRRRSR"),
+            ("plasma", "RRRRRRRRRRRRRRRR"),
+            ("niri", "RRRRXRRRRRRRRRSR"),
+            ("cinnamon", "RRRRXRRRRRRRRRSR"),
+            ("budgie", "RRRRXRRRRRRRRRSR"),
+            ("lomiri", "RRRRXRRRRRRRRRSR"),
+            ("sway", "RRRRXRRRRRRRRRSR"),
+            ("labwc", "RRRRXRRRRRRRRRSR"),
+            ("xfce", "RRRRRRRRRRRRRRRR"),
+            ("mate", "RRRRRRRRRRRRRRRR"),
+            ("lxqt", "RRRRRRRRRRRRRRRR"),
+            ("i3", "RRRRRRRRRRRRRRRR"),
+        ];
+        for (id, verdicts) in expected {
+            let d = catalog.desktop(id).unwrap();
+            assert_eq!(verdicts.len(), generations.len(), "{id}");
+            for ((name, g), want) in generations.iter().zip(verdicts.chars()) {
+                let got = match d.fit(g) {
+                    Fit::Runs => 'R',
+                    Fit::OnCpu(_) => 'C',
+                    Fit::Slow => 'S',
+                    Fit::Cannot(_) => 'X',
+                };
+                assert_eq!(got, want, "{id} on {name}: {:?}", d.fit(g));
+            }
+        }
+        // The warning names the desktop and what draws on the CPU.
+        let gm45 = &generations[1].1;
+        let warning = catalog
+            .desktop("gnome")
+            .unwrap()
+            .on_cpu_warning(gm45)
+            .unwrap();
+        assert!(warning.starts_with("GNOME's apps"), "{warning}");
+        let why = catalog.desktop("cosmic").unwrap().blocked(gm45).unwrap();
+        assert!(
+            why.starts_with("Needs OpenGL ES 3.0 or OpenGL 3.3"),
+            "{why}"
+        );
+        // Every generation still gets a desktop by default.
+        for (name, g) in &generations {
+            assert!(catalog.default_desktop(g).is_some(), "{name}");
         }
     }
 

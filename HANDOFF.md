@@ -526,8 +526,9 @@ data/webapps, data/agents  their icons, <id>.png (sources in the READMEs)
 data/keybinds/gnome.json   GNOME's 138 default binds (scripts/extract-gnome-keybinds.sh)
 docs/keybinds.md           how each desktop's keybinds can be set (researched), and
                            which renderers exist
-docs/graphics.md           each desktop's graphics requirement (researched, sourced)
-                           and how the installer detects the machine's
+docs/graphics.md           what each desktop's whole session needs from the graphics
+                           (researched, sourced, VM-tested), the desktops x GPU
+                           generations matrix, and how the installer detects the machine's
 examples/answers, hosts    example answers and their generated output (a test keeps
                            hosts current: UPDATE_EXPECT=1 cargo test)
 nix/live                   the live system: the GUI fullscreen in cage (root, restarts on
@@ -537,7 +538,9 @@ nix/live                   the live system: the GUI fullscreen in cage (root, re
                            `configurator wizard`; `nix build .#iso`, `nix run .#vm`
 nix/catalog                the app catalog derivation (scripts/build-catalog.py)
 nix/screenshots            every desktop booted in a VM and photographed, for the
-                           Desktop layer (`nix build .#desktop-screenshots`)
+                           Desktop layer (`nix build .#desktop-screenshots`); `.probes.
+                           <ceiling>.<desktop>`: the session held to an old GPU's OpenGL
+                           (Mesa's overrides), apps opened, logs (docs/graphics.md)
 nix/modules/host           what host flakes import: TPM2 + PIN first-boot sealing
 nix/tests                  install.nix: the end-to-end VM install test; answers/ and
                            hosts/ are its inputs (target disk /dev/vdb); keybinds.nix
@@ -834,6 +837,36 @@ GUI in a headless cage, as llvmpipe and as a GMA 4500 through
 by OCR), and the live VM (llvmpipe: everything offered, in software).
 Not tested on the real T500. Noticed: Budgie's registry entry says
 `sessions: ["x11"]`, but its 26.05 module runs labwc (Wayland).
+
+**Graphics, the whole session (2026-09-27):** the first pass only asked
+whether each compositor starts. Researched again for everything a desktop
+shows after login (shell, launcher, settings, files, terminal, lock
+screen) and their toolkits, over the GPU generations people have
+(docs/graphics.md: the toolkits, a desktops x generations matrix, sources,
+confidence), and checked in VMs: `nix build
+.#desktop-screenshots.probes.<ceiling>.<desktop>` holds a whole session
+(greeter, compositor, user manager, apps) to an old GPU's OpenGL with
+Mesa's overrides (`gm45`, `snb`, `t500` = gm45 on `-cpu Penryn`, …), opens
+its apps and locks it, and keeps screenshots, eglinfo, which process mapped
+which driver, and the journal. Findings: NixOS always has lavapipe, and GTK
+4 falls back to it (not cairo) below OpenGL 3.3 / ES 3.0, so GNOME's and
+Pantheon's apps draw on the CPU on OpenGL 2 chips (the shell stays on the
+GPU); COSMIC's wgpu apps (Settings, Files, Terminal, its portal) take
+lavapipe there too and panic on CPUs without F16C (every Core 2-era
+machine: "Shader requires capability SHADER_FLOAT16_IN_FLOAT32"), while its
+compositor, panel and lock screen are fine; on Sandy Bridge-class GPUs they
+fall back to tiny-skia. `graphics` gained `full` (what draws everything on
+the GPU; any of gl, gles, a Vulkan GPU), `onCpu` (what draws on the CPU
+below it) and `why`; `Fit::OnCpu` shows an amber "Slow on this GPU" tag and
+"GNOME's apps would draw on the CPU on this graphics chip; expect them to be
+slow", and the default desktop is the first that draws everything on the
+GPU. On a T500 now: Omarchy, Hyprland and COSMIC ("its apps crash without
+it") not offered, GNOME and Pantheon offered with the warning, KDE Plasma
+the default. `ICED_BACKEND=tiny-skia` makes COSMIC work there (VM-tested);
+the generator doesn't set it (the answers don't carry the graphics): the
+user's call. `checks.live-graphics` stands in an eglinfo with a real chip's
+renderer name (the packages put eglinfo last on PATH), as a GMA 4500 and as
+Sandy Bridge; `gpu_generations` checks the matrix.
 
 **Decided (2026-09-26):** the generated host flake lives in the first
 admin's `~/.config/nixos` (was `~/nixos`, which collided with personal

@@ -302,6 +302,7 @@ fn desktop_tags(ctx: &Ctx, d: Option<&Desktop>) -> Vec<Tag> {
         Fit::Cannot(_) => return vec![("Not for this GPU".into(), "tag-error")],
         Fit::Slow if !d.graphics.software => tags.push(("Needs a GPU driver".into(), "tag-unfree")),
         Fit::Slow => tags.push(("Software rendering".into(), "tag-unfree")),
+        Fit::OnCpu(_) => tags.push(("Slow on this GPU".into(), "tag-unfree")),
         Fit::Runs => {}
     }
     if d.module.flake.is_some() {
@@ -316,6 +317,7 @@ fn graphics_note(ctx: &Ctx, d: &Desktop) -> Option<String> {
     match d.fit(&ctx.graphics) {
         Fit::Runs => None,
         Fit::Cannot(why) => Some(format!("{why}, so it can't be picked.")),
+        Fit::OnCpu(_) => d.on_cpu_warning(&ctx.graphics).map(|w| format!("{w}.")),
         Fit::Slow if !d.graphics.software => Some(format!(
             "{} doesn't start on software rendering ({}), all the graphics this computer has here: it needs a GPU driver the live system doesn't have (a virtual machine without 3D has none).",
             d.name,

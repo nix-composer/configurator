@@ -1,5 +1,5 @@
 {
-  "$comment": "Every desktop and window manager the configurator offers. The generator writes `module.config` into the host's configuration.nix, so adding one is a data change. Special values: {\"$path\": \"./x\"} is a path in the host flake, {\"$context\": \"users\"} the users' names, {\"$context\": \"configDir\"} where the host flake lives. `checks.desktops` verifies every nixpkgs option path here exists. `unavailable` marks one that can't be installed with this nixpkgs (it doesn't evaluate or build; nix/screenshots finds out) and says why: it's shown but can't be picked. `graphics` is what it needs to start: `gl` and/or `gles` (minimum OpenGL / OpenGL ES versions, either will do) and `vulkan` (true: needed too), with its `source`; `{}` needs no GPU. The installer detects the machine's (engine status::graphics) and greys out what can't start there (docs/graphics.md).",
+  "$comment": "Every desktop and window manager the configurator offers. The generator writes `module.config` into the host's configuration.nix, so adding one is a data change. Special values: {\"$path\": \"./x\"} is a path in the host flake, {\"$context\": \"users\"} the users' names, {\"$context\": \"configDir\"} where the host flake lives. `checks.desktops` verifies every nixpkgs option path here exists. `unavailable` marks one that can't be installed with this nixpkgs (it doesn't evaluate or build; nix/screenshots finds out) and says why: it's shown but can't be picked. `graphics` is what its whole session (compositor, shell, its own apps) needs: to start, or for its core UI to draw, `gl` and/or `gles` (minimum OpenGL / OpenGL ES versions, either will do) and `vulkan` (true: needed too), with `why` when that isn't plain; to draw everything on the GPU, `full` (any of `gl`, `gles`, `vulkan`: a Vulkan GPU, not lavapipe), below which the part `onCpu` names draws on the CPU; `source` says where it comes from; `{}` needs no GPU. The installer detects the machine's (engine status::graphics), greys out what can't start there and warns where part of it would draw on the CPU (docs/graphics.md).",
   "desktops": [
     {
       "id": "omarchy",
@@ -59,7 +59,7 @@
       "name": "GNOME",
       "kind": "desktop",
       "sessions": ["wayland"],
-      "graphics": { "gles": "2.0", "gl": "3.1", "source": "mutter 50.4 cogl: driver/gl/gl3/cogl-driver-gl3.c:487 (OpenGL 3.1 + ARB_texture_swizzle), else driver/gl/gles2/cogl-driver-gles2.c:678 (OpenGL ES 2.0)" },
+      "graphics": { "gles": "2.0", "gl": "3.1", "full": { "gles": "3.0", "gl": "3.3", "vulkan": true }, "onCpu": "apps", "source": "the shell: mutter 50.4 cogl, driver/gl/gl3/cogl-driver-gl3.c:487 (OpenGL 3.1 + ARB_texture_swizzle), else driver/gl/gles2/cogl-driver-gles2.c:678 (OpenGL ES 2.0); its apps are GTK 4: GTK 4.22 draws with OpenGL 3.3 / OpenGL ES 3.0 (gdk/gdkglversionprivate.h:37-38) or a Vulkan GPU, else with lavapipe on the CPU (gsk/gskrenderer.c:712-725: its Vulkan fallback takes CPU devices)" },
       "description": "A focused, modern desktop with a curated set of core apps",
       "module": { "config": { "services.desktopManager.gnome.enable": true } },
       "loginManager": "gdm",
@@ -81,7 +81,7 @@
       "name": "COSMIC",
       "kind": "desktop",
       "sessions": ["wayland"],
-      "graphics": { "gles": "2.0", "source": "cosmic-comp 1.2.0 on smithay's GlesRenderer (gles/mod.rs:658-666: GLES 2.0 + EXT_texture_format_BGRA8888, EXT_unpack_subimage), #version 100 shaders; falls back to llvmpipe itself (src/backend/kms/mod.rs:479-490); apps draw with iced's tiny-skia without wgpu" },
+      "graphics": { "gles": "3.0", "gl": "3.3", "why": "its apps crash without it", "full": { "gl": "4.3", "vulkan": true }, "onCpu": "apps", "source": "cosmic-comp 1.2.0 needs only OpenGL ES 2.0 (smithay gles/mod.rs:612-623), but Settings, Files, Terminal, Editor and its portal draw with wgpu 28. Its OpenGL adapter needs OpenGL 3.3 (wgpu-hal gles/adapter.rs:257-277); without one it takes lavapipe (iced_wgpu window/compositor.rs:198-225, wgpu-core instance.rs:469-538), where iced's shaders need F16C, which Core 2-era CPUs lack (wgpu-hal vulkan/adapter.rs:1916-1922, Mesa gallivm/lp_bld_limits.h:81-84), and panic (VM-tested on a Core 2's instruction set; ICED_BACKEND=tiny-skia avoids it). With OpenGL 3.3 but no storage buffers (crocus Gen6, R600, Tesla) and no Vulkan GPU the device request fails and they draw with tiny-skia on the CPU (iced_renderer fallback.rs:273-335). The panel, applets, launcher and lock screen always use tiny-skia" },
       "description": "System76's Rust desktop with built-in tiling",
       "module": { "config": { "services.desktopManager.cosmic.enable": true } },
       "loginManager": "cosmic-greeter",
@@ -189,7 +189,7 @@
       "name": "Pantheon",
       "kind": "desktop",
       "sessions": ["x11"],
-      "graphics": { "gles": "2.0", "gl": "3.1", "source": "Gala 8.5.1 on mutter 48.7 (pkgs/desktops/pantheon/default.nix:48): cogl's gl3 driver (OpenGL 3.1 + ARB_texture_swizzle), else gles2 (OpenGL ES 2.0)" },
+      "graphics": { "gles": "2.0", "gl": "3.1", "full": { "gles": "3.0", "gl": "3.3", "vulkan": true }, "onCpu": "dock, settings and apps", "source": "Gala 8.5.1 on mutter 48.7 (pkgs/desktops/pantheon/default.nix:48): cogl's gl3 driver (OpenGL 3.1 + ARB_texture_swizzle), else gles2 (OpenGL ES 2.0); the dock, Settings, Terminal and most apps are GTK 4 (granite 7): GTK 4.22 draws with OpenGL 3.3 / OpenGL ES 3.0 (gdk/gdkglversionprivate.h:37-38) or a Vulkan GPU, else with lavapipe on the CPU (gsk/gskrenderer.c:712-725: its Vulkan fallback takes CPU devices)" },
       "description": "elementary OS's polished desktop",
       "module": { "config": { "services.desktopManager.pantheon.enable": true } },
       "loginManager": "lightdm",
@@ -217,7 +217,7 @@
       "name": "Lomiri",
       "kind": "desktop",
       "sessions": ["wayland"],
-      "graphics": { "gles": "2.0", "source": "Mir 2.26 src/platforms/atomic-kms/server/kms/egl_helper.cpp:113-169 (EGL_CONTEXT_CLIENT_VERSION 2); the Qt 5 Quick shell needs GLES 2.0 (medium confidence)" },
+      "graphics": { "gles": "2.0", "source": "Mir's GL renderer (egl_helper.cpp: EGL_CONTEXT_CLIENT_VERSION 2); the Qt 5 Quick shell needs GLES 2.0. VM-tested at OpenGL ES 2.0 (Lomiri runs Mir 2.15 there: \"GLRenderer: GL version: OpenGL ES 2.0\"), shell and apps draw" },
       "description": "The convergent desktop from Ubuntu Touch",
       "module": { "config": { "services.desktopManager.lomiri.enable": true } },
       "loginManager": "lightdm",

@@ -215,6 +215,247 @@ let
     ) desktops
   );
 
+  # Graphics probes (docs/graphics.md): a desktop's session under a
+  # weaker GPU's ceiling, simulated on Mesa's llvmpipe with its version
+  # overrides. Every process gets them: system services (the greeter),
+  # user managers and login shells. The desktop's own file manager,
+  # settings and terminal are opened, the session is locked, and the
+  # output holds screenshots (desktop, apps, lock), eglinfo and
+  # vulkaninfo as the session sees them, which graphics libraries each
+  # process loaded, and the journal.
+  #
+  #   nix build .#desktop-screenshots.probes.gm45.cosmic
+  #
+  # Limits: the renderer is still llvmpipe (GTK skips GL on llvmpipe, see
+  # gsk/gskrenderer.c), and a real chip's missing extensions and shader
+  # limits aren't simulated.
+  ceilings = rec {
+    # Intel GMA 4500 / Ironlake (crocus), ATI r300-r500, nouveau nv30/nv40:
+    # OpenGL 2.1, OpenGL ES 2.0. NixOS's Mesa still has lavapipe, the CPU
+    # Vulkan driver, as on a real machine.
+    gm45 = {
+      MESA_GL_VERSION_OVERRIDE = "2.1";
+      MESA_GLES_VERSION_OVERRIDE = "2.0";
+      MESA_GLSL_VERSION_OVERRIDE = "120";
+    };
+    # The same without any Vulkan driver.
+    gm45-novk = gm45 // {
+      VK_DRIVER_FILES = "/dev/null";
+      VK_ICD_FILENAMES = "/dev/null";
+    };
+    # Sandy Bridge (crocus Gen6), r600, nouveau Tesla: OpenGL 3.3, OpenGL
+    # ES 3.0, no hardware Vulkan (lavapipe present).
+    snb = {
+      MESA_GL_VERSION_OVERRIDE = "3.3";
+      MESA_GLES_VERSION_OVERRIDE = "3.0";
+      MESA_GLSL_VERSION_OVERRIDE = "330";
+    };
+    # A ThinkPad T500's GMA 4500MHD on a Core 2 Duo-like CPU (see the VM).
+    # Sandy Bridge's OpenGL 3.3 as wgpu sees it on the real chip: a GPU
+    # adapter it prefers to lavapipe (here: its OpenGL backend only).
+    snb-wgpugl = snb // {
+      WGPU_BACKEND = "gl";
+    };
+    t500 = gm45;
+    # The same, with COSMIC's apps told to draw with tiny-skia (CPU) rather
+    # than wgpu.
+    t500-tinyskia = gm45 // {
+      ICED_BACKEND = "tiny-skia";
+    };
+    # llvmpipe as is, to compare.
+    llvmpipe = { };
+  };
+
+  # Each desktop's file manager, settings and terminal (whichever exist).
+  probeApps = {
+    gnome = [
+      "nautilus"
+      "gnome-control-center"
+      "ptyxis"
+      "kgx"
+    ];
+    cosmic = [
+      "cosmic-files"
+      "cosmic-settings"
+      "cosmic-term"
+    ];
+    plasma = [
+      "dolphin"
+      "systemsettings"
+      "konsole"
+    ];
+    pantheon = [
+      "io.elementary.files"
+      "io.elementary.settings"
+      "io.elementary.terminal"
+    ];
+    cinnamon = [
+      "nemo"
+      "cinnamon-settings"
+      "gnome-terminal"
+    ];
+    budgie = [
+      "nemo"
+      "budgie-control-center"
+      "gnome-terminal"
+      "tilix"
+    ];
+    xfce = [
+      "thunar"
+      "xfce4-settings-manager"
+      "xfce4-terminal"
+    ];
+    mate = [
+      "caja"
+      "mate-control-center"
+      "mate-terminal"
+    ];
+    lxqt = [
+      "pcmanfm-qt"
+      "lxqt-config"
+      "qterminal"
+    ];
+    lomiri = [
+      "lomiri-filemanager-app"
+      "lomiri-system-settings"
+      "lomiri-terminal-app"
+    ];
+    niri = [
+      "alacritty"
+      "fuzzel"
+    ];
+    hyprland = [ "kitty" ];
+    sway = [ "foot" ];
+  };
+
+  probe =
+    ceiling: d:
+    let
+      env = ceilings.${ceiling} // {
+        # Which renderer GTK, iced/wgpu, Qt and the compositors pick, in the
+        # journal and the apps' logs.
+        GSK_DEBUG = "renderer";
+        RUST_LOG = "warn,iced_wgpu=info,iced_renderer=info,iced_tiny_skia=info,iced_winit=info,wgpu_hal=info,wgpu_core=info,cosmic_comp=info,smithay=info,niri=info";
+        QSG_INFO = "1";
+        QT_LOGGING_RULES = "kwin_scene_opengl.debug=true;kwin_opengl.debug=true;qt.scenegraph.general=true;qt.rhi.general=true";
+      };
+      apps = probeApps.${d.id} or [ ];
+      libsScript = pkgs.writeShellScript "probe-libs" ''
+        for p in $(pgrep -u ${user}) $(pgrep -f -- 'greeter|gdm|sddm|lightdm|Xorg|Xwayland|cosmic-comp'); do
+          c=$(tr '\0' ' ' < /proc/$p/cmdline | cut -c1-100)
+          l=$(grep -o -E 'libgallium[^/]*[.]so|libvulkan_[a-z]+[.]so|libEGL_mesa|libGLX_mesa|libGLESv2|libvulkan[.]so' /proc/$p/maps | sort -u | tr '\n' ' ')
+          echo "$p $(cat /proc/$p/comm) cpu=$(ps -o times= -p $p | tr -d ' ')s rss=$(ps -o rss= -p $p | tr -d ' ')k [$l] $c"
+        done
+      '';
+      session =
+        "export XDG_RUNTIME_DIR=/run/user/$(id -u) DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus DISPLAY=:0; "
+        + "w=$(ls $XDG_RUNTIME_DIR | grep -m1 '^wayland-[0-9]$'); [ -n \"$w\" ] && export WAYLAND_DISPLAY=$w; "
+        # The desktop's name, from a process of the session (settings apps
+        # check it).
+        + "for p in $(pgrep -u $(id -u)); do e=$( (tr '\\0' '\\n' < /proc/$p/environ) 2>/dev/null | grep -m1 '^XDG_CURRENT_DESKTOP='); [ -n \"$e\" ] && export \"$e\" && break; done; ";
+    in
+    pkgs.testers.runNixOSTest {
+      name = "graphics-${ceiling}-${d.id}";
+      nodes.machine =
+        { pkgs, ... }:
+        {
+          imports = [
+            (moduleConfig d)
+            (loginManager d)
+            (extras.${d.id} or (_: { }) pkgs)
+          ];
+          users.users.${user} = {
+            isNormalUser = true;
+            password = "alice";
+            extraGroups = [ "wheel" ];
+          };
+          services.displayManager.autoLogin = {
+            enable = true;
+            inherit user;
+          };
+          virtualisation = {
+            memorySize = 4096;
+            # t500: a Core 2 Duo's instruction set (no AVX: llvmpipe and
+            # lavapipe fall back to 128-bit SSE) and its two cores, at the
+            # host's clock.
+            cores = if lib.hasPrefix "t500" ceiling then 2 else 4;
+            resolution = {
+              x = 1280;
+              y = 800;
+            };
+            qemu.options = [
+              "-vga none"
+              "-device virtio-gpu-pci,xres=1280,yres=800"
+            ]
+            ++ lib.optional (lib.hasPrefix "t500" ceiling) "-cpu Penryn";
+          };
+          # Everywhere: system services (display manager, greeter), user
+          # managers, login shells and PAM sessions.
+          systemd.globalEnvironment = env;
+          systemd.user.extraConfig = "DefaultEnvironment=${
+            lib.concatStringsSep " " (lib.mapAttrsToList (n: v: "\"${n}=${v}\"") env)
+          }";
+          environment.sessionVariables = env // {
+            WLR_NO_HARDWARE_CURSORS = "1";
+          };
+          environment.variables = env;
+          fonts.enableDefaultPackages = true;
+          environment.systemPackages = [
+            pkgs.mesa-demos
+            pkgs.vulkan-tools
+            pkgs.fastfetch
+            pkgs.foot
+            pkgs.xterm
+          ];
+        };
+      testScript = ''
+        import shlex
+        out = "/tmp/probe"
+        machine.succeed(f"mkdir -p {out}")
+        def user(cmd, log):
+            machine.execute("su - ${user} -c " + shlex.quote(${builtins.toJSON session} + cmd) + f" > {out}/{log} 2>&1")
+        try:
+            machine.wait_for_unit("display-manager.service")
+            machine.wait_until_succeeds("loginctl list-sessions --no-legend | grep -q ${user}", timeout=300)
+            machine.wait_until_succeeds("test $(pgrep -u ${user} | wc -l) -gt 3", timeout=300)
+            machine.sleep(45)
+            machine.screenshot("desktop")
+            user("env | sort", "env.txt")
+            user("eglinfo -B -p surfaceless; eglinfo -B -p wayland; eglinfo -B -p x11", "eglinfo.txt")
+            user("vulkaninfo --summary", "vulkaninfo.txt")
+            for app in ${builtins.toJSON apps}:
+                user(f"command -v {app} && (setsid {app} > /tmp/app-{app}.log 2>&1 &)", f"launch-{app}.txt")
+            machine.sleep(30)
+            machine.screenshot("apps")
+            # How busy the CPU is with the apps open and idle, and memory.
+            machine.execute(f"(head -1 /proc/stat; sleep 20; head -1 /proc/stat; free -m; nproc; grep -m1 flags /proc/cpuinfo | grep -o -w 'avx2\\|avx\\|sse4_1\\|sse4_2\\|f16c') > {out}/load.txt")
+            # Which graphics libraries each process loaded.
+            machine.execute(f"${libsScript} > {out}/libs.txt 2>&1")
+            if "${d.id}" == "cosmic":
+                # The shell's app library.
+                user("(setsid cosmic-app-library > /tmp/app-app-library.log 2>&1 &)", "launch-app-library.txt")
+                machine.sleep(15)
+                machine.screenshot("app-library")
+                machine.send_key("esc")
+                machine.sleep(3)
+            machine.execute(f"cp /tmp/app-*.log {out}/")
+            machine.execute("loginctl lock-sessions")
+            machine.sleep(15)
+            # Wake the screen: the lock screen, or its unlock prompt.
+            machine.send_key("shift")
+            machine.sleep(5)
+            machine.screenshot("lock")
+        except Exception as e:
+            print(f"graphics-${ceiling}-${d.id}: {e}")
+        machine.execute(f"journalctl -b --no-pager -o short-monotonic > {out}/journal.txt; chmod -R a+rX {out}")
+        machine.copy_from_vm(out, "")
+      '';
+    };
+
+  probes = lib.mapAttrs (
+    ceiling: _: lib.listToAttrs (map (d: lib.nameValuePair d.id (probe ceiling d)) desktops)
+  ) ceilings;
+
   # Pictures of desktops no VM here can boot (data/screenshots).
   static = lib.fileset.toSource {
     root = ../../data/screenshots;
@@ -224,5 +465,5 @@ in
 pkgs.symlinkJoin {
   name = "desktop-screenshots";
   paths = builtins.attrValues (removeAttrs perDesktop broken) ++ [ static ];
-  passthru = { inherit perDesktop; };
+  passthru = { inherit perDesktop probes; };
 }

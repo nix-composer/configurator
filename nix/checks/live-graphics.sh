@@ -1,6 +1,7 @@
 # Runs inside cage (headless, one tall output): the installer's Desktop and
 # Hardware layers on software rendering (llvmpipe), as is and as a GMA
-# 4500MHD (OpenGL 2.1, OpenGL ES 2.0). $1: where to put the screenshots.
+# 4500MHD (OpenGL 2.1, OpenGL ES 2.0: $GM45_BIN has an eglinfo that says so).
+# $1: where to put the screenshots.
 set -euo pipefail
 out=$1
 trap 'kill $(jobs -p) 2> /dev/null || true' EXIT
@@ -28,14 +29,14 @@ shoot() {
   sleep 1
 }
 
-gm45=(MESA_GL_VERSION_OVERRIDE=2.1 MESA_GLES_VERSION_OVERRIDE=2.0)
+gm45=("PATH=$GM45_BIN:$PATH")
 shoot desktop-llvmpipe 2
 shoot desktop-gm45 2 "${gm45[@]}"
 shoot hardware-gm45 8 "${gm45[@]}"
 
-# Read back: Hyprland and Omarchy greyed out on the GMA 4500's page (the
-# reason itself is checked through `configurator graphics`), nothing on
-# llvmpipe's.
+# Read back: Hyprland, Omarchy and COSMIC greyed out on the GMA 4500's page
+# (the reason itself is checked through `configurator graphics`) and GNOME
+# slow there, nothing on llvmpipe's.
 for page in desktop-llvmpipe desktop-gm45 hardware-gm45; do
   # As is, and with the faint text of greyed-out cards brightened, dark on
   # light.
@@ -47,9 +48,13 @@ for page in desktop-llvmpipe desktop-gm45 hardware-gm45; do
 done
 # What was read, when a check below fails.
 trap 'kill $(jobs -p) 2> /dev/null || true; grep -h "GPU\|OpenGL\|rendering" "$out"/*.txt >&2; cp -r "$out" "$TMPDIR/failed"' EXIT
-# Omarchy's and Hyprland's cards.
+# Omarchy's, Hyprland's and COSMIC's cards.
 grep "Not for this GPU" "$out/desktop-gm45.txt" | grep -q Omarchy
 grep "Not for this GPU" "$out/desktop-gm45.txt" | grep -q Hyp
+grep "Not for this GPU" "$out/desktop-gm45.txt" | grep -q COSMIC
+# GNOME's and Pantheon's (OCR reads their names unreliably next to the tag).
+grep -q "Slow on this GPU" "$out/desktop-gm45.txt"
+! grep -q "Slow on this GPU" "$out/desktop-llvmpipe.txt"
 ! grep -q "Not for this GPU" "$out/desktop-llvmpipe.txt"
 grep -q "Software rendering" "$out/desktop-llvmpipe.txt"
 grep -q "OpenGL ES 2.0 .* OpenGL 2.1" "$out/hardware-gm45.txt"

@@ -45,12 +45,13 @@ rustPlatform.buildRustPackage {
 
   # Its icons, wherever it runs (the live system's cage session has no
   # desktop to provide them); the app catalog; curl for app screenshots;
-  # eglinfo and vulkaninfo to tell which desktops the graphics run.
+  # eglinfo and vulkaninfo to tell which desktops the graphics run (last on
+  # PATH, so checks.live-graphics can stand in for them).
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${adwaita-icon-theme}/share:${hicolor-icon-theme}/share"
       --set-default CONFIGURATOR_CATALOG ${catalog}
-      --prefix PATH : ${
+      --suffix PATH : ${
         lib.makeBinPath [
           curl
           mesa-demos
