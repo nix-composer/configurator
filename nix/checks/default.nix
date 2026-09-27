@@ -240,6 +240,20 @@ hostChecks
     testName = "libreboot-ext4";
     libreboot = true;
   };
+  # Libreboot 20160907's GRUB (2016), still on many second-hand ThinkPads:
+  # it reads /boot only without ext4's newer features (metadata_csum_seed).
+  install-libreboot-2016 = installTest {
+    name = "bios";
+    testName = "libreboot-2016";
+    libreboot = true;
+    librebootGrub = "20160907";
+  };
+  install-libreboot-2016-ext4 = installTest {
+    name = "bios-ext4";
+    testName = "libreboot-2016-ext4";
+    libreboot = true;
+    librebootGrub = "20160907";
+  };
 
   install-btrfs-luks = installTest {
     name = "btrfs-luks";

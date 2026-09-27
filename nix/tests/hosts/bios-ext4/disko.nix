@@ -18,6 +18,7 @@
           content = {
             type = "filesystem";
             format = "ext4";
+            extraArgs = [ "-O" "^metadata_csum_seed,^orphan_file,^64bit" ];
             mountpoint = "/boot";
           };
         };

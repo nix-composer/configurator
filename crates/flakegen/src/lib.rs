@@ -27,6 +27,10 @@ pub const NIXOS_RELEASE: &str = "26.05";
 /// writes it there (on the live system's tmpfs) and removes it after.
 pub const LUKS_KEY_FILE: &str = "/tmp/configurator-luks.key";
 
+/// mkfs.ext4 features a legacy BIOS /boot goes without, so GRUBs from
+/// before 2.12 (Libreboot's older ones) can read it (see `disko`).
+pub const BIOS_BOOT_EXT4_FEATURES: &str = "^metadata_csum_seed,^orphan_file,^64bit";
+
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("unknown desktop {0:?}")]
@@ -1144,7 +1148,14 @@ impl Generator<'_> {
                 ]),
             )],
             // GRUB's core image goes in the BIOS boot partition; /boot
-            // stays unencrypted so any GRUB (Libreboot's too) reads it.
+            // stays unencrypted so any GRUB (Libreboot's too) reads it,
+            // and without the ext4 features older GRUBs don't know: before
+            // 2.12 (in Libreboot before 20211122, e.g. 20160907, still on
+            // many ThinkPads) GRUB calls metadata_csum_seed an "unknown
+            // filesystem", never finds grub.cfg, and Libreboot's menu
+            // scans every disk for minutes. 64bit is only for file systems
+            // over 16 TiB (GRUB 2.00 can't read it), orphan_file needs
+            // e2fsprogs 1.47 to check the file system.
             Firmware::Bios => vec![
                 (
                     Key::from("bios"),
@@ -1159,6 +1170,13 @@ impl Generator<'_> {
                             Nix::attrs([
                                 ("type", Nix::str("filesystem")),
                                 ("format", Nix::str("ext4")),
+                                (
+                                    "extraArgs",
+                                    Nix::List(vec![
+                                        Nix::str("-O"),
+                                        Nix::str(BIOS_BOOT_EXT4_FEATURES),
+                                    ]),
+                                ),
                                 ("mountpoint", Nix::str("/boot")),
                             ]),
                         ),

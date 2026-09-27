@@ -24,6 +24,9 @@
   # Legacy BIOS answers only: boot the installed disk with Libreboot's
   # GRUB payload (coreboot, the disk on AHCI) instead of SeaBIOS.
   libreboot ? false,
+  # Which Libreboot's GRUB (see libreboot.nix): "26.01rev1", or "20160907"
+  # (a 2016 GRUB, as on many second-hand ThinkPads).
+  librebootGrub ? "26.01rev1",
   # Python run on the booted system (`target`).
   testScript ? "",
   # Extra NixOS config for the installed system, test-only.
@@ -46,7 +49,7 @@ let
   tpmPin = answers.security.tpmPin or false;
   # Legacy BIOS: both machines boot SeaBIOS, QEMU's default.
   bios = (answers.hardware.firmware or "uefi") == "bios";
-  librebootRom = pkgs.callPackage ./libreboot.nix { };
+  librebootRom = pkgs.callPackage ./libreboot.nix { grub = librebootGrub; };
   # OVMF with Secure Boot, in setup mode (no keys) until the engine enrolls.
   ovmf = if secureBoot then (pkgs.OVMF.override { secureBoot = true; }) else pkgs.OVMF;
 
@@ -279,6 +282,10 @@ pkgs.testers.runNixOSTest {
           target.fail("test -d /sys/firmware/efi")
           target.succeed("findmnt -no FSTYPE /boot | grep -q ext4")
           target.succeed("test -f /boot/grub/grub.cfg")
+          # Without the ext4 features older GRUBs call an unknown filesystem.
+          features = target.succeed("tune2fs -l $(findmnt -no SOURCE /boot) | grep -i '^filesystem features'")
+          for f in ["metadata_csum_seed", "orphan_file", "64bit"]:
+              assert f not in features.split(), f"/boot has {f}: {features}"
           # The kernel keeps GRUB's framebuffer (Libreboot has no text mode).
           target.succeed("journalctl -k -b | grep -q 'Initialized simpledrm'")
     ''}

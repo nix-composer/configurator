@@ -778,6 +778,31 @@ Libreboot's own QEMU ROM (`nix/tests/libreboot.nix`, 26.01rev1 seagrub
 corebootfb, disk on AHCI) and read the LUKS prompt and the login prompt
 off the screen (OCR). Not tested: the real T500's i915 handover.
 
+**Libreboot 20160907 (2026-09-27):** the user's T500 still froze on its
+GNU + Tux wallpaper after "Load Operating System". That wallpaper and a
+menu without a SeaBIOS entry are Libreboot 20160907 (or older), whose
+GRUB is a 2016 GRUB 2.02 beta: at its prompt `ls` showed the ext4 /boot
+as an unknown filesystem. mke2fs 1.47 turns on `metadata_csum_seed`, an
+incompatible ext4 feature GRUB accepts only since 2.12 (commit 7fd5feff9;
+Libreboot since 20211122). Without a readable grub.cfg that menu entry
+tries every AHCI/ATA device, partition, LVM/RAID name and cryptomount,
+which takes minutes (4 in QEMU, longer on the T500) and looks frozen.
+BIOS hosts now format /boot with `-O
+^metadata_csum_seed,^orphan_file,^64bit` (disko `extraArgs`); the 2016
+GRUB reads orphan_file, 64bit and metadata_csum fine, the other two go
+for GRUB 2.00 and e2fsprogs before 1.47. An existing /boot is fixed
+unmounted from the live system: `e2fsck -f /dev/sda2; tune2fs -O
+^orphan_file,^metadata_csum_seed /dev/sda2`. `checks.install-libreboot-2016`
+(LUKS) and `-2016-ext4` boot with that GRUB: `nix/tests/libreboot.nix
+{ grub = "20160907"; }` puts the T500 ROM's own GRUB payload, menu and
+background (identical to that release's QEMU ROM, whose 2016 coreboot
+no longer starts on QEMU) into the 26.01rev1 QEMU ROM; every BIOS test
+checks /boot's features. Stale signatures from an earlier install
+don't matter: disko's destroy runs `wipefs --all` on the old partitions
+and the disk, and that GRUB has no LUKS2 anyway. Libreboot's
+`libreboot_grub.cfg` isn't needed: 20160907 tries it only after
+`grub/grub.cfg` in the same directory, and lbmk no longer looks for it.
+
 **Decided (2026-09-26):** the generated host flake lives in the first
 admin's `~/.config/nixos` (was `~/nixos`, which collided with personal
 repos).
