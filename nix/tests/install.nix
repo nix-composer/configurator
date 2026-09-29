@@ -272,6 +272,10 @@ pkgs.testers.runNixOSTest {
         target.succeed("test -f /home/${user}/.config/nixos/flake.nix")
         target.succeed("test \"$(stat -c %U /home/${user}/.config/nixos/flake.nix)\" = ${user}")
         target.succeed("test \"$(stat -c %U /home/${user}/.config/nixos/.git)\" = ${user}")
+        # /etc/nixos is the flake, so a plain `sudo nixos-rebuild switch`
+        # finds it, and root can read the user's git repository.
+        target.succeed("test \"$(readlink -f /etc/nixos)\" = /home/${user}/.config/nixos")
+        target.succeed("test -f /etc/nixos/flake.nix && git -C /etc/nixos rev-parse HEAD")
         # ~/.config itself too: it was created on the way, as root.
         target.succeed("test \"$(stat -c %U /home/${user}/.config)\" = ${user}")
         # chpasswd set a real password (not locked, not empty).

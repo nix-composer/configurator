@@ -292,7 +292,8 @@ impl Generator<'_> {
             ),
         ]);
         format!(
-            "{HEADER}# Apply changes with: sudo nixos-rebuild switch --flake {}\n{}\n",
+            "{HEADER}# Apply changes with: sudo nixos-rebuild switch\n\
+             # (/etc/nixos is this folder, {}.)\n{}\n",
             self.config_dir,
             flake.render(0)
         )
@@ -345,6 +346,9 @@ impl Generator<'_> {
                 "programs.git.config.safe.directory",
                 Nix::List(vec![Nix::str(&self.config_dir)]),
             )
+            // /etc/nixos is this flake, so a plain `sudo nixos-rebuild
+            // switch` finds it (nixos-rebuild uses /etc/nixos/flake.nix).
+            .set("environment.etc.nixos.source", Nix::str(&self.config_dir))
             .set(
                 "nix.settings.experimental-features",
                 Nix::List(vec![Nix::str("nix-command"), Nix::str("flakes")]),
@@ -354,7 +358,8 @@ impl Generator<'_> {
 
         let header = format!(
             "# Your choices, one section per installer layer. Apply changes with:\n\
-             #   sudo nixos-rebuild switch --flake {}\n",
+             #   sudo nixos-rebuild switch\n\
+             # (/etc/nixos is this folder, {}.)\n",
             self.config_dir
         );
         // Web app launchers take their icons from the configurator input.
