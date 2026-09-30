@@ -198,14 +198,80 @@ pub fn review(ctx: &Ctx) -> Page {
         .label("Installing NixOS")
         .css_classes(["title-1"])
         .build();
+    // Labels here wrap, even inside long words (store paths, commands):
+    // one that doesn't widens the whole window past the screen, and the
+    // installer shows nothing but its background.
     let progress_step = gtk::Label::builder()
         .css_classes(["dim-label", "title-4"])
+        .wrap(true)
+        .wrap_mode(gtk::pango::WrapMode::WordChar)
+        .justify(gtk::Justification::Center)
         .build();
     let bar = gtk::ProgressBar::builder().show_text(true).build();
     // What the current step is doing: sizes, packages, time left.
     let progress_detail = gtk::Label::builder()
         .css_classes(["dim-label", "caption"])
         .wrap(true)
+        .wrap_mode(gtk::pango::WrapMode::WordChar)
+        .build();
+    // Why the install stopped, when it does: above the steps, with the
+    // log opened below and the ways on. Nothing here erases or restarts,
+    // and Enter lands on "Back to review".
+    let failure_error = gtk::Label::builder()
+        .css_classes(["monospace"])
+        .wrap(true)
+        .wrap_mode(gtk::pango::WrapMode::WordChar)
+        .xalign(0.0)
+        .selectable(true)
+        .build();
+    let failure_command = gtk::Label::builder()
+        .css_classes(["dim-label", "caption"])
+        .wrap(true)
+        .wrap_mode(gtk::pango::WrapMode::WordChar)
+        .xalign(0.0)
+        .selectable(true)
+        .build();
+    let failure_hint = gtk::Label::builder()
+        .label(format!(
+            "Nothing is lost: Back to review keeps every choice, and installing again starts \
+             over on the disk. The details below show where it stopped; the whole log is in \
+             {INSTALL_LOG}."
+        ))
+        .wrap(true)
+        .wrap_mode(gtk::pango::WrapMode::WordChar)
+        .xalign(0.0)
+        .build();
+    let retry = gtk::Button::builder()
+        .label("Back to review")
+        .css_classes(["pill", "suggested-action"])
+        .build();
+    let terminal = gtk::Button::builder()
+        .label("Open a terminal")
+        .css_classes(["pill"])
+        .build();
+    terminal.connect_clicked(|_| crate::open_terminal());
+    let failure_buttons = gtk::Box::builder()
+        .spacing(12)
+        .halign(gtk::Align::Center)
+        .build();
+    failure_buttons.append(&retry);
+    failure_buttons.append(&terminal);
+    let failure_box = gtk::Box::builder()
+        .orientation(gtk::Orientation::Vertical)
+        .spacing(12)
+        .margin_top(18)
+        .margin_bottom(18)
+        .margin_start(18)
+        .margin_end(18)
+        .build();
+    failure_box.append(&failure_error);
+    failure_box.append(&failure_command);
+    failure_box.append(&failure_hint);
+    failure_box.append(&failure_buttons);
+    let failure = adw::Bin::builder()
+        .css_classes(["card"])
+        .visible(false)
+        .child(&failure_box)
         .build();
     let steps = list();
     let (log_view, log_buffer) = monospace_view_bare();
@@ -218,6 +284,7 @@ pub fn review(ctx: &Ctx) -> Page {
     progress_box.append(&progress_step);
     progress_box.append(&bar);
     progress_box.append(&progress_detail);
+    progress_box.append(&failure);
     progress_box.append(&steps);
     progress_box.append(&details);
     let plan_back = gtk::Button::builder()
@@ -238,23 +305,25 @@ pub fn review(ctx: &Ctx) -> Page {
         .build();
     crate::widgets::instant_wheel(&progress_page);
     // Opening the details brings the whole log into view, once the page
-    // has grown to hold it.
+    // has grown to hold it; after a failure the page shows its top instead
+    // (why it stopped, and the ways on). Some(true): the bottom.
+    let page_scroll: Rc<std::cell::Cell<Option<bool>>> = Default::default();
     {
         let adj = progress_page.vadjustment();
-        let reveal = std::rc::Rc::new(std::cell::Cell::new(false));
         {
-            let (reveal, follow_log) = (reveal.clone(), follow_log.clone());
+            let (page_scroll, follow_log) = (page_scroll.clone(), follow_log.clone());
             details.connect_expanded_notify(move |d| {
-                reveal.set(d.is_expanded());
+                page_scroll.set(d.is_expanded().then_some(true));
                 if d.is_expanded() {
                     follow_log.restart();
                 }
             });
         }
-        adj.connect_changed(move |a| {
-            if reveal.replace(false) {
-                a.set_value(a.upper() - a.page_size());
-            }
+        let page_scroll = page_scroll.clone();
+        adj.connect_changed(move |a| match page_scroll.take() {
+            Some(true) => a.set_value(a.upper() - a.page_size()),
+            Some(false) => a.set_value(0.0),
+            None => {}
         });
     }
     stack.add_named(&progress_page, Some("progress"));
@@ -296,7 +365,8 @@ pub fn review(ctx: &Ctx) -> Page {
             stack.set_visible_child_name("review");
         };
         back_to_review.connect_clicked(back.clone());
-        plan_back.connect_clicked(back);
+        plan_back.connect_clicked(back.clone());
+        retry.connect_clicked(back);
     }
 
     // The generated files, regenerated on every visit.
@@ -389,6 +459,13 @@ pub fn review(ctx: &Ctx) -> Page {
             details,
             plan_back,
             follow_log,
+            failure,
+            failure_error,
+            failure_command,
+            retry,
+            last_error: Default::default(),
+            page: progress_page.vadjustment(),
+            page_scroll,
         };
         install.connect_clicked(move |button| {
             let disk = ctx.draft.borrow().disk.clone();
@@ -589,6 +666,17 @@ struct ProgressUi {
     details: gtk::Expander,
     /// Back to the review, after a dry run.
     plan_back: gtk::Button,
+    /// Why it stopped: Nix's error, the command that failed, and the way
+    /// back (focused, so Enter can't restart or erase anything).
+    failure: adw::Bin,
+    failure_error: gtk::Label,
+    failure_command: gtk::Label,
+    retry: gtk::Button,
+    /// The last error Nix logged, for the error view.
+    last_error: Rc<RefCell<Option<String>>>,
+    /// The progress page's scrolling, and where it goes once laid out.
+    page: gtk::Adjustment,
+    page_scroll: Rc<std::cell::Cell<Option<bool>>>,
 }
 
 impl ProgressUi {
@@ -601,6 +689,9 @@ impl ProgressUi {
         {
             use std::io::Write;
             let _ = writeln!(file, "{line}");
+        }
+        if line.lines().any(|l| l.trim_start().starts_with("error:")) {
+            *self.last_error.borrow_mut() = Some(line.to_string());
         }
         let mut end = self.log.end_iter();
         self.log.insert(&mut end, line);
@@ -647,6 +738,8 @@ fn start(ctx: &Ctx, ui: &ProgressUi) {
     };
 
     ctx.show_navigation(false);
+    ui.failure.set_visible(false);
+    ui.last_error.replace(None);
     ui.log.set_text("");
     ui.steps.remove_all();
     let mut step_rows: Vec<(StepId, adw::ActionRow, gtk::Image)> = Vec::new();
@@ -681,7 +774,9 @@ fn start(ctx: &Ctx, ui: &ProgressUi) {
             let _ = tx2.send(e);
         };
         if demo {
-            demo_install(&thread_plan, &mut progress);
+            if let Err(message) = demo_install(&thread_plan, &mut progress) {
+                let _ = tx.send(Event::Failed { message });
+            }
             return;
         }
         if let Err(e) =
@@ -722,15 +817,17 @@ fn start(ctx: &Ctx, ui: &ProgressUi) {
                     for (_, _, icon) in &step_rows {
                         icon.set_icon_name(Some(step_icon("done")));
                     }
-                    finish(&ctx, &ui, &plan, None);
+                    finish(&ui, &plan);
                     return gtk::glib::ControlFlow::Break;
                 }
                 Ok(Event::Failed { message }) => {
+                    let mut stopped_at = None;
                     if let Some(i) = current {
                         step_rows[i].2.set_icon_name(Some(step_icon("failed")));
+                        stopped_at = Some(plan.steps[i].title.clone());
                     }
                     ui.log(&format!("!! {message}"));
-                    finish(&ctx, &ui, &plan, Some(message));
+                    failed(&ctx, &ui, stopped_at.as_deref(), &message);
                     return gtk::glib::ControlFlow::Break;
                 }
                 Err(mpsc::TryRecvError::Empty) => return gtk::glib::ControlFlow::Continue,
@@ -742,8 +839,11 @@ fn start(ctx: &Ctx, ui: &ProgressUi) {
 
 /// Not on the live system: list what the install would run.
 /// A made-up install for CONFIGURATOR_DEMO_INSTALL: every step, with log
-/// lines and download progress in the install step.
-fn demo_install(plan: &Plan, progress: &mut dyn FnMut(Event)) {
+/// lines and download progress in the install step. With
+/// CONFIGURATOR_DEMO_INSTALL=fail it stops there as an install does when
+/// Nix refuses a package, to try the error view.
+fn demo_install(plan: &Plan, progress: &mut dyn FnMut(Event)) -> Result<(), String> {
+    let fail = std::env::var_os("CONFIGURATOR_DEMO_INSTALL").is_some_and(|v| v == "fail");
     let pause = |ms| std::thread::sleep(std::time::Duration::from_millis(ms));
     let mut percent = 0u8;
     for step in &plan.steps {
@@ -754,6 +854,12 @@ fn demo_install(plan: &Plan, progress: &mut dyn FnMut(Event)) {
         });
         let lines = if step.id == StepId::Install { 3000 } else { 8 };
         for i in 0..lines {
+            if fail && step.id == StepId::Install && i == 100 {
+                progress(Event::Log {
+                    line: DEMO_NIX_ERROR.to_string(),
+                });
+                return Err(demo_failure(step));
+            }
             progress(Event::Log {
                 line: format!(
                     "copying path '/nix/store/{i:032x}-demo-package-{i}' from 'https://cache.nixos.org'..."
@@ -771,6 +877,30 @@ fn demo_install(plan: &Plan, progress: &mut dyn FnMut(Event)) {
         percent = percent.saturating_add(step.weight);
     }
     progress(Event::Done);
+    Ok(())
+}
+
+/// What Nix says when a package is marked insecure (olm, through KDE's
+/// NeoChat), for the demo's failure.
+const DEMO_NIX_ERROR: &str = "error:
+       … while calling the 'head' builtin
+         at /nix/store/gsyv2ay8fc48l7vp1gspmk5pk65hrn5w-source/lib/attrsets.nix:1696:13:
+
+       error: Package ‘olm-3.2.16’ in /nix/store/gsyv2ay8fc48l7vp1gspmk5pk65hrn5w-source/pkgs/by-name/ol/olm/package.nix:37 is marked as insecure, refusing to evaluate.
+
+       Known issues:
+        - The libolm end‐to‐end encryption library used in many Matrix
+          clients and Jitsi Meet has been deprecated upstream.";
+
+/// The demo's failure: Nix's error in the log, and the engine's message
+/// for the step's first command (as long as a real one: the whole
+/// `sh -c … nix eval …` line).
+fn demo_failure(step: &configurator_engine::Step) -> String {
+    let command = step
+        .actions
+        .first()
+        .map_or_else(|| "nix eval".to_string(), |a| a.to_string());
+    format!("`{command}` failed (exit status: 1)")
 }
 
 fn dry_run(ui: &ProgressUi, plan: &Plan, rows: &[(StepId, adw::ActionRow, gtk::Image)]) {
@@ -798,37 +928,121 @@ fn dry_run(ui: &ProgressUi, plan: &Plan, rows: &[(StepId, adw::ActionRow, gtk::I
     }
 }
 
-fn finish(ctx: &Ctx, ui: &ProgressUi, plan: &Plan, failure: Option<String>) {
+fn finish(ui: &ProgressUi, plan: &Plan) {
     ui.after.remove_all();
-    match failure {
-        None => {
-            ui.done.set_icon_name(Some("checkbox-checked-symbolic"));
-            ui.done.set_title("NixOS is installed");
-            ui.done.set_description(Some(
-                "Your configuration is in your home folder, in .config/nixos. Restart to start using it.",
-            ));
-            for line in &plan.after_install {
-                let row = adw::ActionRow::builder()
-                    .title(escape(line))
-                    .title_lines(0)
-                    .build();
-                row.add_prefix(&gtk::Image::from_icon_name("dialog-information-symbolic"));
-                ui.after.append(&row);
+    ui.done.set_icon_name(Some("checkbox-checked-symbolic"));
+    ui.done.set_title("NixOS is installed");
+    ui.done.set_description(Some(
+        "Your configuration is in your home folder, in .config/nixos. Restart to start using it.",
+    ));
+    for line in &plan.after_install {
+        let row = adw::ActionRow::builder()
+            .title(escape(line))
+            .title_lines(0)
+            .build();
+        row.add_prefix(&gtk::Image::from_icon_name("dialog-information-symbolic"));
+        ui.after.append(&row);
+    }
+    ui.after.set_visible(!plan.after_install.is_empty());
+    ui.stack.set_visible_child_name("done");
+}
+
+/// The install stopped: the progress view stays, with the failed step
+/// marked, why it stopped above the steps, the log open below, and Back to
+/// review (focused) and a terminal as the ways on.
+fn failed(ctx: &Ctx, ui: &ProgressUi, stopped_at: Option<&str>, message: &str) {
+    ui.title.set_label("The install stopped");
+    ui.step.set_label(&match stopped_at {
+        Some(step) => format!("While {}", lowercase_first(step)),
+        None => String::new(),
+    });
+    ui.detail.set_label("");
+    let nix_error = ui.last_error.borrow().as_deref().and_then(nix_error);
+    ui.failure_error.set_visible(nix_error.is_some());
+    ui.failure_error
+        .set_label(nix_error.as_deref().unwrap_or(""));
+    ui.failure_command.set_label(message);
+    ui.failure.set_visible(true);
+    ui.details.set_expanded(true);
+    ctx.show_navigation(false);
+    ui.stack.set_visible_child_name("progress");
+    // The top of the page, not the log's end: why it stopped comes first.
+    ui.page_scroll.set(Some(false));
+    ui.page.set_value(0.0);
+    focus_when_shown(&ui.retry);
+}
+
+/// Focuses a button once it's on the screen (a widget that isn't shown
+/// yet can't take the focus).
+fn focus_when_shown(button: &gtk::Button) {
+    if button.is_mapped() {
+        button.grab_focus();
+        return;
+    }
+    let handler: Rc<RefCell<Option<gtk::glib::SignalHandlerId>>> = Default::default();
+    let id = {
+        let handler = handler.clone();
+        button.connect_map(move |b| {
+            b.grab_focus();
+            if let Some(id) = handler.borrow_mut().take() {
+                b.disconnect(id);
             }
-            ui.after.set_visible(!plan.after_install.is_empty());
-            ui.stack.set_visible_child_name("done");
-        }
-        Some(message) => {
-            ui.done.set_icon_name(Some("dialog-error-symbolic"));
-            ui.done.set_title("The install stopped");
-            ui.done.set_description(Some(&escape(&message)));
-            ui.after.set_visible(false);
-            ui.details.set_expanded(true);
-            // Stay on the progress view with the log open; offer the way back.
-            ui.step.set_label(&format!("Failed: {message}"));
-            ctx.toast("The install failed; the details show where");
-            ctx.show_navigation(false);
-            ui.stack.set_visible_child_name("done");
-        }
+        })
+    };
+    *handler.borrow_mut() = Some(id);
+}
+
+/// "Installing your system" → "installing your system".
+fn lowercase_first(s: &str) -> String {
+    let mut chars = s.chars();
+    chars
+        .next()
+        .map_or_else(String::new, |c| c.to_lowercase().chain(chars).collect())
+}
+
+/// Nix's error, from a log entry that holds one: its last `error:` (the
+/// cause, after the trace of what was being evaluated), at most 12 lines.
+fn nix_error(entry: &str) -> Option<String> {
+    let lines: Vec<&str> = entry.lines().collect();
+    let start = lines
+        .iter()
+        .rposition(|l| l.trim_start().starts_with("error:"))?;
+    let mut rest: Vec<&str> = lines[start..].iter().map(|l| l.trim()).collect();
+    // "error:" on a line of its own heads a trace; the cause follows.
+    if rest.len() > 1 && rest[0] == "error:" {
+        rest.remove(0);
+    }
+    let text = rest
+        .into_iter()
+        .take(12)
+        .collect::<Vec<_>>()
+        .join("\n")
+        .trim()
+        .to_string();
+    (!text.is_empty()).then_some(text)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn nix_errors_are_their_cause() {
+        let entry = "error:\n       … while calling the 'head' builtin\n         at /nix/store/x-source/lib/attrsets.nix:1696:13:\n\n       error: Package ‘olm-3.2.16’ in /nix/store/x/package.nix:37 is marked as insecure, refusing to evaluate.\n\n       Known issues:\n        - deprecated upstream";
+        assert_eq!(
+            nix_error(entry).as_deref(),
+            Some(
+                "error: Package ‘olm-3.2.16’ in /nix/store/x/package.nix:37 is marked as insecure, refusing to evaluate.\n\nKnown issues:\n- deprecated upstream"
+            )
+        );
+        assert_eq!(
+            nix_error("error: builder for '/nix/store/x.drv' failed with exit code 1").as_deref(),
+            Some("error: builder for '/nix/store/x.drv' failed with exit code 1")
+        );
+        assert_eq!(nix_error("copying path '/nix/store/x'"), None);
+        assert_eq!(
+            lowercase_first("Installing your system"),
+            "installing your system"
+        );
     }
 }

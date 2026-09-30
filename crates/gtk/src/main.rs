@@ -347,6 +347,19 @@ fn theme_toggle() -> gtk::ToggleButton {
     button
 }
 
+/// A terminal (foot), from the menu and the install's error view.
+pub fn open_terminal() {
+    let mut command = std::process::Command::new("foot");
+    // The terminal fills the whole layout too: kept inside what every
+    // mirrored screen shows.
+    if let Some((x, y)) = screens::padding() {
+        command.arg(format!("--override=pad={x}x{y}"));
+    }
+    if let Err(e) = command.spawn() {
+        eprintln!("configurator: foot: {e}");
+    }
+}
+
 /// The escape hatches an installer needs: a terminal, restart, power off.
 fn system_menu(live: bool) -> gtk::MenuButton {
     let popover = gtk::Popover::new();
@@ -354,33 +367,36 @@ fn system_menu(live: bool) -> gtk::MenuButton {
         .orientation(gtk::Orientation::Vertical)
         .spacing(4)
         .build();
-    let item = |label: &str, argv: &'static [&'static str], live_only: bool| {
+    // Restart and power off: only on the live system.
+    let item = |label: &str, argv: &'static [&'static str]| {
         let button = gtk::Button::builder()
             .label(label)
             .css_classes(["flat"])
-            .sensitive(!live_only || live)
+            .sensitive(live)
             .build();
         let popover = popover.clone();
         button.connect_clicked(move |_| {
             popover.popdown();
-            let mut command = std::process::Command::new(argv[0]);
-            command.args(&argv[1..]);
-            // The terminal fills the whole layout too: kept inside what
-            // every mirrored screen shows.
-            if argv[0] == "foot"
-                && let Some((x, y)) = screens::padding()
-            {
-                command.arg(format!("--override=pad={x}x{y}"));
-            }
-            if let Err(e) = command.spawn() {
+            if let Err(e) = std::process::Command::new(argv[0]).args(&argv[1..]).spawn() {
                 eprintln!("configurator: {}: {e}", argv[0]);
             }
         });
         button
     };
-    list.append(&item("Terminal", &["foot"], false));
-    list.append(&item("Restart", &["systemctl", "reboot"], true));
-    list.append(&item("Power Off", &["systemctl", "poweroff"], true));
+    let terminal = gtk::Button::builder()
+        .label("Terminal")
+        .css_classes(["flat"])
+        .build();
+    {
+        let popover = popover.clone();
+        terminal.connect_clicked(move |_| {
+            popover.popdown();
+            open_terminal();
+        });
+    }
+    list.append(&terminal);
+    list.append(&item("Restart", &["systemctl", "reboot"]));
+    list.append(&item("Power Off", &["systemctl", "poweroff"]));
     popover.set_child(Some(&list));
     // Opens leftwards from the button at the window's right edge. The
     // compositor keeps menus on screen, but with mirrored screens of

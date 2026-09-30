@@ -785,6 +785,22 @@ the wheel. CONFIGURATOR_DEMO_INSTALL plays a made-up install anywhere, to
 try the progress screen (the example's plan if the choices aren't
 complete); tested in the live VM through QMP.
 
+**The install's error view (2026-09-30):** a failed install on a T500
+showed a solid grey screen, and Enter rebooted. The engine's message (the
+whole failed `sh -c … nix eval …` command) went into the progress page's
+step label, which didn't wrap: the window's minimum width grew past the
+screen, and cage showed only the window's background (on any GPU, not
+just the GMA 4500's). The page behind it was the "done" page with
+"Restart now" focused. Now a failure keeps the progress view: the failed
+step marked, "The install stopped", Nix's own error (its last `error:`,
+from the log), the command, **Back to review** (focused: Enter goes back;
+choices kept, installing again starts over) and **Open a terminal**, with
+the log open below; no restart button. Every label there wraps inside
+words. CONFIGURATOR_DEMO_INSTALL=fail plays an install that stops that
+way; `checks.live-install-error` (nix/tests/install-error.nix) runs it on
+the live system as a T500 (1280x800, 4 GB, 2 cores, BIOS, Penryn, GL 2.1 /
+GLES 2.0) and reads the error view, Enter and the terminal off the screen.
+
 **Libreboot (2026-09-26):** a BIOS install on a ThinkPad T500 with
 Libreboot's GRUB payload showed GRUB's picture and nothing else, with
 LUKS or without. Libreboot's GRUB (i386-coreboot) finds and runs the

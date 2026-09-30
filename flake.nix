@@ -161,6 +161,10 @@
             inputs
             ;
         }
+        // {
+          # The installer's error view on the live system, as a T500.
+          live-install-error = import ./nix/tests/install-error.nix { inherit pkgs self; };
+        }
       );
 
       formatter = forAllSystems (pkgs: pkgs.nixfmt);
