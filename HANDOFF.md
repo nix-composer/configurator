@@ -345,6 +345,9 @@ the whole ecosystem failed on a T500 because NeoChat and Itinerary need
 evaluate either. All four are out of data/ecosystems.json, and
 `checks.preselected` fails when any ecosystem or profile app stops
 evaluating (insecure, broken or gone) on the pinned nixpkgs.
+fooyin (LXQt) went too: the only ecosystem app not in cache.nixos.org
+(its libvgm dependency is unfree), so it compiled during installs. All
+1,044 others were checked against the cache on 2026-09-30.
 
 **Ecosystems (2026-09-26):** `data/ecosystems.json` has, for every
 installable desktop and window manager but Omarchy (whose ecosystem is its
