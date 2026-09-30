@@ -339,6 +339,13 @@ to spare the Disk layer won't go on. Unfree packages the cache doesn't
 carry (140, e.g. JetBrains IDEs) count as "unknown size". Rerun the
 script when flake.lock moves nixpkgs.
 
+**Ecosystems only preselect what builds (2026-09-30):** a KDE install with
+the whole ecosystem failed on a T500 because NeoChat and Itinerary need
+`olm`, which nixpkgs marks insecure; Pantheon's Spice-Up and Fondo don't
+evaluate either. All four are out of data/ecosystems.json, and
+`checks.preselected` fails when any ecosystem or profile app stops
+evaluating (insecure, broken or gone) on the pinned nixpkgs.
+
 **Ecosystems (2026-09-26):** `data/ecosystems.json` has, for every
 installable desktop and window manager but Omarchy (whose ecosystem is its
 flake's `omarchy.ecosystem.enable`), what its NixOS module installs anyway

@@ -1078,10 +1078,6 @@
           "category": "office"
         },
         {
-          "attr": "kdePackages.itinerary",
-          "category": "office"
-        },
-        {
           "attr": "kdePackages.arianna",
           "category": "office"
         },
@@ -1128,10 +1124,6 @@
         {
           "attr": "crow-translate",
           "category": "office"
-        },
-        {
-          "attr": "kdePackages.neochat",
-          "category": "communication"
         },
         {
           "attr": "kdePackages.tokodon",
@@ -2144,10 +2136,6 @@
           "category": "office"
         },
         {
-          "attr": "spice-up",
-          "category": "office"
-        },
-        {
           "attr": "khronos",
           "category": "office"
         },
@@ -2165,10 +2153,6 @@
         },
         {
           "attr": "annotator",
-          "category": "graphics"
-        },
-        {
-          "attr": "fondo",
           "category": "graphics"
         },
         {

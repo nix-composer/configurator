@@ -128,9 +128,46 @@ let
       )
     )
   ) ecosystems;
+
+  # Every app an ecosystem or a profile preselects evaluates on this
+  # nixpkgs: not insecure (NeoChat and Itinerary need the insecure olm),
+  # broken or gone. One that doesn't would fail the whole install.
+  unfreePkgs = import nixpkgs {
+    inherit system;
+    config.allowUnfree = true;
+  };
+  attrName = x: if builtins.isString x then x else x.attr or x.id or "";
+  attrEvaluates =
+    a:
+    let
+      p = lib.attrByPath (lib.splitString "." a) null unfreePkgs;
+    in
+    p != null && (builtins.tryEval (builtins.seq p.drvPath true)).success;
+  profileList =
+    let
+      raw = lib.importJSON ../../data/profiles.json;
+    in
+    if builtins.isList raw then raw else raw.profiles or [ ];
+  preselected =
+    lib.concatMap (
+      eco:
+      map (a: "${eco.desktop}: ${a}") (
+        map attrName ((eco.essentials or [ ]) ++ (eco.apps or [ ]) ++ (eco.cli or [ ]) ++ (eco.tools or [ ]))
+      )
+    ) ecosystems
+    ++ lib.concatMap (pr: map (a: "profile ${pr.id}: ${attrName a}") (pr.apps or [ ])) profileList;
+  unbuildable = lib.filter (
+    entry:
+    let
+      a = lib.last (lib.splitString ": " entry);
+    in
+    a != "" && !(attrEvaluates a)
+  ) preselected;
 in
 hostChecks
 // {
+  preselected = check "preselected" (unbuildable == [ ]) "don't evaluate: ${lib.concatStringsSep ", " unbuildable}";
+
   inherit (self.packages.${system}) configurator configurator-gtk;
 
   desktops = check "desktops" (missing == [ ]) "options missing in nixpkgs: ${toString missing}";
