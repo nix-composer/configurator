@@ -132,11 +132,11 @@
     "omarchy": {
       "flake": false,
       "locked": {
-        "lastModified": 1790706048,
-        "narHash": "sha256-ibJp++36oMFq0k13wy4zU364S3/A1yBjzwU3pCOWDhM=",
+        "lastModified": 1790710837,
+        "narHash": "sha256-SaZx5P+Ilcp2LslmgMPqbwYz+y6/UVSbtOibESLSvrs=",
         "owner": "nix-desktops",
         "repo": "omarchy",
-        "rev": "4173f9cf5b41d562cb5581f974049700373734ee",
+        "rev": "a63a9dc14d02061cdb9ee00f0787ad964b3a2629",
         "type": "github"
       },
       "original": {
