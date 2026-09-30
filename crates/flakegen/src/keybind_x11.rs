@@ -131,7 +131,8 @@ impl Generator<'_> {
                 Target::Command(command, label) => {
                     let script = match command {
                         Nix::Str(s) => crate::nix::string(s),
-                        other => other.render(2),
+                        // An expression (`lib.getExe pkgs.x`) is one argument.
+                        other => format!("({})", other.render(2)),
                     };
                     entry(
                         &mut lines,

@@ -431,7 +431,8 @@ impl Generator<'_> {
                     "pkgs.writeShellScript \"keybind-{n}\" {}",
                     match command {
                         Nix::Str(s) => crate::nix::string(s),
-                        other => other.render(3),
+                        // An expression (`lib.getExe pkgs.x`) is one argument.
+                        other => format!("({})", other.render(3)),
                     }
                 );
                 out.push(Nix::raw(format!(

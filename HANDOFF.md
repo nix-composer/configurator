@@ -348,6 +348,12 @@ evaluating (insecure, broken or gone) on the pinned nixpkgs.
 fooyin (LXQt) went too: the only ecosystem app not in cache.nixos.org
 (its libvgm dependency is unfree), so it compiled during installs. All
 1,044 others were checked against the cache on 2026-09-30.
+`scripts/eval-ecosystems.sh` generates a host for every installable desktop
+with its whole ecosystem (and with a launch and a command shortcut) and
+evaluates each fully, as a fresh install would: all 41 and all 27 with
+editable shortcuts passed on 2026-09-30, after fixing the KDE and X11
+shortcut renderers (an app launch, `lib.getExe pkgs.x`, needs parentheses
+as writeShellScript's argument). Run it after moving nixpkgs.
 
 **Ecosystems (2026-09-26):** `data/ecosystems.json` has, for every
 installable desktop and window manager but Omarchy (whose ecosystem is its
